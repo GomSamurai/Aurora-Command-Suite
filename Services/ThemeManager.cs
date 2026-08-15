@@ -18,13 +18,18 @@ namespace AuroraDesignSuite.Services
         public string TextSecondary { get; set; } = "#8B949E";
         public string BorderColor { get; set; } = "#30363D";
 
-        public override string ToString() => $"{Icon} {Name}";
+        public override string ToString()
+        {
+            if (string.IsNullOrEmpty(Name)) return string.Empty;
+            return Name.StartsWith(Icon) ? Name : $"{Icon} {Name}";
+        }
     }
 
     public static class ThemeManager
     {
         public static List<ThemeOption> AvailableThemes { get; } = new List<ThemeOption>
         {
+            // === 🌌 MODOS OSCURO / DEEP SPACE ===
             new ThemeOption
             {
                 Name = "👑 Imperial Gold (Fran Gómez Edition)",
@@ -40,7 +45,7 @@ namespace AuroraDesignSuite.Services
             },
             new ThemeOption
             {
-                Name = "Cyber Neon Cyan (Default)",
+                Name = "🌌 Cyber Neon Cyan (Default)",
                 Icon = "🌌",
                 BgDark = "#0B0E14",
                 CardBg = "#131924",
@@ -53,20 +58,7 @@ namespace AuroraDesignSuite.Services
             },
             new ThemeOption
             {
-                Name = "Deep Void Gold (Imperial Elite)",
-                Icon = "👑",
-                BgDark = "#0D0B07",
-                CardBg = "#1C160C",
-                CardHeader = "#292012",
-                AccentCyan = "#FFD700",
-                AccentAmber = "#FF8C00",
-                TextPrimary = "#F5E6CC",
-                TextSecondary = "#A69273",
-                BorderColor = "#524022"
-            },
-            new ThemeOption
-            {
-                Name = "Obsidian Emerald (Tactical Ops)",
+                Name = "🛡️ Obsidian Emerald (Tactical Ops)",
                 Icon = "🛡️",
                 BgDark = "#070D09",
                 CardBg = "#0E1C14",
@@ -79,7 +71,7 @@ namespace AuroraDesignSuite.Services
             },
             new ThemeOption
             {
-                Name = "Royal Nebula (Star Fleet)",
+                Name = "⚡ Royal Nebula (Star Fleet)",
                 Icon = "⚡",
                 BgDark = "#0D0914",
                 CardBg = "#1A1226",
@@ -92,7 +84,7 @@ namespace AuroraDesignSuite.Services
             },
             new ThemeOption
             {
-                Name = "Solar Flare Amber (Deep Space)",
+                Name = "☀️ Solar Flare Amber (Deep Space)",
                 Icon = "☀️",
                 BgDark = "#140A07",
                 CardBg = "#24120D",
@@ -102,6 +94,140 @@ namespace AuroraDesignSuite.Services
                 TextPrimary = "#FFEBE6",
                 TextSecondary = "#A87C71",
                 BorderColor = "#5E2E20"
+            },
+            new ThemeOption
+            {
+                Name = "🪐 Saturnian Titanium (Deep Core)",
+                Icon = "🪐",
+                BgDark = "#1A202C",
+                CardBg = "#2D3748",
+                CardHeader = "#3A4A63",
+                AccentCyan = "#63B3ED",
+                AccentAmber = "#F6AD55",
+                TextPrimary = "#EDF2F7",
+                TextSecondary = "#A0AEC0",
+                BorderColor = "#4A5568"
+            },
+            new ThemeOption
+            {
+                Name = "🔴 Mars Command Crimson (Red Planet)",
+                Icon = "🔴",
+                BgDark = "#170C0D",
+                CardBg = "#2B1618",
+                CardHeader = "#3F1F23",
+                AccentCyan = "#FC8181",
+                AccentAmber = "#F6AD55",
+                TextPrimary = "#FFF5F5",
+                TextSecondary = "#FEB2B2",
+                BorderColor = "#63171B"
+            },
+            new ThemeOption
+            {
+                Name = "🟢 Andromeda Biopunk (Alien Tech)",
+                Icon = "🟢",
+                BgDark = "#0A120E",
+                CardBg = "#14241C",
+                CardHeader = "#1E362A",
+                AccentCyan = "#68D391",
+                AccentAmber = "#4FD1C5",
+                TextPrimary = "#F0FFF4",
+                TextSecondary = "#9AE6B4",
+                BorderColor = "#276749"
+            },
+
+            // === ☀️ MODOS CLARO / DIA (Light & High Legibility Modes) ===
+            new ThemeOption
+            {
+                Name = "🏛️ Imperial Marble (Light Classic)",
+                Icon = "🏛️",
+                BgDark = "#F0F4F8",
+                CardBg = "#FFFFFF",
+                CardHeader = "#E2E8F0",
+                AccentCyan = "#1A365D",
+                AccentAmber = "#B7791F",
+                TextPrimary = "#0F172A",
+                TextSecondary = "#475569",
+                BorderColor = "#CBD5E1"
+            },
+            new ThemeOption
+            {
+                Name = "❄️ Solar Ice (Polar Light)",
+                Icon = "❄️",
+                BgDark = "#EBF8FF",
+                CardBg = "#FFFFFF",
+                CardHeader = "#BEE3F8",
+                AccentCyan = "#007791",
+                AccentAmber = "#DD6B20",
+                TextPrimary = "#1A202C",
+                TextSecondary = "#4A5568",
+                BorderColor = "#90CDF4"
+            },
+            new ThemeOption
+            {
+                Name = "📜 Ancient Codex (Soft Warm Parchment)",
+                Icon = "📜",
+                BgDark = "#FDF6E3",
+                CardBg = "#EEE8D5",
+                CardHeader = "#E0D7C3",
+                AccentCyan = "#B58900",
+                AccentAmber = "#CB4B16",
+                TextPrimary = "#073642",
+                TextSecondary = "#586E75",
+                BorderColor = "#D3C6AA"
+            },
+
+            // === ☯️ MODOS NEUTROS Y EQUILIBRADOS (Neutral Slate & Soft Dark) ===
+            new ThemeOption
+            {
+                Name = "⚙️ Slate Protocol (Balanced Industrial)",
+                Icon = "⚙️",
+                BgDark = "#181A1B",
+                CardBg = "#222527",
+                CardHeader = "#2D3135",
+                AccentCyan = "#38BDF8",
+                AccentAmber = "#FBBF24",
+                TextPrimary = "#F3F4F6",
+                TextSecondary = "#9CA3AF",
+                BorderColor = "#374151"
+            },
+            new ThemeOption
+            {
+                Name = "🌲 Nordic Pine (Sage & Evergreen)",
+                Icon = "🌲",
+                BgDark = "#121A17",
+                CardBg = "#1C2924",
+                CardHeader = "#293B34",
+                AccentCyan = "#34D399",
+                AccentAmber = "#F59E0B",
+                TextPrimary = "#ECFDF5",
+                TextSecondary = "#A7F3D0",
+                BorderColor = "#059669"
+            },
+            new ThemeOption
+            {
+                Name = "☕ Espresso Command (Warm Dark Coffee)",
+                Icon = "☕",
+                BgDark = "#181412",
+                CardBg = "#26201D",
+                CardHeader = "#362E2A",
+                AccentCyan = "#FB923C",
+                AccentAmber = "#FACC15",
+                TextPrimary = "#FFF7ED",
+                TextSecondary = "#FDBA74",
+                BorderColor = "#7C2D12"
+            },
+            new ThemeOption
+            {
+                Name = "🌃 Tokyo Night Synth (Cyberpunk Synthwave)",
+                Icon = "🌃",
+                BgDark = "#1A1B26",
+                CardBg = "#24283B",
+                CardHeader = "#343B58",
+                AccentCyan = "#7AA2F7",
+                AccentAmber = "#F7768E",
+                TextPrimary = "#C0CAF5",
+                TextSecondary = "#A9B1D6",
+                BorderColor = "#414868"
             }
         };
 

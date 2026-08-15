@@ -1,7 +1,8 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
-using System.Windows;
+using System.Text;
 
 namespace AuroraDesignSuite.Services
 {
@@ -17,61 +18,91 @@ namespace AuroraDesignSuite.Services
         [DllImport("user32.dll")]
         private static extern bool BringWindowToTop(IntPtr hWnd);
 
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern IntPtr FindWindow(string? lpClassName, string? lpWindowName);
+        private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        private static extern bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+        [DllImport("user32.dll")]
+        private static extern bool IsWindowVisible(IntPtr hWnd);
 
         private const int SW_RESTORE = 9;
 
         /// <summary>
-        /// Locates the running Aurora 4X game process and brings its window to the foreground.
+        /// Locates the running Aurora 4X game process or window and brings it to the foreground.
+        /// Automatically launches the game if it is not currently running.
         /// </summary>
         public static bool FocusAuroraGame(out string statusMessage)
         {
             try
             {
-                // Try finding process by name
-                Process[] processes = Process.GetProcessesByName("Aurora");
-                if (processes.Length == 0)
-                {
-                    // Fallback to checking executable path or window title
-                    processes = Process.GetProcessesByName("Aurora4X");
-                }
+                IntPtr targetHWnd = IntPtr.Zero;
 
-                if (processes.Length > 0)
+                // 1. Enumerate top level windows to find Aurora game windows
+                EnumWindows((hWnd, lParam) =>
                 {
-                    IntPtr handle = processes[0].MainWindowHandle;
-                    if (handle == IntPtr.Zero)
+                    if (IsWindowVisible(hWnd))
                     {
-                        handle = FindWindow(null, "Aurora");
-                    }
+                        StringBuilder sb = new StringBuilder(256);
+                        GetWindowText(hWnd, sb, 256);
+                        string title = sb.ToString();
 
-                    if (handle != IntPtr.Zero)
-                    {
-                        ShowWindow(handle, SW_RESTORE);
-                        BringWindowToTop(handle);
-                        SetForegroundWindow(handle);
-                        statusMessage = "🎮 Enfocado juego Aurora 4X en primer plano.";
-                        return true;
+                        if (!string.IsNullOrEmpty(title) && 
+                            (title.StartsWith("Aurora") || title.Contains("System Map") || title.Contains("Tactical Map")))
+                        {
+                            targetHWnd = hWnd;
+                            return false; // Stop enumeration
+                        }
                     }
-                }
+                    return true;
+                }, IntPtr.Zero);
 
-                // Fallback: try finding window by title "Aurora"
-                IntPtr windowHandle = FindWindow(null, "Aurora");
-                if (windowHandle != IntPtr.Zero)
+                if (targetHWnd != IntPtr.Zero)
                 {
-                    ShowWindow(windowHandle, SW_RESTORE);
-                    BringWindowToTop(windowHandle);
-                    SetForegroundWindow(windowHandle);
-                    statusMessage = "🎮 Enfocado juego Aurora 4X (vía FindWindow).";
+                    ShowWindow(targetHWnd, SW_RESTORE);
+                    BringWindowToTop(targetHWnd);
+                    SetForegroundWindow(targetHWnd);
+                    statusMessage = "🎮 Juego Aurora 4X enfocado en primer plano.";
                     return true;
                 }
 
-                statusMessage = "⚠️ No se encontró la ventana de Aurora 4X en ejecución. Inicia el juego desde abrir_aurora_design_suite.bat.";
+                // 2. Fallback: check processes
+                Process[] processes = Process.GetProcessesByName("Aurora");
+                if (processes.Length == 0) processes = Process.GetProcessesByName("AuroraPatch");
+                if (processes.Length == 0) processes = Process.GetProcessesByName("Aurora4X");
+
+                if (processes.Length > 0 && processes[0].MainWindowHandle != IntPtr.Zero)
+                {
+                    IntPtr handle = processes[0].MainWindowHandle;
+                    ShowWindow(handle, SW_RESTORE);
+                    BringWindowToTop(handle);
+                    SetForegroundWindow(handle);
+                    statusMessage = "🎮 Juego Aurora 4X enfocado en primer plano.";
+                    return true;
+                }
+
+                // 3. Auto-launch game if not running!
+                string gameLauncherPath = @"c:\VSCODE\Aurora271Full\AuroraPatch.exe";
+                if (File.Exists(gameLauncherPath))
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = gameLauncherPath,
+                        WorkingDirectory = @"c:\VSCODE\Aurora271Full"
+                    });
+                    statusMessage = "🚀 Iniciando juego Aurora 4X v2.7.1 automáticamente...";
+                    return true;
+                }
+
+                statusMessage = "⚠️ No se encontró la instalación de Aurora 4X en c:\\VSCODE\\Aurora271Full.";
                 return false;
             }
             catch (Exception ex)
             {
-                statusMessage = $"⚠️ Error al enfocar Aurora 4X: {ex.Message}";
+                statusMessage = $"⚠️ Error al enfocar/iniciar Aurora 4X: {ex.Message}";
                 return false;
             }
         }

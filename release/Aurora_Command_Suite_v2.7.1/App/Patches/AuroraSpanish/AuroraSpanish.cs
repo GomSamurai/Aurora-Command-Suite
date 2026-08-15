@@ -158,53 +158,60 @@ namespace AuroraSpanish
             }
             catch { }
 
-            // Inject Master Suite Button on main game windows
+            // Inject Master Suite Button on main game windows when Shown
             try
             {
-                if (__instance.GetType().Name.Contains("Main") || __instance.GetType().Name.Contains("Tactical") || __instance.GetType().Name.Contains("System"))
+                __instance.Shown += delegate
                 {
-                    Button btnSuite = new Button
+                    try
                     {
-                        Text = "🚀 AURORA COMMAND SUITE",
-                        Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
-                        BackColor = Color.FromArgb(13, 26, 38),
-                        ForeColor = Color.FromArgb(0, 240, 255),
-                        FlatStyle = FlatStyle.Flat,
-                        Size = new Size(215, 26),
-                        Location = new Point(__instance.Width - 235, 6),
-                        Anchor = AnchorStyles.Top | AnchorStyles.Right,
-                        Cursor = Cursors.Hand
-                    };
-                    btnSuite.FlatAppearance.BorderColor = Color.FromArgb(0, 240, 255);
-                    btnSuite.Click += delegate
-                    {
-                        try
+                        if (__instance.Controls.Find("btnMasterSuiteNav", true).Length > 0) return;
+
+                        Button btnSuite = new Button
                         {
-                            var suiteProc = System.Diagnostics.Process.GetProcessesByName("AuroraDesignSuite");
-                            if (suiteProc.Length > 0)
+                            Name = "btnMasterSuiteNav",
+                            Text = "🚀 AURORA COMMAND SUITE",
+                            Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                            BackColor = Color.FromArgb(13, 26, 38),
+                            ForeColor = Color.FromArgb(0, 240, 255),
+                            FlatStyle = FlatStyle.Flat,
+                            Size = new Size(215, 26),
+                            Location = new Point(Math.Max(10, __instance.ClientSize.Width - 225), 4),
+                            Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                            Cursor = Cursors.Hand
+                        };
+                        btnSuite.FlatAppearance.BorderColor = Color.FromArgb(0, 240, 255);
+                        btnSuite.Click += delegate
+                        {
+                            try
                             {
-                                IntPtr handle = suiteProc[0].MainWindowHandle;
-                                if (handle != IntPtr.Zero)
+                                var suiteProc = System.Diagnostics.Process.GetProcessesByName("AuroraDesignSuite");
+                                if (suiteProc.Length > 0)
                                 {
-                                    ShowWindow(handle, 9);
-                                    BringWindowToTop(handle);
-                                    SetForegroundWindow(handle);
-                                    return;
+                                    IntPtr handle = suiteProc[0].MainWindowHandle;
+                                    if (handle != IntPtr.Zero)
+                                    {
+                                        ShowWindow(handle, 9);
+                                        BringWindowToTop(handle);
+                                        SetForegroundWindow(handle);
+                                        return;
+                                    }
+                                }
+
+                                string suiteExe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AuroraDesignSuite.exe");
+                                if (File.Exists(suiteExe))
+                                {
+                                    System.Diagnostics.Process.Start(suiteExe);
                                 }
                             }
+                            catch { }
+                        };
 
-                            string suiteExe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AuroraDesignSuite.exe");
-                            if (File.Exists(suiteExe))
-                            {
-                                System.Diagnostics.Process.Start(suiteExe);
-                            }
-                        }
-                        catch { }
-                    };
-
-                    __instance.Controls.Add(btnSuite);
-                    btnSuite.BringToFront();
-                }
+                        __instance.Controls.Add(btnSuite);
+                        btnSuite.BringToFront();
+                    }
+                    catch { }
+                };
             }
             catch { }
 

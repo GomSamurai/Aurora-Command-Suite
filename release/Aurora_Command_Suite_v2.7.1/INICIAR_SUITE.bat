@@ -20,32 +20,32 @@ goto LAUNCH_SUITE
 
 :LAUNCH_PATCH_PARENT
 echo [1/2] Iniciando Aurora 4X con Parche (AuroraPatch.exe)...
-start "" "..\AuroraPatch.exe"
+start /d "%~dp0.." "" "%~dp0..\AuroraPatch.exe"
 ping 127.0.0.1 -n 3 >nul
 goto LAUNCH_SUITE
 
 :LAUNCH_GAME_PARENT
 echo [1/2] Iniciando Aurora 4X (Aurora.exe)...
-start "" "..\Aurora.exe"
+start /d "%~dp0.." "" "%~dp0..\Aurora.exe"
 ping 127.0.0.1 -n 3 >nul
 goto LAUNCH_SUITE
 
 :LAUNCH_PATCH_LOCAL
 echo [1/2] Iniciando Aurora 4X con Parche (AuroraPatch.exe)...
-start "" "AuroraPatch.exe"
+start /d "%~dp0" "" "%~dp0AuroraPatch.exe"
 ping 127.0.0.1 -n 3 >nul
 goto LAUNCH_SUITE
 
 :LAUNCH_GAME_LOCAL
 echo [1/2] Iniciando Aurora 4X (Aurora.exe)...
-start "" "Aurora.exe"
+start /d "%~dp0" "" "%~dp0Aurora.exe"
 ping 127.0.0.1 -n 3 >nul
 goto LAUNCH_SUITE
 
 :LAUNCH_SUITE
 if exist "App\AuroraDesignSuite.exe" (
     echo [2/2] Iniciando Aurora Command Suite...
-    start "" "App\AuroraDesignSuite.exe"
+    start /d "%~dp0App" "" "%~dp0App\AuroraDesignSuite.exe"
     echo.
     echo [EXITO] Ambos programas se estan ejecutando en paralelo.
     ping 127.0.0.1 -n 2 >nul
@@ -55,7 +55,7 @@ if exist "App\AuroraDesignSuite.exe" (
 
 if exist "AuroraDesignSuite.exe" (
     echo [2/2] Iniciando Aurora Command Suite...
-    start "" "AuroraDesignSuite.exe"
+    start /d "%~dp0" "" "%~dp0AuroraDesignSuite.exe"
     echo.
     echo [EXITO] Ambos programas se estan ejecutando en paralelo.
     ping 127.0.0.1 -n 2 >nul

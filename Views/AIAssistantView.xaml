@@ -123,7 +123,7 @@
                     </Border>
 
                     <!-- Card 2: Direct AI Imperial Tools -->
-                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
                         <StackPanel>
                             <TextBlock Text="🛠️ HERRAMIENTAS Y ACCIONES IA DIRECTAS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
 
@@ -131,6 +131,24 @@
                             <Button Content="🛡️ Auto-Diagnóstico de Vulnerabilidades Defensivas" Click="BtnDefenseAudit_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Audita los escudos, blindajes y cobertura de sensores activos en naves de guerra."/>
                             <Button Content="⚙️ Optimizador de Producción de Fábricas" Click="BtnOptimizeProd_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" ToolTip="Calcula la tasa de consumo de minerales y sugiere la asignación óptima de fábricas."/>
                             <Button Content="🧹 Limpiar Historial de Chat" Click="BtnClearChat_Click" Padding="6,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="11" ToolTip="Vacíe la ventana de conversación y reinicie la matriz computacional."/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Card 3: Epic History Chronicle Generator -->
+                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="📖 CRÓNICA HISTÓRICA DEL IMPERIO (IA NARRATIVA)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+                            <TextBlock Text="Genera la novela épica con la historia completa de tu partida desde sus inicios:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,6"/>
+
+                            <TextBlock Text="Estilo Narrativo Literario:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,2"/>
+                            <ComboBox x:Name="CmbNarrativeStyle" Padding="4" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource BorderBrush}" FontSize="11" Margin="0,0,0,6">
+                                <ComboBoxItem Content="📖 Épica Literaria Sci-Fi (Asimov / Dan Simmons)" IsSelected="True"/>
+                                <ComboBoxItem Content="⚔️ Diario de Bitácora Militar (Flotas &amp; Batallas)"/>
+                                <ComboBoxItem Content="🔬 Anales de la Ciencia Imperial (I+D &amp; Galaxia)"/>
+                            </ComboBox>
+
+                            <Button Content="📜 Generar Novela Histórica del Imperio" Click="BtnGenerateChronicle_Click" Padding="6,6" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" ToolTip="Lee todos los eventos históricos guardados en AuroraDB.db y genera una novela estelar en capítulos."/>
+                            <Button Content="💾 Exportar Crónica Histórica (.md)" Click="BtnExportChronicle_Click" Padding="6,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Guarda la novela e historia del imperio en un archivo local Markdown."/>
                         </StackPanel>
                     </Border>
                 </StackPanel>

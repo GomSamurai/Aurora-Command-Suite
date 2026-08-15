@@ -346,5 +346,41 @@ namespace AuroraDesignSuite.Services
 
             return sb.ToString();
         }
+
+        public async Task<string> GenerateEmpireHistoryChronicleAsync(string empireName, List<string> historyLogs, string styleChoice)
+        {
+            if (historyLogs == null || historyLogs.Count == 0)
+            {
+                return "⚠️ No se encontraron registros de eventos para el imperio seleccionado en AuroraDB.db.";
+            }
+
+            string rawLogsText = string.Join("\n", historyLogs.Take(75));
+
+            string stylePrompt = styleChoice switch
+            {
+                "BitacoraMilitar" => "Adopta el tono de un Diario de Bitácora Militar Táctico y Registro de la Flota Imperial. Enfatiza los nombramientos de almirantes, la botadura de naves de combate, expediciones lejanas y contactos/batallas espaciales.",
+                "AnalesCientificos" => "Adopta el tono de los Anales de la Ciencia Imperial y Registro de Descubrimientos Tecnológicos. Enfatiza los saltos científicos, descubrimientos de sistemas estelares, yacimientos minerales y terraformación.",
+                _ => "Adopta el tono de un gran escritor de ciencia ficción espacial (al estilo de Isaac Asimov, Dan Simmons o Frank Herbert). Escribe una narrativa majestuosa, inmersiva, elegante y apasionante en español."
+            };
+
+            string prompt = $@"Eres un historiador estelar y cronista de la saga espacio-temporal del imperio '{empireName}'.
+{stylePrompt}
+
+A continuación se te proporcionan los registros históricos reales extraídos cronológicamente de la partida de Aurora 4X (v2.7.1):
+
+---
+REGISTROS HISTÓRICOS DE LA PARTIDA:
+{rawLogsText}
+---
+
+INSTRUCCIONES DE REDACCIÓN LITERARIA:
+1. Divide la crónica en Capítulos Épicos bien estructurados con títulos evocadores (Ej: 'Capítulo I: El Despertar de la Cuna', 'Capítulo II: La Frontera del Vacío', 'Capítulo III: La Era de las Estrellas').
+2. Narra la evolución del imperio desde sus primeros descubrimientos hasta el momento actual.
+3. Incorpora los nombres reales de los oficiales, naves, tecnologías y sistemas solares presentes en los registros.
+4. Mantén una prosa cuidada, épica, inmersiva y fascinante que emocione al jugador.
+5. Formatea el texto con markdown para títulos, cursivas y negritas.";
+
+            return await AskAIAsync(prompt, "", useOnlineGemini: true);
+        }
     }
 }

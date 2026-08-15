@@ -1850,5 +1850,50 @@ namespace AuroraDesignSuite.Services
                 return false;
             }
         }
+
+        public List<string> GetEmpireHistoryLogs(int raceId, int maxLogs = 80)
+        {
+            var history = new List<string>();
+            try
+            {
+                using var conn = GetConnection();
+                string query = @"
+                    SELECT g.Time, d.Description AS EventTypeDesc, g.MessageText
+                    FROM FCT_GameLog g
+                    LEFT JOIN DIM_EventType d ON g.EventType = d.EventTypeID
+                    WHERE g.RaceID = @raceId OR g.RaceID = 0
+                    ORDER BY g.Time ASC
+                    LIMIT @maxLogs";
+
+                using var cmd = new SqliteCommand(query, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                cmd.Parameters.AddWithValue("@maxLogs", maxLogs);
+                using var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    double timeSeconds = reader["Time"] != DBNull.Value ? Convert.ToDouble(reader["Time"]) : 0;
+                    string eventType = reader["EventTypeDesc"] != DBNull.Value ? reader["EventTypeDesc"].ToString()! : "Evento";
+                    string msg = reader["MessageText"] != DBNull.Value ? reader["MessageText"].ToString()! : "";
+
+                    // Convert Aurora 4X game time seconds into years/days format
+                    double years = Math.Floor(timeSeconds / 31536000.0);
+                    double remainingSecs = timeSeconds % 31536000.0;
+                    double days = Math.Floor(remainingSecs / 86400.0);
+
+                    string dateStr = years > 0 ? $"Año {years:F0}, Día {days:F0}" : $"Día {days:F0}";
+
+                    if (!string.IsNullOrWhiteSpace(msg))
+                    {
+                        history.Add($"[{dateStr}] ({eventType}) {msg}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"GetEmpireHistoryLogs Error: {ex.Message}");
+            }
+            return history;
+        }
     }
 }

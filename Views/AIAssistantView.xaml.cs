@@ -309,5 +309,70 @@ namespace AuroraDesignSuite.Views
         private void BtnPromptTech_Click(object sender, RoutedEventArgs e) => ExecuteQuery("Evalúa mis proyectos de investigación activos y recomiéndame las mejores tecnologías para investigar ahora.");
         private void BtnPromptNavy_Click(object sender, RoutedEventArgs e) => ExecuteQuery("Realiza un diagnóstico de la fuerza militar y logística de mis flotas en servicio.");
         private void BtnPromptExpansion_Click(object sender, RoutedEventArgs e) => ExecuteQuery("Examina los sistemas estelares descubiertos y dame un plan de expansión y terraformación colonial.");
+
+        // Epic History Chronicle Handlers
+        private async void BtnGenerateChronicle_Click(object sender, RoutedEventArgs e)
+        {
+            if (_dbService == null || _aiService == null) return;
+
+            string empireName = "Imperio Estelar";
+            var empires = _dbService.GetEmpires();
+            var currentEmpire = empires?.FirstOrDefault(emp => emp.RaceID == _currentRaceId);
+            if (currentEmpire != null && !string.IsNullOrEmpty(currentEmpire.RaceName))
+            {
+                empireName = currentEmpire.RaceName;
+            }
+
+            AddChatMessage("👨‍✈️ COMANDANTE IMPERIAL", "📜 Solicitando generación de Novela e Historia Épica del Imperio...", isUser: true);
+
+            var historyLogs = _dbService.GetEmpireHistoryLogs(_currentRaceId, 80);
+            if (historyLogs.Count == 0)
+            {
+                AddChatMessage("🖥️ CRONISTA IMPERIAL", "⚠️ No se encontraron registros de eventos para el imperio seleccionado en AuroraDB.db.", isUser: false);
+                return;
+            }
+
+            string styleChoice = "Asimov";
+            if (CmbNarrativeStyle.SelectedIndex == 1) styleChoice = "BitacoraMilitar";
+            else if (CmbNarrativeStyle.SelectedIndex == 2) styleChoice = "AnalesCientificos";
+
+            AddChatMessage("📜 CRONISTA IMPERIAL", "⚡ Leyendo registros históricos en AuroraDB.db y redactando la novela del imperio...", isUser: false);
+
+            string chronicleText = await _aiService.GenerateEmpireHistoryChronicleAsync(empireName, historyLogs, styleChoice);
+            _lastAiResponse = chronicleText;
+
+            // Remove loading indicator
+            if (PnlChatMessages.Children.Count > 0)
+            {
+                PnlChatMessages.Children.RemoveAt(PnlChatMessages.Children.Count - 1);
+            }
+
+            AddChatMessage("📖 CRÓNICA HISTÓRICA DEL IMPERIO", chronicleText, isUser: false);
+        }
+
+        private void BtnExportChronicle_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(_lastAiResponse))
+            {
+                MessageBox.Show("Primero debes hacer clic en 'Generar Novela Histórica del Imperio' para redactar la historia antes de exportar.", "Atención", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            try
+            {
+                string docsDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string fileName = $"Cronica_Imperial_{DateTime.Now:yyyyMMdd_HHmmss}.md";
+                string fullPath = System.IO.Path.Combine(docsDir, fileName);
+
+                string content = $"# 📖 CRÓNICA E HISTORIA ÉPICA DEL IMPERIO\n\n*Generado por Aurora Command Suite AI Chronicle Engine*\n\n---\n\n{_lastAiResponse}";
+                System.IO.File.WriteAllText(fullPath, content, System.Text.Encoding.UTF8);
+
+                MessageBox.Show($"📖 ¡Crónica e Historia del Imperio exportada exitosamente!\n\nGuardado en:\n{fullPath}", "Crónica Exportada", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"❌ Error al exportar la crónica: {ex.Message}", "Error de Exportación", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }

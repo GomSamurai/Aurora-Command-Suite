@@ -8,6 +8,22 @@ echo   INICIANDO AURORA 4X (v2.7.1) + COMMAND SUITE
 echo ============================================================
 echo.
 
+if exist "App\Patches\AuroraSpanish" if exist "..\Patches" (
+    xcopy /E /Y /Q "App\Patches\AuroraSpanish" "..\Patches\AuroraSpanish\" >nul 2>&1
+)
+
+tasklist /fi "IMAGENAME eq Aurora.exe" 2>NUL | find /I /N "Aurora.exe" >NUL
+if "%ERRORLEVEL%"=="0" (
+    echo [INFO] Aurora 4X ya se encuentra ejecutandose.
+    goto LAUNCH_SUITE
+)
+
+tasklist /fi "IMAGENAME eq AuroraPatch.exe" 2>NUL | find /I /N "AuroraPatch.exe" >NUL
+if "%ERRORLEVEL%"=="0" (
+    echo [INFO] AuroraPatch.exe ya se encuentra ejecutandose.
+    goto LAUNCH_SUITE
+)
+
 if exist "..\AuroraPatch.exe" goto LAUNCH_PATCH_PARENT
 if exist "..\Aurora.exe" goto LAUNCH_GAME_PARENT
 if exist "AuroraPatch.exe" goto LAUNCH_PATCH_LOCAL

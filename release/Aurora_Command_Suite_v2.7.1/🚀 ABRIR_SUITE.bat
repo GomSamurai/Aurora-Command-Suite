@@ -23,7 +23,7 @@ if exist "%~dp0..\AuroraPatch.exe" (
     start "" "%~dp0Aurora.exe"
     ping 127.0.0.1 -n 3 >nul
 ) else (
-    echo ⚠️ AuroraPatch.exe / Aurora.exe no detectado en la carpeta superior.
+    echo AuroraPatch.exe / Aurora.exe no detectado en la carpeta superior.
     echo Para interconexion total, descomprime esta carpeta dentro del directorio de Aurora 4X.
 )
 
@@ -31,5 +31,5 @@ echo [2/2] Iniciando Aurora Command Suite...
 start "" "%~dp0App\AuroraDesignSuite.exe"
 
 echo.
-echo ✅ Proceso completado. Ambos programas sincronizados.
+echo Proceso completado. Ambos programas sincronizados.
 exit

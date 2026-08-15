@@ -8,7 +8,7 @@ echo.
 echo Esta accion borrara los archivos de la Suite manteniendo tu partida
 echo e instalacion de Aurora 4X totalmente intactas.
 echo.
-set /p CONFIRM="¿Estas seguro de que deseas desinstalar la suite? (S/N): "
+set /p CONFIRM="�Estas seguro de que deseas desinstalar la suite? (S/N): "
 if /i "%CONFIRM%" NEQ "S" goto CANCEL
 
 echo.
@@ -20,7 +20,7 @@ if exist "%~dp0App" rmdir /s /q "%~dp0App" >nul 2>&1
 
 echo.
 echo ============================================================
-echo   DESINSTALACION COMPLETADA CON ÉXITO
+echo   DESINSTALACION COMPLETADA CON EXITO
 echo   Tu juego Aurora 4X y tu base de datos siguen intactos.
 echo ============================================================
 pause

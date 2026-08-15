@@ -95,7 +95,7 @@ namespace AuroraDesignSuite.Services
 
                 if (targetHWnd != IntPtr.Zero)
                 {
-                    ShowWindow(targetHWnd, SW_RESTORE);
+                    ShowWindow(targetHWnd, SW_MAXIMIZE);
                     BringWindowToTop(targetHWnd);
                     SetForegroundWindow(targetHWnd);
                     SwitchToThisWindow(targetHWnd, true);
@@ -120,7 +120,7 @@ namespace AuroraDesignSuite.Services
                     if (proc.Id != currentAppPid && proc.MainWindowHandle != IntPtr.Zero)
                     {
                         IntPtr handle = proc.MainWindowHandle;
-                        ShowWindow(handle, SW_RESTORE);
+                        ShowWindow(handle, SW_MAXIMIZE);
                         BringWindowToTop(handle);
                         SetForegroundWindow(handle);
                         SwitchToThisWindow(handle, true);

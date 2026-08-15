@@ -118,108 +118,50 @@ namespace AuroraDesignSuite.Services
             try
             {
                 var colonies = dbService.GetColonies(raceId);
+                if (colonies.Count > 0)
+                {
+                    double totalPop = colonies.Sum(c => c.PopulationMillions);
+                    var capital = colonies.FirstOrDefault(c => c.IsCapital) ?? colonies[0];
+
+                    sb.AppendLine($"• Imperio Conectado ID: {raceId}");
+                    sb.AppendLine($"• Población Imperial Total: {totalPop:N2} M (Capital: {capital.PopName})");
+                    sb.AppendLine($"• Reserva de Combustible Planetaria: {capital.FuelStockpile:N0} L");
+                    sb.AppendLine($"• Reservas de Duranio: {capital.MineralStockpiles.Duranium:N0} T | Sorium: {capital.MineralStockpiles.Sorium:N0} T | Gallicite: {capital.MineralStockpiles.Gallicite:N0} T");
+                }
+
                 var fleets = dbService.GetActiveFleets(raceId);
-                var infra = dbService.GetEmpireInfrastructure(raceId);
-                var officers = dbService.GetOfficerSummary(raceId);
+                sb.AppendLine($"• Flotas Registradas: {fleets.Count} flotas en servicio activo.");
+
+                var labs = dbService.GetPopulationInstallations(raceId).FirstOrDefault(i => i.InstallationName.Contains("Laboratorio"));
+                if (labs != null)
+                {
+                    sb.AppendLine($"• Instalaciones de I+D: {labs.Amount:N0} Laboratorios de Investigación.");
+                }
+
                 var research = dbService.GetActiveResearchProjects(raceId);
-
-                double totalPop = colonies.Sum(c => c.PopulationMillions);
-                double totalRevenueBP = Math.Round(totalPop * 10.0, 0);
-
-                sb.AppendLine($"• Población Total: {totalPop:N2}M | Capital: {(colonies.Count > 0 ? colonies.First().PopName : "Sol")} | Colonias: {colonies.Count}");
-                sb.AppendLine($"• PIB Imperial: {totalRevenueBP:N0} BP/Año | Superávit Fiscal: +{totalRevenueBP * 0.10:N0} BP/Año");
-
-                // Minerals
-                var globalMin = new MineralRequirement();
-                foreach (var col in colonies)
-                {
-                    var m = col.MineralStockpiles;
-                    globalMin.Duranium += m.Duranium;
-                    globalMin.Sorium += m.Sorium;
-                    globalMin.Neutronium += m.Neutronium;
-                    globalMin.Corundium += m.Corundium;
-                    globalMin.Uridium += m.Uridium;
-                    globalMin.Gallicite += m.Gallicite;
-                    globalMin.Boronide += m.Boronide;
-                }
-
-                sb.AppendLine("• Reservas Minerales:");
-                sb.AppendLine($"  - Duranium: {globalMin.Duranium:N0}t | Sorium: {globalMin.Sorium:N0}t | Neutronium: {globalMin.Neutronium:N0}t");
-                sb.AppendLine($"  - Corundium: {globalMin.Corundium:N0}t | Uridium: {globalMin.Uridium:N0}t | Gallicite: {globalMin.Gallicite:N0}t | Boronide: {globalMin.Boronide:N0}t");
-
-                // Infrastructure
-                double constFactories = infra.Where(i => i.Name.Contains("Construcción") || i.Name.Contains("Convencional")).Sum(i => i.Amount);
-                double mines = infra.Where(i => i.Name.Contains("Mina")).Sum(i => i.Amount);
-                double refineries = infra.Where(i => i.Name.Contains("Refinería")).Sum(i => i.Amount);
-                double labs = infra.Where(i => i.Name.Contains("Laboratorio")).Sum(i => i.Amount);
-                double finCentres = infra.Where(i => i.Name.Contains("Financiero")).Sum(i => i.Amount);
-
-                sb.AppendLine("• Infraestructura Industrial:");
-                sb.AppendLine($"  - Fábricas Totales: {constFactories:N0} | Minas: {mines:N0} | Refinerías: {refineries:N0} | Labs: {labs:N0} | Centros Financieros: {finCentres:N0}");
-
-                // Fleets & Fuel Breakdown
-                double planetaryFuel = colonies.Sum(c => c.FuelStockpile);
-                double shipFuel = fleets.Sum(f => f.TotalFuelLiters);
-                double totalFuel = planetaryFuel + shipFuel;
-                int activeFleetCount = fleets.Count(f => f.ShipCount > 0);
-                int totalFleetRecords = fleets.Count;
-                int shipCount = fleets.Sum(f => f.ShipCount);
-
-                sb.AppendLine("• Combustible e Inventario:");
-                sb.AppendLine($"  - Depósitos Planetarios: {planetaryFuel:N0} L | Combustible en Naves: {shipFuel:N0} L");
-                sb.AppendLine($"  - Reserva Total Combustible Imperio: {totalFuel:N0} L");
-
-                sb.AppendLine("• Fuerza Naval:");
-                sb.AppendLine($"  - Flotas Operativas (con Naves): {activeFleetCount} Flota ({shipCount} Nave activa)");
-                sb.AppendLine($"  - Agrupaciones Registradas: {totalFleetRecords} Flotas ({totalFleetRecords - activeFleetCount} vacías)");
-
-                // Officers
-                sb.AppendLine($"• Oficialidad: {officers.CaptainsCount} Capitanes | {officers.ScientistsCount} Científicos | {officers.GovernorsCount} Gobernadores.");
-
-                // Active Research Projects
-                if (research.Count > 0)
-                {
-                    sb.AppendLine("• Proyectos I+D Activos:");
-                    foreach (var p in research)
-                    {
-                        sb.AppendLine($"  - {p.TechName}: {p.ProgressDisplay}");
-                    }
-                }
+                sb.AppendLine($"• Proyectos I+D Activos: {research.Count} tecnologías en desarrollo.");
             }
             catch (Exception ex)
             {
-                sb.AppendLine($"• Error telemetría: {ex.Message}");
+                sb.AppendLine($"Error recopilando contexto: {ex.Message}");
             }
 
-            sb.AppendLine("==================================================================");
-            sb.AppendLine("DIRECTRICES DE RESPUESTA OBLIGATORIAS (MATRIZ IMPERIAL):");
-            sb.AppendLine("1. REGLA INVIOLABLE: PROHIBICIÓN ABSOLUTA de mencionar o hacer referencia a tu propia personalidad, naturaleza, condición de IA o estilo de voz. Cero meta-comentarios.");
-            sb.AppendLine("2. Responde de forma fría, concisa, quirúrgica, absolutamente precisa y directa.");
-            sb.AppendLine("3. Sin saludos, sin introducciones informales, sin disculpas y sin frases superfluas. Ve al grano de inmediato.");
-            sb.AppendLine("4. Usa exclusivamente los datos numéricos reales de AuroraDB.db provistos.");
-            sb.AppendLine("5. ESTRUCTURA DE RESPUESTA OBLIGATORIA:");
-            sb.AppendLine("   [TELEMETRÍA]");
-            sb.AppendLine("   [VULNERABILIDAD DETECTADA]");
-            sb.AppendLine("   [ACCIÓN RECOMENDADA]");
             return sb.ToString();
         }
 
-        public async Task<string> AskAIAsync(string userQuery, string imperialContext, bool useOnlineGemini = true)
+        public async Task<string> AskAIAsync(string userQuery, string imperialContext = "", bool useOnlineGemini = true)
         {
-            if (!useOnlineGemini || string.IsNullOrWhiteSpace(_apiKey))
-            {
-                return GenerateLocalDiagnostic(userQuery, imperialContext);
-            }
-
-            string[] candidateModels = new[] { "gemini-flash-latest", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-2.5-flash" };
-
-            foreach (var model in candidateModels)
+            if (useOnlineGemini && !string.IsNullOrWhiteSpace(_apiKey))
             {
                 try
                 {
-                    string endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={_apiKey}";
+                    string systemInstruction = @"Eres la Matriz Computacional de Inteligencia Imperial para Aurora 4X (v2.7.1).
+Tus análisis deben ser precisos, ejecutivos, con terminología de ciencia ficción militar/científica.
+Sigue estrictamente el formato solicitado por el usuario.";
 
-                    var requestPayload = new
+                    string fullPrompt = $"{systemInstruction}\n\n[CONTEXTO IMPERIAL]\n{imperialContext}\n\n[CONSULTA DEL COMANDANTE]\n{userQuery}";
+
+                    string jsonBody = JsonSerializer.Serialize(new
                     {
                         contents = new[]
                         {
@@ -227,39 +169,44 @@ namespace AuroraDesignSuite.Services
                             {
                                 parts = new[]
                                 {
-                                    new { text = $"{imperialContext}\n\nCONSULTA DE ANÁLISIS EXIGIDA: {userQuery}" }
+                                    new { text = fullPrompt }
                                 }
                             }
                         }
-                    };
+                    });
 
-                    string jsonString = JsonSerializer.Serialize(requestPayload);
-                    var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+                    string[] models = new[] { "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro" };
 
-                    var response = await _httpClient.PostAsync(endpoint, content);
-                    if (response.IsSuccessStatusCode)
+                    foreach (var model in models)
                     {
-                        string responseBody = await response.Content.ReadAsStringAsync();
-                        using var doc = JsonDocument.Parse(responseBody);
-                        var candidates = doc.RootElement.GetProperty("candidates");
-                        if (candidates.GetArrayLength() > 0)
+                        string endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={_apiKey}";
+                        using var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+                        var response = await _httpClient.PostAsync(endpoint, content);
+                        if (response.IsSuccessStatusCode)
                         {
-                            var parts = candidates[0].GetProperty("content").GetProperty("parts");
-                            if (parts.GetArrayLength() > 0)
+                            string jsonResp = await response.Content.ReadAsStringAsync();
+                            using var doc = JsonDocument.Parse(jsonResp);
+
+                            var candidates = doc.RootElement.GetProperty("candidates");
+                            if (candidates.GetArrayLength() > 0)
                             {
-                                string text = parts[0].GetProperty("text").GetString()!;
-                                return text;
+                                var parts = candidates[0].GetProperty("content").GetProperty("parts");
+                                if (parts.GetArrayLength() > 0)
+                                {
+                                    string text = parts[0].GetProperty("text").GetString()!;
+                                    return text;
+                                }
                             }
                         }
                     }
                 }
                 catch
                 {
-                    // Try next candidate model
+                    // Fall back if network or API error
                 }
             }
 
-            // Fallback to local rule-based diagnostic engine if online API unreachable
             return GenerateLocalDiagnostic(userQuery, imperialContext);
         }
 
@@ -363,24 +310,101 @@ namespace AuroraDesignSuite.Services
                 _ => "Adopta el tono de un gran escritor de ciencia ficción espacial (al estilo de Isaac Asimov, Dan Simmons o Frank Herbert). Escribe una narrativa majestuosa, inmersiva, elegante y apasionante en español."
             };
 
-            string prompt = $@"Eres un historiador estelar y cronista de la saga espacio-temporal del imperio '{empireName}'.
+            string prompt = $@"Eres un renombrado escritor de ciencia ficción espacial y cronista imperial de la saga del imperio '{empireName}'.
 {stylePrompt}
 
-A continuación se te proporcionan los registros históricos reales extraídos cronológicamente de la partida de Aurora 4X (v2.7.1):
+PROHIBICIÓN STRICTA: NO redactes listas técnicas, NO incluyas secciones de '[TELEMETRÍA]', NO incluyas '[VULNERABILIDAD DETECTADA]' ni '[ACCIÓN RECOMENDADA]'. Debes escribir ÚNICAMENTE una novela e historia narrativa literaria en capítulos.
+
+A continuación se te proporcionan los registros históricos reales extraídos de la partida de Aurora 4X (v2.7.1):
 
 ---
-REGISTROS HISTÓRICOS DE LA PARTIDA:
+REGISTROS HISTÓRICOS REALES:
 {rawLogsText}
 ---
 
-INSTRUCCIONES DE REDACCIÓN LITERARIA:
-1. Divide la crónica en Capítulos Épicos bien estructurados con títulos evocadores (Ej: 'Capítulo I: El Despertar de la Cuna', 'Capítulo II: La Frontera del Vacío', 'Capítulo III: La Era de las Estrellas').
-2. Narra la evolución del imperio desde sus primeros descubrimientos hasta el momento actual.
-3. Incorpora los nombres reales de los oficiales, naves, tecnologías y sistemas solares presentes en los registros.
-4. Mantén una prosa cuidada, épica, inmersiva y fascinante que emocione al jugador.
-5. Formatea el texto con markdown para títulos, cursivas y negritas.";
+INSTRUCCIONES DE REDACCIÓN LITERARIA OBLIGATORIAS:
+1. Divide la obra en 3 o 4 Capítulos Épicos bien estructurados con títulos literarios evocadores (Ej: 'Capítulo I: El Despertar del Imperio', 'Capítulo II: La Frontera del Vacío', 'Capítulo III: El Triunfo de las Estrellas').
+2. Narra la historia cronológica del imperio como una novela apasionante en español.
+3. Incorpora los nombres de almirantes, naves, sistemas y tecnologías reales de los registros.
+4. Usa formato Markdown impecable con títulos, cursivas y negritas.";
 
-            return await AskAIAsync(prompt, "", useOnlineGemini: true);
+            string response = await AskAIAsync(prompt, "", useOnlineGemini: true);
+
+            // If local fallback diagnostic triggered, intercept and build narrative chronicle offline
+            if (string.IsNullOrWhiteSpace(response) || response.Contains("[VULNERABILIDAD DETECTADA]") || response.Contains("[ACCIÓN RECOMENDADA]"))
+            {
+                response = BuildOfflineNarrativeChronicle(empireName, historyLogs, styleChoice);
+            }
+
+            return response;
+        }
+
+        private string BuildOfflineNarrativeChronicle(string empireName, List<string> historyLogs, string styleChoice)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine($"# 📖 NOVELA HISTÓRICA DE LA SAGA IMPERIAL: {empireName.ToUpper()}");
+            sb.AppendLine($"*Crónica Literaria Transcrita por la Matriz Computacional Imperial de Aurora Command Suite*");
+            sb.AppendLine();
+            sb.AppendLine("---");
+            sb.AppendLine();
+
+            int totalLogs = historyLogs.Count;
+            int partSize = Math.Max(1, totalLogs / 3);
+
+            var part1 = historyLogs.Take(partSize).ToList();
+            var part2 = historyLogs.Skip(partSize).Take(partSize).ToList();
+            var part3 = historyLogs.Skip(partSize * 2).ToList();
+
+            // CAPÍTULO I
+            sb.AppendLine("### 🏛️ CAPÍTULO I: EL DESPERTAR EN EL NÚCLEO DE LA CIVILIZACIÓN");
+            sb.AppendLine($"Bajo los cielos de la cuna natal, los mandatarios y pioneros del **{empireName}** trazaron los primeros designios para trascender la cuna planetaria. Los registros más antiguos de la memoria imperial atesoran los cimientos de esta era:");
+            sb.AppendLine();
+
+            foreach (var log in part1)
+            {
+                sb.AppendLine($"> 📜 *{log}*");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine($"La determinación de la población del **{empireName}** impulsó la construcción de los primeros laboratorios de investigación y complejos industriales, sembrando la semilla de una expansión sin precedentes en los anales estelares.");
+            sb.AppendLine();
+            sb.AppendLine("---");
+            sb.AppendLine();
+
+            // CAPÍTULO II
+            sb.AppendLine("### 🌌 CAPÍTULO II: LA FRONTERA DEL VACÍO Y LA EXPLORACIÓN ESTELAR");
+            sb.AppendLine($"Con el dominio del salto de hiperespacio y el despliegue de las primeras naves de reconocimiento, el **{empireName}** se adentró en las profundidades de la galaxia. Cada escaneo de sistema y cada boya de salto situaron a la flota en los confines de la frontera:");
+            sb.AppendLine();
+
+            foreach (var log in part2)
+            {
+                sb.AppendLine($"> 🛸 *{log}*");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine($"Los capitanes y almirantes asignados al mando guiaron sus escuadras con temple de acero, asegurando la soberanía del imperio frente a los imprevistos del cosmos profundo.");
+            sb.AppendLine();
+            sb.AppendLine("---");
+            sb.AppendLine();
+
+            // CAPÍTULO III
+            sb.AppendLine("### ⚔️ CAPÍTULO III: EL TRIUNFO DE LAS ESTRELLAS Y LA ERA MODERNA");
+            sb.AppendLine($"En la época contemporánea, la supremacía del **{empireName}** se consolida mediante una infraestructura técnica imponente, colonias florecientes y una fuerza naval lista para responder ante cualquier amenaza:");
+            sb.AppendLine();
+
+            foreach (var log in part3)
+            {
+                sb.AppendLine($"> 🛡️ *{log}*");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine($"La epopeya del **{empireName}** continúa escribiéndose día a día en las estrellas. La historia recordará a aquellos que abrieron el camino hacia el destino infinito.");
+            sb.AppendLine();
+            sb.AppendLine("---");
+            sb.AppendLine($"*Fin del Tomo I de la Crónica Histórica | Registrado en Aurora Command Suite*");
+
+            return sb.ToString();
         }
     }
 }

@@ -16,27 +16,27 @@ Combina una interfaz gráfica sci-fi de última generación (WPF), telemetría d
 
 ---
 
-## 📦 ¿Dónde Extraer la Carpeta para Jugar? (Instrucciones de Instalación)
+## 📦 ¿Cómo Instalar y Jugar? (Interconexión 100% Automática)
 
-Para que el lanzador **`🚀 ABRIR_SUITE.bat`** funcione perfectamente y detecte tu partida sin errores:
+Para que el lanzador **`🚀 ABRIR_SUITE.bat`** abra automáticamente el juego parcheado (**`AuroraPatch.exe`** / **`Aurora.exe`**) y la suite juntos en paralelo:
 
-### 📥 Opción Recomendada (Extraer dentro de la carpeta del juego):
-1. Descarga el paquete comprimido `.zip` desde la sección [Releases](https://github.com/GomSamurai/Aurora-Command-Suite/releases).
-2. Extrae la carpeta `Aurora_Command_Suite_v2.7.1` **dentro del directorio principal de tu juego Aurora 4X** (donde se encuentra `AuroraDB.db` y `Aurora.exe`).
-3. Entra a la carpeta extraída y haz doble clic en **`🚀 ABRIR_SUITE.bat`**.
+### 📥 Pasos Rápidos de Instalación:
+1. Descarga la carpeta comprimida `Aurora_Command_Suite_v2.7.1.zip` desde la sección de **Releases** de este repositorio (o navega a la subcarpeta [`release/Aurora_Command_Suite_v2.7.1`](https://github.com/GomSamurai/Aurora-Command-Suite/tree/main/release/Aurora_Command_Suite_v2.7.1)).
+2. Extrae la carpeta `Aurora_Command_Suite_v2.7.1` **dentro del directorio principal de tu juego Aurora 4X** (en la misma carpeta donde residen `AuroraPatch.exe`, `Aurora.exe` y `AuroraDB.db`).
+3. Entra en la carpeta extraída y haz doble clic en **`🚀 ABRIR_SUITE.bat`**.
 
 ```
-📁 Tu_Carpeta_Aurora4X/
- ├── Aurora.exe
- ├── AuroraDB.db
+📁 Tu_Carpeta_De_Aurora_4X/
+ ├── AuroraPatch.exe                  <-- Patcher con inyección de botón
+ ├── Aurora.exe                       <-- Juego base
+ ├── AuroraDB.db                      <-- Base de datos de la partida
  └── 📁 Aurora_Command_Suite_v2.7.1/
-      ├── 🚀 ABRIR_SUITE.bat               <-- ¡Haz doble clic aquí!
+      ├── 🚀 ABRIR_SUITE.bat           <-- ¡Doble clic aquí para lanzar TODO!
       ├── 📜 INSTRUCCIONES_Y_GUIA.html
-      ├── 📜 INSTRUCCIONES_DE_INSTALACION.md
       └── 📁 App/
 ```
 
-> **⚡ Auto-Detección Inteligente de Base de Datos**: La suite incluye búsqueda automática. Si extraes la carpeta en cualquier ubicación, detectará la base de datos `AuroraDB.db` automáticamente en su propio directorio, en la carpeta padre de Aurora 4X o en `c:\VSCODE\Aurora271Full\AuroraDB.db`.
+> **⚡ Conexión e Inyección Automática**: Al hacer clic en `🚀 ABRIR_SUITE.bat`, la script detecta automáticamente `AuroraPatch.exe` en la carpeta superior del juego, inicia Aurora 4X con el botón **`🚀 AURORA COMMAND SUITE`** inyectado en el juego, y lanza la suite de mando en paralelo.
 
 ---
 
@@ -89,29 +89,6 @@ Para que el lanzador **`🚀 ABRIR_SUITE.bat`** funcione perfectamente y detecte
 
 - **Botón en la App**: **`🎮 VOLVER A AURORA 4X`** enfoca la ventana del juego de inmediato en estado maximizado.
 - **Botón en el Juego**: El parche inyecta el botón **`🚀 AURORA COMMAND SUITE`** dentro de Aurora 4X para saltar a la suite al instante.
-
----
-
-## 📁 Estructura del Repositorio
-
-```
-AuroraDesignSuite/
-├── README.md                          <-- Guía oficial de GitHub
-├── AuroraDesignSuite.sln             <-- Solución de Visual Studio
-├── AuroraDesignSuite.csproj          <-- Proyecto C# WPF (.NET 7.0)
-│
-├── Services/                         <-- DatabaseService, ThemeManager, AITacticalMonitorService
-├── Models/                           <-- Modelos de datos SQLite
-├── Views/                            <-- Vistas XAML/C# de los 12 módulos
-│
-└── release/                          <-- Paquete ejecutable distribuible
-    └── Aurora_Command_Suite_v2.7.1/
-        ├── 🚀 ABRIR_SUITE.bat         <-- Lanzador principal
-        ├── 📜 INSTRUCCIONES_Y_GUIA.html<-- Manual visual interactivo
-        ├── 📜 INSTRUCCIONES_DE_INSTALACION.md <-- Guía rápida de instalación
-        ├── 🧹 DESINSTALAR_SUITE.bat   <-- Desinstalador limpio
-        └── App/                      <-- Binarios y ejecutable principal
-```
 
 ---
 

@@ -10,7 +10,8 @@ namespace AuroraDesignSuite.Services
         public string Name { get; set; } = string.Empty;
         public string Icon { get; set; } = "🎨";
         public string Category { get; set; } = "🌌 Oscuro";
-        
+        public bool IsHeader { get; set; } = false;
+
         public string BgDark { get; set; } = "#0B0E14";
         public string CardBg { get; set; } = "#131924";
         public string CardHeader { get; set; } = "#1B2333";
@@ -27,6 +28,7 @@ namespace AuroraDesignSuite.Services
 
         public override string ToString()
         {
+            if (IsHeader) return Name;
             if (string.IsNullOrEmpty(Name)) return string.Empty;
             return Name.StartsWith(Icon) ? Name : $"{Icon} {Name}";
         }
@@ -39,6 +41,7 @@ namespace AuroraDesignSuite.Services
             // ==========================================
             // 👑 EDICIÓN INSIGNIA
             // ==========================================
+            new ThemeOption { Name = "─── 👑 EDICIÓN INSIGNIA ───", IsHeader = true },
             new ThemeOption
             {
                 Category = "👑 Insignia",
@@ -58,8 +61,9 @@ namespace AuroraDesignSuite.Services
             },
 
             // ==========================================
-            // 🌌 CATEGORÍA: MODOS OSCURO / DEEP SPACE (8 Temas)
+            // 🌌 CATEGORÍA: MODOS OSCURO / DEEP SPACE
             // ==========================================
+            new ThemeOption { Name = "─── 🌌 MODOS OSCURO (DEEP SPACE) ───", IsHeader = true },
             new ThemeOption
             {
                 Category = "🌌 Modos Oscuro",
@@ -181,8 +185,9 @@ namespace AuroraDesignSuite.Services
             },
 
             // ==========================================
-            // ☀️ CATEGORÍA: MODOS CLARO / DÍA (High Contrast Dark Text) (5 Temas)
+            // ☀️ CATEGORÍA: MODOS CLARO / DÍA (Alta Legibilidad)
             // ==========================================
+            new ThemeOption { Name = "─── ☀️ MODOS CLARO / DÍA (ALTA LEGIBILIDAD) ───", IsHeader = true },
             new ThemeOption
             {
                 Category = "☀️ Modos Claro",
@@ -193,11 +198,11 @@ namespace AuroraDesignSuite.Services
                 CardHeader = "#E2E8F0",
                 TextPrimary = "#0F172A",
                 TextSecondary = "#475569",
-                AccentCyan = "#1E3A8A",   // Deep Sapphire Blue
-                AccentAmber = "#B45309",  // Deep Bronze Gold
-                AccentGreen = "#15803D",  // Deep Forest Emerald
-                AccentRed = "#B91C1C",    // Deep Crimson
-                AccentPurple = "#6B21A8", // Deep Royal Purple
+                AccentCyan = "#1E3A8A",
+                AccentAmber = "#B45309",
+                AccentGreen = "#15803D",
+                AccentRed = "#B91C1C",
+                AccentPurple = "#6B21A8",
                 BorderColor = "#CBD5E1"
             },
             new ThemeOption
@@ -210,11 +215,11 @@ namespace AuroraDesignSuite.Services
                 CardHeader = "#BEE3F8",
                 TextPrimary = "#1A202C",
                 TextSecondary = "#4A5568",
-                AccentCyan = "#0284C7",   // Crisp Oceanic Blue
-                AccentAmber = "#C2410C",  // Deep Rust Amber
-                AccentGreen = "#166534",  // Dark Pine Green
-                AccentRed = "#C53030",    // Dark Red
-                AccentPurple = "#7E22CE", // Deep Violet
+                AccentCyan = "#0284C7",
+                AccentAmber = "#C2410C",
+                AccentGreen = "#166534",
+                AccentRed = "#C53030",
+                AccentPurple = "#7E22CE",
                 BorderColor = "#90CDF4"
             },
             new ThemeOption
@@ -225,13 +230,13 @@ namespace AuroraDesignSuite.Services
                 BgDark = "#FDF6E3",
                 CardBg = "#FAF4E1",
                 CardHeader = "#EEE8D5",
-                TextPrimary = "#073642",   // Dark Sepia Ink
+                TextPrimary = "#073642",
                 TextSecondary = "#586E75",
-                AccentCyan = "#B58900",   // Solarized Amber
-                AccentAmber = "#CB4B16",  // Terracotta
-                AccentGreen = "#2AA198",  // Dark Teal
-                AccentRed = "#DC322F",    // Muted Red
-                AccentPurple = "#6C71C4", // Muted Violet
+                AccentCyan = "#B58900",
+                AccentAmber = "#CB4B16",
+                AccentGreen = "#2AA198",
+                AccentRed = "#DC322F",
+                AccentPurple = "#6C71C4",
                 BorderColor = "#D3C6AA"
             },
             new ThemeOption
@@ -244,11 +249,11 @@ namespace AuroraDesignSuite.Services
                 CardHeader = "#F1F5F9",
                 TextPrimary = "#020617",
                 TextSecondary = "#334155",
-                AccentCyan = "#0369A1",   // Sharp Dark Sky Blue
-                AccentAmber = "#D97706",  // Deep Amber
-                AccentGreen = "#047857",  // Emerald
-                AccentRed = "#BE123C",    // Rose Red
-                AccentPurple = "#581C87", // Indigo Purple
+                AccentCyan = "#0369A1",
+                AccentAmber = "#D97706",
+                AccentGreen = "#047857",
+                AccentRed = "#BE123C",
+                AccentPurple = "#581C87",
                 BorderColor = "#E2E8F0"
             },
             new ThemeOption
@@ -270,8 +275,9 @@ namespace AuroraDesignSuite.Services
             },
 
             // ==========================================
-            // ☯️ CATEGORÍA: MODOS NEUTROS Y SLATE (4 Temas)
+            // ☯️ CATEGORÍA: MODOS NEUTROS Y SLATE
             // ==========================================
+            new ThemeOption { Name = "─── ☯️ MODOS NEUTROS Y SLATE ───", IsHeader = true },
             new ThemeOption
             {
                 Category = "☯️ Modos Neutros",
@@ -342,8 +348,9 @@ namespace AuroraDesignSuite.Services
             },
 
             // ==========================================
-            // 💎 CATEGORÍA: EDICIONES REFINADAS (3 Temas)
+            // 💎 CATEGORÍA: EDICIONES REFINADAS
             // ==========================================
+            new ThemeOption { Name = "─── 💎 EDICIONES REFINADAS ───", IsHeader = true },
             new ThemeOption
             {
                 Category = "💎 Ediciones Refinadas",
@@ -399,7 +406,7 @@ namespace AuroraDesignSuite.Services
 
         public static void ApplyTheme(ThemeOption theme)
         {
-            if (theme == null || Application.Current == null) return;
+            if (theme == null || theme.IsHeader || Application.Current == null) return;
 
             var res = Application.Current.Resources;
 

@@ -44,7 +44,22 @@
                     <TextBlock Text="● CONECTADO" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
 
                     <TextBlock Text="🎨 ESTILO VISUAL:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="14,0,6,0"/>
-                    <ComboBox x:Name="CmbThemeSelector" SelectionChanged="CmbThemeSelector_SelectionChanged" Width="210" VerticalAlignment="Center" ToolTip="Cambia drásticamente la paleta de colores y el esquema visual de toda la aplicación en tiempo real."/>
+                    <ComboBox x:Name="CmbThemeSelector" SelectionChanged="CmbThemeSelector_SelectionChanged" Width="240" VerticalAlignment="Center" ToolTip="Cambia drásticamente la paleta de colores y el esquema visual de toda la aplicación en tiempo real.">
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsHeader}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource AccentAmberBrush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource CardHeaderBrush}"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                        <Setter Property="Padding" Value="4,4,4,4"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                    </ComboBox>
 
                     <Button Content="🎮 VOLVER A AURORA 4X" Click="BtnFocusGame_Click" Padding="10,4" Margin="14,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Enfoca al instante la ventana del juego Aurora 4X en primer plano."/>
                 </StackPanel>
@@ -83,122 +98,122 @@
             </TabControl.Template>
 
             <!-- DIVISION 1: GOBIERNO Y COLONIAS -->
-            <TabItem x:Name="TabEmpire" Header="🏰 Mi Imperio">
+            <TabItem x:Name="TabEmpire" Header="🏰 MI IMPERIO">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:EmpireOverviewView x:Name="ViewEmpire"/>
             </TabItem>
 
-            <TabItem x:Name="TabColonies" Header="🪐 Colonias y Minerales">
+            <TabItem x:Name="TabColonies" Header="🪐 COLONIAS Y MINERALES">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:ColoniesOverviewView x:Name="ViewColonies"/>
             </TabItem>
 
-            <TabItem x:Name="TabCommanders" Header="🎖️ Alto Mando">
+            <TabItem x:Name="TabCommanders" Header="🎖️ ALTO MANDO">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:CommandersHQView x:Name="ViewCommanders"/>
             </TabItem>
 
             <!-- DIVISION 2: CIENCIA E INDUSTRIA -->
-            <TabItem x:Name="TabResearch" Header="🔬 Investigación I+D">
+            <TabItem x:Name="TabResearch" Header="🔬 INVESTIGACIÓN I+D">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:ResearchHQView x:Name="ViewResearch"/>
             </TabItem>
 
-            <TabItem x:Name="TabIndustrial" Header="⚡ Industria y Fábricas">
+            <TabItem x:Name="TabIndustrial" Header="⚡ INDUSTRIA Y FÁBRICAS">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:IndustrialHQView x:Name="ViewIndustrial"/>
             </TabItem>
 
             <!-- DIVISION 3: INGENIERÍA Y DISEÑO -->
-            <TabItem x:Name="TabBlueprint" Header="🛠️ Diseñador Naves">
+            <TabItem x:Name="TabBlueprint" Header="🛠️ DISEÑADOR NAVES">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:BlueprintDesignerView x:Name="ViewBlueprint"/>
             </TabItem>
 
-            <TabItem x:Name="TabMissile" Header="🚀 Lab Misiles/Motores">
+            <TabItem x:Name="TabMissile" Header="🚀 LAB MISILES/MOTORES">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:MissileEngineLabView x:Name="ViewMissile"/>
             </TabItem>
 
-            <TabItem x:Name="TabShipyards" Header="🏭 Operaciones Astillero">
+            <TabItem x:Name="TabShipyards" Header="🏭 OPERACIONES ASTILLERO">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:ShipyardOperationsView x:Name="ViewShipyards"/>
             </TabItem>
 
             <!-- DIVISION 4: OPERACIONES NAVALES -->
-            <TabItem x:Name="TabActiveFleets" Header="🛸 Mis Flotas y Naves">
+            <TabItem x:Name="TabActiveFleets" Header="🛸 MIS FLOTAS Y NAVES">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:ActiveFleetsView x:Name="ViewActiveFleets"/>
             </TabItem>
 
-            <TabItem x:Name="TabFleet" Header="⚓ Auditoría Naval">
+            <TabItem x:Name="TabFleet" Header="⚓ AUDITORÍA NAVAL">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:FleetCompositionView x:Name="ViewFleet"/>
             </TabItem>
 
-            <TabItem x:Name="TabExploration" Header="🌌 Exploración y Sistemas">
+            <TabItem x:Name="TabExploration" Header="🌌 EXPLORACIÓN Y SISTEMAS">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:SystemExplorationView x:Name="ViewExploration"/>
             </TabItem>
 
             <!-- DIVISION 5: IA E INTELIGENCIA -->
-            <TabItem x:Name="TabAI" Header="🤖 Asistente IA Imperial">
+            <TabItem x:Name="TabAI" Header="🤖 MATRIZ IA IMPERIAL">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:AIAssistantView x:Name="ViewAI"/>
             </TabItem>
 
-            <TabItem x:Name="TabCalculators" Header="🧮 Calculadoras Espaciales">
+            <TabItem x:Name="TabCalculators" Header="🧮 CALCULADORAS ESPACIALES">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:TravelCalculatorView x:Name="ViewCalculators"/>
@@ -209,7 +224,7 @@
         <Border Grid.Row="3" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="10,4">
             <Grid>
                 <TextBlock Text="Aurora 4X Design &amp; Empire Command Center Master Suite | Aurora 4X v2.7.1 | C# WPF Live Bridge (12 Módulos)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                <TextBlock Text="👑 Creado por Fran Gómez &amp; Antigravity AI | © 2026 Aurora Master Suite" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right"/>
+                <TextBlock Text="👑 Creado por Fran Gómez &amp; Antigravity AI | © 2026 Aurora Master Suite" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" HorizontalAlignment="Right"/>
             </Grid>
         </Border>
     </Grid>

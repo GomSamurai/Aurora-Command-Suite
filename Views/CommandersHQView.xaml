@@ -66,9 +66,9 @@
 
             <!-- Action Bar -->
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
-                <Button Content="⚡ Recomendador Inteligente de Mando" Click="BtnAutoAssign_Click" Padding="12,6" Margin="0,0,6,0" Background="#1D2A1F" Foreground="#00FF88" BorderBrush="#00FF88" FontWeight="Bold" ToolTip="Escanea en vivo los 179 oficiales de tu imperio en AuroraDB.db y recomienda automáticamente las asignaciones óptimas."/>
-                <Button Content="📜 Asignar Destino / Misión" Click="BtnAssignTask_Click" Padding="12,6" Margin="0,0,6,0" Background="#1C2536" Foreground="#00F0FF" BorderBrush="#00F0FF" ToolTip="Registra la asignación oficial del comandante a un laboratorio, nave o colonia."/>
-                <Button Content="🎖️ Conceder Promoción de Rango" Click="BtnPromote_Click" Padding="12,6" Background="#2C2000" Foreground="#FFD700" BorderBrush="#FFD700" FontWeight="Bold" ToolTip="Incrementa el rango oficial y la aptitud de mando del oficial seleccionado."/>
+                <Button Content="⚡ Recomendador Inteligente de Mando" Click="BtnAutoAssign_Click" Padding="12,6" Margin="0,0,6,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Escanea en vivo los 179 oficiales de tu imperio en AuroraDB.db y recomienda automáticamente las asignaciones óptimas."/>
+                <Button Content="📜 Asignar Destino / Misión" Click="BtnAssignTask_Click" Padding="12,6" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" ToolTip="Registra la asignación oficial del comandante a un laboratorio, nave o colonia."/>
+                <Button Content="🎖️ Conceder Promoción de Rango" Click="BtnPromote_Click" Padding="12,6" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Incrementa el rango oficial y la aptitud de mando del oficial seleccionado."/>
             </StackPanel>
         </Grid>
 
@@ -106,13 +106,13 @@
                                 <TextBlock Text="Aptitud de Promoción:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
                                 <TextBlock x:Name="LblDossierPromotion" Text="75 / 100" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
                             </Grid>
-                            <ProgressBar x:Name="PbPromotion" Value="75" Maximum="100" Height="6" Foreground="{DynamicResource AccentAmberBrush}" Background="#111" BorderBrush="#222" Margin="0,0,0,4"/>
+                            <ProgressBar x:Name="PbPromotion" Value="75" Maximum="100" Height="6" Foreground="{DynamicResource AccentAmberBrush}" Background="#111" BorderBrush="{DynamicResource BorderBrush}" Margin="0,0,0,4"/>
 
                             <Grid Margin="0,4,0,2">
                                 <TextBlock Text="Lealtad Política Imperial:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                <TextBlock x:Name="LblDossierLoyalty" Text="100 %" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                                <TextBlock x:Name="LblDossierLoyalty" Text="100 %" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
                             </Grid>
-                            <ProgressBar x:Name="PbLoyalty" Value="100" Maximum="100" Height="6" Foreground="#55FF55" Background="#111" BorderBrush="#222"/>
+                            <ProgressBar x:Name="PbLoyalty" Value="100" Maximum="100" Height="6" Foreground="{DynamicResource AccentGreenBrush}" Background="#111" BorderBrush="{DynamicResource BorderBrush}"/>
                         </StackPanel>
                     </Border>
 
@@ -128,8 +128,8 @@
                                             <ColumnDefinition Width="70"/>
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="{Binding Description}" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center"/>
-                                        <Border Grid.Column="1" Background="#16261C" BorderBrush="#00FF88" BorderThickness="1" CornerRadius="3" Padding="4,1" HorizontalAlignment="Right">
-                                            <TextBlock Text="{Binding ValueDisplay}" Foreground="#55FF55" FontWeight="Bold" FontSize="11"/>
+                                        <Border Grid.Column="1" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" BorderThickness="1" CornerRadius="3" Padding="4,1" HorizontalAlignment="Right">
+                                            <TextBlock Text="{Binding ValueDisplay}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
                                         </Border>
                                     </Grid>
                                 </DataTemplate>
@@ -144,11 +144,11 @@
                             <TextBlock x:Name="LblImpactInputLabel" Text="Rendimiento Base (I+D / Minería / Flota):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
                             <TextBox x:Name="TxtImpactBase" Text="1000" TextChanged="OnImpactInputChanged" Margin="0,2,0,6" ToolTip="Ingresa el valor base de producción o I+D para calcular la aportación extra del líder."/>
 
-                            <Border Background="#161F2E" CornerRadius="4" Padding="6">
+                            <Border Background="{DynamicResource CardBgBrush}" CornerRadius="4" Padding="6">
                                 <StackPanel>
                                     <Grid Margin="0,2">
                                         <TextBlock Text="Aportación Extra del Líder:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                        <TextBlock x:Name="LblImpactExtra" Text="+250.0 Unidades/año" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                        <TextBlock x:Name="LblImpactExtra" Text="+250.0 Unidades/año" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
                                     </Grid>
                                     <Grid Margin="0,2">
                                         <TextBlock Text="Rendimiento Total con Liderazgo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
@@ -181,7 +181,7 @@
                             </Grid>
                             <Grid Margin="0,2">
                                 <TextBlock Text="Promedio de Antigüedad:" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblStaffAvgSeniority" Text="0.0 Rating" Foreground="#55FF55" HorizontalAlignment="Right"/>
+                                <TextBlock x:Name="LblStaffAvgSeniority" Text="0.0 Rating" Foreground="{DynamicResource AccentGreenBrush}" HorizontalAlignment="Right"/>
                             </Grid>
                         </StackPanel>
                     </Border>

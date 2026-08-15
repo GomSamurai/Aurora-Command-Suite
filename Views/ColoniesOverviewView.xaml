@@ -52,28 +52,28 @@
                     <TextBlock Grid.Column="0" Text="📊 TELEMETRÍA DE MINERALES:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,10,0"/>
 
                     <UniformGrid Grid.Column="1" Columns="4">
-                        <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="Total Minerales: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                                <TextBlock x:Name="LblGlobalTotalMinerals" Text="135,247 t" Foreground="#00F0FF" FontWeight="Bold" FontSize="10.5"/>
+                                <TextBlock x:Name="LblGlobalTotalMinerals" Text="135,247 t" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10.5"/>
                             </StackPanel>
                         </Border>
-                        <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="Más Abundante: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                                <TextBlock x:Name="LblTopMineral" Text="Gallicite (28.3k t)" Foreground="#55FF55" FontWeight="Bold" FontSize="10.5"/>
+                                <TextBlock x:Name="LblTopMineral" Text="Gallicite (28.3k t)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5"/>
                             </StackPanel>
                         </Border>
-                        <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="Recurso Crítico: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                                <TextBlock x:Name="LblBottleneckMineral" Text="Sorium (6.5k t)" Foreground="#FFB400" FontWeight="Bold" FontSize="10.5"/>
+                                <TextBlock x:Name="LblBottleneckMineral" Text="Sorium (6.5k t)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5"/>
                             </StackPanel>
                         </Border>
-                        <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="Estado General: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                                <TextBlock x:Name="LblMineralHealthStatus" Text="✅ ESTABLE" Foreground="#00FF88" FontWeight="Bold" FontSize="10.5"/>
+                                <TextBlock x:Name="LblMineralHealthStatus" Text="✅ ESTABLE" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5"/>
                             </StackPanel>
                         </Border>
                     </UniformGrid>
@@ -109,14 +109,14 @@
                         <DockPanel Margin="0,0,0,6">
                             <TextBlock Text="🪐" FontSize="26" VerticalAlignment="Center" Margin="0,0,6,0"/>
                             <StackPanel VerticalAlignment="Center">
-                                <TextBlock x:Name="LblColonyTitle" Text="Earth (Sol)" Foreground="#00F0FF" FontWeight="Bold" FontSize="13"/>
+                                <TextBlock x:Name="LblColonyTitle" Text="Earth (Sol)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13"/>
                                 <TextBlock x:Name="LblColonyStatus" Text="Capital Imperial | Colony Cost: 0.00 (Mundo Nativo)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                             </StackPanel>
                         </DockPanel>
 
                         <Grid Margin="0,2">
                             <TextBlock Text="Población Humana Total:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                            <TextBlock x:Name="LblColonyPop" Text="1,168.63 Millones" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                            <TextBlock x:Name="LblColonyPop" Text="1,168.63 Millones" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
                         </Grid>
                         <Grid Margin="0,2">
                             <TextBlock Text="Reserva Combustible Planetario:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
@@ -124,15 +124,15 @@
                         </Grid>
                         <Grid Margin="0,2">
                             <TextBlock Text="Gobernador Asignado:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                            <TextBlock x:Name="LblColonyGovernor" Text="Oficial de Alto Mando (+10.0% Minería)" Foreground="#FFB400" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                            <TextBlock x:Name="LblColonyGovernor" Text="Oficial de Alto Mando (+10.0% Minería)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
                         </Grid>
                         <Grid Margin="0,2">
                             <TextBlock Text="Capacidad Industrial Local:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                            <TextBlock x:Name="LblColonyInfra" Text="1,595 Fábricas | 11 Minas | 2 Refinerías" Foreground="#00F0FF" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                            <TextBlock x:Name="LblColonyInfra" Text="1,595 Fábricas | 11 Minas | 2 Refinerías" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
                         </Grid>
 
-                        <Border Background="#0D2818" BorderBrush="#00FF88" BorderThickness="1" CornerRadius="4" Padding="6" Margin="0,8,0,0">
-                            <TextBlock Text="✅ CAPITAL Y NÚCLEO INDUSTRIAL DEL IMPERIO EN RÉGIMEN NOMINAL" Foreground="#00FF88" FontWeight="Bold" FontSize="10.5" HorizontalAlignment="Center"/>
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="0,8,0,0">
+                            <TextBlock Text="✅ CAPITAL Y NÚCLEO INDUSTRIAL DEL IMPERIO EN RÉGIMEN NOMINAL" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5" HorizontalAlignment="Center"/>
                         </Border>
                     </StackPanel>
                 </Border>
@@ -141,19 +141,19 @@
                 <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
                     <StackPanel>
                         <TextBlock Text="📊 AUDITORÍA EXTRACTIVA Y REFINO IMPERIAL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                        <TextBlock Text="Capacidad instalada de extracción y procesamiento de minerales:" Foreground="#8A99AD" FontSize="10" Margin="0,0,0,6"/>
+                        <TextBlock Text="Capacidad instalada de extracción y procesamiento de minerales:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,6"/>
 
                         <UniformGrid Columns="2" Margin="0,0,0,6">
-                            <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
+                            <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
                                 <StackPanel>
                                     <TextBlock Text="Minas Operativas:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                                     <TextBlock Text="11 Minas" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12"/>
                                 </StackPanel>
                             </Border>
-                            <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
+                            <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
                                 <StackPanel>
                                     <TextBlock Text="Refinerías de Sorium:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                    <TextBlock Text="2 Refinerías (100k L/Año)" Foreground="#55FF55" FontWeight="Bold" FontSize="12"/>
+                                    <TextBlock Text="2 Refinerías (100k L/Año)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12"/>
                                 </StackPanel>
                             </Border>
                         </UniformGrid>
@@ -161,7 +161,7 @@
                         <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8">
                             <StackPanel>
                                 <TextBlock Text="Tasa de Producción Minera Anual Estimada:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                <TextBlock Text="110 Toneladas / Año (10 t por Mina)" Foreground="#FFD700" FontWeight="Bold" FontSize="13" Margin="0,2,0,0"/>
+                                <TextBlock Text="110 Toneladas / Año (10 t por Mina)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,2,0,0"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>

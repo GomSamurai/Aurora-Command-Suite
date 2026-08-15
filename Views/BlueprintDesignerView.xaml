@@ -80,7 +80,7 @@
         </Grid>
 
         <!-- Column 1: GridSplitter for Resizing Left Panel -->
-        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="#1C2536" ResizeDirection="Columns"/>
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="{DynamicResource CardBgBrush}" ResizeDirection="Columns"/>
 
         <!-- Column 2: Ship Designer Workbench & Presets -->
         <Border Grid.Column="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Margin="4,0" Padding="12">
@@ -135,8 +135,8 @@
                     </StackPanel>
 
                     <!-- Automatic Military Classification Badge -->
-                    <Border Grid.Column="4" x:Name="BdrMilitaryStatus" CornerRadius="4" Padding="8,4" VerticalAlignment="Bottom" Margin="4,0,0,4" BorderThickness="1" Background="#331A1A" BorderBrush="#FF4444">
-                        <TextBlock x:Name="TxtMilitaryStatus" Text="⚔️ CLASIFICACIÓN MILITAR" Foreground="#FF6B6B" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                    <Border Grid.Column="4" x:Name="BdrMilitaryStatus" CornerRadius="4" Padding="8,4" VerticalAlignment="Bottom" Margin="4,0,0,4" BorderThickness="1" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentRedBrush}">
+                        <TextBlock x:Name="TxtMilitaryStatus" Text="⚔️ CLASIFICACIÓN MILITAR" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
                     </Border>
                 </Grid>
 
@@ -148,7 +148,7 @@
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" Margin="0,0,0,4">
                         <TextBlock Text="Componentes Seleccionados en el Plano:" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Bold"/>
-                        <Button Content="✕ Eliminar Seleccionado" Click="BtnRemoveComponent_Click" HorizontalAlignment="Right" Padding="8,2" Background="#331A1A" Foreground="#FF6B6B" BorderBrush="#FF4444" ToolTip="Quita el componente actualmente seleccionado en la lista del plano de la nave."/>
+                        <Button Content="✕ Eliminar Seleccionado" Click="BtnRemoveComponent_Click" HorizontalAlignment="Right" Padding="8,2" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" ToolTip="Quita el componente actualmente seleccionado en la lista del plano de la nave."/>
                     </Grid>
                     <DataGrid Grid.Row="1" x:Name="DgSelectedComponents" AutoGenerateColumns="False" CanUserAddRows="False" CellEditEnding="DgSelectedComponents_CellEditEnding">
                         <DataGrid.Columns>
@@ -164,10 +164,10 @@
 
                 <!-- Export Actions Bar -->
                 <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                    <Button Content="💾 Guardar como Mi Preset" Click="BtnSaveUserPreset_Click" Padding="10,6" Margin="0,0,6,0" Background="#1D2A1F" Foreground="#55FF55" BorderBrush="#55FF55" FontWeight="Bold" ToolTip="Guarda este diseño personalizado en tu biblioteca local de 'Diseños del Usuario' para reutilizarlo en cualquier momento."/>
-                    <Button Content="📋 Copiar Texto" Click="BtnCopyReport_Click" Padding="8,6" Margin="0,0,6,0" Background="#1C2536" Foreground="#00F0FF" BorderBrush="#00F0FF" ToolTip="Genera y copia la ficha técnica oficial de la nave al portapapeles."/>
-                    <Button Content="🔬 Enviar a I+D" Click="BtnExportResearch_Click" Padding="10,6" Margin="0,0,6,0" Background="#1A2C38" Foreground="#00FF88" BorderBrush="#00FF88" FontWeight="Bold" ToolTip="⚖️ MODO FAIR PLAY: Registra este diseño como un proyecto de investigación en tu partida."/>
-                    <Button Content="🚀 Registrar en Astilleros" Click="BtnExportAurora_Click" Padding="10,6" Background="#2C2000" Foreground="#FFD700" BorderBrush="#FFD700" FontWeight="Bold" ToolTip="Registra la clase de nave directamente en tus astilleros."/>
+                    <Button Content="💾 Guardar como Mi Preset" Click="BtnSaveUserPreset_Click" Padding="10,6" Margin="0,0,6,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Guarda este diseño personalizado en tu biblioteca local de 'Diseños del Usuario' para reutilizarlo en cualquier momento."/>
+                    <Button Content="📋 Copiar Texto" Click="BtnCopyReport_Click" Padding="8,6" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" ToolTip="Genera y copia la ficha técnica oficial de la nave al portapapeles."/>
+                    <Button Content="🔬 Enviar a I+D" Click="BtnExportResearch_Click" Padding="10,6" Margin="0,0,6,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="⚖️ MODO FAIR PLAY: Registra este diseño como un proyecto de investigación en tu partida."/>
+                    <Button Content="🚀 Registrar en Astilleros" Click="BtnExportAurora_Click" Padding="10,6" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Registra la clase de nave directamente en tus astilleros."/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -254,7 +254,7 @@
                                 <DataTemplate>
                                     <Grid Margin="0,1">
                                         <TextBlock Text="{Binding Key}" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                        <TextBlock Text="{Binding Value, StringFormat={}{0:N1} t}" Foreground="#00F0FF" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                        <TextBlock Text="{Binding Value, StringFormat={}{0:N1} t}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -263,7 +263,7 @@
 
                     <!-- Warnings & Design Validation -->
                     <TextBlock x:Name="LblValidationTitle" Text="⚠️ VALIDACIÓN Y ALERTAS DE DISEÑO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,4,0,4"/>
-                    <Border x:Name="BdrValidation" Background="#1F0D0D" BorderBrush="#FF4444" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,8" ToolTip="Validador inteligente de diseño. Muestra advertencias si falta tripulación, combustible, espacios de ingeniería o si hay incompatibilidades mecánicas.">
+                    <Border x:Name="BdrValidation" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentRedBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,8" ToolTip="Validador inteligente de diseño. Muestra advertencias si falta tripulación, combustible, espacios de ingeniería o si hay incompatibilidades mecánicas.">
                         <ItemsControl x:Name="IcWarnings">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -277,7 +277,7 @@
                     <TextBlock Text="⚓ ASTILLEROS COMPATIBLES EN VIVO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,4,0,4"/>
                     <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" ToolTip="Consulta en vivo tu base de datos de astilleros para verificar qué instalaciones reales pueden construir esta nave y el costo de retooling.">
                         <StackPanel>
-                            <TextBlock x:Name="LblShipyardMatchStatus" Text="Buscando astilleros en AuroraDB.db..." Foreground="#00F0FF" FontWeight="Bold" FontSize="11" TextWrapping="Wrap"/>
+                            <TextBlock x:Name="LblShipyardMatchStatus" Text="Buscando astilleros en AuroraDB.db..." Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" TextWrapping="Wrap"/>
                             <TextBlock x:Name="LblShipyardRetoolInfo" Text="Retooling estimado: --" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" Margin="0,4,0,0"/>
                         </StackPanel>
                     </Border>

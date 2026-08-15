@@ -23,7 +23,7 @@
                 <DockPanel>
                     <Grid DockPanel.Dock="Top" Margin="0,0,0,8">
                         <TextBlock Text="🏭 COMPLEJOS DE ASTILLEROS NAVALES Y COMERCIALES" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
-                        <Button Content="➕ Ampliar Grada / Capacidad" Click="BtnExpandShipyard_Click" HorizontalAlignment="Right" Padding="8,3" Background="#1D2A1F" Foreground="#55FF55" BorderBrush="#55FF55" FontWeight="Bold" ToolTip="Registra una expansión industrial de tonelaje o gradas de construcción."/>
+                        <Button Content="➕ Ampliar Grada / Capacidad" Click="BtnExpandShipyard_Click" HorizontalAlignment="Right" Padding="8,3" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Registra una expansión industrial de tonelaje o gradas de construcción."/>
                     </Grid>
 
                     <DataGrid x:Name="DgShipyards" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgShipyards_SelectionChanged" ToolTip="Selecciona un astillero para administrar sus gradas de construcción y tareas activas.">
@@ -57,7 +57,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid Margin="4,2">
-                                            <ProgressBar Value="{Binding ProgressPercent}" Maximum="100" Height="14" Foreground="{DynamicResource AccentCyanBrush}" Background="#111" BorderBrush="#333"/>
+                                            <ProgressBar Value="{Binding ProgressPercent}" Maximum="100" Height="14" Foreground="{DynamicResource AccentCyanBrush}" Background="#111" BorderBrush="{DynamicResource BorderBrush}"/>
                                             <TextBlock Text="{Binding ProgressPercent, StringFormat={}{0:F1}%}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10" Foreground="White" FontWeight="Bold"/>
                                         </Grid>
                                     </DataTemplate>
@@ -68,9 +68,9 @@
 
                     <!-- Action Bar -->
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                        <Button Content="❌ Cancelar Tarea" Click="BtnCancelTask_Click" Padding="10,6" Margin="0,0,6,0" Background="#331A1A" Foreground="#FF6B6B" BorderBrush="#FF4444" ToolTip="Cancela la tarea seleccionada en la grada de construcción y libera el espacio."/>
-                        <Button Content="🔧 Re-equipar (Retooling)" Click="BtnRetoolShipyard_Click" Padding="10,6" Margin="0,0,6,0" Background="#1C2536" Foreground="#00F0FF" BorderBrush="#00F0FF" ToolTip="Re-equipa este astillero para fabricar una nueva clase de nave."/>
-                        <Button Content="🚀 Ordenar Nueva Nave" Click="BtnNewOrder_Click" Padding="12,6" Background="#1D2A1F" Foreground="#55FF55" BorderBrush="#55FF55" FontWeight="Bold" ToolTip="Añade una nueva orden de construcción directamente a las gradas de este astillero."/>
+                        <Button Content="❌ Cancelar Tarea" Click="BtnCancelTask_Click" Padding="10,6" Margin="0,0,6,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" ToolTip="Cancela la tarea seleccionada en la grada de construcción y libera el espacio."/>
+                        <Button Content="🔧 Re-equipar (Retooling)" Click="BtnRetoolShipyard_Click" Padding="10,6" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" ToolTip="Re-equipa este astillero para fabricar una nueva clase de nave."/>
+                        <Button Content="🚀 Ordenar Nueva Nave" Click="BtnNewOrder_Click" Padding="12,6" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Añade una nueva orden de construcción directamente a las gradas de este astillero."/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -95,7 +95,7 @@
                             </Grid>
                             <Grid Margin="0,2" ToolTip="Número de gradas activas construyendo vs gradas libres disponibles.">
                                 <TextBlock Text="Gradas Libres / Totales:" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblSlipwaysStatus" Text="0 / 0" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                <TextBlock x:Name="LblSlipwaysStatus" Text="0 / 0" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
                             </Grid>
                             <Grid Margin="0,2" ToolTip="Puntos de Construcción (BP) anuales generados por la industria de astilleros del imperio.">
                                 <TextBlock Text="Rendimiento Anual BP:" Foreground="{DynamicResource TextSecondaryBrush}"/>
@@ -103,7 +103,7 @@
                             </Grid>
                             <Grid Margin="0,2" ToolTip="Bonificación de velocidad asignada por el Gobernador Planetario de la capital.">
                                 <TextBlock Text="Bono Gobernador:" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblGovBonus" Text="+10.0 %" Foreground="#00F0FF" HorizontalAlignment="Right"/>
+                                <TextBlock x:Name="LblGovBonus" Text="+10.0 %" Foreground="{DynamicResource AccentCyanBrush}" HorizontalAlignment="Right"/>
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -121,11 +121,11 @@
                             <TextBlock Text="Rendimiento Grada (BP/año):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
                             <TextBox x:Name="TxtCalcBPRate" Text="500" TextChanged="OnCalcInputChanged" Margin="0,0,0,6" ToolTip="Puntos de construcción por año generados por el astillero."/>
 
-                            <Border Background="#161F2E" CornerRadius="4" Padding="6" Margin="0,4,0,0">
+                            <Border Background="{DynamicResource CardBgBrush}" CornerRadius="4" Padding="6" Margin="0,4,0,0">
                                 <StackPanel>
                                     <Grid Margin="0,2">
                                         <TextBlock Text="Tiempo Estimado Construcción:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                        <TextBlock x:Name="LblCalcBuildDays" Text="183 Días (6.1 m)" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                        <TextBlock x:Name="LblCalcBuildDays" Text="183 Días (6.1 m)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
                                     </Grid>
                                     <Grid Margin="0,2">
                                         <TextBlock Text="Costo Re-equipamiento (Retool):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
@@ -146,19 +146,19 @@
                         <StackPanel>
                             <Grid Margin="0,2">
                                 <TextBlock Text="Duranium (Estructuras):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblMinDuranium" Text="0.0 t" Foreground="#00F0FF" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                <TextBlock x:Name="LblMinDuranium" Text="0.0 t" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
                             </Grid>
                             <Grid Margin="0,2">
                                 <TextBlock Text="Neutronium (Blindajes):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblMinNeutronium" Text="0.0 t" Foreground="#00F0FF" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                <TextBlock x:Name="LblMinNeutronium" Text="0.0 t" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
                             </Grid>
                             <Grid Margin="0,2">
                                 <TextBlock Text="Gallicite (Propulsión):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblMinGallicite" Text="0.0 t" Foreground="#00F0FF" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                <TextBlock x:Name="LblMinGallicite" Text="0.0 t" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
                             </Grid>
                             <Grid Margin="0,2">
                                 <TextBlock Text="Uridium (Sensores / Control):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblMinUridium" Text="0.0 t" Foreground="#00F0FF" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                <TextBlock x:Name="LblMinUridium" Text="0.0 t" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
                             </Grid>
                         </StackPanel>
                     </Border>

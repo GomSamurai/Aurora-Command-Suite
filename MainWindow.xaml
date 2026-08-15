@@ -28,7 +28,7 @@
 
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="🚀 AURORA MASTER COMMAND SUITE" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="17" VerticalAlignment="Center"/>
-                    <Border Background="#1C2536" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="4" Margin="10,0,0,0" Padding="6,2">
+                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="4" Margin="10,0,0,0" Padding="6,2">
                         <TextBlock Text="v2.7.1 LIVE BRIDGE (12 MÓDULOS)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5"/>
                     </Border>
                 </StackPanel>
@@ -41,12 +41,12 @@
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <TextBlock Text="STATUS: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center"/>
-                    <TextBlock Text="● CONECTADO" Foreground="#00FF88" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                    <TextBlock Text="● CONECTADO" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
 
                     <TextBlock Text="🎨 ESTILO VISUAL:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="14,0,6,0"/>
                     <ComboBox x:Name="CmbThemeSelector" SelectionChanged="CmbThemeSelector_SelectionChanged" Width="210" VerticalAlignment="Center" ToolTip="Cambia drásticamente la paleta de colores y el esquema visual de toda la aplicación en tiempo real."/>
 
-                    <Button Content="🎮 VOLVER A AURORA 4X" Click="BtnFocusGame_Click" Padding="10,4" Margin="14,0,0,0" Background="#1D2A1F" Foreground="#00FF88" BorderBrush="#00FF88" FontWeight="Bold" FontSize="11" ToolTip="Enfoca al instante la ventana del juego Aurora 4X en primer plano."/>
+                    <Button Content="🎮 VOLVER A AURORA 4X" Click="BtnFocusGame_Click" Padding="10,4" Margin="14,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Enfoca al instante la ventana del juego Aurora 4X en primer plano."/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -57,11 +57,11 @@
                 <TextBlock Text="🏛️ SECCIONES TÁCTICAS:" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Bold" FontSize="10.5" VerticalAlignment="Center" Margin="0,0,10,0"/>
 
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="🏛️ GOBIERNO Y COLONIAS" Click="BtnNavGobierno_Click" Padding="10,4" Margin="0,0,4,0" Background="#1A180E" Foreground="#FFD700" BorderBrush="#FFD700" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Gobierno, Finanzas, Colonias y Estado Mayor."/>
-                    <Button Content="🔬 CIENCIA E INDUSTRIA" Click="BtnNavCiencia_Click" Padding="10,4" Margin="0,0,4,0" Background="#1B1224" Foreground="#AF52DE" BorderBrush="#AF52DE" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Investigación Técnica y Producción Industrial."/>
-                    <Button Content="🛠️ INGENIERÍA Y DISEÑO" Click="BtnNavIngenieria_Click" Padding="10,4" Margin="0,0,4,0" Background="#0D2026" Foreground="#00F0FF" BorderBrush="#00F0FF" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Ensamblaje de Naves, Misiles y Astilleros."/>
-                    <Button Content="⚓ OPERACIONES NAVALES" Click="BtnNavNaval_Click" Padding="10,4" Margin="0,0,4,0" Background="#0D2818" Foreground="#00FF88" BorderBrush="#00FF88" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Flotas Activas, Misiones y Cartografía de Saltos."/>
-                    <Button Content="🤖 IA E INTELIGENCIA" Click="BtnNavIA_Click" Padding="10,4" Background="#0D1E28" Foreground="#5AC8FA" BorderBrush="#5AC8FA" FontWeight="Bold" FontSize="11" ToolTip="Navega al Asistente IA Imperial Gemini y Calculadoras Espaciales."/>
+                    <Button Content="🏛️ GOBIERNO Y COLONIAS" Click="BtnNavGobierno_Click" Padding="10,4" Margin="0,0,4,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Gobierno, Finanzas, Colonias y Estado Mayor."/>
+                    <Button Content="🔬 CIENCIA E INDUSTRIA" Click="BtnNavCiencia_Click" Padding="10,4" Margin="0,0,4,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentPurpleBrush}" BorderBrush="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Investigación Técnica y Producción Industrial."/>
+                    <Button Content="🛠️ INGENIERÍA Y DISEÑO" Click="BtnNavIngenieria_Click" Padding="10,4" Margin="0,0,4,0" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Ensamblaje de Naves, Misiles y Astilleros."/>
+                    <Button Content="⚓ OPERACIONES NAVALES" Click="BtnNavNaval_Click" Padding="10,4" Margin="0,0,4,0" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Flotas Activas, Misiones y Cartografía de Saltos."/>
+                    <Button Content="🤖 IA E INTELIGENCIA" Click="BtnNavIA_Click" Padding="10,4" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Navega al Asistente IA Imperial Gemini y Calculadoras Espaciales."/>
                 </StackPanel>
             </DockPanel>
         </Border>
@@ -86,7 +86,7 @@
             <TabItem x:Name="TabEmpire" Header="🏰 Mi Imperio">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#FFD700" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:EmpireOverviewView x:Name="ViewEmpire"/>
@@ -95,7 +95,7 @@
             <TabItem x:Name="TabColonies" Header="🪐 Colonias y Minerales">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#FF9500" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:ColoniesOverviewView x:Name="ViewColonies"/>
@@ -104,7 +104,7 @@
             <TabItem x:Name="TabCommanders" Header="🎖️ Alto Mando">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#FF2D55" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:CommandersHQView x:Name="ViewCommanders"/>
@@ -114,7 +114,7 @@
             <TabItem x:Name="TabResearch" Header="🔬 Investigación I+D">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#AF52DE" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:ResearchHQView x:Name="ViewResearch"/>
@@ -123,7 +123,7 @@
             <TabItem x:Name="TabIndustrial" Header="⚡ Industria y Fábricas">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#34C759" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:IndustrialHQView x:Name="ViewIndustrial"/>
@@ -133,7 +133,7 @@
             <TabItem x:Name="TabBlueprint" Header="🛠️ Diseñador Naves">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#00F0FF" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:BlueprintDesignerView x:Name="ViewBlueprint"/>
@@ -142,7 +142,7 @@
             <TabItem x:Name="TabMissile" Header="🚀 Lab Misiles/Motores">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#FF3B30" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:MissileEngineLabView x:Name="ViewMissile"/>
@@ -151,7 +151,7 @@
             <TabItem x:Name="TabShipyards" Header="🏭 Operaciones Astillero">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#FFCC00" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:ShipyardOperationsView x:Name="ViewShipyards"/>
@@ -161,7 +161,7 @@
             <TabItem x:Name="TabActiveFleets" Header="🛸 Mis Flotas y Naves">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#00FF88" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:ActiveFleetsView x:Name="ViewActiveFleets"/>
@@ -170,7 +170,7 @@
             <TabItem x:Name="TabFleet" Header="⚓ Auditoría Naval">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#4A90E2" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:FleetCompositionView x:Name="ViewFleet"/>
@@ -179,7 +179,7 @@
             <TabItem x:Name="TabExploration" Header="🌌 Exploración y Sistemas">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#5AC8FA" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:SystemExplorationView x:Name="ViewExploration"/>
@@ -189,7 +189,7 @@
             <TabItem x:Name="TabAI" Header="🤖 Asistente IA Imperial">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#00FF88" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:AIAssistantView x:Name="ViewAI"/>
@@ -198,7 +198,7 @@
             <TabItem x:Name="TabCalculators" Header="🧮 Calculadoras Espaciales">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="#7D5FFF" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:TravelCalculatorView x:Name="ViewCalculators"/>

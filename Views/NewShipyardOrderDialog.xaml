@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="🚀 Nueva Orden de Construcción Naval" Height="400" Width="500"
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
-        Background="#0E131F">
+        Background="{DynamicResource BgDarkBrush}">
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -43,16 +43,16 @@
                     </StackPanel>
                 </Grid>
 
-                <Border x:Name="BdrCapacityWarning" Background="#241A00" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Visibility="Collapsed" Margin="0,6,0,0">
-                    <TextBlock Text="⚠️ Atención: La masa de esta nave supera la capacidad máxima actual del astillero." Foreground="#FFD700" FontSize="11" TextWrapping="Wrap"/>
+                <Border x:Name="BdrCapacityWarning" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Visibility="Collapsed" Margin="0,6,0,0">
+                    <TextBlock Text="⚠️ Atención: La masa de esta nave supera la capacidad máxima actual del astillero." Foreground="{DynamicResource AccentAmberBrush}" FontSize="11" TextWrapping="Wrap"/>
                 </Border>
             </StackPanel>
         </Border>
 
         <!-- Buttons -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
-            <Button Content="✕ Cancelar" Click="BtnCancel_Click" Padding="12,6" Margin="0,0,8,0" Background="#222" Foreground="White" BorderBrush="#444"/>
-            <Button Content="🚀 Enviar Orden al Astillero" Click="BtnConfirm_Click" Padding="14,6" Background="#1D2A1F" Foreground="#55FF55" BorderBrush="#55FF55" FontWeight="Bold"/>
+            <Button Content="✕ Cancelar" Click="BtnCancel_Click" Padding="12,6" Margin="0,0,8,0" Background="#222" Foreground="White" BorderBrush="{DynamicResource BorderBrush}"/>
+            <Button Content="🚀 Enviar Orden al Astillero" Click="BtnConfirm_Click" Padding="14,6" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold"/>
         </StackPanel>
     </Grid>
 </Window>

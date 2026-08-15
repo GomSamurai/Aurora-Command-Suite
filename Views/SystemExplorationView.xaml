@@ -17,9 +17,9 @@
                 <TextBlock Text="🌌 SUITE DE EXPLORACIÓN E INTELIGENCIA INTERESTELAR" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" Margin="5,0,20,0"/>
                 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <RadioButton x:Name="BtnModeProspection" Content="🌌 Prospección y Cuerpos Celestes" IsChecked="True" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Margin="0,0,6,0" Background="#1C2536" Foreground="#00F0FF" BorderBrush="#00F0FF" FontWeight="Bold" ToolTip="Exploración geológica y física de planetas, lunas y yacimientos minerales."/>
-                    <RadioButton x:Name="BtnModeJumpPoints" Content="🌀 Red de Puntos de Salto" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Margin="0,0,6,0" Background="#1C2536" Foreground="#FFB400" BorderBrush="#FFB400" FontWeight="Bold" ToolTip="Red de nodos de salto interestelar y estado de construcción de Puertas de Salto (Jump Gates)."/>
-                    <RadioButton x:Name="BtnModeSurveyFleets" Content="🛸 Flotas de Prospección Activas" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Background="#1C2536" Foreground="#55FF55" BorderBrush="#55FF55" FontWeight="Bold" ToolTip="Buques y escuadras de reconocimiento geológico y gravitatorio en servicio."/>
+                    <RadioButton x:Name="BtnModeProspection" Content="🌌 Prospección y Cuerpos Celestes" IsChecked="True" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Exploración geológica y física de planetas, lunas y yacimientos minerales."/>
+                    <RadioButton x:Name="BtnModeJumpPoints" Content="🌀 Red de Puntos de Salto" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Red de nodos de salto interestelar y estado de construcción de Puertas de Salto (Jump Gates)."/>
+                    <RadioButton x:Name="BtnModeSurveyFleets" Content="🛸 Flotas de Prospección Activas" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Buques y escuadras de reconocimiento geológico y gravitatorio en servicio."/>
                 </StackPanel>
             </DockPanel>
         </Border>
@@ -63,7 +63,7 @@
                             </Grid>
                             <Grid Margin="0,2">
                                 <TextBlock Text="Puntos de Salto Conocidos:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                <TextBlock x:Name="LblSysJumpCount" Text="0 Puntos" Foreground="#FFB400" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                                <TextBlock x:Name="LblSysJumpCount" Text="0 Puntos" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -111,25 +111,25 @@
                                     <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Multiplicador de costo en infraestructura para sostener población en este planeta.">
                                         <StackPanel HorizontalAlignment="Center">
                                             <TextBlock Text="Costo Colonial (Colony Cost):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblColonyCostVal" Text="0.00 (Ideal)" Foreground="#55FF55" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                            <TextBlock x:Name="LblColonyCostVal" Text="0.00 (Ideal)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                         </StackPanel>
                                     </Border>
                                     <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Tolerancia de fuerza G para tus ciudadanos sin trajes gravitatorios.">
                                         <StackPanel HorizontalAlignment="Center">
                                             <TextBlock Text="Tolerancia Gravitatoria:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblGravSuitability" Text="Óptima (1.0 G)" Foreground="#55FF55" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                            <TextBlock x:Name="LblGravSuitability" Text="Óptima (1.0 G)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                         </StackPanel>
                                     </Border>
                                     <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Modificación de presión atmosférica requerida para reducir el Colony Cost.">
                                         <StackPanel HorizontalAlignment="Center">
                                             <TextBlock Text="Ajuste Atmosférico:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblAtmosReq" Text="Ninguno (1.0 atm)" Foreground="#00F0FF" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                            <TextBlock x:Name="LblAtmosReq" Text="Ninguno (1.0 atm)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                         </StackPanel>
                                     </Border>
                                     <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Modificación térmica necesaria vía gases de efecto invernadero para templar el mundo.">
                                         <StackPanel HorizontalAlignment="Center">
                                             <TextBlock Text="Ajuste Térmico:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblTempReq" Text="Estable (15 °C)" Foreground="#00F0FF" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                            <TextBlock x:Name="LblTempReq" Text="Estable (15 °C)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                         </StackPanel>
                                     </Border>
                                 </UniformGrid>
@@ -145,8 +145,8 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Button Grid.Column="0" Content="🌍 Marcar como Objetivo Colonial" Click="BtnSetColonyTarget_Click" Padding="10,8" Margin="0,0,4,0" Background="#1C2536" Foreground="#55FF55" BorderBrush="#55FF55" FontWeight="Bold" ToolTip="Designa este planeta como destino prioritario para cargueros de infraestructura y naves colonizadoras en AuroraDB.db."/>
-                                    <Button Grid.Column="1" Content="🚀 Enviar Flota de Prospección Geológica" Click="BtnSendSurveyFleet_Click" Padding="10,8" Margin="4,0,0,0" Background="#1C2536" Foreground="#00F0FF" BorderBrush="#00F0FF" FontWeight="Bold" ToolTip="Asigna a tu flota exploradora (Survey Fleet) la orden de escanear minuciosamente este planeta."/>
+                                    <Button Grid.Column="0" Content="🌍 Marcar como Objetivo Colonial" Click="BtnSetColonyTarget_Click" Padding="10,8" Margin="0,0,4,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Designa este planeta como destino prioritario para cargueros de infraestructura y naves colonizadoras en AuroraDB.db."/>
+                                    <Button Grid.Column="1" Content="🚀 Enviar Flota de Prospección Geológica" Click="BtnSendSurveyFleet_Click" Padding="10,8" Margin="4,0,0,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Asigna a tu flota exploradora (Survey Fleet) la orden de escanear minuciosamente este planeta."/>
                                 </Grid>
                             </StackPanel>
                         </Border>

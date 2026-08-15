@@ -45,7 +45,7 @@
                         <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Renta fiscal bruta anual generada por la población y el comercio.">
                             <StackPanel>
                                 <TextBlock Text="Ingreso Fiscal Anual:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                <TextBlock x:Name="LblEmpRevenue" Text="11,686 BP / Año" Foreground="#55FF55" FontWeight="Bold" FontSize="13"/>
+                                <TextBlock x:Name="LblEmpRevenue" Text="11,686 BP / Año" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="13"/>
                             </StackPanel>
                         </Border>
                     </UniformGrid>
@@ -67,7 +67,7 @@
                                 <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Margin="2" Padding="6">
                                     <StackPanel HorizontalAlignment="Center">
                                         <TextBlock Text="{Binding Key}" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="{Binding Value, StringFormat={}{0:N0} t}" Foreground="#00F0FF" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        <TextBlock Text="{Binding Value, StringFormat={}{0:N0} t}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
@@ -86,15 +86,15 @@
                     </Grid>
                     <Grid Margin="0,2">
                         <TextBlock Text="Impuestos de Población (10%):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                        <TextBlock x:Name="LblTax" Text="1,168 BP / Año" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                        <TextBlock x:Name="LblTax" Text="1,168 BP / Año" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
                     </Grid>
                     <Grid Margin="0,2">
                         <TextBlock Text="Centros Financieros Activos:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                        <TextBlock x:Name="LblFinCentres" Text="0 Centros" Foreground="#FFB400" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                        <TextBlock x:Name="LblFinCentres" Text="0 Centros" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
                     </Grid>
                     <Grid Margin="0,2">
                         <TextBlock Text="Balance Financiero Neto:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                        <TextBlock x:Name="LblNetWealth" Text="+1,168 BP (Superávit)" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                        <TextBlock x:Name="LblNetWealth" Text="+1,168 BP (Superávit)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
                     </Grid>
                 </StackPanel>
             </Border>
@@ -157,19 +157,19 @@
                                 <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Comandantes de flota y capitanes navales activos.">
                                     <StackPanel>
                                         <TextBlock Text="Capitanes Navales:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                        <TextBlock x:Name="LblCaptainsCount" Text="5 Oficiales" Foreground="#00F0FF" FontWeight="Bold" FontSize="12"/>
+                                        <TextBlock x:Name="LblCaptainsCount" Text="5 Oficiales" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Científicos e investigadores de I+D activos.">
                                     <StackPanel>
                                         <TextBlock Text="Científicos I+D:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                        <TextBlock x:Name="LblScientistsCount" Text="12 Científicos" Foreground="#55FF55" FontWeight="Bold" FontSize="12"/>
+                                        <TextBlock x:Name="LblScientistsCount" Text="12 Científicos" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Gobernadores planetarios y sectoriales en servicio.">
                                     <StackPanel>
                                         <TextBlock Text="Gobernadores:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                        <TextBlock x:Name="LblGovsCount" Text="3 Gobernadores" Foreground="#FFB400" FontWeight="Bold" FontSize="12"/>
+                                        <TextBlock x:Name="LblGovsCount" Text="3 Gobernadores" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Total acumulado de oficiales registrados en el imperio.">
@@ -186,11 +186,11 @@
                     <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                         <StackPanel>
                             <TextBlock Text="🏛️ DECRETOS IMPERIALES Y HERRAMIENTAS DE JUEGO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                            <TextBlock Text="Promulga decretos de estado directos para impactar en AuroraDB.db:" Foreground="#8A99AD" FontSize="10" Margin="0,0,0,8"/>
+                            <TextBlock Text="Promulga decretos de estado directos para impactar en AuroraDB.db:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,8"/>
 
-                            <Button Content="💰 Recaudar Impuesto Extraordinario" Click="BtnTaxDecree_Click" Padding="8,6" Margin="0,0,0,6" Background="#1C2536" Foreground="#55FF55" BorderBrush="#55FF55" FontWeight="Bold" ToolTip="Ejecuta un decreto de recaudación fiscal de emergencia para incrementar el capital de la colonia."/>
-                            <Button Content="⚡ Optimizar Asignación de Fábricas" Click="BtnProdDecree_Click" Padding="8,6" Margin="0,0,0,6" Background="#1C2536" Foreground="#00F0FF" BorderBrush="#00F0FF" FontWeight="Bold" ToolTip="Ajusta las prioridades de producción industrial para maximizar el rendimiento por turno."/>
-                            <Button Content="📦 Auditoría de Suministros e Inventario" Click="BtnSupplyDecree_Click" Padding="8,6" Background="#1C2536" Foreground="#FFB400" BorderBrush="#FFB400" FontWeight="Bold" ToolTip="Calcula la reserva de suministros de mantenimiento (MSP) e inventario de misiles en la capital."/>
+                            <Button Content="💰 Recaudar Impuesto Extraordinario" Click="BtnTaxDecree_Click" Padding="8,6" Margin="0,0,0,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Ejecuta un decreto de recaudación fiscal de emergencia para incrementar el capital de la colonia."/>
+                            <Button Content="⚡ Optimizar Asignación de Fábricas" Click="BtnProdDecree_Click" Padding="8,6" Margin="0,0,0,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Ajusta las prioridades de producción industrial para maximizar el rendimiento por turno."/>
+                            <Button Content="📦 Auditoría de Suministros e Inventario" Click="BtnSupplyDecree_Click" Padding="8,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Calcula la reserva de suministros de mantenimiento (MSP) e inventario de misiles en la capital."/>
                         </StackPanel>
                     </Border>
 

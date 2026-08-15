@@ -9,6 +9,9 @@
         <Color x:Key="CardHeaderColor">#1B2333</Color>
         <Color x:Key="AccentCyanColor">#00F0FF</Color>
         <Color x:Key="AccentAmberColor">#FFB700</Color>
+        <Color x:Key="AccentGreenColor">#00FF88</Color>
+        <Color x:Key="AccentRedColor">#FF5555</Color>
+        <Color x:Key="AccentPurpleColor">#BF5AF2</Color>
         <Color x:Key="TextPrimaryColor">#E6EDF3</Color>
         <Color x:Key="TextSecondaryColor">#8B949E</Color>
         <Color x:Key="BorderColor">#30363D</Color>
@@ -18,6 +21,9 @@
         <SolidColorBrush x:Key="CardHeaderBrush" Color="{StaticResource CardHeaderColor}"/>
         <SolidColorBrush x:Key="AccentCyanBrush" Color="{StaticResource AccentCyanColor}"/>
         <SolidColorBrush x:Key="AccentAmberBrush" Color="{StaticResource AccentAmberColor}"/>
+        <SolidColorBrush x:Key="AccentGreenBrush" Color="{StaticResource AccentGreenColor}"/>
+        <SolidColorBrush x:Key="AccentRedBrush" Color="{StaticResource AccentRedColor}"/>
+        <SolidColorBrush x:Key="AccentPurpleBrush" Color="{StaticResource AccentPurpleColor}"/>
         <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimaryColor}"/>
         <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondaryColor}"/>
         <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>

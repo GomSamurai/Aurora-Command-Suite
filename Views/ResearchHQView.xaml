@@ -50,28 +50,28 @@
                     <TextBlock Grid.Column="0" Text="📊 TELEMETRÍA GLOBAL:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,12,0"/>
 
                     <UniformGrid Grid.Column="1" Columns="4">
-                        <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="Total Labs: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                                <TextBlock x:Name="LblGlobalTotalLabs" Text="17 Labs" Foreground="#00F0FF" FontWeight="Bold" FontSize="10.5"/>
+                                <TextBlock x:Name="LblGlobalTotalLabs" Text="17 Labs" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10.5"/>
                             </StackPanel>
                         </Border>
-                        <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="Ocupación: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                                <TextBlock x:Name="LblGlobalLabsInUse" Text="17/0 (100%)" Foreground="#55FF55" FontWeight="Bold" FontSize="10.5"/>
+                                <TextBlock x:Name="LblGlobalLabsInUse" Text="17/0 (100%)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5"/>
                             </StackPanel>
                         </Border>
-                        <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="RP Bruta/Año: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                                <TextBlock x:Name="LblGlobalTotalRpYear" Text="3,400 RP" Foreground="#FFD700" FontWeight="Bold" FontSize="10.5"/>
+                                <TextBlock x:Name="LblGlobalTotalRpYear" Text="3,400 RP" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5"/>
                             </StackPanel>
                         </Border>
-                        <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="Bono Promedio: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                                <TextBlock x:Name="LblGlobalAvgBonus" Text="+23.5%" Foreground="#00FF88" FontWeight="Bold" FontSize="10.5"/>
+                                <TextBlock x:Name="LblGlobalAvgBonus" Text="+23.5%" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5"/>
                             </StackPanel>
                         </Border>
                     </UniformGrid>
@@ -86,7 +86,7 @@
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <TextBlock Text="🔍 Buscar:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                            <TextBox x:Name="TxtSearchTech" TextChanged="TxtSearchTech_TextChanged" Width="170" Padding="4" Background="{DynamicResource BgDarkBrush}" Foreground="#00F0FF" BorderBrush="{DynamicResource BorderBrush}" FontSize="11" Margin="0,0,10,0" ToolTip="Filtra tecnologías en tiempo real por cualquier palabra clave (ej. 'railgun', 'shield', 'terra')."/>
+                            <TextBox x:Name="TxtSearchTech" TextChanged="TxtSearchTech_TextChanged" Width="170" Padding="4" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource BorderBrush}" FontSize="11" Margin="0,0,10,0" ToolTip="Filtra tecnologías en tiempo real por cualquier palabra clave (ej. 'railgun', 'shield', 'terra')."/>
 
                             <TextBlock Text="Categoría:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
                             <ComboBox x:Name="CmbTechCategory" SelectionChanged="CmbTechCategory_SelectionChanged" Width="180" ToolTip="Filtra el árbol tecnológico por rama científica de especialización."/>
@@ -136,8 +136,8 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Content="🚀 Iniciar Proyecto" Click="BtnAssignResearch_Click" Padding="6,6" Margin="0,0,3,0" Background="#1C2536" Foreground="#00F0FF" BorderBrush="#00F0FF" FontWeight="Bold" FontSize="11" ToolTip="Registra e inicia este proyecto de investigación en AuroraDB.db."/>
-                            <Button Grid.Column="1" Content="❌ Cancelar Proyecto" Click="BtnCancelResearch_Click" Padding="6,6" Margin="3,0,0,0" Background="#2B1A1A" Foreground="#FF5555" BorderBrush="#FF5555" FontWeight="Bold" FontSize="11" ToolTip="Cancela el proyecto de investigación activo seleccionado en AuroraDB.db."/>
+                            <Button Grid.Column="0" Content="🚀 Iniciar Proyecto" Click="BtnAssignResearch_Click" Padding="6,6" Margin="0,0,3,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Registra e inicia este proyecto de investigación en AuroraDB.db."/>
+                            <Button Grid.Column="1" Content="❌ Cancelar Proyecto" Click="BtnCancelResearch_Click" Padding="6,6" Margin="3,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="11" ToolTip="Cancela el proyecto de investigación activo seleccionado en AuroraDB.db."/>
                         </Grid>
 
                         <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6">
@@ -154,7 +154,7 @@
                         <DockPanel Margin="0,0,0,6">
                             <TextBlock Text="🔬" FontSize="22" VerticalAlignment="Center" Margin="0,0,6,0"/>
                             <StackPanel VerticalAlignment="Center">
-                                <TextBlock x:Name="LblTacticalTechName" Text="Tecnología Seleccionada" Foreground="#FFD700" FontWeight="Bold" FontSize="12"/>
+                                <TextBlock x:Name="LblTacticalTechName" Text="Tecnología Seleccionada" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12"/>
                                 <TextBlock x:Name="LblTacticalCategory" Text="Categoría: General" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                             </StackPanel>
                         </DockPanel>
@@ -165,7 +165,7 @@
 
                         <Grid Margin="0,2">
                             <TextBlock Text="Costo en Puntos de Investigación (RP):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                            <TextBlock x:Name="LblTacticalCost" Text="0 RP" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                            <TextBlock x:Name="LblTacticalCost" Text="0 RP" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
                         </Grid>
                     </StackPanel>
                 </Border>
@@ -178,7 +178,7 @@
                         <DockPanel Margin="0,0,0,6">
                             <TextBlock Text="👨‍🔬" FontSize="24" VerticalAlignment="Center" Margin="0,0,6,0"/>
                             <StackPanel VerticalAlignment="Center">
-                                <TextBlock x:Name="LblDossierScientistName" Text="Científico Seleccionado" Foreground="#00F0FF" FontWeight="Bold" FontSize="12"/>
+                                <TextBlock x:Name="LblDossierScientistName" Text="Científico Seleccionado" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12"/>
                                 <TextBlock x:Name="LblDossierRating" Text="Antigüedad: 79 Rating | Puesto: Investigador Principal" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                             </StackPanel>
                         </DockPanel>
@@ -189,15 +189,15 @@
                         </Grid>
                         <Grid Margin="0,2">
                             <TextBlock Text="Bonificación de Investigación:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                            <TextBlock x:Name="LblDossierBonus" Text="+25,0%" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                            <TextBlock x:Name="LblDossierBonus" Text="+25,0%" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
                         </Grid>
                         <Grid Margin="0,2">
                             <TextBlock Text="Máximo Laboratorios Simultáneos:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                            <TextBlock x:Name="LblDossierMaxLabs" Text="10 Labs (Admin Rating)" Foreground="#FFB400" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                            <TextBlock x:Name="LblDossierMaxLabs" Text="10 Labs (Admin Rating)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
                         </Grid>
 
-                        <Border x:Name="BrdDossierMatchStatus" Background="#0D2818" BorderBrush="#00FF88" BorderThickness="1" CornerRadius="4" Padding="6" Margin="0,6,0,0">
-                            <TextBlock x:Name="LblDossierMatchStatus" Text="⚡ COINCIDENCIA PERFECTA (+25% BONUS APLICADO)" Foreground="#00FF88" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
+                        <Border x:Name="BrdDossierMatchStatus" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="0,6,0,0">
+                            <TextBlock x:Name="LblDossierMatchStatus" Text="⚡ COINCIDENCIA PERFECTA (+25% BONUS APLICADO)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
                         </Border>
                     </StackPanel>
                 </Border>
@@ -206,19 +206,19 @@
                 <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
                     <StackPanel>
                         <TextBlock Text="🧮 SIMULADOR DE TIEMPO Y PROGRESO CIENTÍFICO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
-                        <TextBlock Text="Estimación de tiempo combinando labs y bonos de científico:" Foreground="#8A99AD" FontSize="10" Margin="0,0,0,6"/>
+                        <TextBlock Text="Estimación de tiempo combinando labs y bonos de científico:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,6"/>
 
                         <UniformGrid Columns="2" Margin="0,0,0,6">
-                            <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
+                            <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
                                 <StackPanel>
                                     <TextBlock Text="Velocidad I+D (RP/Año):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                                     <TextBlock x:Name="LblSimRpYear" Text="1,250 RP/Año" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12"/>
                                 </StackPanel>
                             </Border>
-                            <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
+                            <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
                                 <StackPanel>
                                     <TextBlock Text="Multiplicador Científico:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                    <TextBlock x:Name="LblSimBonus" Text="+25% (Emparejado)" Foreground="#55FF55" FontWeight="Bold" FontSize="12"/>
+                                    <TextBlock x:Name="LblSimBonus" Text="+25% (Emparejado)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12"/>
                                 </StackPanel>
                             </Border>
                         </UniformGrid>
@@ -226,7 +226,7 @@
                         <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8">
                             <StackPanel>
                                 <TextBlock Text="Tiempo Estimado de Finalización:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                <TextBlock x:Name="LblSimEstimatedTime" Text="1 Año y 4 Meses (486 Días)" Foreground="#FFD700" FontWeight="Bold" FontSize="14" Margin="0,2,0,0"/>
+                                <TextBlock x:Name="LblSimEstimatedTime" Text="1 Año y 4 Meses (486 Días)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="14" Margin="0,2,0,0"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>

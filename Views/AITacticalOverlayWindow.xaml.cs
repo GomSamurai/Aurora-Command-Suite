@@ -25,7 +25,7 @@ namespace AuroraDesignSuite.Views
             InitializeComponent();
         }
 
-        public void ShowAlert(string message, AlertType type, double autoDismissSeconds = 10.0, bool playSound = true)
+        public void ShowAlert(string message, AlertType type, double autoDismissSeconds = 10.0, bool playSound = false)
         {
             _totalSeconds = autoDismissSeconds;
             _elapsedSeconds = 0.0;
@@ -81,11 +81,6 @@ namespace AuroraDesignSuite.Views
             this.Top = 45;
 
             this.Show();
-
-            if (playSound)
-            {
-                try { SystemSounds.Asterisk.Play(); } catch { }
-            }
 
             if (_totalSeconds > 0)
             {

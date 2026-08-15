@@ -16,7 +16,7 @@ namespace AuroraDesignSuite.Services
         public bool IsActive { get; set; } = false;
         public int IntervalSeconds { get; set; } = 90;
         public double AutoDismissSeconds { get; set; } = 10.0;
-        public bool EnableSound { get; set; } = true;
+        public bool EnableSound { get; set; } = false;
 
         public bool EnableCritical { get; set; } = true;
         public bool EnableAdvice { get; set; } = true;

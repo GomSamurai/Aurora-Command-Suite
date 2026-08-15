@@ -21,23 +21,31 @@ namespace AuroraDesignSuite.Views
 
         private void InitializeInstallationsList()
         {
-            var items = new List<string>
+            var dbItems = _dbService.GetAvailablePlanetaryInstallations();
+            var items = new List<string>();
+
+            foreach (var name in dbItems)
             {
-                "🏗️ Fábrica de Construcción",
-                "🤖 Mina Automatizada",
-                "⛏️ Mina Convencional",
-                "⛽ Refinería de Combustible",
-                "🔬 Laboratorio de Investigación",
-                "🏛️ Centro Financiero",
-                "🌌 Puerto Espacial",
-                "🏰 Cuartel General Naval",
-                "🚀 Fábrica de Misiles",
-                "🛩️ Fábrica de Cazas",
-                "⚡ Lanzador de Masa (Mass Driver)",
-                "🌍 Instalación de Terraformación"
-            };
+                string icon = "🏗️";
+                if (name.Contains("Mine", StringComparison.OrdinalIgnoreCase)) icon = "🤖";
+                else if (name.Contains("Refinery", StringComparison.OrdinalIgnoreCase) || name.Contains("Refuelling", StringComparison.OrdinalIgnoreCase)) icon = "⛽";
+                else if (name.Contains("Research", StringComparison.OrdinalIgnoreCase)) icon = "🔬";
+                else if (name.Contains("Financial", StringComparison.OrdinalIgnoreCase)) icon = "🏛️";
+                else if (name.Contains("Spaceport", StringComparison.OrdinalIgnoreCase) || name.Contains("Shuttle", StringComparison.OrdinalIgnoreCase)) icon = "🌌";
+                else if (name.Contains("Naval", StringComparison.OrdinalIgnoreCase) || name.Contains("Military", StringComparison.OrdinalIgnoreCase) || name.Contains("Academy", StringComparison.OrdinalIgnoreCase)) icon = "🏰";
+                else if (name.Contains("Ordnance", StringComparison.OrdinalIgnoreCase) || name.Contains("Fighter", StringComparison.OrdinalIgnoreCase)) icon = "🚀";
+                else if (name.Contains("Mass", StringComparison.OrdinalIgnoreCase)) icon = "⚡";
+                else if (name.Contains("Terraform", StringComparison.OrdinalIgnoreCase)) icon = "🌍";
+                else if (name.Contains("Convert", StringComparison.OrdinalIgnoreCase)) icon = "🔄";
+
+                items.Add($"{icon} {name}");
+            }
+
             CmbTargetInstallation.ItemsSource = items;
-            CmbTargetInstallation.SelectedIndex = 0;
+            if (items.Count > 0)
+            {
+                CmbTargetInstallation.SelectedIndex = 0;
+            }
         }
 
         private void BtnConfirm_Click(object sender, RoutedEventArgs e)

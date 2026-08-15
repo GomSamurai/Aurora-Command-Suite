@@ -15,12 +15,17 @@ namespace AuroraDesignSuite.Services
             _dbPath = dbPath;
         }
 
-        private SqliteConnection GetConnection()
+        private SqliteConnection GetConnection(bool readOnly = true)
         {
-            var connStr = $"Data Source={_dbPath};Mode=ReadOnly;";
+            var connStr = readOnly ? $"Data Source={_dbPath};Mode=ReadOnly;" : $"Data Source={_dbPath};Mode=ReadWrite;";
             var conn = new SqliteConnection(connStr);
             conn.Open();
             return conn;
+        }
+
+        private SqliteConnection GetWriteConnection()
+        {
+            return GetConnection(readOnly: false);
         }
 
         public bool TestConnection(out string error)
@@ -135,7 +140,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = @"
                     INSERT INTO FCT_IndustrialProjects (GameID, RaceID, PopulationID, Description, Amount, Percentage, PartialCompletion, Pause)
                     VALUES (1, @raceId, 1, @desc, @amount, 0.0, 0.0, 0)";
@@ -160,7 +165,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = "DELETE FROM FCT_IndustrialProjects WHERE ProjectID = @projectId";
                 using var cmd = new SqliteCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@projectId", projectId);
@@ -173,6 +178,65 @@ namespace AuroraDesignSuite.Services
                 msg = $"❌ Error al cancelar proyecto: {ex.Message}";
                 return false;
             }
+        }
+
+        public List<string> GetAvailablePlanetaryInstallations()
+        {
+            var list = new List<string>();
+            try
+            {
+                using var conn = GetConnection();
+                string sql = "SELECT Name FROM DIM_PlanetaryInstallation ORDER BY Name ASC";
+                using var cmd = new SqliteCommand(sql, conn);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (!reader.IsDBNull(0))
+                    {
+                        list.Add(reader.GetString(0));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching installations: {ex.Message}");
+            }
+
+            if (list.Count == 0)
+            {
+                list = new List<string>
+                {
+                    "Construction Factory",
+                    "Automated Mine",
+                    "Mine",
+                    "Fuel Refinery",
+                    "Research Lab",
+                    "Financial Centre",
+                    "Spaceport",
+                    "Naval Headquarters",
+                    "Ordnance Factory",
+                    "Fighter Factory",
+                    "Mass Driver",
+                    "Terraforming Installation",
+                    "Military Academy",
+                    "Maintenance Facility",
+                    "Sector Command",
+                    "Ground Force Construction Complex",
+                    "Genetic Modification Centre",
+                    "Refuelling Station",
+                    "Ordnance Transfer Station",
+                    "Cargo Shuttle Station",
+                    "Convert Mine to Automated",
+                    "Convert CI to Construction Factory",
+                    "Convert CI to Mine",
+                    "Convert CI to Fuel Refinery",
+                    "Convert CI to Ordnance Factory",
+                    "Convert CI to Fighter Factory",
+                    "Convert CI to Financial Centre"
+                };
+            }
+
+            return list;
         }
 
         public double GetTotalEmpirePopulation(int raceId)
@@ -661,8 +725,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = new SqliteConnection($"Data Source={_dbPath};");
-                conn.Open();
+                using var conn = GetWriteConnection();
 
                 using var checkCmd = new SqliteCommand("SELECT COUNT(*) FROM FCT_ResearchProject WHERE RaceID=@raceId AND TechID=@techId", conn);
                 checkCmd.Parameters.AddWithValue("@raceId", raceId);
@@ -1071,7 +1134,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 if (decreeType == "Tax")
                 {
                     string sql = "UPDATE FCT_Population SET Population = Population * 1.001 WHERE RaceID = @raceId";
@@ -1212,7 +1275,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = "DELETE FROM FCT_ResearchProject WHERE ProjectID = @projId";
 
                 using var cmd = new SqliteCommand(sql, conn);
@@ -1266,7 +1329,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = @"
                     INSERT INTO FCT_MissileType (GameID, Name, Size, Speed, WarheadStrength, MaxRange, Cost)
                     VALUES (1, @name, @size, @speed, @dmg, @range, @cost)";
@@ -1335,7 +1398,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = @"
                     INSERT INTO FCT_ShipComponentTemplate (ComponentTypeID, ComponentName, ComponentSize, ComponentValue, EnginePowerMod)
                     VALUES (1, @name, @hs, @cost, @powerMod)";
@@ -1499,7 +1562,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = @"
                     INSERT INTO FCT_ShipyardTask (ShipyardID, UnitName, TotalBP, CompletedBP)
                     VALUES (@syId, @name, @bp, 0.0)";
@@ -1524,7 +1587,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = "DELETE FROM FCT_ShipyardTask WHERE TaskID = @taskId";
                 using var cmd = new SqliteCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@taskId", taskId);
@@ -1661,7 +1724,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = @"
                     UPDATE FCT_Commander
                     SET PromotionScore = PromotionScore + 25.0,
@@ -1691,7 +1754,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = "UPDATE FCT_Commander SET CommandID = 1 WHERE CommanderID = @cmdrId";
                 using var cmd = new SqliteCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@cmdrId", commanderId);
@@ -1794,7 +1857,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = "UPDATE FCT_Ship SET FleetID = @fId WHERE ShipID = @sId";
                 using var cmd = new SqliteCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@fId", targetFleetId);
@@ -1815,7 +1878,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = "UPDATE FCT_Ship SET Fuel = 200000.0 WHERE FleetID = @fId";
                 using var cmd = new SqliteCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@fId", fleetId);
@@ -1835,7 +1898,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = "UPDATE FCT_Ship SET CurrentMSP = 500.0, CrewMorale = 1.0 WHERE FleetID = @fId";
                 using var cmd = new SqliteCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@fId", fleetId);

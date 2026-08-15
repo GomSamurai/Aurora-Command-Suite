@@ -374,5 +374,67 @@ namespace AuroraDesignSuite.Views
                 MessageBox.Show($"❌ Error al exportar la crónica: {ex.Message}", "Error de Exportación", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        // AI Tactical Monitor & Overlay Controls
+        private static readonly AITacticalMonitorService _monitorService = new AITacticalMonitorService();
+
+        private void ChkEnableMonitor_Changed(object sender, RoutedEventArgs e)
+        {
+            if (ChkEnableMonitor == null) return;
+            bool enabled = ChkEnableMonitor.IsChecked == true;
+
+            if (enabled)
+            {
+                if (_dbService != null && _aiService != null)
+                {
+                    _monitorService.Start(_dbService, _aiService, _currentRaceId);
+                    AddChatMessage("📡 MONITOR TÁCTICO IA", "🟢 Monitor de avisos y advertencias en directo ACTIVADO en segundo plano.", isUser: false);
+                }
+            }
+            else
+            {
+                _monitorService.Stop();
+                AddChatMessage("📡 MONITOR TÁCTICO IA", "🔴 Monitor de avisos en directo DESACTIVADO.", isUser: false);
+            }
+        }
+
+        private void CmbMonitorInterval_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CmbMonitorInterval == null || _monitorService == null) return;
+
+            int seconds = CmbMonitorInterval.SelectedIndex switch
+            {
+                0 => 45,
+                1 => 90,
+                2 => 180,
+                3 => 300,
+                _ => 90
+            };
+
+            _monitorService.IntervalSeconds = seconds;
+            if (_monitorService.IsActive && _dbService != null && _aiService != null)
+            {
+                _monitorService.Start(_dbService, _aiService, _currentRaceId);
+            }
+        }
+
+        private void ChkMonitorFilters_Changed(object sender, RoutedEventArgs e)
+        {
+            if (_monitorService == null) return;
+            _monitorService.EnableCritical = ChkMonitorCritical?.IsChecked == true;
+            _monitorService.EnableAdvice = ChkMonitorAdvice?.IsChecked == true;
+            _monitorService.EnableAchievements = ChkMonitorAchievements?.IsChecked == true;
+            _monitorService.EnableReports = ChkMonitorReports?.IsChecked == true;
+        }
+
+        private void BtnTestCriticalOverlay_Click(object sender, RoutedEventArgs e)
+        {
+            _monitorService.TriggerTestAlert(AlertType.Critical, "🚨 ¡PRUEBA OVERLAY! 15 Laboratorios de I+D se encuentran inactivos sin proyecto asignado.");
+        }
+
+        private void BtnTestAdviceOverlay_Click(object sender, RoutedEventArgs e)
+        {
+            _monitorService.TriggerTestAlert(AlertType.Advice, "💡 ¡PRUEBA OVERLAY! Desarrollar 'Motores Magneto-Plasma' incrementará la velocidad de maniobra naval en un +45%.");
+        }
     }
 }

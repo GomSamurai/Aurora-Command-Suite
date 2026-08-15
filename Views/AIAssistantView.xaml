@@ -135,7 +135,7 @@
                     </Border>
 
                     <!-- Card 3: Epic History Chronicle Generator -->
-                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
                         <StackPanel>
                             <TextBlock Text="📖 CRÓNICA HISTÓRICA DEL IMPERIO (IA NARRATIVA)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
                             <TextBlock Text="Genera la novela épica con la historia completa de tu partida desde sus inicios:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,6"/>
@@ -149,6 +149,38 @@
 
                             <Button Content="📜 Generar Novela Histórica del Imperio" Click="BtnGenerateChronicle_Click" Padding="6,6" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" ToolTip="Lee todos los eventos históricos guardados en AuroraDB.db y genera una novela estelar en capítulos."/>
                             <Button Content="💾 Exportar Crónica Histórica (.md)" Click="BtnExportChronicle_Click" Padding="6,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Guarda la novela e historia del imperio en un archivo local Markdown."/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Card 4: AI Tactical Monitor & In-Game Overlay HUD -->
+                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="📡 MONITOR TÁCTICO IA &amp; OVERLAY IN-GAME" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+                            <TextBlock Text="Superpone avisos flotantes translúcidos directamente sobre el juego Aurora 4X en tiempo real:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,6"/>
+
+                            <CheckBox x:Name="ChkEnableMonitor" Content="📡 Activar Consejos y Advertencias en Directo" Checked="ChkEnableMonitor_Changed" Unchecked="ChkEnableMonitor_Changed" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" Margin="0,0,0,6" ToolTip="Analiza AuroraDB.db en segundo plano y muestra mensajes flotantes sobre el juego."/>
+
+                            <Grid Margin="0,0,0,6">
+                                <TextBlock Text="Intervalo de Monitoreo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="CmbMonitorInterval" SelectionChanged="CmbMonitorInterval_SelectionChanged" HorizontalAlignment="Right" Width="140" Padding="3" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource BorderBrush}" FontSize="10">
+                                    <ComboBoxItem Content="⏱️ Cada 45 Segundos"/>
+                                    <ComboBoxItem Content="⏱️ Cada 90 Segundos" IsSelected="True"/>
+                                    <ComboBoxItem Content="⏱️ Cada 3 Minutos"/>
+                                    <ComboBoxItem Content="⏱️ Cada 5 Minutos"/>
+                                </ComboBox>
+                            </Grid>
+
+                            <StackPanel Margin="0,0,0,6">
+                                <CheckBox x:Name="ChkMonitorCritical" Content="🚨 Alertas Críticas (Combustible/Fábricas/Minas)" IsChecked="True" Checked="ChkMonitorFilters_Changed" Unchecked="ChkMonitorFilters_Changed" Foreground="White" FontSize="10" Margin="0,2"/>
+                                <CheckBox x:Name="ChkMonitorAdvice" Content="💡 Consejos Tácticos e I+D" IsChecked="True" Checked="ChkMonitorFilters_Changed" Unchecked="ChkMonitorFilters_Changed" Foreground="White" FontSize="10" Margin="0,2"/>
+                                <CheckBox x:Name="ChkMonitorAchievements" Content="🏆 Hitos &amp; Logros Imperiales" IsChecked="True" Checked="ChkMonitorFilters_Changed" Unchecked="ChkMonitorFilters_Changed" Foreground="White" FontSize="10" Margin="0,2"/>
+                                <CheckBox x:Name="ChkMonitorReports" Content="📊 Informes Periódicos de Economía" IsChecked="True" Checked="ChkMonitorFilters_Changed" Unchecked="ChkMonitorFilters_Changed" Foreground="White" FontSize="10" Margin="0,2"/>
+                            </StackPanel>
+
+                            <UniformGrid Columns="2">
+                                <Button Content="🧪 Probar Alerta Crítica" Click="BtnTestCriticalOverlay_Click" Padding="4,4" Margin="0,0,2,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="10" ToolTip="Lanza un mensaje emergente de prueba con alerta roja."/>
+                                <Button Content="🧪 Probar Consejo Táctico" Click="BtnTestAdviceOverlay_Click" Padding="4,4" Margin="2,0,0,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" ToolTip="Lanza un mensaje emergente de prueba con consejo cian."/>
+                            </UniformGrid>
                         </StackPanel>
                     </Border>
                 </StackPanel>

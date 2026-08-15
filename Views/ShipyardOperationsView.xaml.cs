@@ -188,7 +188,8 @@ namespace AuroraDesignSuite.Views
             {
                 if (_dbService.AddIndustrialProject(_currentRaceId, $"Ampliar Astillero: {SelectedShipyard.ShipyardName}", 1.0, out string msg))
                 {
-                    MessageBox.Show(msg, "Proyecto de Expansión Registrado en AuroraDB", MessageBoxButton.OK, MessageBoxImage.Information);
+                    string fullMsg = $"{msg}\n\n💡 NOTA DE CONEXIÓN EN VIVO:\nPara ver el proyecto en las colas de construcción del juego mientras está abierto, avanza 1 incremento de tiempo (ej. 5 Segundos) en Aurora 4X.";
+                    MessageBox.Show(fullMsg, "Proyecto de Expansión Registrado en AuroraDB", MessageBoxButton.OK, MessageBoxImage.Information);
                     RefreshShipyards();
                 }
                 else

@@ -131,7 +131,8 @@ namespace AuroraDesignSuite.Views
 
                 if (_dbService.TransferShipToFleet(_currentRaceId, _selectedShip.ShipID, targetFleet.FleetID, targetFleet.FleetName, out string msg))
                 {
-                    MessageBox.Show(msg, "Transferencia Naval Completada", MessageBoxButton.OK, MessageBoxImage.Information);
+                    string fullMsg = $"{msg}\n\n💡 NOTA DE CONEXIÓN EN VIVO:\nPara ver este cambio reflejado en la interfaz de Aurora 4X mientras el juego está abierto:\n• Avanza 1 incremento de tiempo (ej. 5 Segundos) en el juego, o\n• Cierra y vuelve a abrir la ventana de Naval/Fleets del juego.";
+                    MessageBox.Show(fullMsg, "Transferencia Naval Registrada en DB", MessageBoxButton.OK, MessageBoxImage.Information);
                     RefreshData();
                 }
             }
@@ -147,7 +148,8 @@ namespace AuroraDesignSuite.Views
 
             if (_dbService.RefuelFleet(_currentRaceId, _selectedFleet.FleetID, _selectedFleet.FleetName, out string msg))
             {
-                MessageBox.Show(msg, "Reabastecimiento Naval", MessageBoxButton.OK, MessageBoxImage.Information);
+                string fullMsg = $"{msg}\n\n💡 NOTA DE CONEXIÓN EN VIVO:\nPara ver los tanques llenos en la pantalla del juego mientras está abierto, avanza 1 incremento de tiempo (ej. 5 Segundos) en Aurora 4X.";
+                MessageBox.Show(fullMsg, "Reabastecimiento Naval", MessageBoxButton.OK, MessageBoxImage.Information);
                 RefreshData();
             }
         }
@@ -158,7 +160,8 @@ namespace AuroraDesignSuite.Views
 
             if (_dbService.ReplenishFleetMSP(_currentRaceId, _selectedFleet.FleetID, _selectedFleet.FleetName, out string msg))
             {
-                MessageBox.Show(msg, "Mantenimiento y Repuestos", MessageBoxButton.OK, MessageBoxImage.Information);
+                string fullMsg = $"{msg}\n\n💡 NOTA DE CONEXIÓN EN VIVO:\nPara ver los suministros de repuesto en el juego, avanza 1 incremento de tiempo (ej. 5 Segundos) en Aurora 4X.";
+                MessageBox.Show(fullMsg, "Mantenimiento y Repuestos", MessageBoxButton.OK, MessageBoxImage.Information);
                 RefreshData();
             }
         }

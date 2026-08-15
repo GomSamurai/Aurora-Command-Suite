@@ -31,7 +31,6 @@
                     <Border Background="#1C2536" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="4" Margin="10,0,0,0" Padding="6,2">
                         <TextBlock Text="v2.7.1 LIVE BRIDGE (12 MÓDULOS)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5"/>
                     </Border>
-                    <Button Content="🎮 VOLVER A AURORA 4X" Click="BtnFocusGame_Click" Padding="10,4" Margin="10,0,0,0" Background="#1D2A1F" Foreground="#00FF88" BorderBrush="#00FF88" FontWeight="Bold" FontSize="11" ToolTip="Enfoca al instante la ventana del juego Aurora 4X en primer plano."/>
                 </StackPanel>
 
                 <!-- Global Empire Selector -->
@@ -42,10 +41,12 @@
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <TextBlock Text="STATUS: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center"/>
-                    <TextBlock Text="● CONECTADO A AURORADB.DB" Foreground="#00FF88" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                    <TextBlock Text="● CONECTADO" Foreground="#00FF88" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
 
-                    <TextBlock Text="🎨 ESTILO VISUAL:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="16,0,6,0"/>
-                    <ComboBox x:Name="CmbThemeSelector" SelectionChanged="CmbThemeSelector_SelectionChanged" Width="220" VerticalAlignment="Center" ToolTip="Cambia drásticamente la paleta de colores y el esquema visual de toda la aplicación en tiempo real."/>
+                    <TextBlock Text="🎨 ESTILO VISUAL:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="14,0,6,0"/>
+                    <ComboBox x:Name="CmbThemeSelector" SelectionChanged="CmbThemeSelector_SelectionChanged" Width="210" VerticalAlignment="Center" ToolTip="Cambia drásticamente la paleta de colores y el esquema visual de toda la aplicación en tiempo real."/>
+
+                    <Button Content="🎮 VOLVER A AURORA 4X" Click="BtnFocusGame_Click" Padding="10,4" Margin="14,0,0,0" Background="#1D2A1F" Foreground="#00FF88" BorderBrush="#00FF88" FontWeight="Bold" FontSize="11" ToolTip="Enfoca al instante la ventana del juego Aurora 4X en primer plano."/>
                 </StackPanel>
             </Grid>
         </Border>

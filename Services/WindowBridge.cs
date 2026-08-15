@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows;
 
 namespace AuroraDesignSuite.Services
 {
@@ -18,6 +19,9 @@ namespace AuroraDesignSuite.Services
         [DllImport("user32.dll")]
         private static extern bool BringWindowToTop(IntPtr hWnd);
 
+        [DllImport("user32.dll")]
+        private static extern void SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
+
         private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 
         [DllImport("user32.dll")]
@@ -29,11 +33,11 @@ namespace AuroraDesignSuite.Services
         [DllImport("user32.dll")]
         private static extern bool IsWindowVisible(IntPtr hWnd);
 
+        private const int SW_MAXIMIZE = 3;
         private const int SW_RESTORE = 9;
 
         /// <summary>
         /// Locates the running Aurora 4X game process or window and brings it to the foreground.
-        /// Automatically launches the game if it is not currently running.
         /// </summary>
         public static bool FocusAuroraGame(out string statusMessage)
         {
@@ -51,7 +55,7 @@ namespace AuroraDesignSuite.Services
                         string title = sb.ToString();
 
                         if (!string.IsNullOrEmpty(title) && 
-                            (title.StartsWith("Aurora") || title.Contains("System Map") || title.Contains("Tactical Map")))
+                            (title.StartsWith("Aurora") || title.Contains("System Map") || title.Contains("Tactical Map") || title.Contains("Commanders")))
                         {
                             targetHWnd = hWnd;
                             return false; // Stop enumeration
@@ -65,6 +69,7 @@ namespace AuroraDesignSuite.Services
                     ShowWindow(targetHWnd, SW_RESTORE);
                     BringWindowToTop(targetHWnd);
                     SetForegroundWindow(targetHWnd);
+                    SwitchToThisWindow(targetHWnd, true);
                     statusMessage = "🎮 Juego Aurora 4X enfocado en primer plano.";
                     return true;
                 }
@@ -74,14 +79,18 @@ namespace AuroraDesignSuite.Services
                 if (processes.Length == 0) processes = Process.GetProcessesByName("AuroraPatch");
                 if (processes.Length == 0) processes = Process.GetProcessesByName("Aurora4X");
 
-                if (processes.Length > 0 && processes[0].MainWindowHandle != IntPtr.Zero)
+                foreach (var proc in processes)
                 {
-                    IntPtr handle = processes[0].MainWindowHandle;
-                    ShowWindow(handle, SW_RESTORE);
-                    BringWindowToTop(handle);
-                    SetForegroundWindow(handle);
-                    statusMessage = "🎮 Juego Aurora 4X enfocado en primer plano.";
-                    return true;
+                    if (proc.MainWindowHandle != IntPtr.Zero)
+                    {
+                        IntPtr handle = proc.MainWindowHandle;
+                        ShowWindow(handle, SW_RESTORE);
+                        BringWindowToTop(handle);
+                        SetForegroundWindow(handle);
+                        SwitchToThisWindow(handle, true);
+                        statusMessage = "🎮 Juego Aurora 4X enfocado en primer plano.";
+                        return true;
+                    }
                 }
 
                 // 3. Auto-launch game if not running!
@@ -97,18 +106,18 @@ namespace AuroraDesignSuite.Services
                     return true;
                 }
 
-                statusMessage = "⚠️ No se encontró la instalación de Aurora 4X en c:\\VSCODE\\Aurora271Full.";
+                statusMessage = "⚠️ No se encontró el ejecutable de Aurora 4X.";
                 return false;
             }
             catch (Exception ex)
             {
-                statusMessage = $"⚠️ Error al enfocar/iniciar Aurora 4X: {ex.Message}";
+                statusMessage = $"⚠️ Error al enfocar Aurora 4X: {ex.Message}";
                 return false;
             }
         }
 
         /// <summary>
-        /// Locates the running Aurora Master Suite application and brings it to the foreground.
+        /// Locates the running Aurora Master Suite application and brings it to the foreground MAXIMIZED.
         /// </summary>
         public static bool FocusMasterSuite()
         {
@@ -120,9 +129,10 @@ namespace AuroraDesignSuite.Services
                     IntPtr handle = processes[0].MainWindowHandle;
                     if (handle != IntPtr.Zero)
                     {
-                        ShowWindow(handle, SW_RESTORE);
+                        ShowWindow(handle, SW_MAXIMIZE);
                         BringWindowToTop(handle);
                         SetForegroundWindow(handle);
+                        SwitchToThisWindow(handle, true);
                         return true;
                     }
                 }

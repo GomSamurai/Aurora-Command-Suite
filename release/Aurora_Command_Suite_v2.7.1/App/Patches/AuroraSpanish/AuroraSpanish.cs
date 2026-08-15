@@ -148,6 +148,9 @@ namespace AuroraSpanish
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern bool BringWindowToTop(IntPtr hWnd);
 
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern void SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
+
         private static void FormConstructorPostfix(Form __instance)
         {
             // Make ALL forms in Aurora 4X resizable from window borders like standard Windows apps!
@@ -191,9 +194,10 @@ namespace AuroraSpanish
                                     IntPtr handle = suiteProc[0].MainWindowHandle;
                                     if (handle != IntPtr.Zero)
                                     {
-                                        ShowWindow(handle, 9);
+                                        ShowWindow(handle, 3); // 3 = SW_MAXIMIZE
                                         BringWindowToTop(handle);
                                         SetForegroundWindow(handle);
+                                        SwitchToThisWindow(handle, true);
                                         return;
                                     }
                                 }

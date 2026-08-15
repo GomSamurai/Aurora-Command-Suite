@@ -41,161 +41,172 @@
             </Grid>
         </Border>
 
-        <!-- Main Workspace: Master-Detail Professional 2-Column Layout -->
+        <!-- Main Workspace: Master AI Dashboard Grid + Compact Right Chat -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="380"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="440"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Column 0: Left Tools Sidebar (Scrollable) -->
+            <!-- Column 0: Spacious 2-SubColumn Dashboard Grid for Tool Cards -->
             <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,8,0">
-                <StackPanel>
-                    <!-- Card 1: Imperial Live Telemetry Audit -->
-                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
-                        <StackPanel x:Name="PnlTelemetryAudit">
-                            <TextBlock Text="📊 AUDITORÍA EN TIEMPO REAL" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
-                            
-                            <Grid Margin="0,2">
-                                <TextBlock Text="Población Imperial:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                <TextBlock x:Name="LblAuditPop" Text="1,168.63 M" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
-                            </Grid>
-                            <Grid Margin="0,2">
-                                <TextBlock Text="Capital Colonial:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                <TextBlock x:Name="LblAuditCapital" Text="Earth" Foreground="White" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
-                            </Grid>
-                            <Grid Margin="0,2">
-                                <TextBlock Text="Superávit Fiscal Anual:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                <TextBlock x:Name="LblAuditWealth" Text="+1,169 BP" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
-                            </Grid>
-                            <Grid Margin="0,2">
-                                <TextBlock Text="Reserva Combustible:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                <TextBlock x:Name="LblAuditFuel" Text="27,153,817 L" Foreground="White" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
-                            </Grid>
-                            <Grid Margin="0,2">
-                                <TextBlock Text="Fábricas de Construcción:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                <TextBlock x:Name="LblAuditFactories" Text="1,595 Fábricas" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
-                            </Grid>
-                            <Grid Margin="0,2">
-                                <TextBlock Text="Proyectos I+D Activos:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                <TextBlock x:Name="LblAuditResearch" Text="9 Proyectos" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
-                            </Grid>
-                            <Grid Margin="0,2">
-                                <TextBlock Text="Flotas Operativas:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                <TextBlock x:Name="LblAuditFleets" Text="1 Operativa (1 Nave)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
-                            </Grid>
-                        </StackPanel>
-                    </Border>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                    <!-- Card 2: Built-In Strategic 1-Click Prompts -->
-                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
-                        <StackPanel>
-                            <TextBlock Text="⚡ ANÁLISIS ESTRATÉGICOS (1-CLIC)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
-
-                            <Button Content="📊 Analizar Estado Global del Imperio" Click="BtnPromptGlobalReport_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Genera una auditoría completa del imperio basada en población, economía y producción."/>
-                            <Button Content="💎 Auditar Déficit y Reservas de Minerales" Click="BtnPromptMinerals_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Evalúa las reservas de los 11 minerales exóticos e identifica cuellos de botella."/>
-                            <Button Content="🔬 Recomendar Siguiente Tecnología" Click="BtnPromptTech_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" ToolTip="Analiza la velocidad de investigación y sugiere prioridades en el árbol de tecnologías."/>
-                            <Button Content="⚔️ Diagnóstico de Fuerza Naval y Flotas" Click="BtnPromptNavy_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Audita el tonelaje militar vs comercial y la reserva de combustible de la flota."/>
-                            <Button Content="🪐 Plan de Expansión y Terraforma" Click="BtnPromptExpansion_Click" Padding="6,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Examina los sistemas y planetas descubiertos sugiriendo metas de colonización."/>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Card 3: Custom Saved Prompts Manager -->
-                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
-                        <StackPanel>
-                            <TextBlock Text="⭐ MIS CONSULTAS PERSONALIZADAS" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
-                            <TextBlock Text="Guarda tus propias consultas personalizadas para ejecutarlas en 1-clic:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,6"/>
-
-                            <TextBox x:Name="TxtCustomTitle" Padding="4" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource BorderBrush}" FontSize="11" Margin="0,0,0,4" ToolTip="Título corto para identificar tu consulta personalizada (ej. 'Auditoría de Invasión Ground Force')."/>
-                            <TextBox x:Name="TxtCustomPrompt" Height="45" TextWrapping="Wrap" AcceptsReturn="True" Padding="4" Background="{DynamicResource BgDarkBrush}" Foreground="White" BorderBrush="{DynamicResource BorderBrush}" FontSize="11" Margin="0,0,0,6" ToolTip="Escribe el texto detallado de tu consulta o instrucción personalizada."/>
-                            <Button Content="➕ Guardar Consulta Personalizada" Click="BtnSaveCustomPrompt_Click" Padding="6,4" Margin="0,0,0,8" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Almacena la consulta en tu biblioteca personal permanente."/>
-
-                            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="0,6,0,0">
-                                <StackPanel x:Name="PnlCustomPromptsList"/>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Card 4: Direct AI Imperial Tools -->
-                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
-                        <StackPanel>
-                            <TextBlock Text="🛠️ HERRAMIENTAS Y ACCIONES IA DIRECTAS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
-
-                            <Button Content="📋 Exportar Informe Ejecutivo a Archivo (.md)" Click="BtnExportReport_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Guarda un archivo de informe estratégico completo en formato Markdown (.md) con la telemetría actual."/>
-                            <Button Content="🛡️ Auto-Diagnóstico de Vulnerabilidades Defensivas" Click="BtnDefenseAudit_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Audita los escudos, blindajes y cobertura de sensores activos en naves de guerra."/>
-                            <Button Content="⚙️ Optimizador de Producción de Fábricas" Click="BtnOptimizeProd_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" ToolTip="Calcula la tasa de consumo de minerales y sugiere la asignación óptima de fábricas."/>
-                            <Button Content="🧹 Limpiar Historial de Chat" Click="BtnClearChat_Click" Padding="6,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="11" ToolTip="Vacíe la ventana de conversación y reinicie la matriz computacional."/>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Card 5: Epic History Chronicle Generator -->
-                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
-                        <StackPanel>
-                            <TextBlock Text="📖 CRÓNICA HISTÓRICA DEL IMPERIO (IA NARRATIVA)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
-                            <TextBlock Text="Genera la novela épica con la historia completa de tu partida desde sus inicios:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,6"/>
-
-                            <TextBlock Text="Estilo Narrativo Literario:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,2"/>
-                            <ComboBox x:Name="CmbNarrativeStyle" Padding="4" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource BorderBrush}" FontSize="11" Margin="0,0,0,6">
-                                <ComboBoxItem Content="📖 Épica Literaria Sci-Fi (Asimov / Dan Simmons)" IsSelected="True"/>
-                                <ComboBoxItem Content="⚔️ Diario de Bitácora Militar (Flotas &amp; Batallas)"/>
-                                <ComboBoxItem Content="🔬 Anales de la Ciencia Imperial (I+D &amp; Galaxia)"/>
-                            </ComboBox>
-
-                            <Button Content="📜 Generar Novela Histórica del Imperio" Click="BtnGenerateChronicle_Click" Padding="6,6" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" ToolTip="Lee todos los eventos históricos guardados en AuroraDB.db y genera una novela estelar en capítulos."/>
-                            <Button Content="💾 Exportar Crónica Histórica (.md)" Click="BtnExportChronicle_Click" Padding="6,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Guarda la novela e historia del imperio en un archivo local Markdown."/>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Card 6: AI Tactical Monitor & In-Game Overlay HUD -->
-                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
-                        <StackPanel>
-                            <TextBlock Text="📡 MONITOR TÁCTICO IA &amp; OVERLAY IN-GAME" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
-                            <TextBlock Text="Superpone avisos flotantes translúcidos directamente sobre el juego Aurora 4X en tiempo real:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,6"/>
-
-                            <CheckBox x:Name="ChkEnableMonitor" Content="📡 Activar Consejos y Advertencias en Directo" Checked="ChkEnableMonitor_Changed" Unchecked="ChkEnableMonitor_Changed" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" Margin="0,0,0,6" ToolTip="Analiza AuroraDB.db en segundo plano y muestra mensajes flotantes sobre el juego."/>
-
-                            <Grid Margin="0,0,0,6">
-                                <TextBlock Text="Intervalo de Monitoreo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" VerticalAlignment="Center"/>
-                                <ComboBox x:Name="CmbMonitorInterval" SelectionChanged="CmbMonitorInterval_SelectionChanged" HorizontalAlignment="Right" Width="140" Padding="3" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource BorderBrush}" FontSize="10">
-                                    <ComboBoxItem Content="⏱️ Cada 45 Segundos"/>
-                                    <ComboBoxItem Content="⏱️ Cada 90 Segundos" IsSelected="True"/>
-                                    <ComboBoxItem Content="⏱️ Cada 3 Minutos"/>
-                                    <ComboBoxItem Content="⏱️ Cada 5 Minutos"/>
-                                </ComboBox>
-                            </Grid>
-
-                            <StackPanel Margin="0,0,0,6">
-                                <CheckBox x:Name="ChkMonitorCritical" Content="🚨 Alertas Críticas (Combustible/Fábricas/Minas)" IsChecked="True" Checked="ChkMonitorFilters_Changed" Unchecked="ChkMonitorFilters_Changed" Foreground="White" FontSize="10" Margin="0,2"/>
-                                <CheckBox x:Name="ChkMonitorAdvice" Content="💡 Consejos Tácticos e I+D" IsChecked="True" Checked="ChkMonitorFilters_Changed" Unchecked="ChkMonitorFilters_Changed" Foreground="White" FontSize="10" Margin="0,2"/>
-                                <CheckBox x:Name="ChkMonitorAchievements" Content="🏆 Hitos &amp; Logros Imperiales" IsChecked="True" Checked="ChkMonitorFilters_Changed" Unchecked="ChkMonitorFilters_Changed" Foreground="White" FontSize="10" Margin="0,2"/>
-                                <CheckBox x:Name="ChkMonitorReports" Content="📊 Informes Periódicos de Economía" IsChecked="True" Checked="ChkMonitorFilters_Changed" Unchecked="ChkMonitorFilters_Changed" Foreground="White" FontSize="10" Margin="0,2"/>
+                    <!-- SubColumn 0: Left Dashboard Cards -->
+                    <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                        <!-- Card 1: Imperial Live Telemetry Audit -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                            <StackPanel x:Name="PnlTelemetryAudit">
+                                <TextBlock Text="📊 AUDITORÍA EN TIEMPO REAL" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+                                
+                                <Grid Margin="0,2">
+                                    <TextBlock Text="Población Imperial:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                                    <TextBlock x:Name="LblAuditPop" Text="1,168.63 M" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                                </Grid>
+                                <Grid Margin="0,2">
+                                    <TextBlock Text="Capital Colonial:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                                    <TextBlock x:Name="LblAuditCapital" Text="Earth" Foreground="White" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                                </Grid>
+                                <Grid Margin="0,2">
+                                    <TextBlock Text="Superávit Fiscal Anual:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                                    <TextBlock x:Name="LblAuditWealth" Text="+1,169 BP" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                                </Grid>
+                                <Grid Margin="0,2">
+                                    <TextBlock Text="Reserva Combustible:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                                    <TextBlock x:Name="LblAuditFuel" Text="27,153,817 L" Foreground="White" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                                </Grid>
+                                <Grid Margin="0,2">
+                                    <TextBlock Text="Fábricas de Construcción:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                                    <TextBlock x:Name="LblAuditFactories" Text="1,595 Fábricas" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                                </Grid>
+                                <Grid Margin="0,2">
+                                    <TextBlock Text="Proyectos I+D Activos:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                                    <TextBlock x:Name="LblAuditResearch" Text="9 Proyectos" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                                </Grid>
+                                <Grid Margin="0,2">
+                                    <TextBlock Text="Flotas Operativas:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                                    <TextBlock x:Name="LblAuditFleets" Text="1 Operativa (1 Nave)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                                </Grid>
                             </StackPanel>
+                        </Border>
 
-                            <UniformGrid Columns="2">
-                                <Button Content="🧪 Probar Alerta Crítica" Click="BtnTestCriticalOverlay_Click" Padding="4,4" Margin="0,0,2,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="10" ToolTip="Lanza un mensaje emergente de prueba con alerta roja."/>
-                                <Button Content="🧪 Probar Consejo Táctico" Click="BtnTestAdviceOverlay_Click" Padding="4,4" Margin="2,0,0,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" ToolTip="Lanza un mensaje emergente de prueba con consejo cian."/>
-                            </UniformGrid>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
+                        <!-- Card 2: Built-In Strategic 1-Click Prompts -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                            <StackPanel>
+                                <TextBlock Text="⚡ ANÁLISIS ESTRATÉGICOS (1-CLIC)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+
+                                <Button Content="📊 Analizar Estado Global del Imperio" Click="BtnPromptGlobalReport_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Genera una auditoría completa del imperio basada en población, economía y producción."/>
+                                <Button Content="💎 Auditar Déficit y Reservas de Minerales" Click="BtnPromptMinerals_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Evalúa las reservas de los 11 minerales exóticos e identifica cuellos de botella."/>
+                                <Button Content="🔬 Recomendar Siguiente Tecnología" Click="BtnPromptTech_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" ToolTip="Analiza la velocidad de investigación y sugiere prioridades en el árbol de tecnologías."/>
+                                <Button Content="⚔️ Diagnóstico de Fuerza Naval y Flotas" Click="BtnPromptNavy_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Audita el tonelaje militar vs comercial y la reserva de combustible de la flota."/>
+                                <Button Content="🪐 Plan de Expansión y Terraforma" Click="BtnPromptExpansion_Click" Padding="6,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Examina los sistemas y planetas descubiertos sugiriendo metas de colonización."/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 3: Epic History Chronicle Generator -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                            <StackPanel>
+                                <TextBlock Text="📖 CRÓNICA HISTÓRICA DEL IMPERIO (IA NARRATIVA)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+                                <TextBlock Text="Genera la novela épica con la historia completa de tu partida desde sus inicios:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,6"/>
+
+                                <TextBlock Text="Estilo Narrativo Literario:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,2"/>
+                                <ComboBox x:Name="CmbNarrativeStyle" Padding="4" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource BorderBrush}" FontSize="11" Margin="0,0,0,6">
+                                    <ComboBoxItem Content="📖 Épica Literaria Sci-Fi (Asimov / Dan Simmons)" IsSelected="True"/>
+                                    <ComboBoxItem Content="⚔️ Diario de Bitácora Militar (Flotas &amp; Batallas)"/>
+                                    <ComboBoxItem Content="🔬 Anales de la Ciencia Imperial (I+D &amp; Galaxia)"/>
+                                </ComboBox>
+
+                                <Button Content="📜 Generar Novela Histórica del Imperio" Click="BtnGenerateChronicle_Click" Padding="6,6" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" ToolTip="Lee todos los eventos históricos guardados en AuroraDB.db y genera una novela estelar en capítulos."/>
+                                <Button Content="💾 Exportar Crónica Histórica (.md)" Click="BtnExportChronicle_Click" Padding="6,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Guarda la novela e historia del imperio en un archivo local Markdown."/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- SubColumn 1: Right Dashboard Cards -->
+                    <StackPanel Grid.Column="1" Margin="4,0,0,0">
+                        <!-- Card 4: AI Tactical Monitor & In-Game Overlay HUD -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                            <StackPanel>
+                                <TextBlock Text="📡 MONITOR TÁCTICO IA &amp; OVERLAY IN-GAME" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+                                <TextBlock Text="Superpone avisos flotantes translúcidos directamente sobre el juego Aurora 4X en tiempo real:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,6"/>
+
+                                <CheckBox x:Name="ChkEnableMonitor" Content="📡 Activar Consejos y Advertencias en Directo" Checked="ChkEnableMonitor_Changed" Unchecked="ChkEnableMonitor_Changed" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" Margin="0,0,0,6" ToolTip="Analiza AuroraDB.db en segundo plano y muestra mensajes flotantes sobre el juego."/>
+
+                                <Grid Margin="0,0,0,6">
+                                    <TextBlock Text="Intervalo de Monitoreo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" VerticalAlignment="Center"/>
+                                    <ComboBox x:Name="CmbMonitorInterval" SelectionChanged="CmbMonitorInterval_SelectionChanged" HorizontalAlignment="Right" Width="140" Padding="3" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource BorderBrush}" FontSize="10">
+                                        <ComboBoxItem Content="⏱️ Cada 45 Segundos"/>
+                                        <ComboBoxItem Content="⏱️ Cada 90 Segundos" IsSelected="True"/>
+                                        <ComboBoxItem Content="⏱️ Cada 3 Minutos"/>
+                                        <ComboBoxItem Content="⏱️ Cada 5 Minutos"/>
+                                    </ComboBox>
+                                </Grid>
+
+                                <StackPanel Margin="0,0,0,6">
+                                    <CheckBox x:Name="ChkMonitorCritical" Content="🚨 Alertas Críticas (Combustible/Fábricas/Minas)" IsChecked="True" Checked="ChkMonitorFilters_Changed" Unchecked="ChkMonitorFilters_Changed" Foreground="White" FontSize="10" Margin="0,2"/>
+                                    <CheckBox x:Name="ChkMonitorAdvice" Content="💡 Consejos Tácticos e I+D" IsChecked="True" Checked="ChkMonitorFilters_Changed" Unchecked="ChkMonitorFilters_Changed" Foreground="White" FontSize="10" Margin="0,2"/>
+                                    <CheckBox x:Name="ChkMonitorAchievements" Content="🏆 Hitos &amp; Logros Imperiales" IsChecked="True" Checked="ChkMonitorFilters_Changed" Unchecked="ChkMonitorFilters_Changed" Foreground="White" FontSize="10" Margin="0,2"/>
+                                    <CheckBox x:Name="ChkMonitorReports" Content="📊 Informes Periódicos de Economía" IsChecked="True" Checked="ChkMonitorFilters_Changed" Unchecked="ChkMonitorFilters_Changed" Foreground="White" FontSize="10" Margin="0,2"/>
+                                </StackPanel>
+
+                                <UniformGrid Columns="2">
+                                    <Button Content="🧪 Probar Alerta Crítica" Click="BtnTestCriticalOverlay_Click" Padding="4,4" Margin="0,0,2,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="10" ToolTip="Lanza un mensaje emergente de prueba con alerta roja."/>
+                                    <Button Content="🧪 Probar Consejo Táctico" Click="BtnTestAdviceOverlay_Click" Padding="4,4" Margin="2,0,0,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" ToolTip="Lanza un mensaje emergente de prueba con consejo cian."/>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 5: Custom Saved Prompts Manager -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                            <StackPanel>
+                                <TextBlock Text="⭐ MIS CONSULTAS PERSONALIZADAS" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+                                <TextBlock Text="Guarda tus propias consultas personalizadas para ejecutarlas en 1-clic:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,6"/>
+
+                                <TextBox x:Name="TxtCustomTitle" Padding="4" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource BorderBrush}" FontSize="11" Margin="0,0,0,4" ToolTip="Título corto para identificar tu consulta personalizada (ej. 'Auditoría de Invasión Ground Force')."/>
+                                <TextBox x:Name="TxtCustomPrompt" Height="45" TextWrapping="Wrap" AcceptsReturn="True" Padding="4" Background="{DynamicResource BgDarkBrush}" Foreground="White" BorderBrush="{DynamicResource BorderBrush}" FontSize="11" Margin="0,0,0,6" ToolTip="Escribe el texto detallado de tu consulta o instrucción personalizada."/>
+                                <Button Content="➕ Guardar Consulta Personalizada" Click="BtnSaveCustomPrompt_Click" Padding="6,4" Margin="0,0,0,8" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Almacena la consulta en tu biblioteca personal permanente."/>
+
+                                <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="0,6,0,0">
+                                    <StackPanel x:Name="PnlCustomPromptsList"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 6: Direct AI Imperial Tools -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                            <StackPanel>
+                                <TextBlock Text="🛠️ HERRAMIENTAS Y ACCIONES IA DIRECTAS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+
+                                <Button Content="📋 Exportar Informe Ejecutivo a Archivo (.md)" Click="BtnExportReport_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Guarda un archivo de informe estratégico completo en formato Markdown (.md) con la telemetría actual."/>
+                                <Button Content="🛡️ Auto-Diagnóstico de Vulnerabilidades Defensivas" Click="BtnDefenseAudit_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Audita los escudos, blindajes y cobertura de sensores activos en naves de guerra."/>
+                                <Button Content="⚙️ Optimizador de Producción de Fábricas" Click="BtnOptimizeProd_Click" Padding="6,5" Margin="0,0,0,5" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" ToolTip="Calcula la tasa de consumo de minerales y sugiere la asignación óptima de fábricas."/>
+                                <Button Content="🧹 Limpiar Historial de Chat" Click="BtnClearChat_Click" Padding="6,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="11" ToolTip="Vacíe la ventana de conversación y reinicie la matriz computacional."/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
             </ScrollViewer>
 
-            <!-- Column 1: Full-Height Interactive AI Chat Workspace -->
+            <!-- Column 1: Compact Interactive AI Chat Panel (Width 440) -->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- Chat Feed Container Stretching 100% Vertical Space -->
-                <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,8">
+                <!-- Chat Feed Container -->
+                <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,6">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="💬 CONVERSACIÓN Y REGISTRO CON LA MATRIZ IA IMPERIAL" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,8"/>
+                        <TextBlock Grid.Row="0" Text="💬 CONVERSACIÓN CON LA MATRIZ IA" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
                         
                         <ScrollViewer Grid.Row="1" x:Name="ScvChat" VerticalScrollBarVisibility="Auto">
                             <StackPanel x:Name="PnlChatMessages" Margin="0,2"/>
@@ -204,16 +215,16 @@
                 </Border>
 
                 <!-- Chat Input Bar -->
-                <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8">
+                <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="6">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBox x:Name="TxtUserInput" Grid.Column="0" KeyDown="TxtUserInput_KeyDown" AcceptsReturn="False" Padding="8,6" Background="{DynamicResource BgDarkBrush}" Foreground="White" BorderBrush="{DynamicResource BorderBrush}" FontSize="12" VerticalAlignment="Center" ToolTip="Escribe cualquier consulta técnica o estratégica directa."/>
+                        <TextBox x:Name="TxtUserInput" Grid.Column="0" KeyDown="TxtUserInput_KeyDown" AcceptsReturn="False" Padding="6" Background="{DynamicResource BgDarkBrush}" Foreground="White" BorderBrush="{DynamicResource BorderBrush}" FontSize="11.5" VerticalAlignment="Center" ToolTip="Escribe cualquier consulta técnica o estratégica directa."/>
                         
-                        <Button x:Name="BtnSendQuery" Grid.Column="1" Content="🚀 Enviar Consulta a la IA" Click="BtnSendQuery_Click" Padding="14,8" Margin="8,0,0,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" ToolTip="Envía tu consulta a la Matriz IA junto con la telemetría en vivo de AuroraDB.db."/>
+                        <Button x:Name="BtnSendQuery" Grid.Column="1" Content="🚀 Enviar" Click="BtnSendQuery_Click" Padding="12,6" Margin="6,0,0,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" ToolTip="Envía tu consulta a la Matriz IA junto con la telemetría en vivo de AuroraDB.db."/>
                     </Grid>
                 </Border>
             </Grid>

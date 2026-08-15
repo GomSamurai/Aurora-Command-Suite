@@ -161,7 +161,7 @@ namespace AuroraSpanish
             }
             catch { }
 
-            // Inject Master Suite Button on main game windows when Shown
+            // Inject Master Suite Button ONLY on the main map window
             try
             {
                 __instance.Shown += delegate
@@ -169,6 +169,47 @@ namespace AuroraSpanish
                     try
                     {
                         if (__instance.Controls.Find("btnMasterSuiteNav", true).Length > 0) return;
+
+                        // Strict filter: Button should ONLY be injected into the main map window (hf form)
+                        string formTypeName = __instance.GetType().Name;
+                        string formTitle = __instance.Text ?? "";
+
+                        bool isMainMapWindow = formTypeName.Equals("hf", StringComparison.OrdinalIgnoreCase);
+
+                        if (!isMainMapWindow && System.Windows.Forms.Application.OpenForms.Count > 0)
+                        {
+                            if (__instance == System.Windows.Forms.Application.OpenForms[0])
+                            {
+                                isMainMapWindow = true;
+                            }
+                        }
+
+                        // Explicitly exclude all secondary dialogs and sub-windows
+                        if (formTitle.StartsWith("Economía", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Economy", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Investigación", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Research", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Astilleros", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Shipyards", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Diseño", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Class", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Comandantes", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Commanders", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Flotas", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Fleets", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Eventos", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Events", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Sistemas", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Systems", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Industria", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Industry", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Minería", StringComparison.OrdinalIgnoreCase) ||
+                            formTitle.StartsWith("Mining", StringComparison.OrdinalIgnoreCase))
+                        {
+                            isMainMapWindow = false;
+                        }
+
+                        if (!isMainMapWindow) return;
 
                         Button btnSuite = new Button
                         {

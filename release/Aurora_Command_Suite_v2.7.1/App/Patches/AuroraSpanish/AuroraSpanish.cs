@@ -170,19 +170,8 @@ namespace AuroraSpanish
                     {
                         if (__instance.Controls.Find("btnMasterSuiteNav", true).Length > 0) return;
 
-                        // Strict filter: Button should ONLY be injected into the main map window (hf form)
-                        string formTypeName = __instance.GetType().Name;
+                        string formTypeName = __instance.GetType().Name.ToLower();
                         string formTitle = __instance.Text ?? "";
-
-                        bool isMainMapWindow = formTypeName.Equals("hf", StringComparison.OrdinalIgnoreCase);
-
-                        if (!isMainMapWindow && System.Windows.Forms.Application.OpenForms.Count > 0)
-                        {
-                            if (__instance == System.Windows.Forms.Application.OpenForms[0])
-                            {
-                                isMainMapWindow = true;
-                            }
-                        }
 
                         // Explicitly exclude all secondary dialogs and sub-windows
                         if (formTitle.StartsWith("Economía", StringComparison.OrdinalIgnoreCase) ||
@@ -206,10 +195,32 @@ namespace AuroraSpanish
                             formTitle.StartsWith("Minería", StringComparison.OrdinalIgnoreCase) ||
                             formTitle.StartsWith("Mining", StringComparison.OrdinalIgnoreCase))
                         {
-                            isMainMapWindow = false;
+                            return;
                         }
 
-                        if (!isMainMapWindow) return;
+                        // Skip modal dialogs or child controls
+                        if (__instance.Modal || __instance.Parent != null) return;
+
+                        // Identify the Main Tactical System Map Window
+                        bool isMainMap = false;
+
+                        if (formTitle.Contains("Racial") || formTitle.Contains("Riqueza") || 
+                            formTitle.Contains("Wealth") || formTitle.Contains("Sol") || 
+                            formTitle.Contains("System Map") || formTitle.Contains("Tactical") ||
+                            formTitle.Contains("Imperio"))
+                        {
+                            isMainMap = true;
+                        }
+                        else if (formTypeName == "f5" || formTypeName == "hf" || formTypeName == "gu" || formTypeName == "bd")
+                        {
+                            isMainMap = true;
+                        }
+                        else if (System.Windows.Forms.Application.OpenForms.Count > 0 && __instance == System.Windows.Forms.Application.OpenForms[0])
+                        {
+                            isMainMap = true;
+                        }
+
+                        if (!isMainMap) return;
 
                         Button btnSuite = new Button
                         {

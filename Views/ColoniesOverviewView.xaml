@@ -1,0 +1,180 @@
+<UserControl x:Class="AuroraDesignSuite.Views.ColoniesOverviewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+             d:DesignHeight="850" d:DesignWidth="1400">
+    <Grid Margin="8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="450"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Column: Fluid Responsive Layout (Fills 100% Screen Height) -->
+        <Grid Grid.Column="0" Margin="0,0,8,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Card 1: Colonies Table (Row 0) -->
+            <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,6">
+                        <TextBlock Text="🪐 COLONIAS Y ASENTAMIENTOS IMPERIALES (AuroraDB.db)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="LblColonyCount" Text="1 Colonia" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </DockPanel>
+
+                    <DataGrid x:Name="DgColonies" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgColonies_SelectionChanged" ToolTip="Poblaciones planetarias y reservas almacenadas de los 11 minerales exóticos trans-uranianos. Selecciona una fila para ver el dossier colonial.">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nombre Colonia" Binding="{Binding DisplayName}" Width="*"/>
+                            <DataGridTextColumn Header="Población" Binding="{Binding PopulationMillions, StringFormat={}{0:N2} M}" Width="110"/>
+                            <DataGridTextColumn Header="Depósito Fuel" Binding="{Binding FuelStockpile, StringFormat={}{0:N0} L}" Width="130"/>
+                            <DataGridTextColumn Header="Duranium (t)" Binding="{Binding MineralStockpiles.Duranium, StringFormat={}{0:N0}}" Width="95"/>
+                            <DataGridTextColumn Header="Sorium (t)" Binding="{Binding MineralStockpiles.Sorium, StringFormat={}{0:N0}}" Width="95"/>
+                            <DataGridTextColumn Header="Gallicite (t)" Binding="{Binding MineralStockpiles.Gallicite, StringFormat={}{0:N0}}" Width="95"/>
+                            <DataGridTextColumn Header="Minerales Totales" Binding="{Binding TotalMineralsTonnage, StringFormat={}{0:N0} t}" Width="125"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <!-- Card 2: Executive Imperial Minerals Summary Bar (Row 1) -->
+            <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,0,0,8">
+                <Grid x:Name="PnlMineralsTelemetry">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="📊 TELEMETRÍA DE MINERALES:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,10,0"/>
+
+                    <UniformGrid Grid.Column="1" Columns="4">
+                        <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="Total Minerales: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
+                                <TextBlock x:Name="LblGlobalTotalMinerals" Text="135,247 t" Foreground="#00F0FF" FontWeight="Bold" FontSize="10.5"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="Más Abundante: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
+                                <TextBlock x:Name="LblTopMineral" Text="Gallicite (28.3k t)" Foreground="#55FF55" FontWeight="Bold" FontSize="10.5"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="Recurso Crítico: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
+                                <TextBlock x:Name="LblBottleneckMineral" Text="Sorium (6.5k t)" Foreground="#FFB400" FontWeight="Bold" FontSize="10.5"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="Estado General: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
+                                <TextBlock x:Name="LblMineralHealthStatus" Text="✅ ESTABLE" Foreground="#00FF88" FontWeight="Bold" FontSize="10.5"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+                </Grid>
+            </Border>
+
+            <!-- Card 3: 11 Trans-Uranic Minerals Breakdown Table (Row 2 - Fills 100% Remaining Height!) -->
+            <Border Grid.Row="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="💎 DESGLOSE Y ANÁLISIS DE LOS 11 MINERALES TRANS-URANIANOS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+
+                    <DataGrid x:Name="DgMineralDetails" AutoGenerateColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" ToolTip="Catálogo detallado de los 11 minerales exóticos trans-uranianos, su utilidad táctica en juego y el tonelaje almacenado.">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Mineral Exótico" Binding="{Binding Name}" Width="150"/>
+                            <DataGridTextColumn Header="Reservas Totales" Binding="{Binding AmountDisplay}" Width="120"/>
+                            <DataGridTextColumn Header="Cuota Imperio" Binding="{Binding PercentageDisplay}" Width="95"/>
+                            <DataGridTextColumn Header="Utilidad Táctica en Juego (Aurora 4X)" Binding="{Binding GameUtility}" Width="*"/>
+                            <DataGridTextColumn Header="Estado Reserva" Binding="{Binding Status}" Width="120"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+        </Grid>
+
+        <!-- Right Column: Colony Dossier & Mining Intelligence Sidebar -->
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Card 1: Selected Colony Dossier -->
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                    <StackPanel x:Name="PnlColonyDetail">
+                        <TextBlock Text="🪐 DOSSIER DE DETALLE COLONIAL" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+
+                        <DockPanel Margin="0,0,0,6">
+                            <TextBlock Text="🪐" FontSize="26" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock x:Name="LblColonyTitle" Text="Earth (Sol)" Foreground="#00F0FF" FontWeight="Bold" FontSize="13"/>
+                                <TextBlock x:Name="LblColonyStatus" Text="Capital Imperial | Colony Cost: 0.00 (Mundo Nativo)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <Grid Margin="0,2">
+                            <TextBlock Text="Población Humana Total:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                            <TextBlock x:Name="LblColonyPop" Text="1,168.63 Millones" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                        </Grid>
+                        <Grid Margin="0,2">
+                            <TextBlock Text="Reserva Combustible Planetario:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                            <TextBlock x:Name="LblColonyFuel" Text="26,953,818 Litros" Foreground="White" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                        </Grid>
+                        <Grid Margin="0,2">
+                            <TextBlock Text="Gobernador Asignado:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                            <TextBlock x:Name="LblColonyGovernor" Text="Oficial de Alto Mando (+10.0% Minería)" Foreground="#FFB400" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                        </Grid>
+                        <Grid Margin="0,2">
+                            <TextBlock Text="Capacidad Industrial Local:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                            <TextBlock x:Name="LblColonyInfra" Text="1,595 Fábricas | 11 Minas | 2 Refinerías" Foreground="#00F0FF" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                        </Grid>
+
+                        <Border Background="#0D2818" BorderBrush="#00FF88" BorderThickness="1" CornerRadius="4" Padding="6" Margin="0,8,0,0">
+                            <TextBlock Text="✅ CAPITAL Y NÚCLEO INDUSTRIAL DEL IMPERIO EN RÉGIMEN NOMINAL" Foreground="#00FF88" FontWeight="Bold" FontSize="10.5" HorizontalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card 2: Mining & Processing Balance -->
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                    <StackPanel>
+                        <TextBlock Text="📊 AUDITORÍA EXTRACTIVA Y REFINO IMPERIAL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                        <TextBlock Text="Capacidad instalada de extracción y procesamiento de minerales:" Foreground="#8A99AD" FontSize="10" Margin="0,0,0,6"/>
+
+                        <UniformGrid Columns="2" Margin="0,0,0,6">
+                            <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
+                                <StackPanel>
+                                    <TextBlock Text="Minas Operativas:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                    <TextBlock Text="11 Minas" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="#121824" BorderBrush="#2A344A" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
+                                <StackPanel>
+                                    <TextBlock Text="Refinerías de Sorium:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                    <TextBlock Text="2 Refinerías (100k L/Año)" Foreground="#55FF55" FontWeight="Bold" FontSize="12"/>
+                                </StackPanel>
+                            </Border>
+                        </UniformGrid>
+
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8">
+                            <StackPanel>
+                                <TextBlock Text="Tasa de Producción Minera Anual Estimada:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock Text="110 Toneladas / Año (10 t por Mina)" Foreground="#FFD700" FontWeight="Bold" FontSize="13" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card 3: Imperial Mining Strategy Advisor -->
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                    <StackPanel>
+                        <TextBlock Text="💡 ESTRATEGIA EXPORTADORA Y MINERA PLANETARIA" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
+                        <TextBlock Text="1. Desplegar Minas Automatizadas en cometas y asteroides ricos en Sorium y Gallicite con accesibilidad de yacimiento ≥ 0.80x.\n\n2. Construir cargueros pesados para trasladar los minerales extraídos en sectores exteriores de vuelta a la capital industrial Sol." Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

@@ -1,0 +1,193 @@
+<UserControl x:Class="AuroraDesignSuite.Views.SystemExplorationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+             d:DesignHeight="850" d:DesignWidth="1250">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Mode Toolbar -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,0,0,10">
+            <DockPanel DockPanel.Dock="Top">
+                <TextBlock Text="🌌 SUITE DE EXPLORACIÓN E INTELIGENCIA INTERESTELAR" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" Margin="5,0,20,0"/>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <RadioButton x:Name="BtnModeProspection" Content="🌌 Prospección y Cuerpos Celestes" IsChecked="True" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Margin="0,0,6,0" Background="#1C2536" Foreground="#00F0FF" BorderBrush="#00F0FF" FontWeight="Bold" ToolTip="Exploración geológica y física de planetas, lunas y yacimientos minerales."/>
+                    <RadioButton x:Name="BtnModeJumpPoints" Content="🌀 Red de Puntos de Salto" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Margin="0,0,6,0" Background="#1C2536" Foreground="#FFB400" BorderBrush="#FFB400" FontWeight="Bold" ToolTip="Red de nodos de salto interestelar y estado de construcción de Puertas de Salto (Jump Gates)."/>
+                    <RadioButton x:Name="BtnModeSurveyFleets" Content="🛸 Flotas de Prospección Activas" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Background="#1C2536" Foreground="#55FF55" BorderBrush="#55FF55" FontWeight="Bold" ToolTip="Buques y escuadras de reconocimiento geológico y gravitatorio en servicio."/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Main Mode Container -->
+        <Grid Grid.Row="1">
+            <!-- MODE 1: PROSPECTION & SYSTEM BODIES -->
+            <Grid x:Name="PnlProspection" Visibility="Visible">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="360"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left Column: Discovered Star Systems & System Info -->
+                <Grid Grid.Column="0" Margin="0,0,5,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Top" Text="🌌 SISTEMAS ESTELARES DESCUBIERTOS" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                            <DataGrid x:Name="DgSystems" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgSystems_SelectionChanged" ToolTip="Sistemas solares mapeados por tus naves exploradoras.">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Sistema Estelar" Binding="{Binding SystemName}" Width="*"/>
+                                    <DataGridTextColumn Header="Estrellas" Binding="{Binding StarCount}" Width="65"/>
+                                    <DataGridTextColumn Header="Abundancia" Binding="{Binding AbundanceModifier, StringFormat={}{0:F2}}" Width="85"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </Border>
+
+                    <!-- System Summary Card -->
+                    <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                        <StackPanel x:Name="PnlSysSummary">
+                            <TextBlock Text="📊 RESUMEN DE PROSPECCIÓN DEL SISTEMA" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+                            <Grid Margin="0,2">
+                                <TextBlock Text="Cuerpos Detectados:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                                <TextBlock x:Name="LblSysBodiesCount" Text="0 Cuerpos" Foreground="White" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                            </Grid>
+                            <Grid Margin="0,2">
+                                <TextBlock Text="Puntos de Salto Conocidos:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                                <TextBlock x:Name="LblSysJumpCount" Text="0 Puntos" Foreground="#FFB400" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Right Column: Planets, Minerals, Colonization Viability & Actions -->
+                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="5,0,0,0">
+                    <StackPanel>
+                        <!-- Card 1: Celestial Bodies Grid -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock x:Name="LblBodiesHeader" Text="🪐 PLANETAS, LUNAS Y CUERPOS CELESTES EN SISTEMA" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                                <DataGrid x:Name="DgBodies" AutoGenerateColumns="False" IsReadOnly="True" MaxHeight="220" SelectionChanged="DgBodies_SelectionChanged" ToolTip="Cuerpos celestes analizados en este sistema estelar.">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Nombre del Cuerpo" Binding="{Binding Name}" Width="*"/>
+                                        <DataGridTextColumn Header="Clase" Binding="{Binding BodyTypeName}" Width="150"/>
+                                        <DataGridTextColumn Header="Gravedad" Binding="{Binding GravityDisplay}" Width="85"/>
+                                        <DataGridTextColumn Header="Temperatura" Binding="{Binding TempDisplay}" Width="95"/>
+                                        <DataGridTextColumn Header="Atmósfera" Binding="{Binding AtmosDisplay}" Width="85"/>
+                                        <DataGridTextColumn Header="Costo Colonial" Binding="{Binding ColonyCostDisplay}" Width="160"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 2: Mineral Deposits Grid -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock x:Name="LblMineralsHeader" Text="💎 YACIMIENTOS MINERALES EN CUERPO CELESTE" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                                <DataGrid x:Name="DgMinerals" AutoGenerateColumns="False" IsReadOnly="True" MaxHeight="180" ToolTip="Depósitos de minerales exóticos trans-uranianos detectados en este planeta.">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Mineral Exótico" Binding="{Binding MineralName}" Width="*"/>
+                                        <DataGridTextColumn Header="Reservas Estimadas" Binding="{Binding AmountDisplay}" Width="180"/>
+                                        <DataGridTextColumn Header="Accesibilidad de Minería" Binding="{Binding AccessibilityDisplay}" Width="180"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 3: Colonization & Terraforming Viability -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="🚀 LOGÍSTICA DE COLONIZACIÓN Y VIABILIDAD DE HÁBITAT" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                                <UniformGrid Columns="4">
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Multiplicador de costo en infraestructura para sostener población en este planeta.">
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <TextBlock Text="Costo Colonial (Colony Cost):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="LblColonyCostVal" Text="0.00 (Ideal)" Foreground="#55FF55" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Tolerancia de fuerza G para tus ciudadanos sin trajes gravitatorios.">
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <TextBlock Text="Tolerancia Gravitatoria:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="LblGravSuitability" Text="Óptima (1.0 G)" Foreground="#55FF55" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Modificación de presión atmosférica requerida para reducir el Colony Cost.">
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <TextBlock Text="Ajuste Atmosférico:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="LblAtmosReq" Text="Ninguno (1.0 atm)" Foreground="#00F0FF" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Modificación térmica necesaria vía gases de efecto invernadero para templar el mundo.">
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <TextBlock Text="Ajuste Térmico:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="LblTempReq" Text="Estable (15 °C)" Foreground="#00F0FF" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 4: Prospecting Actions & Live Commands -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="⚓ MISIONES Y ACCIONES DE PROSPECCIÓN EN VIVO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" Content="🌍 Marcar como Objetivo Colonial" Click="BtnSetColonyTarget_Click" Padding="10,8" Margin="0,0,4,0" Background="#1C2536" Foreground="#55FF55" BorderBrush="#55FF55" FontWeight="Bold" ToolTip="Designa este planeta como destino prioritario para cargueros de infraestructura y naves colonizadoras en AuroraDB.db."/>
+                                    <Button Grid.Column="1" Content="🚀 Enviar Flota de Prospección Geológica" Click="BtnSendSurveyFleet_Click" Padding="10,8" Margin="4,0,0,0" Background="#1C2536" Foreground="#00F0FF" BorderBrush="#00F0FF" FontWeight="Bold" ToolTip="Asigna a tu flota exploradora (Survey Fleet) la orden de escanear minuciosamente este planeta."/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- MODE 2: JUMP POINTS TOPOLOGY -->
+            <Grid x:Name="PnlJumpPoints" Visibility="Collapsed">
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Text="🌀 RED DE PUNTOS DE SALTO INTERESTELARES (JUMP POINTS)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                        <DataGrid x:Name="DgJumpPoints" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Nodos de salto warp detectados por sensores de prospección gravitatoria en los sistemas explorados.">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Punto de Salto ID" Binding="{Binding JumpPointID}" Width="140"/>
+                                <DataGridTextColumn Header="Sistema Destino" Binding="{Binding DestinationSystemName}" Width="*"/>
+                                <DataGridTextColumn Header="Tipo de Conexión" Binding="{Binding GateDisplay}" Width="220"/>
+                                <DataGridTextColumn Header="Estado Prospección" Binding="{Binding StatusDisplay}" Width="220"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </Border>
+            </Grid>
+
+            <!-- MODE 3: ACTIVE SURVEY FLEETS -->
+            <Grid x:Name="PnlSurveyFleets" Visibility="Collapsed">
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Text="🛸 BUQUES Y ESCUADRAS DE PROSPECCIÓN EN SERVICIO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                        <DataGrid x:Name="DgSurveyFleets" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Escuadras exploradoras equipadas con sensores geológicos y gravitatorios activos.">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nombre de Flota / Nave" Binding="{Binding FleetName}" Width="*"/>
+                                <DataGridTextColumn Header="Cantidad de Naves" Binding="{Binding ShipsDisplay}" Width="150"/>
+                                <DataGridTextColumn Header="Velocidad" Binding="{Binding SpeedDisplay}" Width="150"/>
+                                <DataGridTextColumn Header="Reserva Combustible" Binding="{Binding FuelDisplay}" Width="150"/>
+                                <DataGridTextColumn Header="Ubicación Actual" Binding="{Binding SystemLocation}" Width="200"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

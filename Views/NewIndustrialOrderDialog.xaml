@@ -1,0 +1,46 @@
+<Window x:Class="AuroraDesignSuite.Views.NewIndustrialOrderDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Nueva Orden de Construcción Industrial" Height="380" Width="480"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Background="{DynamicResource BgDarkBrush}" Foreground="#E0E6ED">
+    
+    <Window.Resources>
+        <SolidColorBrush x:Key="CardBgBrush" Color="#161C2A"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#2A344A"/>
+        <SolidColorBrush x:Key="AccentCyanBrush" Color="#00F0FF"/>
+        <SolidColorBrush x:Key="AccentAmberBrush" Color="#FFB400"/>
+    </Window.Resources>
+
+    <Border Padding="20" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="8" Margin="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                <TextBlock Text="🚀 ASIGNAR PROYECTO INDUSTRIAL PLANETARIO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="15"/>
+                <TextBlock Text="Registra una nueva orden de construcción en los centros industriales del imperio." Foreground="#8A99AD" FontSize="11" Margin="0,2,0,0"/>
+            </StackPanel>
+
+            <!-- Form Body -->
+            <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                <TextBlock Text="Instalación / Estructura a Construir:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,5"/>
+                <ComboBox x:Name="CmbTargetInstallation" Height="32" Margin="0,0,0,15" Padding="8,4" Background="#1C2536" Foreground="#FFFFFF" BorderBrush="#2A344A"/>
+
+                <TextBlock Text="Cantidad de Unidades a Fabricar:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,5"/>
+                <TextBox x:Name="TxtQuantity" Text="10.0" Height="32" Padding="8,6" Background="#1C2536" Foreground="#FFFFFF" BorderBrush="#2A344A" FontSize="13"/>
+                <TextBlock Text="💡 Nota: Las fábricas planetarias asignarán su capacidad BP automáticamente según la prioridad del imperio." Foreground="#708090" FontSize="10" Margin="0,4,0,0" TextWrapping="Wrap"/>
+            </StackPanel>
+
+            <!-- Buttons -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                <Button Content="Cancelar" Click="BtnCancel_Click" Width="100" Height="32" Margin="0,0,10,0" Background="#263238" Foreground="#B0BEC5" BorderBrush="#37474F"/>
+                <Button Content="🚀 Registrar Orden" Click="BtnConfirm_Click" Width="140" Height="32" Background="#004D40" Foreground="#00FF88" BorderBrush="#00FF88" FontWeight="Bold"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

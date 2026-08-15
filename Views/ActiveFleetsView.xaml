@@ -1,0 +1,148 @@
+<UserControl x:Class="AuroraDesignSuite.Views.ActiveFleetsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+             d:DesignHeight="850" d:DesignWidth="1250">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="380"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Column: Fleets DataGrid & Ships DataGrid -->
+        <Grid Grid.Column="0" Margin="0,0,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="240"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Card 1: Active Fleets DataGrid -->
+            <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                        <TextBlock Text="⚓ FLOTAS OPERATIVAS DEL IMPERIO EN TIEMPO REAL" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="LblFleetsCountHeader" Text="5 Flotas Activas" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </DockPanel>
+
+                    <DataGrid x:Name="DgActiveFleets" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgActiveFleets_SelectionChanged" ToolTip="Lista de agrupaciones de combate navales y flotas comerciales en servicio activo en AuroraDB.db.">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nombre de la Flota" Binding="{Binding FleetName}" Width="*"/>
+                            <DataGridTextColumn Header="Naves" Binding="{Binding ShipCount}" Width="70"/>
+                            <DataGridTextColumn Header="Masa Flota" Binding="{Binding TotalTonnage, StringFormat={}{0:N0} t}" Width="100"/>
+                            <DataGridTextColumn Header="Velocidad" Binding="{Binding SpeedKmS, StringFormat={}{0:N0} km/s}" Width="95"/>
+                            <DataGridTextColumn Header="Combustible Actual" Binding="{Binding TotalFuelLiters, StringFormat={}{0:N0} L}" Width="140"/>
+                            <DataGridTextColumn Header="Combustible Máx." Binding="{Binding MaxFuelLiters, StringFormat={}{0:N0} L}" Width="140"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <!-- Card 2: Ships Assigned to Selected Fleet -->
+            <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,4,0,0">
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                        <TextBlock x:Name="LblFleetShipsHeader" Text="🛸 NAVES ASIGNADAS A LA FLOTA SELECCIONADA" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="LblShipsCountHeader" Text="0 Naves" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </DockPanel>
+
+                    <DataGrid x:Name="DgActiveShips" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgActiveShips_SelectionChanged" ToolTip="Navíos y unidades de combate asignados a esta flota con su estado de casco, combustible y mantenimiento.">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nombre de Nave" Binding="{Binding ShipName}" Width="*"/>
+                            <DataGridTextColumn Header="Casco #" Binding="{Binding HullNumber}" Width="65"/>
+                            <DataGridTextColumn Header="Clase" Binding="{Binding ClassName}" Width="160"/>
+                            <DataGridTextColumn Header="Tonelaje" Binding="{Binding Tonnage, StringFormat={}{0:N0} t}" Width="85"/>
+                            <DataGridTextColumn Header="Combustible" Binding="{Binding FuelDisplay}" Width="130"/>
+                            <DataGridTextColumn Header="Moral Tripul." Binding="{Binding MoraleDisplay}" Width="90"/>
+                            <DataGridTextColumn Header="Reserva MSP" Binding="{Binding CurrentMSP, StringFormat={}{0:N0} MSP}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+        </Grid>
+
+        <!-- Right Column: Telemetry, Ship Transfer & Actions, Admiral Dossier -->
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="5,0,0,0">
+            <StackPanel>
+                <!-- Card 1: Tactical Fleet Telemetry -->
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                    <StackPanel>
+                        <TextBlock Text="📊 TELEMETRÍA Y FIRMA OPERATIVA DE FLOTA" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                        <UniformGrid Columns="2">
+                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Velocidad máxima sostenida de la escuadra (limitada por la nave más lenta).">
+                                <StackPanel>
+                                    <TextBlock Text="Velocidad Escuadra:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                    <TextBlock x:Name="LblFleetSpeedLimit" Text="1,258 km/s" Foreground="#00F0FF" FontWeight="Bold" FontSize="12"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Autonomía de navegación estimada a máxima velocidad sostenida.">
+                                <StackPanel>
+                                    <TextBlock Text="Autonomía Estimada:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                    <TextBlock x:Name="LblFleetRangeLightYears" Text="14.8 Años Luz" Foreground="#55FF55" FontWeight="Bold" FontSize="12"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Suministros de mantenimiento (MSP) combinados para reparar averías en el espacio profundo.">
+                                <StackPanel>
+                                    <TextBlock Text="Reservas MSP Total:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                    <TextBlock x:Name="LblFleetTotalMSP" Text="500 MSP" Foreground="White" FontWeight="Bold" FontSize="12"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Estado promedio de la moral de las tripulaciones de la flota.">
+                                <StackPanel>
+                                    <TextBlock Text="Moral Promedio:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                    <TextBlock x:Name="LblFleetAvgMorale" Text="100% (Óptima)" Foreground="#55FF55" FontWeight="Bold" FontSize="12"/>
+                                </StackPanel>
+                            </Border>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card 2: Ship Reassignment & Fleet Actions -->
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                    <StackPanel>
+                        <TextBlock Text="⚓ ORDENES Y REASIGNACIÓN TÁCTICA DE NAVES" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                        <TextBlock Text="Selecciona una nave a la izquierda para reasignarla de flota en AuroraDB.db:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,6"/>
+
+                        <TextBlock Text="Flota de Destino:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,4,0,2"/>
+                        <ComboBox x:Name="CboTargetFleets" DisplayMemberPath="FleetName" Margin="0,0,0,8" ToolTip="Selecciona la flota imperial a la que deseas transferir la nave seleccionada."/>
+
+                        <Button Content="🔄 Transferir Nave a Nueva Flota" Click="BtnTransferShip_Click" Padding="8,6" Margin="0,0,0,8" Background="#1C2536" Foreground="#00F0FF" BorderBrush="#00F0FF" FontWeight="Bold" ToolTip="Ejecuta la transferencia de la nave a la flota seleccionada actualizando AuroraDB.db."/>
+
+                        <Separator Background="{StaticResource BorderBrush}" Margin="0,4,0,8"/>
+
+                        <Button Content="⛽ Reabastecer Combustible de Flota" Click="BtnRefuelFleet_Click" Padding="8,6" Margin="0,0,0,6" Background="#1C2536" Foreground="#55FF55" BorderBrush="#55FF55" FontWeight="Bold" ToolTip="Llena los tanques de combustible al 100% en todas las naves asignadas a esta flota."/>
+                        <Button Content="📦 Reponer Suministros MSP y Moral" Click="BtnReplenishMSP_Click" Padding="8,6" Background="#1C2536" Foreground="#FFB400" BorderBrush="#FFB400" FontWeight="Bold" ToolTip="Repone repuestos de mantenimiento MSP y restaura la moral de la tripulación al 100%."/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card 3: Admiral & Officer Corps Dossier -->
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                    <StackPanel>
+                        <TextBlock Text="🎓 ALMIRANTE Y COMANDANTE DE ESCUADRA" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                        <Grid Margin="0,2">
+                            <TextBlock Text="Comandante Asignado:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                            <TextBlock x:Name="LblCommanderName" Text="Almirante de Flota" Foreground="White" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                        </Grid>
+                        <Grid Margin="0,2">
+                            <TextBlock Text="Bono de Iniciativa Naval:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                            <TextBlock x:Name="LblCommanderBonus" Text="+25% Velocidad de Reacción" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                        </Grid>
+                        <Grid Margin="0,2">
+                            <TextBlock Text="Bono de Moral y Liderazgo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                            <TextBlock x:Name="LblCommanderMorale" Text="+15% Disciplina" Foreground="#00F0FF" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card 4: Tactical Advisor -->
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="💡 ASESOR TÁCTICO DE OPERACIONES NAVALES" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                        <TextBlock x:Name="LblTacticalAdvisorText" Text="💡 EVALUACIÓN TÁCTICA: Tu escuadra cuenta con reservas de combustible y mantenimiento adecuadas para incursiones en sistemas contiguos." Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

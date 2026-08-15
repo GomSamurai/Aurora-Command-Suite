@@ -1,0 +1,145 @@
+using System.Windows;
+using System.Windows.Controls;
+using AuroraDesignSuite.Models;
+using AuroraDesignSuite.Services;
+
+namespace AuroraDesignSuite
+{
+    public partial class MainWindow : Window
+    {
+        private DatabaseService? _dbService;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            CmbThemeSelector.ItemsSource = ThemeManager.AvailableThemes;
+            CmbThemeSelector.SelectedIndex = 0;
+
+            string dbPath = @"c:\VSCODE\Aurora271Full\AuroraDB.db";
+            _dbService = new DatabaseService(dbPath);
+
+            if (_dbService.TestConnection(out _))
+            {
+                var empires = _dbService.GetEmpires();
+                CmbGlobalEmpire.ItemsSource = empires;
+                if (empires.Count > 0)
+                {
+                    CmbGlobalEmpire.SelectedIndex = 0; // Auto-select Imperio Epistocrático
+                }
+            }
+        }
+
+        private void CmbThemeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CmbThemeSelector.SelectedItem is ThemeOption theme)
+            {
+                ThemeManager.ApplyTheme(theme);
+            }
+        }
+
+        private void CmbGlobalEmpire_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source != CmbGlobalEmpire) return;
+            RefreshActiveTab();
+        }
+
+        private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // CRITICAL FIX: Prevent inner ComboBox/DataGrid SelectionChanged bubbling up to TabControl!
+            if (e.Source != MainTabControl) return;
+            RefreshActiveTab();
+        }
+
+        private void RefreshActiveTab()
+        {
+            if (CmbGlobalEmpire?.SelectedItem is not Empire emp || _dbService == null) return;
+
+            int raceId = emp.RaceID;
+
+            if (MainTabControl.SelectedItem == TabBlueprint && ViewBlueprint != null)
+            {
+                ViewBlueprint.SetSelectedEmpire(emp);
+            }
+            else if (MainTabControl.SelectedItem == TabFleet && ViewFleet != null && ViewBlueprint != null)
+            {
+                ViewBlueprint.Recalculate();
+                ViewFleet.SetActiveBlueprint(ViewBlueprint.CurrentDesign);
+                ViewFleet.LoadEmpireClasses(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabEmpire && ViewEmpire != null)
+            {
+                ViewEmpire.LoadEmpireData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabResearch && ViewResearch != null)
+            {
+                ViewResearch.LoadResearchData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabActiveFleets && ViewActiveFleets != null)
+            {
+                ViewActiveFleets.LoadFleetsData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabColonies && ViewColonies != null)
+            {
+                ViewColonies.LoadColoniesData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabShipyards && ViewShipyards != null)
+            {
+                ViewShipyards.LoadShipyardsData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabCommanders && ViewCommanders != null)
+            {
+                ViewCommanders.LoadCommandersData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabIndustrial && ViewIndustrial != null)
+            {
+                ViewIndustrial.LoadData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabExploration && ViewExploration != null)
+            {
+                ViewExploration.LoadData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabAI && ViewAI != null)
+            {
+                ViewAI.LoadData(_dbService, raceId);
+            }
+        }
+
+        private void BtnNavGobierno_Click(object sender, RoutedEventArgs e)
+        {
+            MainTabControl.SelectedItem = TabEmpire;
+        }
+
+        private void BtnNavCiencia_Click(object sender, RoutedEventArgs e)
+        {
+            MainTabControl.SelectedItem = TabResearch;
+        }
+
+        private void BtnNavIngenieria_Click(object sender, RoutedEventArgs e)
+        {
+            MainTabControl.SelectedItem = TabBlueprint;
+        }
+
+        private void BtnNavNaval_Click(object sender, RoutedEventArgs e)
+        {
+            MainTabControl.SelectedItem = TabActiveFleets;
+        }
+
+        private void BtnNavIA_Click(object sender, RoutedEventArgs e)
+        {
+            MainTabControl.SelectedItem = TabAI;
+        }
+
+        private void BtnFocusGame_Click(object sender, RoutedEventArgs e)
+        {
+            if (!WindowBridge.FocusAuroraGame(out string status))
+            {
+                MessageBox.Show(status, "Enfoque de Aurora 4X", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+    }
+}

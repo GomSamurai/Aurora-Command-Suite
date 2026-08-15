@@ -1,0 +1,288 @@
+<UserControl x:Class="AuroraDesignSuite.Views.BlueprintDesignerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+             d:DesignHeight="750" d:DesignWidth="1250">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="420" MinWidth="300" MaxWidth="700"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="340"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Column 0: Component Palette & Database Filters (Resizable) -->
+        <Grid Grid.Column="0" Margin="0,0,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Database & Mode Selector -->
+            <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                <StackPanel>
+                    <TextBlock Text="🗄️ BASE DE DATOS Y MODO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
+                    <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TxtDbPath" Text="c:\VSCODE\Aurora271Full\AuroraDB.db" IsReadOnly="True" VerticalAlignment="Center" ToolTip="Ruta a la base de datos SQLite de tu partida guardada de Aurora 4X."/>
+                        <Button Grid.Column="1" Content="📁" Click="BtnBrowseDb_Click" Width="30" Margin="4,0,0,0" ToolTip="Buscar manualmente otro archivo AuroraDB.db en tu sistema."/>
+                    </Grid>
+
+                    <TextBlock Text="Imperio Seleccionado:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,2,0,2"/>
+                    <ComboBox x:Name="CmbEmpire" SelectionChanged="CmbEmpire_SelectionChanged" Margin="0,0,0,6" ToolTip="Selecciona el Imperio de tu partida actual cuyos componentes e investigaciones deseas consultar."/>
+
+                    <TextBlock Text="Modo Paleta Componentes:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,2,0,2"/>
+                    <ComboBox x:Name="CmbPaletteMode" SelectionChanged="CmbPaletteMode_SelectionChanged" ToolTip="• Modo Local: Muestra solo los componentes que tu imperio ya ha investigado y puede construir hoy.&#10;• Modo Sandbox: Muestra el catálogo teórico completo del juego para diseñar naves del futuro.">
+                        <ComboBoxItem Content="📍 Componentes Investigados (Imperio Local)" IsSelected="True"/>
+                        <ComboBoxItem Content="🌌 Catálogo Global Sandbox (Todos)"/>
+                    </ComboBox>
+                </StackPanel>
+            </Border>
+
+            <!-- Category Filter & Search Box -->
+            <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                <StackPanel>
+                    <TextBlock Text="🎨 PALETA DE COMPONENTES DISPONIBLES" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
+
+                    <TextBlock Text="Filtrar por Categoría:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                    <ComboBox x:Name="CmbCategoryFilter" SelectionChanged="CmbCategoryFilter_SelectionChanged" Margin="0,0,0,6" ToolTip="Filtra la lista de componentes por tipo funcional (Motores, Combustible, Sensores, Armas, etc.)."/>
+
+                    <TextBlock Text="Búsqueda Rápida:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                    <TextBox x:Name="TxtSearchComponent" TextChanged="TxtSearchComponent_TextChanged" Margin="0,0,0,4" ToolTip="Escribe cualquier nombre o palabra clave para filtrar componentes al instante."/>
+                    <TextBlock Text="💡 Haz doble clic en un componente para añadirlo al plano" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Component Palette DataGrid -->
+            <Border Grid.Row="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="4">
+                <DataGrid x:Name="DgComponentPalette" AutoGenerateColumns="False" IsReadOnly="True" MouseDoubleClick="DgComponentPalette_MouseDoubleClick" ToolTip="Lista de componentes disponibles. Haz doble clic en cualquier fila para añadir 1 unidad al plano de la nave.">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nombre del Componente" Binding="{Binding ComponentName}" Width="*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="ToolTip" Value="{Binding ComponentName}"/>
+                                    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Tipo" Binding="{Binding TypeName}" Width="100"/>
+                        <DataGridTextColumn Header="HS" Binding="{Binding ComponentSize, StringFormat={}{0:F1}}" Width="45"/>
+                        <DataGridTextColumn Header="BP" Binding="{Binding Cost, StringFormat={}{0:N0}}" Width="50"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+
+        <!-- Column 1: GridSplitter for Resizing Left Panel -->
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="#1C2536" ResizeDirection="Columns"/>
+
+        <!-- Column 2: Ship Designer Workbench & Presets -->
+        <Border Grid.Column="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Margin="4,0" Padding="12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Title & Presets Selector -->
+                <Grid Grid.Row="0" Margin="0,0,0,10">
+                    <TextBlock Text="🛠️ BLUEPRINT DE NAVE: ENSAMBLAJE DE CLASE" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="15" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="Categoría:" Foreground="{DynamicResource AccentAmberBrush}" VerticalAlignment="Center" Margin="0,0,4,0" FontSize="11"/>
+                        <ComboBox x:Name="CmbPresetCategoryFilter" SelectionChanged="CmbPresetCategoryFilter_SelectionChanged" Width="170" Margin="0,0,8,0" ToolTip="Filtra las plantillas por categoría o selecciona 'Diseños del Usuario'."/>
+
+                        <TextBlock Text="Preset:" Foreground="{DynamicResource AccentAmberBrush}" VerticalAlignment="Center" Margin="0,0,4,0" FontSize="11"/>
+                        <ComboBox x:Name="CmbPresets" SelectionChanged="CmbPresets_SelectionChanged" Width="230" ToolTip="Selecciona el blueprint pre-diseñado que deseas cargar."/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Class Header Parameters -->
+                <Grid Grid.Row="1" Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                        <TextBlock Text="Nombre de la Clase:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                        <TextBox x:Name="TxtClassName" Text="Golondrina de Guerra MK-I" TextChanged="OnDesignInputChanged" ToolTip="Nombre asignado a esta clase de nave (ej. Clase Asturias, Clase Victoria)."/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="0,0,6,0">
+                        <TextBlock Text="Despliegue (M):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                        <TextBox x:Name="TxtDeploymentMonths" Text="12" TextChanged="OnDesignInputChanged" ToolTip="Tiempo planificado en meses que la tripulación puede operar en el espacio antes de que baje su moral."/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Margin="0,0,6,0">
+                        <TextBlock Text="Grosor Armadura:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                        <TextBox x:Name="TxtArmorThickness" Text="3" TextChanged="OnDesignInputChanged" ToolTip="Número de capas protectoras de armadura. A mayor grosor, más impactos de misiles y láseres absorbe antes de sufrir daños internos."/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3" Margin="0,0,6,0">
+                        <TextBlock Text="Ancho Armadura:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                        <TextBox x:Name="TxtArmorWidth" Text="10" TextChanged="OnDesignInputChanged" ToolTip="Ancho de la matriz de armadura según el tamaño del casco. Se calcula automáticamente en base a las secciones de la nave."/>
+                    </StackPanel>
+
+                    <!-- Automatic Military Classification Badge -->
+                    <Border Grid.Column="4" x:Name="BdrMilitaryStatus" CornerRadius="4" Padding="8,4" VerticalAlignment="Bottom" Margin="4,0,0,4" BorderThickness="1" Background="#331A1A" BorderBrush="#FF4444">
+                        <TextBlock x:Name="TxtMilitaryStatus" Text="⚔️ CLASIFICACIÓN MILITAR" Foreground="#FF6B6B" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                    </Border>
+                </Grid>
+
+                <!-- Selected Components Grid -->
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="0,0,0,4">
+                        <TextBlock Text="Componentes Seleccionados en el Plano:" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Bold"/>
+                        <Button Content="✕ Eliminar Seleccionado" Click="BtnRemoveComponent_Click" HorizontalAlignment="Right" Padding="8,2" Background="#331A1A" Foreground="#FF6B6B" BorderBrush="#FF4444" ToolTip="Quita el componente actualmente seleccionado en la lista del plano de la nave."/>
+                    </Grid>
+                    <DataGrid Grid.Row="1" x:Name="DgSelectedComponents" AutoGenerateColumns="False" CanUserAddRows="False" CellEditEnding="DgSelectedComponents_CellEditEnding">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Componente" Binding="{Binding Component.ComponentName}" IsReadOnly="True" Width="*"/>
+                            <DataGridTextColumn Header="Tipo" Binding="{Binding Component.TypeName}" IsReadOnly="True" Width="100"/>
+                            <DataGridTextColumn Header="Cant." Binding="{Binding Quantity}" Width="55"/>
+                            <DataGridTextColumn Header="Total HS" Binding="{Binding TotalHS, StringFormat={}{0:F1}}" IsReadOnly="True" Width="65"/>
+                            <DataGridTextColumn Header="Total BP" Binding="{Binding TotalCostBP, StringFormat={}{0:N1}}" IsReadOnly="True" Width="65"/>
+                            <DataGridTextColumn Header="Tripulación" Binding="{Binding TotalCrew, StringFormat={}{0:N0}}" IsReadOnly="True" Width="75"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+                <!-- Export Actions Bar -->
+                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                    <Button Content="💾 Guardar como Mi Preset" Click="BtnSaveUserPreset_Click" Padding="10,6" Margin="0,0,6,0" Background="#1D2A1F" Foreground="#55FF55" BorderBrush="#55FF55" FontWeight="Bold" ToolTip="Guarda este diseño personalizado en tu biblioteca local de 'Diseños del Usuario' para reutilizarlo en cualquier momento."/>
+                    <Button Content="📋 Copiar Texto" Click="BtnCopyReport_Click" Padding="8,6" Margin="0,0,6,0" Background="#1C2536" Foreground="#00F0FF" BorderBrush="#00F0FF" ToolTip="Genera y copia la ficha técnica oficial de la nave al portapapeles."/>
+                    <Button Content="🔬 Enviar a I+D" Click="BtnExportResearch_Click" Padding="10,6" Margin="0,0,6,0" Background="#1A2C38" Foreground="#00FF88" BorderBrush="#00FF88" FontWeight="Bold" ToolTip="⚖️ MODO FAIR PLAY: Registra este diseño como un proyecto de investigación en tu partida."/>
+                    <Button Content="🚀 Registrar en Astilleros" Click="BtnExportAurora_Click" Padding="10,6" Background="#2C2000" Foreground="#FFD700" BorderBrush="#FFD700" FontWeight="Bold" ToolTip="Registra la clase de nave directamente en tus astilleros."/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Column 3: Live Telemetry Dashboard -->
+        <Border Grid.Column="3" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Margin="5,0,0,0" Padding="10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="PnlTelemetry">
+                    <TextBlock Text="📊 TELEMETRÍA Y MÉTRICAS EN VIVO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
+
+                    <!-- Speed & Mass -->
+                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,8">
+                        <StackPanel>
+                            <Grid Margin="0,2" ToolTip="Velocidad máxima de desplazamiento en kilómetros por segundo (km/s). Depende de la potencia de los motores dividida por la masa total de la nave.">
+                                <TextBlock Text="Velocidad Máxima:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblSpeed" Text="0 km/s" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid Margin="0,2" ToolTip="Masa total de la nave expresada en Toneladas y en HS (Hull Size, donde 1 HS = 50 Toneladas). Determina la capacidad requerida en los astilleros.">
+                                <TextBlock Text="Masa Total (Tons / HS):" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblTonnage" Text="0 Tons" Foreground="White" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid Margin="0,2" ToolTip="• Firma Térmica: Calor emitido por los motores (detectable por sensores pasivos térmicos enemigos).&#10;• Firma EM: Emisión electromagnética de escudos y sensores activos (detectable por sensores pasivos EM).">
+                                <TextBlock Text="Firma Térmica / EM:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblSignatures" Text="0 / 0" Foreground="White" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid Margin="0,2" ToolTip="Costo total en Puntos de Construcción (BP - Build Points) necesarios para fabricar la nave en el astillero.">
+                                <TextBlock Text="Costo de Construcción:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblCost" Text="0 BP" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid Margin="0,2" ToolTip="Tripulantes necesarios para operar los sistemas vs plazos de alojamiento (Crew Quarters) equipados en la nave.">
+                                <TextBlock Text="Tripulación (Req / Dispon):" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblCrew" Text="0 / 0" Foreground="White" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Range & Fuel -->
+                    <TextBlock Text="⛽ AUTONOMÍA Y COMBUSTIBLE" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,4,0,4"/>
+                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,8">
+                        <StackPanel>
+                            <Grid Margin="0,2" ToolTip="Capacidad total de combustible almacenado en los tanques en Litros. Se refina a partir del mineral Sorium.">
+                                <TextBlock Text="Capacidad Combustible:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblFuelCap" Text="0 Litros" Foreground="White" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid Margin="0,2" ToolTip="Consumo de combustible por hora a máxima velocidad de desplazamiento.">
+                                <TextBlock Text="Consumo Hora:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblFuelCons" Text="0 L/h" Foreground="White" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid Margin="0,2" ToolTip="Distancia máxima de recorrido en Billones de kilómetros a velocidad constante antes de agotar los tanques.">
+                                <TextBlock Text="Alcance Operativo:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblRangeKm" Text="0 Billones km" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid Margin="0,2" ToolTip="Alcance expresado en Unidades Astronómicas (1 UA = 149.6M km, distancia Tierra-Sol) y Años-Luz.">
+                                <TextBlock Text="Alcance UA / Años-Luz:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblRangeAu" Text="0 AU" Foreground="White" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Maintenance -->
+                    <TextBlock Text="🛠️ FIABILIDAD Y MANTENIMIENTO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,4,0,4"/>
+                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,8">
+                        <StackPanel>
+                            <Grid Margin="0,2" ToolTip="Puntos de Suministro de Mantenimiento (MSP - Maintenance Supply Points) almacenados para reparar averías de componentes en medio del espacio.">
+                                <TextBlock Text="Reserva MSP:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblMSP" Text="0 MSP" Foreground="White" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid Margin="0,2" ToolTip="Tasa de Fallos Anual (AFR - Annual Failure Rate). Probabilidad matemática de que un componente sufra una avería técnica en un periodo de 1 año.">
+                                <TextBlock Text="Tasa Fallos Anual (AFR):" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblFailureRate" Text="0%" Foreground="White" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid Margin="0,2" ToolTip="Tiempo estimado en Años que la nave puede permanecer en misión antes de agotar sus reservas MSP debido a averías mecánicas periódicas.">
+                                <TextBlock Text="Vida Mantenimiento:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblMaintLife" Text="0 Años" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Minerals -->
+                    <TextBlock Text="💎 DESGLOSE DE MINERALES NECESARIOS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,4,0,4"/>
+                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,8" ToolTip="Desglose exacto de las Toneladas de minerales exóticos trans-uranio requeridas para construir esta nave.&#10;• Duranium: Estructura y cascos.&#10;• Sorium: Motores y combustible.&#10;• Neutronium: Armadurapesada.&#10;• Corundium: Láseres y escudos.&#10;• Uridium: Sensores y control de tiro.&#10;• Gallicite: Motores de alta potencia.&#10;• Tritium: Motores de salto.&#10;• Boronide: Escudos térmicos.">
+                        <ItemsControl x:Name="IcMinerals">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,1">
+                                        <TextBlock Text="{Binding Key}" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                        <TextBlock Text="{Binding Value, StringFormat={}{0:N1} t}" Foreground="#00F0FF" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+
+                    <!-- Warnings & Design Validation -->
+                    <TextBlock x:Name="LblValidationTitle" Text="⚠️ VALIDACIÓN Y ALERTAS DE DISEÑO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,4,0,4"/>
+                    <Border x:Name="BdrValidation" Background="#1F0D0D" BorderBrush="#FF4444" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,8" ToolTip="Validador inteligente de diseño. Muestra advertencias si falta tripulación, combustible, espacios de ingeniería o si hay incompatibilidades mecánicas.">
+                        <ItemsControl x:Name="IcWarnings">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Message}" Foreground="{Binding ColorHex}" TextWrapping="Wrap" FontWeight="Bold" Margin="0,2"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+
+                    <!-- Live Shipyard Compatibility & Retooling Card (AuroraDB.db) -->
+                    <TextBlock Text="⚓ ASTILLEROS COMPATIBLES EN VIVO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,4,0,4"/>
+                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" ToolTip="Consulta en vivo tu base de datos de astilleros para verificar qué instalaciones reales pueden construir esta nave y el costo de retooling.">
+                        <StackPanel>
+                            <TextBlock x:Name="LblShipyardMatchStatus" Text="Buscando astilleros en AuroraDB.db..." Foreground="#00F0FF" FontWeight="Bold" FontSize="11" TextWrapping="Wrap"/>
+                            <TextBlock x:Name="LblShipyardRetoolInfo" Text="Retooling estimado: --" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

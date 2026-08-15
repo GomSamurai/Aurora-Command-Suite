@@ -1,0 +1,208 @@
+<UserControl x:Class="AuroraDesignSuite.Views.EmpireOverviewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+             d:DesignHeight="850" d:DesignWidth="1250">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ROW 1: TOP GLOBAL IMPERIAL TELEMETRY & MINERALS -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="360"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Card 1: Global Empire Stats -->
+            <Border Grid.Column="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,5,0">
+                <StackPanel>
+                    <TextBlock Text="🏛️ TELEMETRÍA Y ESTADÍSTICAS GLOBALES DEL IMPERIO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                    <UniformGrid Columns="2">
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Población total registrada en todos los sectores imperiales.">
+                            <StackPanel>
+                                <TextBlock Text="Población Imperio:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock x:Name="LblEmpPop" Text="1,168.63 M" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Capital colonial y sede de gobierno de la civilización.">
+                            <StackPanel>
+                                <TextBlock Text="Capital Colonial:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock x:Name="LblEmpCapital" Text="★ Sol (Tierra)" Foreground="White" FontWeight="Bold" FontSize="13"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Reserva total de combustible de Sorium refinado almacenado.">
+                            <StackPanel>
+                                <TextBlock Text="Reserva Combustible:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock x:Name="LblEmpFuel" Text="16,625,532 L" Foreground="White" FontWeight="Bold" FontSize="13"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Renta fiscal bruta anual generada por la población y el comercio.">
+                            <StackPanel>
+                                <TextBlock Text="Ingreso Fiscal Anual:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock x:Name="LblEmpRevenue" Text="11,686 BP / Año" Foreground="#55FF55" FontWeight="Bold" FontSize="13"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- Card 2: Exotic Mineral Reserves -->
+            <Border Grid.Column="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="2,0,5,0">
+                <StackPanel>
+                    <TextBlock Text="💎 RESERVAS Y VELOCIDAD DE EXTRACCIÓN DE MINERALES EXÓTICOS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                    <ItemsControl x:Name="IcEmpireMinerals">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="4"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Margin="2" Padding="6">
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="{Binding Key}" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Value, StringFormat={}{0:N0} t}" Foreground="#00F0FF" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Card 3: Financial Structure -->
+            <Border Grid.Column="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="2,0,0,0">
+                <StackPanel>
+                    <TextBlock Text="📊 ESTRUCTURA ECONÓMICA Y FINANCIERA" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
+                    <Grid Margin="0,2">
+                        <TextBlock Text="Producto Imperial Bruto (PIB):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                        <TextBlock x:Name="LblGip" Text="11,686 BP / Año" Foreground="White" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                    </Grid>
+                    <Grid Margin="0,2">
+                        <TextBlock Text="Impuestos de Población (10%):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                        <TextBlock x:Name="LblTax" Text="1,168 BP / Año" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                    </Grid>
+                    <Grid Margin="0,2">
+                        <TextBlock Text="Centros Financieros Activos:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                        <TextBlock x:Name="LblFinCentres" Text="0 Centros" Foreground="#FFB400" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                    </Grid>
+                    <Grid Margin="0,2">
+                        <TextBlock Text="Balance Financiero Neto:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                        <TextBlock x:Name="LblNetWealth" Text="+1,168 BP (Superávit)" Foreground="#55FF55" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- ROW 2: BOTTOM DENSE 3-COLUMN WORKSPACE (100% NO EMPTY SPACE) -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="360"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Column 1: Planetary Infrastructure Inventory -->
+            <Border Grid.Column="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,4,0">
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                        <TextBlock Text="🪐 INFRAESTRUCTURA PLANETARIA DEL IMPERIO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="LblTotalFactories" Text="Fábricas: 200" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </DockPanel>
+
+                    <DataGrid x:Name="DgInfrastructure" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Resumen detallado de todas las instalaciones industriales, mineras, científicas y defensivas en tus colonias.">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Instalación Industrial" Binding="{Binding Name}" Width="*"/>
+                            <DataGridTextColumn Header="Cantidad" Binding="{Binding AmountDisplay}" Width="110"/>
+                            <DataGridTextColumn Header="Producción Estimada" Binding="{Binding OutputDisplay}" Width="130"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <!-- Column 2: Live Fleet Status & Naval Strength -->
+            <Border Grid.Column="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="4,0">
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                        <TextBlock Text="⚓ ESTADO MAYOR DE FLOTAS Y FUERZA NAVAL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="LblTotalFleetsCount" Text="Flotas: 5" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </DockPanel>
+
+                    <DataGrid x:Name="DgFleetsSummary" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Lista en tiempo real de todas las agrupaciones de combate navales y su preparación operativa.">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nombre de Flota" Binding="{Binding FleetName}" Width="*"/>
+                            <DataGridTextColumn Header="Naves" Binding="{Binding ShipsDisplay}" Width="70"/>
+                            <DataGridTextColumn Header="Velocidad" Binding="{Binding SpeedDisplay}" Width="90"/>
+                            <DataGridTextColumn Header="Combust." Binding="{Binding FuelDisplay}" Width="70"/>
+                            <DataGridTextColumn Header="Moral" Binding="{Binding MoraleDisplay}" Width="65"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <!-- Column 3: Leadership, Decrees & Strategic Advisor -->
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" Margin="4,0,0,0">
+                <StackPanel>
+                    <!-- Card 1: Officer Corps Breakdown -->
+                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🎖️ CUERPO DE OFICIALES Y LIDERAZGO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                            <UniformGrid Columns="2">
+                                <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Comandantes de flota y capitanes navales activos.">
+                                    <StackPanel>
+                                        <TextBlock Text="Capitanes Navales:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                        <TextBlock x:Name="LblCaptainsCount" Text="5 Oficiales" Foreground="#00F0FF" FontWeight="Bold" FontSize="12"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Científicos e investigadores de I+D activos.">
+                                    <StackPanel>
+                                        <TextBlock Text="Científicos I+D:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                        <TextBlock x:Name="LblScientistsCount" Text="12 Científicos" Foreground="#55FF55" FontWeight="Bold" FontSize="12"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Gobernadores planetarios y sectoriales en servicio.">
+                                    <StackPanel>
+                                        <TextBlock Text="Gobernadores:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                        <TextBlock x:Name="LblGovsCount" Text="3 Gobernadores" Foreground="#FFB400" FontWeight="Bold" FontSize="12"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Total acumulado de oficiales registrados en el imperio.">
+                                    <StackPanel>
+                                        <TextBlock Text="Total Oficiales:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                        <TextBlock x:Name="LblTotalOfficersCount" Text="20 Oficiales" Foreground="White" FontWeight="Bold" FontSize="12"/>
+                                    </StackPanel>
+                                </Border>
+                            </UniformGrid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Card 2: Imperial Decrees & Live Actions -->
+                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🏛️ DECRETOS IMPERIALES Y HERRAMIENTAS DE JUEGO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                            <TextBlock Text="Promulga decretos de estado directos para impactar en AuroraDB.db:" Foreground="#8A99AD" FontSize="10" Margin="0,0,0,8"/>
+
+                            <Button Content="💰 Recaudar Impuesto Extraordinario" Click="BtnTaxDecree_Click" Padding="8,6" Margin="0,0,0,6" Background="#1C2536" Foreground="#55FF55" BorderBrush="#55FF55" FontWeight="Bold" ToolTip="Ejecuta un decreto de recaudación fiscal de emergencia para incrementar el capital de la colonia."/>
+                            <Button Content="⚡ Optimizar Asignación de Fábricas" Click="BtnProdDecree_Click" Padding="8,6" Margin="0,0,0,6" Background="#1C2536" Foreground="#00F0FF" BorderBrush="#00F0FF" FontWeight="Bold" ToolTip="Ajusta las prioridades de producción industrial para maximizar el rendimiento por turno."/>
+                            <Button Content="📦 Auditoría de Suministros e Inventario" Click="BtnSupplyDecree_Click" Padding="8,6" Background="#1C2536" Foreground="#FFB400" BorderBrush="#FFB400" FontWeight="Bold" ToolTip="Calcula la reserva de suministros de mantenimiento (MSP) e inventario de misiles en la capital."/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Card 3: Imperial Expansion Advisor -->
+                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                        <StackPanel>
+                            <TextBlock Text="💡 ASESOR DE PLANIFICACIÓN Y EXPANSIÓN" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                            <TextBlock x:Name="LblAdvisorText" Text="Con 1,168M de ciudadanos, tu imperio requiere expandir la infraestructura industrial y la extracción de Gallicite para sostener la construcción de la flota." Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

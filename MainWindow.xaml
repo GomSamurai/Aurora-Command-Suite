@@ -1,0 +1,215 @@
+<Window x:Class="AuroraDesignSuite.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:AuroraDesignSuite.Views"
+        mc:Ignorable="d"
+        Title="Aurora 4X - Design &amp; Empire Command Center Master Suite (12 Módulos en Vivo)" 
+        Height="880" Width="1440"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
+    <Grid Background="{DynamicResource BgDarkBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Row 0: Top Header Bar with Global Empire Selector & Live Bridge Status -->
+        <Border Grid.Row="0" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="15,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="🚀 AURORA MASTER COMMAND SUITE" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="17" VerticalAlignment="Center"/>
+                    <Border Background="#1C2536" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="4" Margin="10,0,0,0" Padding="6,2">
+                        <TextBlock Text="v2.7.1 LIVE BRIDGE (12 MÓDULOS)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5"/>
+                    </Border>
+                    <Button Content="🎮 VOLVER A AURORA 4X" Click="BtnFocusGame_Click" Padding="10,4" Margin="10,0,0,0" Background="#1D2A1F" Foreground="#00FF88" BorderBrush="#00FF88" FontWeight="Bold" FontSize="11" ToolTip="Enfoca al instante la ventana del juego Aurora 4X en primer plano."/>
+                </StackPanel>
+
+                <!-- Global Empire Selector -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="👑 IMPERIO ACTIVO:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <ComboBox x:Name="CmbGlobalEmpire" SelectionChanged="CmbGlobalEmpire_SelectionChanged" Width="260" VerticalAlignment="Center" ToolTip="Selecciona el Imperio de tu partida actual cuyos datos deseas conectar en toda la suite."/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock Text="STATUS: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center"/>
+                    <TextBlock Text="● CONECTADO A AURORADB.DB" Foreground="#00FF88" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+
+                    <TextBlock Text="🎨 ESTILO VISUAL:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="16,0,6,0"/>
+                    <ComboBox x:Name="CmbThemeSelector" SelectionChanged="CmbThemeSelector_SelectionChanged" Width="220" VerticalAlignment="Center" ToolTip="Cambia drásticamente la paleta de colores y el esquema visual de toda la aplicación en tiempo real."/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Row 1: Division Category Navigation Bar -->
+        <Border Grid.Row="1" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="10,4">
+            <DockPanel>
+                <TextBlock Text="🏛️ SECCIONES TÁCTICAS:" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Bold" FontSize="10.5" VerticalAlignment="Center" Margin="0,0,10,0"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="🏛️ GOBIERNO Y COLONIAS" Click="BtnNavGobierno_Click" Padding="10,4" Margin="0,0,4,0" Background="#1A180E" Foreground="#FFD700" BorderBrush="#FFD700" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Gobierno, Finanzas, Colonias y Estado Mayor."/>
+                    <Button Content="🔬 CIENCIA E INDUSTRIA" Click="BtnNavCiencia_Click" Padding="10,4" Margin="0,0,4,0" Background="#1B1224" Foreground="#AF52DE" BorderBrush="#AF52DE" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Investigación Técnica y Producción Industrial."/>
+                    <Button Content="🛠️ INGENIERÍA Y DISEÑO" Click="BtnNavIngenieria_Click" Padding="10,4" Margin="0,0,4,0" Background="#0D2026" Foreground="#00F0FF" BorderBrush="#00F0FF" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Ensamblaje de Naves, Misiles y Astilleros."/>
+                    <Button Content="⚓ OPERACIONES NAVALES" Click="BtnNavNaval_Click" Padding="10,4" Margin="0,0,4,0" Background="#0D2818" Foreground="#00FF88" BorderBrush="#00FF88" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Flotas Activas, Misiones y Cartografía de Saltos."/>
+                    <Button Content="🤖 IA E INTELIGENCIA" Click="BtnNavIA_Click" Padding="10,4" Background="#0D1E28" Foreground="#5AC8FA" BorderBrush="#5AC8FA" FontWeight="Bold" FontSize="11" ToolTip="Navega al Asistente IA Imperial Gemini y Calculadoras Espaciales."/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Row 2: Single-Row Non-Wrapping TabControl -->
+        <TabControl Grid.Row="2" x:Name="MainTabControl" SelectionChanged="MainTabControl_SelectionChanged" Background="Transparent" BorderThickness="0" Margin="4">
+            <!-- TabControl Header Panel Template forcing single-row horizontal layout -->
+            <TabControl.Template>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TabPanel Grid.Row="0" IsItemsHost="True" Background="{DynamicResource BgDarkBrush}"/>
+                        <ContentPresenter Grid.Row="1" ContentSource="SelectedContent"/>
+                    </Grid>
+                </ControlTemplate>
+            </TabControl.Template>
+
+            <!-- DIVISION 1: GOBIERNO Y COLONIAS -->
+            <TabItem x:Name="TabEmpire" Header="🏰 Mi Imperio">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#FFD700" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:EmpireOverviewView x:Name="ViewEmpire"/>
+            </TabItem>
+
+            <TabItem x:Name="TabColonies" Header="🪐 Colonias y Minerales">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#FF9500" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:ColoniesOverviewView x:Name="ViewColonies"/>
+            </TabItem>
+
+            <TabItem x:Name="TabCommanders" Header="🎖️ Alto Mando">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#FF2D55" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:CommandersHQView x:Name="ViewCommanders"/>
+            </TabItem>
+
+            <!-- DIVISION 2: CIENCIA E INDUSTRIA -->
+            <TabItem x:Name="TabResearch" Header="🔬 Investigación I+D">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#AF52DE" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:ResearchHQView x:Name="ViewResearch"/>
+            </TabItem>
+
+            <TabItem x:Name="TabIndustrial" Header="⚡ Industria y Fábricas">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#34C759" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:IndustrialHQView x:Name="ViewIndustrial"/>
+            </TabItem>
+
+            <!-- DIVISION 3: INGENIERÍA Y DISEÑO -->
+            <TabItem x:Name="TabBlueprint" Header="🛠️ Diseñador Naves">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#00F0FF" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:BlueprintDesignerView x:Name="ViewBlueprint"/>
+            </TabItem>
+
+            <TabItem x:Name="TabMissile" Header="🚀 Lab Misiles/Motores">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#FF3B30" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:MissileEngineLabView x:Name="ViewMissile"/>
+            </TabItem>
+
+            <TabItem x:Name="TabShipyards" Header="🏭 Operaciones Astillero">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#FFCC00" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:ShipyardOperationsView x:Name="ViewShipyards"/>
+            </TabItem>
+
+            <!-- DIVISION 4: OPERACIONES NAVALES -->
+            <TabItem x:Name="TabActiveFleets" Header="🛸 Mis Flotas y Naves">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#00FF88" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:ActiveFleetsView x:Name="ViewActiveFleets"/>
+            </TabItem>
+
+            <TabItem x:Name="TabFleet" Header="⚓ Auditoría Naval">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#4A90E2" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:FleetCompositionView x:Name="ViewFleet"/>
+            </TabItem>
+
+            <TabItem x:Name="TabExploration" Header="🌌 Exploración y Sistemas">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#5AC8FA" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:SystemExplorationView x:Name="ViewExploration"/>
+            </TabItem>
+
+            <!-- DIVISION 5: IA E INTELIGENCIA -->
+            <TabItem x:Name="TabAI" Header="🤖 Asistente IA Imperial">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#00FF88" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:AIAssistantView x:Name="ViewAI"/>
+            </TabItem>
+
+            <TabItem x:Name="TabCalculators" Header="🧮 Calculadoras Espaciales">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Foreground="#7D5FFF" FontWeight="Bold" FontSize="11.5" Margin="4,2"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <views:TravelCalculatorView x:Name="ViewCalculators"/>
+            </TabItem>
+        </TabControl>
+
+        <!-- Row 3: Footer Bar -->
+        <Border Grid.Row="3" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="10,4">
+            <Grid>
+                <TextBlock Text="Aurora 4X Design &amp; Empire Command Center Master Suite | Aurora 4X v2.7.1 | C# WPF Live Bridge (12 Módulos)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                <TextBlock Text="👑 Creado por Fran Gómez &amp; Antigravity AI | © 2026 Aurora Master Suite" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

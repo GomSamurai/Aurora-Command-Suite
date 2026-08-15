@@ -10,9 +10,33 @@
 
 ## 🌟 Visión General
 
-**Aurora 4X Command Suite** es una aplicación de inteligencia de mando desarrollada para integrarse al 100% en tiempo real con el célebre juego de estrategia espacial **Aurora 4X (v2.7.1)**. 
+**Aurora 4X Command Suite** es una suite de mando e inteligencia espacial desarrollada para integrarse al 100% en tiempo real con el juego de estrategia **Aurora 4X (v2.7.1)**. 
 
-Combina una interfaz gráfica sci-fi de última generación (WPF), telemetría directa desde la base de datos de juego `AuroraDB.db`, simulación táctica de misiles y naves, y un **Asistente de Inteligencia Artificial (Gemini REST API)** con el tema exclusivo **`👑 Imperial Gold (Fran Gómez Edition)`**.
+Combina una interfaz gráfica sci-fi de última generación (WPF), telemetría directa desde la base de datos de juego `AuroraDB.db`, simulación táctica de misiles y naves, un **Monitor Táctico IA con Popups Overlay en tiempo real sobre el juego** y un **Generador de Novelas e Historia Épica**.
+
+---
+
+## 📦 ¿Dónde Extraer la Carpeta para Jugar? (Instrucciones de Instalación)
+
+Para que el lanzador **`🚀 ABRIR_SUITE.bat`** funcione perfectamente y detecte tu partida sin errores:
+
+### 📥 Opción Recomendada (Extraer dentro de la carpeta del juego):
+1. Descarga el paquete comprimido `.zip` desde la sección [Releases](https://github.com/GomSamurai/Aurora-Command-Suite/releases).
+2. Extrae la carpeta `Aurora_Command_Suite_v2.7.1` **dentro del directorio principal de tu juego Aurora 4X** (donde se encuentra `AuroraDB.db` y `Aurora.exe`).
+3. Entra a la carpeta extraída y haz doble clic en **`🚀 ABRIR_SUITE.bat`**.
+
+```
+📁 Tu_Carpeta_Aurora4X/
+ ├── Aurora.exe
+ ├── AuroraDB.db
+ └── 📁 Aurora_Command_Suite_v2.7.1/
+      ├── 🚀 ABRIR_SUITE.bat               <-- ¡Haz doble clic aquí!
+      ├── 📜 INSTRUCCIONES_Y_GUIA.html
+      ├── 📜 INSTRUCCIONES_DE_INSTALACION.md
+      └── 📁 App/
+```
+
+> **⚡ Auto-Detección Inteligente de Base de Datos**: La suite incluye búsqueda automática. Si extraes la carpeta en cualquier ubicación, detectará la base de datos `AuroraDB.db` automáticamente en su propio directorio, en la carpeta padre de Aurora 4X o en `c:\VSCODE\Aurora271Full\AuroraDB.db`.
 
 ---
 
@@ -29,7 +53,6 @@ Combina una interfaz gráfica sci-fi de última generación (WPF), telemetría d
 
 ### 👥 3. Cuartel General de Oficiales (`CommandersHQView`)
 - Gestión centralizada del cuerpo de oficiales navales, administradores planetarios e investigadores.
-- Visualización de rangos, habilidades de mando y asignaciones activas.
 
 ### 🔬 4. Laboratorios de I+D (`ResearchHQView`)
 - Seguimiento de proyectos científicos activos, velocidad de investigación (BP/año) y bonificaciones de los científicos a cargo.
@@ -42,7 +65,7 @@ Combina una interfaz gráfica sci-fi de última generación (WPF), telemetría d
 - **Matcheador de Astilleros en Vivo**: Valida si tus astilleros en `AuroraDB.db` pueden construir la nave o calcula los meses de Retooling requeridos.
 
 ### 🚀 7. Laboratorio de Misiles & Matriz de Interceptación (`MissileEngineLab`)
-- Simulador de rendimiento de misiles con cálculo de rango (M-km), velocidad (km/s), maniobrabilidad y **Matriz de Probabilidad de Impacto (Pk)** contra objetivos evasivos de 3,000, 6,000 y 12,000 km/s.
+- Simulador de rendimiento de misiles con cálculo de rango (M-km), velocidad (km/s), maniobrabilidad y **Matriz de Probabilidad de Impacto (Pk)**.
 
 ### ⚓ 8. Operaciones de Astilleros (`ShipyardOperationsView`)
 - Monitor de gradas activas, capacidad de toneladas (BP/ton) y construcciones en curso.
@@ -53,25 +76,19 @@ Combina una interfaz gráfica sci-fi de última generación (WPF), telemetría d
 ### 🌌 10. Exploración del Sistema (`SystemExplorationView`)
 - Cartografía de cuerpos celestes, cuerpos colonizables y yacimientos minerales descubiertos.
 
-### 🤖 11. Asistente IA Imperial (`AIAssistantView`)
-- Integración nativa con la API de Google Gemini para auditar tu imperio, evaluar amenazas alienígenas y optimizar diseños navales.
+### 🤖 11. Matriz IA Imperial & Overlay HUD (`AIAssistantView`)
+- Integración nativa con la API de Google Gemini y **Monitor Táctico en Tiempo Real** con avisos flotantes translúcidos sobre Aurora 4X.
+- **Generador de Novelas e Historia Épica**: Convierte los registros de tu partida en un libro de ciencia ficción en capítulos (funciona tanto online como offline).
 
-### 🎨 12. Motor de Temas Dinámicos en Tiempo Real (`ThemeManager`)
-- 6 temas visuales con repintado instantáneo en tiempo real:
-  - `👑 Imperial Gold (Fran Gómez Edition)`
-  - `🌌 Cyber Neon Cyan`
-  - `🛡️ Obsidian Emerald`
-  - `⚡ Royal Nebula`
-  - `☀️ Solar Flare Amber`
-  - `👑 Deep Void Gold`
+### 🎨 12. Motor de Temas Dinámicos Categorizado (`ThemeManager`)
+- Paleta de 15 estilos visuales clasificados por categorías (`👑 Edición Insignia`, `🌌 Modos Oscuro`, `☀️ Modos Claro`, `☯️ Modos Neutros`, `💎 Ediciones Refinadas`).
 
 ---
 
 ## 🌉 Conmutador Bidireccional de Ventanas (Win32 Bridge)
 
-La suite incluye interoperabilidad nativa de ventanas de Windows (`User32.dll`):
-- **Boton en la App**: **`🎮 VOLVER A AURORA 4X`** enfoca la ventana del juego de inmediato.
-- **Botón en el Juego**: El parche inyecta el botón **`🚀 AURORA COMMAND SUITE`** dentro de Aurora 4X para saltar a la suite sin minimizar.
+- **Botón en la App**: **`🎮 VOLVER A AURORA 4X`** enfoca la ventana del juego de inmediato en estado maximizado.
+- **Botón en el Juego**: El parche inyecta el botón **`🚀 AURORA COMMAND SUITE`** dentro de Aurora 4X para saltar a la suite al instante.
 
 ---
 
@@ -83,7 +100,7 @@ AuroraDesignSuite/
 ├── AuroraDesignSuite.sln             <-- Solución de Visual Studio
 ├── AuroraDesignSuite.csproj          <-- Proyecto C# WPF (.NET 7.0)
 │
-├── Services/                         <-- DatabaseService, ThemeManager, WindowBridge
+├── Services/                         <-- DatabaseService, ThemeManager, AITacticalMonitorService
 ├── Models/                           <-- Modelos de datos SQLite
 ├── Views/                            <-- Vistas XAML/C# de los 12 módulos
 │
@@ -91,17 +108,10 @@ AuroraDesignSuite/
     └── Aurora_Command_Suite_v2.7.1/
         ├── 🚀 ABRIR_SUITE.bat         <-- Lanzador principal
         ├── 📜 INSTRUCCIONES_Y_GUIA.html<-- Manual visual interactivo
+        ├── 📜 INSTRUCCIONES_DE_INSTALACION.md <-- Guía rápida de instalación
         ├── 🧹 DESINSTALAR_SUITE.bat   <-- Desinstalador limpio
         └── App/                      <-- Binarios y ejecutable principal
 ```
-
----
-
-## 🚀 Instalación y Uso Rápido
-
-1. Descarga la última versión desde la sección de **Releases** de este repositorio.
-2. Descomprime la carpeta `Aurora_Command_Suite_v2.7.1` dentro del directorio de tu juego **Aurora 4X (v2.7.1)**.
-3. Ejecuta **`🚀 ABRIR_SUITE.bat`**.
 
 ---
 

@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using AuroraDesignSuite.Models;
@@ -20,7 +23,17 @@ namespace AuroraDesignSuite
             CmbThemeSelector.ItemsSource = ThemeManager.AvailableThemes;
             CmbThemeSelector.SelectedIndex = 0;
 
-            string dbPath = @"c:\VSCODE\Aurora271Full\AuroraDB.db";
+            string[] candidatePaths = new[]
+            {
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AuroraDB.db"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "AuroraDB.db"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "AuroraDB.db"),
+                Path.Combine(Directory.GetCurrentDirectory(), "AuroraDB.db"),
+                Path.Combine(Directory.GetCurrentDirectory(), "..", "AuroraDB.db"),
+                @"c:\VSCODE\Aurora271Full\AuroraDB.db"
+            };
+
+            string dbPath = candidatePaths.FirstOrDefault(File.Exists) ?? @"c:\VSCODE\Aurora271Full\AuroraDB.db";
             _dbService = new DatabaseService(dbPath);
 
             if (_dbService.TestConnection(out _))

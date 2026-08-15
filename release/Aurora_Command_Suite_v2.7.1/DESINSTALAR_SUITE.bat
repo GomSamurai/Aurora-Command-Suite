@@ -1,6 +1,8 @@
 @echo off
 title Desinstalador - Aurora Command Suite
 color 0C
+cd /d "%~dp0"
+
 echo ============================================================
 echo   DESINSTALADOR OFICIAL DE AURORA COMMAND SUITE
 echo ============================================================
@@ -16,7 +18,7 @@ echo [1/2] Cerrando procesos activos de la suite...
 taskkill /f /im AuroraDesignSuite.exe >nul 2>&1
 
 echo [2/2] Eliminando carpeta App y componentes...
-if exist "%~dp0App" rmdir /s /q "%~dp0App" >nul 2>&1
+if exist "App" rmdir /s /q "App" >nul 2>&1
 
 echo.
 echo ============================================================

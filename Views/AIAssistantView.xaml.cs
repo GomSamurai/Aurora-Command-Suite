@@ -31,6 +31,12 @@ namespace AuroraDesignSuite.Views
             _currentRaceId = raceId;
             if (_dbService == null || _aiService == null) return;
 
+            string raceName = _dbService.GetRaceName(_currentRaceId);
+            if (!string.IsNullOrEmpty(raceName) && TxtAiHeaderTitle != null)
+            {
+                TxtAiHeaderTitle.Text = $"🤖 CENTRO DE INTELIGENCIA TÁCTICA Y COMANDO DE {raceName.ToUpper()}";
+            }
+
             _customPrompts = _aiService.LoadCustomPrompts();
             RefreshTelemetrySidebar();
             RefreshCustomPromptsUI();

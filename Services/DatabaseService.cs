@@ -90,12 +90,33 @@ namespace AuroraDesignSuite.Services
                         });
                     }
                 }
+                if (result.Count == 0)
+                {
+                    result.Add(new Empire { RaceID = 1, GameID = 140, RaceName = "Imperio Epistocrático" });
+                }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error fetching empires: {ex.Message}");
+                result.Add(new Empire { RaceID = 1, GameID = 140, RaceName = "Imperio Epistocrático" });
             }
             return result;
+        }
+
+        public string GetRaceName(int raceId)
+        {
+            try
+            {
+                using var conn = GetConnection();
+                string query = "SELECT COALESCE(NULLIF(RaceTitle, ''), RaceName) FROM FCT_Race WHERE RaceID = @raceId";
+                using var cmd = new SqliteCommand(query, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                var res = cmd.ExecuteScalar();
+                if (res != null && res != DBNull.Value) return res.ToString()!;
+            }
+            catch { }
+
+            return "Imperio";
         }
 
         public List<IndustrialProjectInfo> GetIndustrialProjects(int raceId)

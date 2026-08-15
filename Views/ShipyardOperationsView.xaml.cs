@@ -174,7 +174,28 @@ namespace AuroraDesignSuite.Views
                 return;
             }
 
-            MessageBox.Show($"🔨 Solicitud de Expansión Industrial enviada a Fábricas Planetarias:\n\n• Astillero: {SelectedShipyard.ShipyardName}\n• Proyecto: Añadir Grada N° {SelectedShipyard.Slipways + 1}\n• Costo Industrial: 120 BP en Industria Pesada Planetaria.", "Proyecto de Expansión Registrado", MessageBoxButton.OK, MessageBoxImage.Information);
+            var dlg = new ConfirmActionDialog(
+                "🔨 CONFIRMAR EXPANSIÓN DE ASTILLERO",
+                $"¿Estás seguro de que deseas autorizar la orden de expansión para '{SelectedShipyard.ShipyardName}'?\nSe registrará la construcción de la Grada N° {SelectedShipyard.Slipways + 1} o +5,000 Tons en el complejo industrial de tu colonia.",
+                "120 BP en Industria Planetaria (Duranium + Neutronium)",
+                "90 Días (3 Meses)"
+            )
+            {
+                Owner = Window.GetWindow(this)
+            };
+
+            if (dlg.ShowDialog() == true && _dbService != null)
+            {
+                if (_dbService.AddIndustrialProject(_currentRaceId, $"Ampliar Astillero: {SelectedShipyard.ShipyardName}", 1.0, out string msg))
+                {
+                    MessageBox.Show(msg, "Proyecto de Expansión Registrado en AuroraDB", MessageBoxButton.OK, MessageBoxImage.Information);
+                    RefreshShipyards();
+                }
+                else
+                {
+                    MessageBox.Show(msg, "Error de Base de Datos", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void OnCalcInputChanged(object sender, TextChangedEventArgs e)

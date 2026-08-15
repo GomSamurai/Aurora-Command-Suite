@@ -21,7 +21,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="🤖 MATRIZ DE INTELIGENCIA IMPERIAL E IA SUITE" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="TxtAiHeaderTitle" Text="🤖 CENTRO DE INTELIGENCIA TÁCTICA Y COMANDO IMPERIAL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
                     <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="4" Margin="10,0,0,0" Padding="6,2" ToolTip="Módulo #12 de Inteligencia Computacional conectado a AuroraDB.db.">
                         <TextBlock Text="LIVE GEMINI AI BRIDGE" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10"/>
                     </Border>

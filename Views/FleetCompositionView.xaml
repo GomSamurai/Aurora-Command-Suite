@@ -7,12 +7,22 @@
              d:DesignHeight="750" d:DesignWidth="1250">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="420"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="420" MinWidth="300"/>
+            <ColumnDefinition Width="6"/>
+            <ColumnDefinition Width="*" MinWidth="350"/>
         </Grid.ColumnDefinitions>
 
+        <!-- GridSplitter for Resizing Fleet Workbench and Items Table -->
+        <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Cursor="SizeWE" ShowsPreview="True" ToolTip="Arrastra horizontalmente para redimensionar el agregador de flota y la tabla de naves">
+            <GridSplitter.Template>
+                <ControlTemplate TargetType="GridSplitter">
+                    <Border Background="{DynamicResource BorderBrush}" Width="2" HorizontalAlignment="Center"/>
+                </ControlTemplate>
+            </GridSplitter.Template>
+        </GridSplitter>
+
         <!-- Column 0: Fleet Aggregator, Fuel & Mineral Workbench -->
-        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,8,0">
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,4,0">
             <StackPanel>
                 <!-- Fleet Add & Formations Section -->
                 <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
@@ -104,8 +114,8 @@
             </StackPanel>
         </ScrollViewer>
 
-        <!-- Column 1: Fleet Items DataGrid, Tactical Telemetry & Shipyard Feasibility -->
-        <Grid Grid.Column="1" Margin="4,0,0,0">
+        <!-- Column 2: Fleet Items DataGrid, Tactical Telemetry & Shipyard Feasibility -->
+        <Grid Grid.Column="2" Margin="4,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>

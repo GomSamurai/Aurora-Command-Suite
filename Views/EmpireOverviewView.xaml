@@ -103,13 +103,32 @@
         <!-- ROW 2: BOTTOM DENSE 3-COLUMN WORKSPACE (100% NO EMPTY SPACE) -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="360"/>
+                <ColumnDefinition Width="*" MinWidth="250"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="*" MinWidth="250"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="360" MinWidth="250"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Column 1: Planetary Infrastructure Inventory -->
-            <Border Grid.Column="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,4,0">
+            <!-- GridSplitters for Resizing 3 Columns -->
+            <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Cursor="SizeWE" ShowsPreview="True" ToolTip="Arrastra horizontalmente para redimensionar la infraestructura planetaria">
+                <GridSplitter.Template>
+                    <ControlTemplate TargetType="GridSplitter">
+                        <Border Background="{DynamicResource BorderBrush}" Width="2" HorizontalAlignment="Center"/>
+                    </ControlTemplate>
+                </GridSplitter.Template>
+            </GridSplitter>
+
+            <GridSplitter Grid.Column="3" Width="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Cursor="SizeWE" ShowsPreview="True" ToolTip="Arrastra horizontalmente para redimensionar las flotas navales y decretos">
+                <GridSplitter.Template>
+                    <ControlTemplate TargetType="GridSplitter">
+                        <Border Background="{DynamicResource BorderBrush}" Width="2" HorizontalAlignment="Center"/>
+                    </ControlTemplate>
+                </GridSplitter.Template>
+            </GridSplitter>
+
+            <!-- Column 0: Planetary Infrastructure Inventory -->
+            <Border Grid.Column="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,2,0">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
                         <TextBlock Text="🪐 INFRAESTRUCTURA PLANETARIA DEL IMPERIO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
@@ -127,7 +146,7 @@
             </Border>
 
             <!-- Column 2: Live Fleet Status & Naval Strength -->
-            <Border Grid.Column="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="4,0">
+            <Border Grid.Column="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="2,0">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
                         <TextBlock Text="⚓ ESTADO MAYOR DE FLOTAS Y FUERZA NAVAL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
@@ -146,8 +165,8 @@
                 </DockPanel>
             </Border>
 
-            <!-- Column 3: Leadership, Decrees & Strategic Advisor -->
-            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" Margin="4,0,0,0">
+            <!-- Column 4: Leadership, Decrees & Strategic Advisor -->
+            <ScrollViewer Grid.Column="4" VerticalScrollBarVisibility="Auto" Margin="2,0,0,0">
                 <StackPanel>
                     <!-- Card 1: Officer Corps Breakdown -->
                     <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">

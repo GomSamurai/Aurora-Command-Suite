@@ -210,7 +210,8 @@
                 <views:AIAssistantView x:Name="ViewAI"/>
             </TabItem>
 
-            <TabItem x:Name="TabCalculators" Header="🧮 CALCULADORAS ESPACIALES">
+            <!-- Module 12: Spatial Audit & Utilities -->
+            <TabItem x:Name="TabCalculators" Header="📐 AUDITORÍA Y HERRAMIENTAS ESPACIALES">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>

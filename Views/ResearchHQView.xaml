@@ -7,12 +7,22 @@
              d:DesignHeight="850" d:DesignWidth="1400">
     <Grid Margin="8">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="440"/>
+            <ColumnDefinition Width="*" MinWidth="350"/>
+            <ColumnDefinition Width="6"/>
+            <ColumnDefinition Width="440" MinWidth="300"/>
         </Grid.ColumnDefinitions>
 
+        <!-- GridSplitter for Resizing Tech Tree Panel and Laboratory Management Panel -->
+        <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Cursor="SizeWE" ShowsPreview="True" ToolTip="Arrastra horizontalmente para redimensionar el árbol tecnológico y la gestión de laboratorios">
+            <GridSplitter.Template>
+                <ControlTemplate TargetType="GridSplitter">
+                    <Border Background="{DynamicResource BorderBrush}" Width="2" HorizontalAlignment="Center"/>
+                </ControlTemplate>
+            </GridSplitter.Template>
+        </GridSplitter>
+
         <!-- Left Column: Fluid Responsive Layout (Fills 100% Screen Height) -->
-        <Grid Grid.Column="0" Margin="0,0,8,0">
+        <Grid Grid.Column="0" Margin="0,0,4,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="210"/>
                 <RowDefinition Height="Auto"/>
@@ -106,7 +116,7 @@
         </Grid>
 
         <!-- Right Column: Project Assignment & Intelligent Dossiers Sidebar -->
-        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <!-- Card 1: Project Assignment Panel -->
                 <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">

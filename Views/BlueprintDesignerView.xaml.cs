@@ -807,6 +807,28 @@ namespace AuroraDesignSuite.Views
                 }
             }
 
+            // Update Visual Ship Scale Silhouette Bar
+            if (BdrVisualShipSilhouette != null && TxtVisualShipTonnage != null && LblVisualScaleClass != null)
+            {
+                double tons = CurrentDesign.TotalTonnage;
+                double hs = CurrentDesign.TotalHS;
+
+                string hullCategory = "Corbeta";
+                if (tons >= 100000) hullCategory = "Acorazado Estelar / Súper-Nave";
+                else if (tons >= 50000) hullCategory = "Crucero Pesado / Dreadnought";
+                else if (tons >= 25000) hullCategory = "Crucero Ligero / Batalla";
+                else if (tons >= 10000) hullCategory = "Destructor Escuadra";
+                else if (tons >= 5000) hullCategory = "Fragata de Escolta";
+                else if (tons >= 2000) hullCategory = "Corbeta / Cañonera";
+                else hullCategory = "Caza / Nave Ligera";
+
+                LblVisualScaleClass.Text = $"Clase: {hullCategory} ({tons:N0}t / HS {hs:F0})";
+                TxtVisualShipTonnage.Text = $"◄═══ {tons:N0} Tons (HS {hs:F0}) ═══►";
+
+                double targetWidth = Math.Max(90, Math.Min(340, 90 + (Math.Min(tons, 100000) / 100000.0) * 250));
+                BdrVisualShipSilhouette.Width = targetWidth;
+            }
+
             LblTonnage.Text = $"{CurrentDesign.TotalTonnage:N0} Tons ({CurrentDesign.TotalHS:F1} HS)";
             LblSpeed.Text = $"{CurrentDesign.MaxSpeedKmS:N0} km/s";
             LblSignatures.Text = $"Térmica: {CurrentDesign.ThermalSignature:N0} | EM: {CurrentDesign.EMSignature:N0}";

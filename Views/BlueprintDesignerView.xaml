@@ -88,6 +88,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
@@ -140,8 +141,37 @@
                     </Border>
                 </Grid>
 
+                <!-- Visual Hull Scale Reference & Sci-Fi Blueprint Diagram -->
+                <Border Grid.Row="2" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,8" ToolTip="Representación visual interactiva de escala de nave según tonelaje de casco.">
+                    <StackPanel>
+                        <DockPanel Margin="0,0,0,4">
+                            <TextBlock Text="🚀 REFERENCIA VISUAL DE ESCALA Y SILUETA NAVAL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                            <TextBlock x:Name="LblVisualScaleClass" Text="Clase: Destructor (10,000t / HS 200)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/>
+                        </DockPanel>
+                        <Border Height="55" Background="#0A121D" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6">
+                            <Grid>
+                                <UniformGrid Columns="5" Opacity="0.15">
+                                    <Border BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1,0,0,0"/>
+                                    <Border BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1,0,0,0"/>
+                                    <Border BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1,0,0,0"/>
+                                    <Border BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1,0,0,0"/>
+                                    <Border BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1,0,0,0"/>
+                                </UniformGrid>
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Border x:Name="BdrVisualShipSilhouette" Width="220" Height="24" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1.5" CornerRadius="12">
+                                        <Grid>
+                                            <TextBlock x:Name="TxtVisualShipTonnage" Text="◄═══ 10,000 Tons (HS 200) ═══►" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                    <TextBlock Text="📏 Escala Comparativa: 1,000t (Caza/Corbeta) ── 10,000t (Destructor) ── 100,000t (Acorazado)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5" HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
                 <!-- Selected Components Grid -->
-                <Grid Grid.Row="2">
+                <Grid Grid.Row="3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>

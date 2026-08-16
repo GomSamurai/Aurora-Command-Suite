@@ -32,10 +32,47 @@ namespace AuroraDesignSuite.Models
         public bool GroundMineralSurvey { get; set; }
         public double RecordedColonyCost { get; set; } = -1;
 
+        // Advanced Astrophysics & Environmental Properties
+        public double Density { get; set; }
+        public double MassEarth { get; set; }
+        public double EscapeVelRel { get; set; }
+        public double OrbitalDistAU { get; set; }
+        public double YearHours { get; set; }
+        public double DayValueHours { get; set; }
+        public bool TidalLock { get; set; }
+        public int TectonicActivity { get; set; }
+        public double MagneticField { get; set; }
+        public double HydroExt { get; set; }
+        public double Albedo { get; set; }
+        public double GHFactor { get; set; }
+        public double RadiationLevel { get; set; }
+        public double DustLevel { get; set; }
+        public int RuinID { get; set; }
+        public int AbandonedFactories { get; set; }
+
         public List<MineralDepositInfo> MineralDeposits { get; set; } = new List<MineralDepositInfo>();
 
         // Surface Temperature converted from Kelvin to Celsius
         public double SurfaceTempC => SurfaceTempK > 0 ? (SurfaceTempK - 273.15) : (BaseTempK > 0 ? (BaseTempK - 273.15) : 15.0);
+        public double SurfaceTempKelvin => SurfaceTempK > 0 ? SurfaceTempK : BaseTempK;
+        public double OrbitalPeriodDays => YearHours / 24.0;
+        public double OrbitalPeriodYears => OrbitalPeriodDays / 365.25;
+
+        public string GravityDisplay => $"{GravityG:F2} G";
+        public string TempDisplay => $"{SurfaceTempC:F1} °C";
+        public string AtmosDisplay => $"{AtmosPress:F2} atm";
+        public string RadiusDisplay => $"{RadiusKm:N0} km";
+        public string MassDisplay => MassEarth >= 0.01 ? $"{MassEarth:F2} M⊕" : $"{MassEarth:F4} M⊕";
+        public string OrbitalDistDisplay => OrbitalDistAU >= 1000 ? $"{OrbitalDistAU / 149597870:F2} UA" : $"{OrbitalDistAU:F2} UA";
+        public string YearDisplay => OrbitalPeriodYears >= 1.0 ? $"{OrbitalPeriodYears:F1} Años ({OrbitalPeriodDays:N0} d)" : $"{OrbitalPeriodDays:F1} Días";
+        public string DayDisplay => DayValueHours >= 24 ? $"{DayValueHours / 24.0:F1} d ({DayValueHours:N0} h)" : $"{DayValueHours:F1} h";
+        public string HydroDisplay => HydroExt > 0 ? $"{HydroExt:F1}% Océanos" : "0% (Seco)";
+        public string EscapeVelDisplay => $"{EscapeVelRel * 11.186:F1} km/s";
+        public string MagneticFieldDisplay => MagneticField >= 1.0 ? "🛡️ Fuerte (1.0)" : (MagneticField > 0 ? $"⚠️ Débil ({MagneticField:F1})" : "🚫 Ausente");
+        public string TidalLockDisplay => TidalLock ? "🔒 Acoplado" : "🔄 Libre";
+        public string RuinsDisplay => RuinID > 0 ? "🏛️ Detectadas" : "Sin Ruinas";
+        public string FactoriesDisplay => AbandonedFactories > 0 ? $"🏭 {AbandonedFactories} Fábricas" : "Ninguna";
+        public string SurveyStatusDisplay => GroundMineralSurvey ? "✅ Completa" : "⚠️ Pendiente";
 
         public double ColonyCost
         {
@@ -85,9 +122,6 @@ namespace AuroraDesignSuite.Models
         }
 
         public string ColonyCostDisplay => ColonyCost == 0 ? "★ 0.00 (Ideal / Terrestre)" : $"{ColonyCost:F2} (Hábitat Requerido)";
-        public string GravityDisplay => $"{GravityG:F2} G";
-        public string TempDisplay => $"{SurfaceTempC:F1} °C";
-        public string AtmosDisplay => $"{AtmosPress:F2} atm";
 
         public string DepositsSummary
         {

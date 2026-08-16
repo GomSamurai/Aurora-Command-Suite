@@ -104,6 +104,40 @@ namespace AuroraDesignSuite.Views
                 LblMineralsHeader.Text = $"💎 YACIMIENTOS MINERALES EN {body.Name.ToUpper()}";
                 DgMinerals.ItemsSource = body.MineralDeposits;
 
+                // Update Detailed Physical & Orbital Telemetry
+                if (LblValRadius != null) LblValRadius.Text = body.RadiusDisplay;
+                if (LblValDensity != null) LblValDensity.Text = $"{body.Density:F2} g/cm³";
+                if (LblValMass != null) LblValMass.Text = body.MassDisplay;
+                if (LblValOrbDist != null) LblValOrbDist.Text = body.OrbitalDistDisplay;
+                if (LblValYear != null) LblValYear.Text = body.YearDisplay;
+                if (LblValDay != null) LblValDay.Text = body.DayDisplay;
+                if (LblValEscape != null) LblValEscape.Text = body.EscapeVelDisplay;
+                if (LblValTidal != null) LblValTidal.Text = body.TidalLockDisplay;
+
+                // Update Climate & Atmosphere Telemetry
+                if (LblValAtmos != null) LblValAtmos.Text = body.AtmosDisplay;
+                if (LblValTemp != null) LblValTemp.Text = body.TempDisplay;
+                if (LblValTempK != null) LblValTempK.Text = $"{body.SurfaceTempKelvin:F1} K";
+                if (LblValHydro != null) LblValHydro.Text = body.HydroDisplay;
+                if (LblValAlbedo != null) LblValAlbedo.Text = $"{body.Albedo:F2}";
+                if (LblValGHFactor != null) LblValGHFactor.Text = $"{body.GHFactor:F2}";
+                if (LblValMagnet != null) LblValMagnet.Text = body.MagneticFieldDisplay;
+
+                // Update Environment, Archaeology & Survey
+                if (LblValRuins != null)
+                {
+                    LblValRuins.Text = body.RuinsDisplay;
+                    LblValRuins.Foreground = body.RuinID > 0 ? System.Windows.Media.Brushes.Gold : System.Windows.Media.Brushes.White;
+                }
+                if (LblValFactories != null)
+                {
+                    LblValFactories.Text = body.FactoriesDisplay;
+                    LblValFactories.Foreground = body.AbandonedFactories > 0 ? System.Windows.Media.Brushes.SpringGreen : System.Windows.Media.Brushes.White;
+                }
+                if (LblValRad != null) LblValRad.Text = body.RadiationLevel > 0 ? $"{body.RadiationLevel:F1} (Alta)" : "0.0";
+                if (LblValDust != null) LblValDust.Text = body.DustLevel > 0 ? $"{body.DustLevel:F1} (Polvo)" : "0.0";
+                if (LblValSurvey != null) LblValSurvey.Text = body.SurveyStatusDisplay;
+
                 // Update Colonization Viability Card
                 double cost = body.ColonyCost;
                 if (LblColonyCostVal != null)
@@ -114,8 +148,8 @@ namespace AuroraDesignSuite.Views
 
                 if (LblGravSuitability != null)
                 {
-                    bool isGravOk = body.GravityG >= 0.1 && body.GravityG <= 3.0;
-                    LblGravSuitability.Text = isGravOk ? $"Tolerable ({body.GravityG:F2} G)" : "🚫 Inhabitable (Fuerza G Extrema)";
+                    bool isGravOk = body.GravityG >= 0.10 && body.GravityG <= 1.90;
+                    LblGravSuitability.Text = isGravOk ? $"Tolerable ({body.GravityG:F2} G)" : "🚫 Inhabitable (G Extrema)";
                     LblGravSuitability.Foreground = isGravOk ? System.Windows.Media.Brushes.SpringGreen : System.Windows.Media.Brushes.Red;
                 }
 
@@ -128,7 +162,7 @@ namespace AuroraDesignSuite.Views
                 if (LblTempReq != null)
                 {
                     double diffTemp = Math.Round(13.9 - body.SurfaceTempC, 1);
-                    LblTempReq.Text = Math.Abs(diffTemp) < 0.2 ? "Temperatura Ideal" : (diffTemp > 0 ? $"+{diffTemp:F1} °C de Calentamiento" : $"{diffTemp:F1} °C de Enfriamiento");
+                    LblTempReq.Text = Math.Abs(diffTemp) < 0.2 ? "Temperatura Ideal" : (diffTemp > 0 ? $"+{diffTemp:F1} °C Calentamiento" : $"{diffTemp:F1} °C Enfriamiento");
                 }
             }
         }

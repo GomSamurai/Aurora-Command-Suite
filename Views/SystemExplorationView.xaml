@@ -86,14 +86,24 @@
                         <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                             <StackPanel>
                                 <TextBlock x:Name="LblBodiesHeader" Text="🪐 PLANETAS, LUNAS Y CUERPOS CELESTES EN SISTEMA" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <DataGrid x:Name="DgBodies" AutoGenerateColumns="False" IsReadOnly="True" MaxHeight="220" SelectionChanged="DgBodies_SelectionChanged" ToolTip="Cuerpos celestes analizados en este sistema estelar.">
+                                <DataGrid x:Name="DgBodies" AutoGenerateColumns="False" IsReadOnly="True" MaxHeight="240" SelectionChanged="DgBodies_SelectionChanged" ToolTip="Cuerpos celestes analizados en este sistema estelar con telemetría astrofísica completa.">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Nombre del Cuerpo" Binding="{Binding Name}" Width="*"/>
-                                        <DataGridTextColumn Header="Clase" Binding="{Binding BodyTypeName}" Width="150"/>
-                                        <DataGridTextColumn Header="Gravedad" Binding="{Binding GravityDisplay}" Width="85"/>
-                                        <DataGridTextColumn Header="Temperatura" Binding="{Binding TempDisplay}" Width="95"/>
-                                        <DataGridTextColumn Header="Atmósfera" Binding="{Binding AtmosDisplay}" Width="85"/>
-                                        <DataGridTextColumn Header="Costo Colonial" Binding="{Binding ColonyCostDisplay}" Width="160"/>
+                                        <DataGridTextColumn Header="Nombre del Cuerpo" Binding="{Binding Name}" Width="130"/>
+                                        <DataGridTextColumn Header="Clase" Binding="{Binding BodyTypeName}" Width="130"/>
+                                        <DataGridTextColumn Header="Gravedad" Binding="{Binding GravityDisplay}" Width="80"/>
+                                        <DataGridTextColumn Header="Temperatura" Binding="{Binding TempDisplay}" Width="90"/>
+                                        <DataGridTextColumn Header="Atmósfera" Binding="{Binding AtmosDisplay}" Width="80"/>
+                                        <DataGridTextColumn Header="Costo Colonial" Binding="{Binding ColonyCostDisplay}" Width="150"/>
+                                        <DataGridTextColumn Header="Radio (km)" Binding="{Binding RadiusDisplay}" Width="90"/>
+                                        <DataGridTextColumn Header="Masa (M⊕)" Binding="{Binding MassDisplay}" Width="85"/>
+                                        <DataGridTextColumn Header="Dist. Órbita" Binding="{Binding OrbitalDistDisplay}" Width="95"/>
+                                        <DataGridTextColumn Header="Año Planetario" Binding="{Binding YearDisplay}" Width="120"/>
+                                        <DataGridTextColumn Header="Día (Duración)" Binding="{Binding DayDisplay}" Width="105"/>
+                                        <DataGridTextColumn Header="Hidrosfera" Binding="{Binding HydroDisplay}" Width="100"/>
+                                        <DataGridTextColumn Header="Magnetosfera" Binding="{Binding MagneticFieldDisplay}" Width="120"/>
+                                        <DataGridTextColumn Header="Ruinas" Binding="{Binding RuinsDisplay}" Width="110"/>
+                                        <DataGridTextColumn Header="Fábricas" Binding="{Binding FactoriesDisplay}" Width="110"/>
+                                        <DataGridTextColumn Header="Prospección" Binding="{Binding SurveyStatusDisplay}" Width="110"/>
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </StackPanel>
@@ -113,36 +123,70 @@
                             </StackPanel>
                         </Border>
 
-                        <!-- Card 3: Colonization & Terraforming Viability -->
+                        <!-- Card 3: Comprehensive Physical, Environmental & Archaeological Telemetry -->
                         <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                             <StackPanel>
-                                <TextBlock Text="🚀 LOGÍSTICA DE COLONIZACIÓN Y VIABILIDAD DE HÁBITAT" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <UniformGrid Columns="4">
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Multiplicador de costo en infraestructura para sostener población en este planeta.">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Costo Colonial (Colony Cost):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblColonyCostVal" Text="0.00 (Ideal)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                <TextBlock Text="🔬 TELEMETRÍA ASTRO-FÍSICA, CLIMÁTICA Y BIOCLIMÁTICA EN VIVO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Column 1: Physical & Orbital -->
+                                    <Border Grid.Column="0" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Propiedades de masa, radio y mecánica orbital del planeta o luna.">
+                                        <StackPanel>
+                                            <TextBlock Text="📐 ASTRO-FÍSICA Y ÓRBITA" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" Margin="0,0,0,6"/>
+                                            <Grid Margin="0,1"><TextBlock Text="Radio:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValRadius" Text="6,378 km" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Densidad:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValDensity" Text="1.00 g/cm³" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Masa Planetaria:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValMass" Text="1.00 M⊕" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Distancia Órbita:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValOrbDist" Text="1.00 UA" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Periodo Orbital (Año):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValYear" Text="1.0 Años" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Duración del Día:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValDay" Text="24.0 h" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Velocidad Escape:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValEscape" Text="11.2 km/s" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Acoplamiento Marea:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValTidal" Text="🔄 Libre" Foreground="{DynamicResource AccentCyanBrush}" FontSize="10" HorizontalAlignment="Right"/></Grid>
                                         </StackPanel>
                                     </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Tolerancia de fuerza G para tus ciudadanos sin trajes gravitatorios.">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Tolerancia Gravitatoria:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblGravSuitability" Text="Óptima (1.0 G)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+
+                                    <!-- Column 2: Atmosphere & Climate -->
+                                    <Border Grid.Column="1" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Condiciones de presión atmosférica, cobertura de océanos y magnetosfera.">
+                                        <StackPanel>
+                                            <TextBlock Text="🌐 CLIMA Y ATMÓSFERA" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" Margin="0,0,0,6"/>
+                                            <Grid Margin="0,1"><TextBlock Text="Presión Atmosférica:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValAtmos" Text="1.01 atm" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Temp. Superficie:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValTemp" Text="13.6 °C" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Temp. Absoluta (K):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValTempK" Text="286.8 K" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Hidrosfera / Océanos:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValHydro" Text="69.7% Océanos" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Albedo Planetario:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValAlbedo" Text="1.02" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Efecto Invernadero:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValGHFactor" Text="1.10" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Magnetosfera:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValMagnet" Text="🛡️ Fuerte (1.0)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/></Grid>
                                         </StackPanel>
                                     </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Modificación de presión atmosférica requerida para reducir el Colony Cost.">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Ajuste Atmosférico:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblAtmosReq" Text="Ninguno (1.0 atm)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+
+                                    <!-- Column 3: Environment & Archaeology -->
+                                    <Border Grid.Column="2" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Presencia de ruinas antiguas alienígenas, instalaciones abandonadas y radiación.">
+                                        <StackPanel>
+                                            <TextBlock Text="🏛️ RECURSOS Y RUINAS" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="11" Margin="0,0,0,6"/>
+                                            <Grid Margin="0,1"><TextBlock Text="Ruinas Alienígenas:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValRuins" Text="Sin Ruinas" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Fábricas Abandonadas:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValFactories" Text="Ninguna" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Nivel de Radiación:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValRad" Text="0.0" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Polvo Atmosférico:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValDust" Text="0.0" Foreground="White" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Escaneo Geológico:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblValSurvey" Text="✅ Completa" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/></Grid>
                                         </StackPanel>
                                     </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Modificación térmica necesaria vía gases de efecto invernadero para templar el mundo.">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Ajuste Térmico:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblTempReq" Text="Estable (15 °C)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+
+                                    <!-- Column 4: Colonization Viability -->
+                                    <Border Grid.Column="3" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Viabilidad biológica y multiplicador de infraestructura requerida para colonización.">
+                                        <StackPanel>
+                                            <TextBlock Text="🚀 COLONIZACIÓN &amp; HÁBITAT" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" Margin="0,0,0,6"/>
+                                            <Grid Margin="0,1"><TextBlock Text="Costo Colonial:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblColonyCostVal" Text="★ 0.00 (Ideal)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Tolerancia G:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblGravSuitability" Text="Tolerable (1.00 G)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Ajuste Atmosférico:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblAtmosReq" Text="Nulo (1.0 atm)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/></Grid>
+                                            <Grid Margin="0,1"><TextBlock Text="Ajuste Térmico:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/><TextBlock x:Name="LblTempReq" Text="Temperatura Ideal" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/></Grid>
                                         </StackPanel>
                                     </Border>
-                                </UniformGrid>
+                                </Grid>
                             </StackPanel>
                         </Border>
 

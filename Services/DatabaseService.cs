@@ -431,12 +431,15 @@ namespace AuroraDesignSuite.Services
                     string bodyQuery = @"
                         SELECT b.SystemBodyID, COALESCE(sbn.Name, b.Name, 'Cuerpo Celeste') as BodyName,
                                b.Radius, b.Gravity, b.BaseTemp, b.SurfaceTemp, b.AtmosPress, b.GroundMineralSurvey, b.BodyClass,
+                               b.Density, b.Mass, b.EscapeVelocity, b.OrbitalDistance, b.Year, b.DayValue, b.TidalLock,
+                               b.TectonicActivity, b.MagneticField, b.HydroExt, b.Albedo, b.GHFactor, b.RadiationLevel, b.DustLevel,
+                               b.RuinID, b.AbandonedFactories,
                                COALESCE(pop.LastColonyCost, -1) as PopulationColonyCost
                         FROM FCT_SystemBody b
                         LEFT JOIN FCT_SystemBodyName sbn ON b.SystemBodyID = sbn.SystemBodyID AND sbn.RaceID = @raceId
                         LEFT JOIN FCT_Population pop ON b.SystemBodyID = pop.SystemBodyID AND pop.RaceID = @raceId
                         WHERE b.SystemID = @sysId
-                        ORDER BY b.PlanetNumber, b.OrbitNumber LIMIT 50";
+                        ORDER BY b.PlanetNumber, b.OrbitNumber LIMIT 60";
 
                     using var bodyCmd = new SqliteCommand(bodyQuery, conn);
                     bodyCmd.Parameters.AddWithValue("@sysId", sys.SystemID);
@@ -469,7 +472,24 @@ namespace AuroraDesignSuite.Services
                             SurfaceTempK = bodyReader["SurfaceTemp"] != DBNull.Value ? Convert.ToDouble(bodyReader["SurfaceTemp"]) : 288.15,
                             AtmosPress = bodyReader["AtmosPress"] != DBNull.Value ? Convert.ToDouble(bodyReader["AtmosPress"]) : 1.0,
                             GroundMineralSurvey = bodyReader["GroundMineralSurvey"] != DBNull.Value && Convert.ToInt32(bodyReader["GroundMineralSurvey"]) > 0,
-                            RecordedColonyCost = popCost
+                            RecordedColonyCost = popCost,
+
+                            Density = bodyReader["Density"] != DBNull.Value ? Convert.ToDouble(bodyReader["Density"]) : 1.0,
+                            MassEarth = bodyReader["Mass"] != DBNull.Value ? Convert.ToDouble(bodyReader["Mass"]) : 1.0,
+                            EscapeVelRel = bodyReader["EscapeVelocity"] != DBNull.Value ? Convert.ToDouble(bodyReader["EscapeVelocity"]) : 1.0,
+                            OrbitalDistAU = bodyReader["OrbitalDistance"] != DBNull.Value ? Convert.ToDouble(bodyReader["OrbitalDistance"]) : 1.0,
+                            YearHours = bodyReader["Year"] != DBNull.Value ? Convert.ToDouble(bodyReader["Year"]) : 8760.0,
+                            DayValueHours = bodyReader["DayValue"] != DBNull.Value ? Convert.ToDouble(bodyReader["DayValue"]) : 24.0,
+                            TidalLock = bodyReader["TidalLock"] != DBNull.Value && Convert.ToInt32(bodyReader["TidalLock"]) > 0,
+                            TectonicActivity = bodyReader["TectonicActivity"] != DBNull.Value ? Convert.ToInt32(bodyReader["TectonicActivity"]) : 0,
+                            MagneticField = bodyReader["MagneticField"] != DBNull.Value ? Convert.ToDouble(bodyReader["MagneticField"]) : 0.0,
+                            HydroExt = bodyReader["HydroExt"] != DBNull.Value ? Convert.ToDouble(bodyReader["HydroExt"]) : 0.0,
+                            Albedo = bodyReader["Albedo"] != DBNull.Value ? Convert.ToDouble(bodyReader["Albedo"]) : 1.0,
+                            GHFactor = bodyReader["GHFactor"] != DBNull.Value ? Convert.ToDouble(bodyReader["GHFactor"]) : 1.0,
+                            RadiationLevel = bodyReader["RadiationLevel"] != DBNull.Value ? Convert.ToDouble(bodyReader["RadiationLevel"]) : 0.0,
+                            DustLevel = bodyReader["DustLevel"] != DBNull.Value ? Convert.ToDouble(bodyReader["DustLevel"]) : 0.0,
+                            RuinID = bodyReader["RuinID"] != DBNull.Value ? Convert.ToInt32(bodyReader["RuinID"]) : 0,
+                            AbandonedFactories = bodyReader["AbandonedFactories"] != DBNull.Value ? Convert.ToInt32(bodyReader["AbandonedFactories"]) : 0
                         };
 
                         // Query Mineral Deposits

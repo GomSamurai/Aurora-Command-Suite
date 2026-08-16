@@ -32,10 +32,11 @@
                     </Border>
                 </StackPanel>
 
-                <!-- Global Empire Selector -->
+                <!-- Global Empire Selector & Database Path Selector -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="👑 IMPERIO ACTIVO:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                    <ComboBox x:Name="CmbGlobalEmpire" SelectionChanged="CmbGlobalEmpire_SelectionChanged" Width="260" VerticalAlignment="Center" ToolTip="Selecciona el Imperio de tu partida actual cuyos datos deseas conectar en toda la suite."/>
+                    <TextBlock Text="👑 IMPERIO ACTIVO:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <ComboBox x:Name="CmbGlobalEmpire" SelectionChanged="CmbGlobalEmpire_SelectionChanged" Width="240" VerticalAlignment="Center" ToolTip="Selecciona el Imperio de tu partida actual cuyos datos deseas conectar en toda la suite."/>
+                    <Button Content="📁 CAMBIAR BD" Click="BtnChangeDb_Click" Padding="8,3" Margin="8,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Selecciona el archivo AuroraDB.db de cualquier otra carpeta o partida guardada de Aurora 4X."/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">

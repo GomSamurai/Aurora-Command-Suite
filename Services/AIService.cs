@@ -125,21 +125,38 @@ namespace AuroraDesignSuite.Services
 
                     sb.AppendLine($"• Imperio Conectado ID: {raceId}");
                     sb.AppendLine($"• Población Imperial Total: {totalPop:N2} M (Capital: {capital.PopName})");
+                    sb.AppendLine($"• Colonias Registradas: {colonies.Count} hábitats planetarios.");
                     sb.AppendLine($"• Reserva de Combustible Planetaria: {capital.FuelStockpile:N0} L");
-                    sb.AppendLine($"• Reservas de Duranio: {capital.MineralStockpiles.Duranium:N0} T | Sorium: {capital.MineralStockpiles.Sorium:N0} T | Gallicite: {capital.MineralStockpiles.Gallicite:N0} T");
+                    sb.AppendLine($"• Reservas en Capital: Duranium: {capital.MineralStockpiles.Duranium:N0} T | Sorium: {capital.MineralStockpiles.Sorium:N0} T | Gallicite: {capital.MineralStockpiles.Gallicite:N0} T | Corundium: {capital.MineralStockpiles.Corundium:N0} T");
                 }
 
                 var fleets = dbService.GetActiveFleets(raceId);
-                sb.AppendLine($"• Flotas Registradas: {fleets.Count} flotas en servicio activo.");
+                int activeFleetsCount = fleets.Count(f => f.ShipCount > 0);
+                int totalShips = fleets.Sum(f => f.ShipCount);
+                sb.AppendLine($"• Flotas Registradas: {fleets.Count} flotas ({activeFleetsCount} activas con naves, {totalShips} naves en total).");
 
-                var labs = dbService.GetPopulationInstallations(raceId).FirstOrDefault(i => i.InstallationName.Contains("Laboratorio"));
-                if (labs != null)
+                foreach (var f in fleets.Where(fl => fl.ShipCount > 0))
                 {
-                    sb.AppendLine($"• Instalaciones de I+D: {labs.Amount:N0} Laboratorios de Investigación.");
+                    sb.AppendLine($"  - Flota '{f.FleetName}': {f.ShipCount} Nave(s) activa(s). Combustible: {f.TotalFuelLiters:N0} L.");
+                    if (f.Ships != null && f.Ships.Count > 0)
+                    {
+                        foreach (var s in f.Ships)
+                        {
+                            sb.AppendLine($"     • Nave: '{s.ShipName}' (Clase: {s.ClassName}, Desplazamiento: {s.Tonnage:N0} T)");
+                        }
+                    }
                 }
 
+                var infra = dbService.GetEmpireInfrastructure(raceId);
+                double constFactories = infra.Where(i => i.Name.Contains("Construcción") || i.Name.Contains("Convencional")).Sum(i => i.Amount);
+                sb.AppendLine($"• Capacidad Industrial: {constFactories:N0} Fábricas activas.");
+
                 var research = dbService.GetActiveResearchProjects(raceId);
-                sb.AppendLine($"• Proyectos I+D Activos: {research.Count} tecnologías en desarrollo.");
+                sb.AppendLine($"• Proyectos I+D Activos: {research.Count} proyectos en desarrollo.");
+                foreach (var r in research.Take(5))
+                {
+                    sb.AppendLine($"  - Proyecto: '{r.TechName}' (Progreso: {r.ProgressPercent:F1}%)");
+                }
             }
             catch (Exception ex)
             {
@@ -156,15 +173,18 @@ namespace AuroraDesignSuite.Services
                 _apiKey = ApiKeyManager.GetApiKey();
             }
 
+            string lastError = "";
+
             if (useOnlineGemini && !string.IsNullOrWhiteSpace(_apiKey))
             {
                 try
                 {
                     string systemInstruction = @"Eres la Matriz Computacional de Inteligencia Imperial para Aurora 4X (v2.7.1).
-Tus análisis deben ser precisos, ejecutivos, con terminología de ciencia ficción militar/científica.
-Sigue strictly el formato solicitado por el usuario.";
+Analiza los datos reales del juego proporcionados en el contexto teleférico.
+Tus respuestas deben ser precisas, solemnes, en español y basadas estrictamente en la telemetría del contexto imperial en tiempo real.
+NO inventes datos si el contexto teleférico contiene la información exacta.";
 
-                    string fullPrompt = $"{systemInstruction}\n\n[CONTEXTO IMPERIAL]\n{imperialContext}\n\n[CONSULTA DEL COMANDANTE]\n{userQuery}";
+                    string fullPrompt = $"{systemInstruction}\n\n[TELEMETRÍA IMPERIAL EN TIEMPO REAL]\n{imperialContext}\n\n[CONSULTA DEL COMANDANTE IMPERIAL]\n{userQuery}";
 
                     string jsonBody = JsonSerializer.Serialize(new
                     {
@@ -180,7 +200,7 @@ Sigue strictly el formato solicitado por el usuario.";
                         }
                     });
 
-                    string[] models = new[] { "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro" };
+                    string[] models = new[] { "gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro" };
 
                     foreach (var model in models)
                     {
@@ -204,97 +224,55 @@ Sigue strictly el formato solicitado por el usuario.";
                                 }
                             }
                         }
+                        else
+                        {
+                            string errContent = await response.Content.ReadAsStringAsync();
+                            lastError = $"HTTP {(int)response.StatusCode} ({response.StatusCode}): {errContent}";
+                        }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // Fall back if network or API error
+                    lastError = ex.Message;
                 }
             }
 
-            return GenerateLocalDiagnostic(userQuery, imperialContext);
+            string localDiag = GenerateLocalDiagnostic(userQuery, imperialContext);
+
+            if (useOnlineGemini)
+            {
+                if (string.IsNullOrWhiteSpace(_apiKey))
+                {
+                    return $"⚠️ MODO LOCAL ACTIVO: No hay una clave Gemini API Key configurada.\nUtiliza el botón '⚙️ Configurar API Key' en la cabecera para vincular tu clave Gemini.\n\n---\n{localDiag}";
+                }
+                else if (!string.IsNullOrEmpty(lastError))
+                {
+                    return $"⚠️ ERROR DE CONEXIÓN CON GEMINI API:\n{lastError}\n\n---\n{localDiag}";
+                }
+            }
+
+            return localDiag;
         }
 
         public string GenerateLocalDiagnostic(string userQuery, string imperialContext)
         {
             var sb = new StringBuilder();
-            string q = userQuery.ToLower();
 
-            if (q.Contains("global") || q.Contains("informe") || q.Contains("estado") || q.Contains("general") || q.Contains("completo"))
+            sb.AppendLine("🖥️ [ANÁLISIS DE TELEMETRÍA IMPERIAL EN VIVO]");
+            if (!string.IsNullOrWhiteSpace(imperialContext))
             {
-                sb.AppendLine("[TELEMETRÍA IMPERIAL EN VIVO]");
-                sb.AppendLine("• Población & Economía: 1.168,63M (Earth) | Superávit: +1.169 BP/Año (Neto)");
-                sb.AppendLine("• Capacidad Industrial: 1.595 Fábricas (Industria Convencional e Industrial)");
-                sb.AppendLine("• Fuerza Naval & Combustible: 1 Flota Operativa (1 Nave) | 27.153.817 L (Total)");
-                sb.AppendLine("• Recursos Exóticos: Stockpiles activos de Duranium, Sorium, Gallicite y 8 elementos adicionales.");
-                sb.AppendLine();
-                sb.AppendLine("[VULNERABILIDAD DETECTADA]");
-                sb.AppendLine("• Consumo elevado de Duranium/Gallicite en astilleros. Riesgo de estrangulamiento de cascos.");
-                sb.AppendLine("• Velocidad de escuadra subóptima para interceptación de largo alcance.");
-                sb.AppendLine();
-                sb.AppendLine("[ACCIÓN RECOMENDADA]");
-                sb.AppendLine("1. Reasignar Minas Automatizadas a cometas/asteroides con accesibilidad ≥ 0.80x.");
-                sb.AppendLine("2. Desarrollar 'Motores Magneto-Plasma' para elevar velocidad de flota a >4.000 km/s.");
-                sb.AppendLine("3. Mantener 100% reserva combustible y ≥500 MSP previo a saltos de hiperespacio.");
-            }
-            else if (q.Contains("mineral") || q.Contains("déficit") || q.Contains("recursos"))
-            {
-                sb.AppendLine("[TELEMETRÍA]");
-                sb.AppendLine("• Duranium & Gallicite: Consumo elevado en construcción naval.");
-                sb.AppendLine("• Sorium: Producción de refinerías en régimen nominal (26,9M L Planetarios + 199K L Navales).");
-                sb.AppendLine();
-                sb.AppendLine("[VULNERABILIDAD DETECTADA]");
-                sb.AppendLine("• Riesgo de paralización industrial si la extracción cae por debajo del consumo.");
-                sb.AppendLine();
-                sb.AppendLine("[ACCIÓN RECOMENDADA]");
-                sb.AppendLine("• Desplegar Minas Automatizadas en yacimientos con accesibilidad ≥ 0.80x.");
-            }
-            else if (q.Contains("tecnolog") || q.Contains("investig") || q.Contains("i+d"))
-            {
-                sb.AppendLine("[TELEMETRÍA]");
-                sb.AppendLine("• Proyectos I+D en ejecución activa.");
-                sb.AppendLine();
-                sb.AppendLine("[VULNERABILIDAD DETECTADA]");
-                sb.AppendLine("• Velocidad de maniobra naval insuficiente para combate de largo alcance.");
-                sb.AppendLine();
-                sb.AppendLine("[ACCIÓN RECOMENDADA]");
-                sb.AppendLine("1. Desarrollar 'Motores Magneto-Plasma' (>4.000 km/s).");
-                sb.AppendLine("2. Desarrollar Sensores Activos Res 1 (AMM) y Res 20 (Cazas).");
-                sb.AppendLine("3. Ajustar asignación de científicos según especialidad (+25% / +35%).");
-            }
-            else if (q.Contains("flota") || q.Contains("nave") || q.Contains("militar"))
-            {
-                sb.AppendLine("[TELEMETRÍA]");
-                sb.AppendLine("• Fuerza Naval: 1 Flota Operativa (Survey Fleet con 1 Nave) | 27,1M L Combustible.");
-                sb.AppendLine();
-                sb.AppendLine("[VULNERABILIDAD DETECTADA]");
-                sb.AppendLine("• Exposición a fallos de componentes sin stock de repuestos MSP en despliegues lejanos.");
-                sb.AppendLine();
-                sb.AppendLine("[ACCIÓN RECOMENDADA]");
-                sb.AppendLine("• Verificar 100% combustible y ≥500 MSP previo a saltos de hiperespacio.");
-            }
-            else if (q.Contains("coloni") || q.Contains("terrafor") || q.Contains("planeta"))
-            {
-                sb.AppendLine("[TELEMETRÍA]");
-                sb.AppendLine("• Asentamientos coloniales en Sol (Earth: 1.168,63M almas).");
-                sb.AppendLine();
-                sb.AppendLine("[VULNERABILIDAD DETECTADA]");
-                sb.AppendLine("• Ineficiencia en mantenimiento de hábitats con Colony Cost > 0.");
-                sb.AppendLine();
-                sb.AppendLine("[ACCIÓN RECOMENDADA]");
-                sb.AppendLine("• Desplegar Módulos Terraformadores para anular costes de infraestructura.");
+                sb.AppendLine(imperialContext.Trim());
             }
             else
             {
-                sb.AppendLine("[TELEMETRÍA IMPERIAL EN VIVO]");
-                sb.AppendLine("• Población: 1.168,63M | Fábricas: 1.595 | Flotas Operativas: 1 (1 Nave) | Combustible: 27,1M L");
-                sb.AppendLine();
-                sb.AppendLine("[VULNERABILIDAD DETECTADA]");
-                sb.AppendLine("• Necesidad de expansión minera y tecnológica.");
-                sb.AppendLine();
-                sb.AppendLine("[ACCIÓN RECOMENDADA]");
-                sb.AppendLine("• Auditar vectores específicos: Minerales, I+D, Flotas o Colonias.");
+                sb.AppendLine("• Telemetría sincronizada desde base de datos activa AuroraDB.db.");
             }
+
+            sb.AppendLine();
+            sb.AppendLine("[DIAGNÓSTICO TÁCTICO IMPERIAL]");
+            sb.AppendLine("1. Evaluación Naval: Revisa la composición de tus flotas y disponibilidad de combustible Sorium en depósitos.");
+            sb.AppendLine("2. Logística Industrial: Mantén el balance entre extracción de Duranium y consumo en astilleros.");
+            sb.AppendLine("3. Seguridad Espacial: Asegura repuestos MSP antes de emprender expediciones de exploración profunda.");
 
             return sb.ToString();
         }

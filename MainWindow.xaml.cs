@@ -23,27 +23,58 @@ namespace AuroraDesignSuite
             CmbThemeSelector.ItemsSource = ThemeManager.AvailableThemes;
             CmbThemeSelector.SelectedIndex = 0;
 
+            string[] args = Environment.GetCommandLineArgs();
+            string? dbArg = (args.Length > 1 && File.Exists(args[1])) ? args[1] : null;
+
             string[] candidatePaths = new[]
             {
+                dbArg ?? "",
+                Path.Combine(Directory.GetCurrentDirectory(), "AuroraDB.db"),
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AuroraDB.db"),
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "AuroraDB.db"),
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "AuroraDB.db"),
-                Path.Combine(Directory.GetCurrentDirectory(), "AuroraDB.db"),
                 Path.Combine(Directory.GetCurrentDirectory(), "..", "AuroraDB.db"),
                 @"c:\VSCODE\Aurora271Full\AuroraDB.db"
             };
 
-            string dbPath = candidatePaths.FirstOrDefault(File.Exists) ?? @"c:\VSCODE\Aurora271Full\AuroraDB.db";
-            _dbService = new DatabaseService(dbPath);
+            string dbPath = candidatePaths.FirstOrDefault(f => !string.IsNullOrEmpty(f) && File.Exists(f)) ?? @"c:\VSCODE\Aurora271Full\AuroraDB.db";
+            LoadDatabasePath(dbPath);
+        }
 
+        private void LoadDatabasePath(string dbPath)
+        {
+            if (!File.Exists(dbPath)) return;
+
+            _dbService = new DatabaseService(dbPath);
             if (_dbService.TestConnection(out _))
             {
                 var empires = _dbService.GetEmpires();
                 CmbGlobalEmpire.ItemsSource = empires;
                 if (empires.Count > 0)
                 {
-                    CmbGlobalEmpire.SelectedIndex = 0; // Auto-select Imperio Epistocrático
+                    CmbGlobalEmpire.SelectedIndex = 0;
                 }
+                RefreshActiveTab();
+            }
+            else
+            {
+                MessageBox.Show($"No se pudo conectar a la base de datos de Aurora 4X en:\n{dbPath}", "Error de Conexión BD", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void BtnChangeDb_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new Microsoft.Win32.OpenFileDialog
+            {
+                Title = "Selecciona la base de datos AuroraDB.db de tu carpeta de Aurora 4X",
+                Filter = "Aurora 4X Database (AuroraDB.db)|AuroraDB.db|SQLite Database (*.db)|*.db|All Files (*.*)|*.*",
+                FileName = "AuroraDB.db"
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+                LoadDatabasePath(dlg.FileName);
+                MessageBox.Show($"✅ Base de datos reconectada con éxito:\n{dlg.FileName}", "Conexión BD Actualizada", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

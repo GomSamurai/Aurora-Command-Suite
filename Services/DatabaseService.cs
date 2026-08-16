@@ -173,6 +173,7 @@ namespace AuroraDesignSuite.Services
                 cmd.ExecuteNonQuery();
 
                 msg = $"✅ Orden industrial para '{description}' ({amount} ud) registrada con éxito en tu colonia.";
+                LiveSyncBridge.NotifyGameSync("INDUSTRIAL_PROJECT_ADDED");
                 return true;
             }
             catch (Exception ex)
@@ -1886,6 +1887,7 @@ namespace AuroraDesignSuite.Services
                 cmd.ExecuteNonQuery();
 
                 msg = $"🔄 Nave reasignada exitosamente a '{targetFleetName}' en AuroraDB.db.";
+                LiveSyncBridge.NotifyGameSync("SHIP_TRANSFER");
                 return true;
             }
             catch (Exception ex)
@@ -1906,6 +1908,7 @@ namespace AuroraDesignSuite.Services
                 cmd.ExecuteNonQuery();
 
                 msg = $"⛽ Flota '{fleetName}' reabastecida al 100% de combustible en AuroraDB.db.";
+                LiveSyncBridge.NotifyGameSync("REFUEL");
                 return true;
             }
             catch (Exception ex)
@@ -1926,6 +1929,7 @@ namespace AuroraDesignSuite.Services
                 cmd.ExecuteNonQuery();
 
                 msg = $"📦 Repuestos MSP y moral de tripulación restaurados al 100% en '{fleetName}'.";
+                LiveSyncBridge.NotifyGameSync("REPLENISH_MSP");
                 return true;
             }
             catch (Exception ex)

@@ -81,6 +81,67 @@ namespace AuroraSpanish
             }
 
             Log("AuroraSpanish patch initialized completely!");
+            StartLiveSyncPipeServer();
+        }
+
+        private static bool isPipeServerStarted = false;
+
+        private static void StartLiveSyncPipeServer()
+        {
+            if (isPipeServerStarted) return;
+            isPipeServerStarted = true;
+
+            System.Threading.Thread thread = new System.Threading.Thread(delegate()
+            {
+                while (true)
+                {
+                    try
+                    {
+                        using (var server = new System.IO.Pipes.NamedPipeServerStream("AuroraCommandSuiteSyncPipe", System.IO.Pipes.PipeDirection.In))
+                        {
+                            server.WaitForConnection();
+                            using (var reader = new System.IO.StreamReader(server))
+                            {
+                                string msg = reader.ReadLine();
+                                if (!string.IsNullOrEmpty(msg))
+                                {
+                                    TriggerInGameRefresh();
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                }
+            });
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        public static void TriggerInGameRefresh()
+        {
+            try
+            {
+                if (Application.OpenForms.Count == 0) return;
+                Form mainForm = Application.OpenForms[0];
+                if (mainForm.InvokeRequired)
+                {
+                    mainForm.BeginInvoke(new Action(TriggerInGameRefresh));
+                    return;
+                }
+
+                foreach (Form f in Application.OpenForms)
+                {
+                    if (f != null && !f.IsDisposed)
+                    {
+                        f.Invalidate(true);
+                        f.Refresh();
+                    }
+                }
+            }
+            catch { }
         }
 
         private static void LoadDictionary()
@@ -265,6 +326,32 @@ namespace AuroraSpanish
 
                         __instance.Controls.Add(btnSuite);
                         btnSuite.BringToFront();
+
+                        if (__instance.Controls.Find("btnSuiteRefreshNav", true).Length == 0)
+                        {
+                            Button btnRefreshSuite = new Button
+                            {
+                                Name = "btnSuiteRefreshNav",
+                                Text = "🔄 REFRESCAR SUITE",
+                                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                                BackColor = Color.FromArgb(13, 26, 38),
+                                ForeColor = Color.FromArgb(255, 184, 108),
+                                FlatStyle = FlatStyle.Flat,
+                                Size = new Size(160, 26),
+                                Location = new Point(Math.Max(10, __instance.ClientSize.Width - 392), 4),
+                                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                                Cursor = Cursors.Hand
+                            };
+                            btnRefreshSuite.FlatAppearance.BorderColor = Color.FromArgb(255, 184, 108);
+                            btnRefreshSuite.Click += delegate
+                            {
+                                TriggerInGameRefresh();
+                                MessageBox.Show("🔄 Interfaz del juego refrescada con los datos de Aurora Command Suite.", "Sincronización Completada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            };
+
+                            __instance.Controls.Add(btnRefreshSuite);
+                            btnRefreshSuite.BringToFront();
+                        }
                     }
                     catch { }
                 };

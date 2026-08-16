@@ -212,53 +212,32 @@ namespace AuroraSpanish
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern void SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
 
-        private static bool IsMainSystemMapForm(Form form)
+        private static bool ShouldInjectButtons(Form form)
         {
             if (form == null || form.IsDisposed) return false;
             if (form.Modal || form.Parent != null) return false;
 
-            string typeName = form.GetType().Name.ToLower();
             string title = (form.Text ?? "").Trim();
 
-            // Secondary sub-window prefixes to EXCLUDE strictly
-            if (title.StartsWith("Naval", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Organización", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Fuerzas", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Ground", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Terrestres", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Economía", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Economy", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Investigación", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Research", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Astilleros", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Shipyards", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Diseño", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Class", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Comandantes", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Commanders", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Flotas", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Fleets", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Eventos", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Events", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Cuerpos", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("System Body", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Industria", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Industry", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Minería", StringComparison.OrdinalIgnoreCase) ||
-                title.StartsWith("Mining", StringComparison.OrdinalIgnoreCase))
+            // Known secondary sub-window prefixes to EXCLUDE
+            string[] subWindowPrefixes = new string[]
             {
-                return false;
+                "Naval", "Organización", "Organization", "Fuerzas", "Ground", "Terrestres",
+                "Order of Battle", "OOB", "Economía", "Economy", "Economics", "Investigación",
+                "Research", "Astilleros", "Shipyard", "Shipyards", "Diseño", "Class Design",
+                "Comandantes", "Commanders", "Officers", "Oficiales", "Flotas", "Fleets",
+                "Eventos", "Events", "Event Log", "Cuerpos", "System Bodies", "System Body",
+                "Industria", "Industry", "Minería", "Mining", "Misil", "Missile", "Torreta",
+                "Turret", "Diplomac", "Intel", "Sector", "Comparaci", "Comparison", "Setup",
+                "Configurac", "Options", "Opciones", "Fast Forward"
+            };
+
+            foreach (string prefix in subWindowPrefixes)
+            {
+                if (title.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return false;
             }
 
-            // Main map window in Aurora 4X is form class 'hf' or the root open form Application.OpenForms[0]
-            if (typeName == "hf") return true;
-
-            if (Application.OpenForms.Count > 0 && form == Application.OpenForms[0])
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         private static void FormConstructorPostfix(Form __instance)
@@ -280,8 +259,8 @@ namespace AuroraSpanish
                     {
                         if (__instance.Controls.Find("btnMasterSuiteNav", true).Length > 0) return;
 
-                        // Check if this is exclusively the Main Tactical System Map Window
-                        if (!IsMainSystemMapForm(__instance)) return;
+                        // Inject buttons on main map window and exclude known sub-windows
+                        if (!ShouldInjectButtons(__instance)) return;
 
                         Button btnSuite = new Button
                         {

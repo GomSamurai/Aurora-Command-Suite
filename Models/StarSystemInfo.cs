@@ -26,28 +26,67 @@ namespace AuroraDesignSuite.Models
         public string BodyTypeName { get; set; } = string.Empty;
         public double RadiusKm { get; set; }
         public double GravityG { get; set; }
-        public double BaseTempC { get; set; }
+        public double BaseTempK { get; set; }
+        public double SurfaceTempK { get; set; }
         public double AtmosPress { get; set; }
         public bool GroundMineralSurvey { get; set; }
+        public double RecordedColonyCost { get; set; } = -1;
 
         public List<MineralDepositInfo> MineralDeposits { get; set; } = new List<MineralDepositInfo>();
+
+        // Surface Temperature converted from Kelvin to Celsius
+        public double SurfaceTempC => SurfaceTempK > 0 ? (SurfaceTempK - 273.15) : (BaseTempK > 0 ? (BaseTempK - 273.15) : 15.0);
 
         public double ColonyCost
         {
             get
             {
-                if (GravityG < 0.1 || GravityG > 3.0) return 10.0; // Uninhabitable gravity
-                double tempCost = Math.Abs(BaseTempC - 15.0) / 20.0;
-                double atmosCost = Math.Abs(AtmosPress - 1.0) * 1.5;
-                if (BaseTempC >= 0 && BaseTempC <= 30 && AtmosPress >= 0.5 && AtmosPress <= 1.5 && GravityG >= 0.8 && GravityG <= 1.2)
-                    return 0.0; // Perfect Earth-like world!
+                // If an existing colony explicitly records ColonyCost in AuroraDB.db:
+                if (RecordedColonyCost >= 0)
+                {
+                    return Math.Round(RecordedColonyCost, 2);
+                }
+
+                // Uninhabitable gravity for standard terrestrial life (< 0.10 G or > 1.90 G)
+                if (GravityG < 0.10 || GravityG > 1.90) return 10.0;
+
+                double tempK = SurfaceTempK > 0 ? SurfaceTempK : BaseTempK;
+                // Standard Human / Terrestrial Species Tolerances in Kelvin:
+                // Min Temp = 263.03 K (-10.12°C), Max Temp = 311.03 K (+37.88°C), Dev = 24.0 K
+                double minTempK = 263.03;
+                double maxTempK = 311.03;
+                double tempDevK = 24.0;
+
+                double tempCost = 0.0;
+                if (tempK > 0)
+                {
+                    if (tempK < minTempK)
+                    {
+                        tempCost = (minTempK - tempK) / tempDevK;
+                    }
+                    else if (tempK > maxTempK)
+                    {
+                        tempCost = (tempK - maxTempK) / tempDevK;
+                    }
+                }
+
+                double atmosCost = 0.0;
+                if (AtmosPress == 0)
+                {
+                    atmosCost = 1.0;
+                }
+                else if (Math.Abs(AtmosPress - 1.0) > 0.5)
+                {
+                    atmosCost = Math.Abs(AtmosPress - 1.0) * 0.5;
+                }
+
                 return Math.Round(Math.Min(10.0, Math.Max(0.0, tempCost + atmosCost)), 2);
             }
         }
 
         public string ColonyCostDisplay => ColonyCost == 0 ? "★ 0.00 (Ideal / Terrestre)" : $"{ColonyCost:F2} (Hábitat Requerido)";
         public string GravityDisplay => $"{GravityG:F2} G";
-        public string TempDisplay => $"{BaseTempC:F1} °C";
+        public string TempDisplay => $"{SurfaceTempC:F1} °C";
         public string AtmosDisplay => $"{AtmosPress:F2} atm";
 
         public string DepositsSummary

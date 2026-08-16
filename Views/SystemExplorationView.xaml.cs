@@ -127,8 +127,8 @@ namespace AuroraDesignSuite.Views
 
                 if (LblTempReq != null)
                 {
-                    double diffTemp = Math.Round(15.0 - body.BaseTempC, 1);
-                    LblTempReq.Text = diffTemp == 0 ? "Temperatura Estable" : $"{diffTemp:F1} °C de Calentamiento";
+                    double diffTemp = Math.Round(13.9 - body.SurfaceTempC, 1);
+                    LblTempReq.Text = Math.Abs(diffTemp) < 0.2 ? "Temperatura Ideal" : (diffTemp > 0 ? $"+{diffTemp:F1} °C de Calentamiento" : $"{diffTemp:F1} °C de Enfriamiento");
                 }
             }
         }

@@ -430,11 +430,13 @@ namespace AuroraDesignSuite.Services
                 {
                     string bodyQuery = @"
                         SELECT b.SystemBodyID, COALESCE(sbn.Name, b.Name, 'Cuerpo Celeste') as BodyName,
-                               b.Radius, b.Gravity, b.BaseTemp, b.AtmosPress, b.GroundMineralSurvey, b.BodyClass
+                               b.Radius, b.Gravity, b.BaseTemp, b.SurfaceTemp, b.AtmosPress, b.GroundMineralSurvey, b.BodyClass,
+                               COALESCE(pop.LastColonyCost, -1) as PopulationColonyCost
                         FROM FCT_SystemBody b
                         LEFT JOIN FCT_SystemBodyName sbn ON b.SystemBodyID = sbn.SystemBodyID AND sbn.RaceID = @raceId
+                        LEFT JOIN FCT_Population pop ON b.SystemBodyID = pop.SystemBodyID AND pop.RaceID = @raceId
                         WHERE b.SystemID = @sysId
-                        ORDER BY b.PlanetNumber, b.OrbitNumber LIMIT 20";
+                        ORDER BY b.PlanetNumber, b.OrbitNumber LIMIT 50";
 
                     using var bodyCmd = new SqliteCommand(bodyQuery, conn);
                     bodyCmd.Parameters.AddWithValue("@sysId", sys.SystemID);
@@ -453,6 +455,8 @@ namespace AuroraDesignSuite.Services
                             _ => "🪐 Planeta / Luna"
                         };
 
+                        double popCost = bodyReader["PopulationColonyCost"] != DBNull.Value ? Convert.ToDouble(bodyReader["PopulationColonyCost"]) : -1;
+
                         var body = new SystemBodyInfo
                         {
                             SystemBodyID = bodyId,
@@ -461,9 +465,11 @@ namespace AuroraDesignSuite.Services
                             BodyTypeName = className,
                             RadiusKm = bodyReader["Radius"] != DBNull.Value ? Convert.ToDouble(bodyReader["Radius"]) : 6371.0,
                             GravityG = bodyReader["Gravity"] != DBNull.Value ? Convert.ToDouble(bodyReader["Gravity"]) : 1.0,
-                            BaseTempC = bodyReader["BaseTemp"] != DBNull.Value ? Convert.ToDouble(bodyReader["BaseTemp"]) : 15.0,
+                            BaseTempK = bodyReader["BaseTemp"] != DBNull.Value ? Convert.ToDouble(bodyReader["BaseTemp"]) : 288.15,
+                            SurfaceTempK = bodyReader["SurfaceTemp"] != DBNull.Value ? Convert.ToDouble(bodyReader["SurfaceTemp"]) : 288.15,
                             AtmosPress = bodyReader["AtmosPress"] != DBNull.Value ? Convert.ToDouble(bodyReader["AtmosPress"]) : 1.0,
-                            GroundMineralSurvey = bodyReader["GroundMineralSurvey"] != DBNull.Value && Convert.ToInt32(bodyReader["GroundMineralSurvey"]) > 0
+                            GroundMineralSurvey = bodyReader["GroundMineralSurvey"] != DBNull.Value && Convert.ToInt32(bodyReader["GroundMineralSurvey"]) > 0,
+                            RecordedColonyCost = popCost
                         };
 
                         // Query Mineral Deposits

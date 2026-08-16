@@ -107,7 +107,7 @@ namespace AuroraDesignSuite
 
             if (TabAI != null && emp != null && !string.IsNullOrEmpty(emp.RaceName))
             {
-                TabAI.Header = $"🧠 INTELIGENCIA DE {emp.RaceName.ToUpper()}";
+                TabAI.ToolTip = $"Matriz Computacional de Inteligencia Táctica conectada al Imperio {emp.RaceName}";
             }
 
             if (MainTabControl.SelectedItem == TabBlueprint && ViewBlueprint != null)

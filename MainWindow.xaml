@@ -12,7 +12,6 @@
     <Grid Background="{DynamicResource BgDarkBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -44,7 +43,7 @@
                     <TextBlock Text="● CONECTADO" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
 
                     <TextBlock Text="🎨 ESTILO VISUAL:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="14,0,6,0"/>
-                    <ComboBox x:Name="CmbThemeSelector" SelectionChanged="CmbThemeSelector_SelectionChanged" Width="240" VerticalAlignment="Center" ToolTip="Cambia drásticamente la paleta de colores y el esquema visual de toda la aplicación en tiempo real.">
+                    <ComboBox x:Name="CmbThemeSelector" SelectionChanged="CmbThemeSelector_SelectionChanged" Width="220" VerticalAlignment="Center" ToolTip="Cambia drásticamente la paleta de colores y el esquema visual de toda la aplicación en tiempo real.">
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
                                 <Style.Triggers>
@@ -66,33 +65,79 @@
             </Grid>
         </Border>
 
-        <!-- Row 1: Division Category Navigation Bar -->
-        <Border Grid.Row="1" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="10,4">
-            <DockPanel>
-                <TextBlock Text="🏛️ SECCIONES TÁCTICAS:" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Bold" FontSize="10.5" VerticalAlignment="Center" Margin="0,0,10,0"/>
+        <!-- Row 1: Vertical Sidebar Navigation Dock & Main Content Area -->
+        <TabControl Grid.Row="1" x:Name="MainTabControl" TabStripPlacement="Left" SelectionChanged="MainTabControl_SelectionChanged" Background="Transparent" BorderThickness="0" Margin="6">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Margin" Value="0,1.5"/>
+                    <Setter Property="Padding" Value="10,8"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="3,0,0,0"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border x:Name="BdrTab" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4" Padding="10,7" Margin="0,1.5" Cursor="Hand">
+                                    <ContentPresenter x:Name="ContentSite" ContentSource="Header" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="BdrTab" Property="Background" Value="{DynamicResource CardHeaderBrush}"/>
+                                        <Setter TargetName="BdrTab" Property="BorderBrush" Value="{DynamicResource AccentCyanBrush}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="BdrTab" Property="Background" Value="{DynamicResource CardBgBrush}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
 
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="🏛️ GOBIERNO Y COLONIAS" Click="BtnNavGobierno_Click" Padding="10,4" Margin="0,0,4,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Gobierno, Finanzas, Colonias y Estado Mayor."/>
-                    <Button Content="🔬 CIENCIA E INDUSTRIA" Click="BtnNavCiencia_Click" Padding="10,4" Margin="0,0,4,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentPurpleBrush}" BorderBrush="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Investigación Técnica y Producción Industrial."/>
-                    <Button Content="🛠️ INGENIERÍA Y DISEÑO" Click="BtnNavIngenieria_Click" Padding="10,4" Margin="0,0,4,0" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Ensamblaje de Naves, Misiles y Astilleros."/>
-                    <Button Content="⚓ OPERACIONES NAVALES" Click="BtnNavNaval_Click" Padding="10,4" Margin="0,0,4,0" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Navega a la División de Flotas Activas, Misiones y Cartografía de Saltos."/>
-                    <Button Content="🤖 IA E INTELIGENCIA" Click="BtnNavIA_Click" Padding="10,4" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" ToolTip="Navega al Asistente IA Imperial Gemini y Calculadoras Espaciales."/>
-                </StackPanel>
-            </DockPanel>
-        </Border>
-
-        <!-- Row 2: Single-Row Non-Wrapping TabControl -->
-        <TabControl Grid.Row="2" x:Name="MainTabControl" SelectionChanged="MainTabControl_SelectionChanged" Background="Transparent" BorderThickness="0" Margin="4">
-            <!-- TabControl Header Panel Template forcing single-row horizontal layout -->
             <TabControl.Template>
                 <ControlTemplate TargetType="TabControl">
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TabPanel Grid.Row="0" IsItemsHost="True" Background="{DynamicResource BgDarkBrush}"/>
-                        <ContentPresenter Grid.Row="1" ContentSource="SelectedContent"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="260" MinWidth="200" MaxWidth="380"/>
+                            <ColumnDefinition Width="6"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left Sidebar Navigation Dock Container -->
+                        <Border Grid.Column="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="6,8">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Left Sidebar Header Banner -->
+                                <Border Grid.Row="0" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="10,6" Margin="0,0,0,8">
+                                    <DockPanel>
+                                        <TextBlock Text="🗺️ MENÚ DE COMANDO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="3" Padding="4,1" HorizontalAlignment="Right">
+                                            <TextBlock Text="12 MÓDULOS" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="9.5"/>
+                                        </Border>
+                                    </DockPanel>
+                                </Border>
+
+                                <!-- Scrollable Vertical Tab Panel -->
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                    <TabPanel IsItemsHost="True"/>
+                                </ScrollViewer>
+                            </Grid>
+                        </Border>
+
+                        <!-- GridSplitter for Resizing Navigation Dock -->
+                        <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Cursor="SizeWE" ShowsPreview="True" ToolTip="Arrastra horizontalmente para redimensionar el menú de navegación izquierdo"/>
+
+                        <!-- Main Display View -->
+                        <Border Grid.Column="2" Background="Transparent" Margin="2,0,0,0">
+                            <ContentPresenter ContentSource="SelectedContent"/>
+                        </Border>
                     </Grid>
                 </ControlTemplate>
             </TabControl.Template>
@@ -101,7 +146,7 @@
             <TabItem x:Name="TabEmpire" Header="🏰 MI IMPERIO">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:EmpireOverviewView x:Name="ViewEmpire"/>
@@ -110,7 +155,7 @@
             <TabItem x:Name="TabColonies" Header="🪐 COLONIAS Y MINERALES">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:ColoniesOverviewView x:Name="ViewColonies"/>
@@ -119,7 +164,7 @@
             <TabItem x:Name="TabCommanders" Header="🎖️ ALTO MANDO">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:CommandersHQView x:Name="ViewCommanders"/>
@@ -129,7 +174,7 @@
             <TabItem x:Name="TabResearch" Header="🔬 INVESTIGACIÓN I+D">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:ResearchHQView x:Name="ViewResearch"/>
@@ -138,7 +183,7 @@
             <TabItem x:Name="TabIndustrial" Header="⚡ INDUSTRIA Y FÁBRICAS">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:IndustrialHQView x:Name="ViewIndustrial"/>
@@ -148,7 +193,7 @@
             <TabItem x:Name="TabBlueprint" Header="🛠️ DISEÑADOR NAVES">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:BlueprintDesignerView x:Name="ViewBlueprint"/>
@@ -157,7 +202,7 @@
             <TabItem x:Name="TabMissile" Header="🚀 LAB MISILES/MOTORES">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:MissileEngineLabView x:Name="ViewMissile"/>
@@ -166,7 +211,7 @@
             <TabItem x:Name="TabShipyards" Header="🏭 OPERACIONES ASTILLERO">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:ShipyardOperationsView x:Name="ViewShipyards"/>
@@ -176,7 +221,7 @@
             <TabItem x:Name="TabActiveFleets" Header="🛸 MIS FLOTAS Y NAVES">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:ActiveFleetsView x:Name="ViewActiveFleets"/>
@@ -185,7 +230,7 @@
             <TabItem x:Name="TabFleet" Header="⚓ AUDITORÍA NAVAL">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:FleetCompositionView x:Name="ViewFleet"/>
@@ -194,7 +239,7 @@
             <TabItem x:Name="TabExploration" Header="🌌 EXPLORACIÓN Y SISTEMAS">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:SystemExplorationView x:Name="ViewExploration"/>
@@ -204,25 +249,25 @@
             <TabItem x:Name="TabAI" Header="🤖 MATRIZ IA IMPERIAL">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:AIAssistantView x:Name="ViewAI"/>
             </TabItem>
 
             <!-- Module 12: Spatial Audit & Utilities -->
-            <TabItem x:Name="TabCalculators" Header="📐 AUDITORÍA Y HERRAMIENTAS ESPACIALES">
+            <TabItem x:Name="TabCalculators" Header="📐 AUDITORÍA Y HERRAMIENTAS">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="12.5" Margin="4,2"/>
+                        <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <views:TravelCalculatorView x:Name="ViewCalculators"/>
             </TabItem>
         </TabControl>
 
-        <!-- Row 3: Footer Bar -->
-        <Border Grid.Row="3" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="10,4">
+        <!-- Row 2: Footer Bar -->
+        <Border Grid.Row="2" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="10,4">
             <Grid>
                 <TextBlock Text="Aurora 4X Design &amp; Empire Command Center Master Suite | Aurora 4X v2.7.1 | C# WPF Live Bridge (12 Módulos)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
                 <TextBlock Text="👑 Creado por Fran Gómez &amp; Antigravity AI | © 2026 Aurora Master Suite" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" HorizontalAlignment="Right"/>

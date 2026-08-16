@@ -212,49 +212,51 @@ namespace AuroraSpanish
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern void SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
 
-        private static bool IsSubWindow(Form form)
+        private static bool IsMainSystemMapForm(Form form)
         {
-            if (form == null) return true;
-            string title = (form.Text ?? "").ToLower();
+            if (form == null || form.IsDisposed) return false;
+            if (form.Modal || form.Parent != null) return false;
 
-            string[] subWindowKeywords = new string[]
-            {
-                "naval", "fuerzas", "ground", "terrestres", "order of battle", "oob",
-                "economía", "economy", "investigación", "research", "astillero", "shipyard",
-                "diseño", "class", "comandante", "commander", "officer", "oficial",
-                "flota", "fleet", "evento", "event", "sistema", "system", "industria", "industry",
-                "minería", "mining", "misil", "ordnance", "torreta", "turret", "diplomac",
-                "intel", "sector", "comparaci", "formation", "plantilla", "admin command",
-                "logistica", "shipping line", "oob by system", "combat report"
-            };
+            string typeName = form.GetType().Name.ToLower();
+            string title = (form.Text ?? "").Trim();
 
-            foreach (string kw in subWindowKeywords)
+            // Secondary sub-window prefixes to EXCLUDE strictly
+            if (title.StartsWith("Naval", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Organización", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Fuerzas", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Ground", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Terrestres", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Economía", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Economy", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Investigación", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Research", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Astilleros", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Shipyards", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Diseño", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Class", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Comandantes", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Commanders", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Flotas", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Fleets", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Eventos", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Events", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Cuerpos", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("System Body", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Industria", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Industry", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Minería", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Mining", StringComparison.OrdinalIgnoreCase))
             {
-                if (title.Contains(kw)) return true;
+                return false;
             }
 
-            try
+            // Main map window in Aurora 4X is form class 'hf' or the root open form Application.OpenForms[0]
+            if (typeName == "hf") return true;
+
+            if (Application.OpenForms.Count > 0 && form == Application.OpenForms[0])
             {
-                foreach (Control c in form.Controls)
-                {
-                    TabControl tc = c as TabControl;
-                    if (tc != null)
-                    {
-                        foreach (TabPage tp in tc.TabPages)
-                        {
-                            string tabText = (tp.Text ?? "").ToLower();
-                            if (tabText.Contains("order of battle") || tabText.Contains("formation") ||
-                                tabText.Contains("ship overview") || tabText.Contains("logistica") ||
-                                tabText.Contains("sto targeting") || tabText.Contains("admin command") ||
-                                tabText.Contains("fleet") || tabText.Contains("shipping line"))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
+                return true;
             }
-            catch { }
 
             return false;
         }
@@ -278,27 +280,8 @@ namespace AuroraSpanish
                     {
                         if (__instance.Controls.Find("btnMasterSuiteNav", true).Length > 0) return;
 
-                        // Explicitly exclude ALL secondary sub-windows
-                        if (IsSubWindow(__instance)) return;
-
-                        // Skip modal dialogs or child controls
-                        if (__instance.Modal || __instance.Parent != null) return;
-
-                        string formTypeName = __instance.GetType().Name.ToLower();
-
-                        // Identify ONLY the Main Tactical System Map Window (hf form class or OpenForms[0])
-                        bool isMainMap = false;
-
-                        if (formTypeName == "hf")
-                        {
-                            isMainMap = true;
-                        }
-                        else if (System.Windows.Forms.Application.OpenForms.Count > 0 && __instance == System.Windows.Forms.Application.OpenForms[0])
-                        {
-                            isMainMap = true;
-                        }
-
-                        if (!isMainMap) return;
+                        // Check if this is exclusively the Main Tactical System Map Window
+                        if (!IsMainSystemMapForm(__instance)) return;
 
                         Button btnSuite = new Button
                         {

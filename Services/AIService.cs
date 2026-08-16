@@ -200,34 +200,41 @@ NO inventes datos si el contexto teleférico contiene la información exacta.";
                         }
                     });
 
-                    string[] models = new[] { "gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro" };
+                    string[] models = new[] { "gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash", "gemini-2.0-flash-exp" };
 
                     foreach (var model in models)
                     {
-                        string endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={_apiKey}";
-                        using var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-                        var response = await _httpClient.PostAsync(endpoint, content);
-                        if (response.IsSuccessStatusCode)
+                        try
                         {
-                            string jsonResp = await response.Content.ReadAsStringAsync();
-                            using var doc = JsonDocument.Parse(jsonResp);
+                            string endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={_apiKey}";
+                            using var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
-                            var candidates = doc.RootElement.GetProperty("candidates");
-                            if (candidates.GetArrayLength() > 0)
+                            var response = await _httpClient.PostAsync(endpoint, content);
+                            if (response.IsSuccessStatusCode)
                             {
-                                var parts = candidates[0].GetProperty("content").GetProperty("parts");
-                                if (parts.GetArrayLength() > 0)
+                                string jsonResp = await response.Content.ReadAsStringAsync();
+                                using var doc = JsonDocument.Parse(jsonResp);
+
+                                var candidates = doc.RootElement.GetProperty("candidates");
+                                if (candidates.GetArrayLength() > 0)
                                 {
-                                    string text = parts[0].GetProperty("text").GetString()!;
-                                    return text;
+                                    var parts = candidates[0].GetProperty("content").GetProperty("parts");
+                                    if (parts.GetArrayLength() > 0)
+                                    {
+                                        string text = parts[0].GetProperty("text").GetString()!;
+                                        return text;
+                                    }
                                 }
                             }
+                            else
+                            {
+                                string errContent = await response.Content.ReadAsStringAsync();
+                                lastError = $"[Modelo: {model}] HTTP {(int)response.StatusCode}: {errContent}";
+                            }
                         }
-                        else
+                        catch (Exception mEx)
                         {
-                            string errContent = await response.Content.ReadAsStringAsync();
-                            lastError = $"HTTP {(int)response.StatusCode} ({response.StatusCode}): {errContent}";
+                            lastError = $"[Modelo: {model}] Exception: {mEx.Message}";
                         }
                     }
                 }

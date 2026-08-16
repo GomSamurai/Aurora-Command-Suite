@@ -37,6 +37,7 @@
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                     <CheckBox x:Name="ChkUseOnlineAI" Content="⚡ Modo Gemini AI Online" IsChecked="True" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" ToolTip="Si está activado, la consulta se envía a Gemini API. Si se desactiva o no hay red, se usa la Matriz Local."/>
+                    <Button Content="⚙️ Configurar API Key" Click="BtnConfigureApiKey_Click" Padding="8,3" Margin="10,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" ToolTip="Abre el cuadro de diálogo para configurar o modificar tu clave personal de Gemini API Key."/>
                 </StackPanel>
             </Grid>
         </Border>

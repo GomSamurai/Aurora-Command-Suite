@@ -25,6 +25,8 @@ namespace AuroraDesignSuite.Views
             AddInitialWelcomeMessage();
         }
 
+        private bool _hasPromptedApiKey = false;
+
         public void LoadData(DatabaseService dbService, int raceId)
         {
             _dbService = dbService;
@@ -40,6 +42,34 @@ namespace AuroraDesignSuite.Views
             _customPrompts = _aiService.LoadCustomPrompts();
             RefreshTelemetrySidebar();
             RefreshCustomPromptsUI();
+
+            // Prompt user for API Key if not configured yet
+            if (!ApiKeyManager.HasApiKey() && !_hasPromptedApiKey)
+            {
+                _hasPromptedApiKey = true;
+                Dispatcher.BeginInvoke(new Action(PromptConfigureApiKey), System.Windows.Threading.DispatcherPriority.Background);
+            }
+        }
+
+        private void BtnConfigureApiKey_Click(object sender, RoutedEventArgs e)
+        {
+            PromptConfigureApiKey();
+        }
+
+        private void PromptConfigureApiKey()
+        {
+            var dlg = new ConfigureApiKeyDialog();
+            var parentWin = Window.GetWindow(this);
+            if (parentWin != null) dlg.Owner = parentWin;
+
+            if (dlg.ShowDialog() == true)
+            {
+                string newKey = ApiKeyManager.GetApiKey();
+                if (_aiService != null)
+                {
+                    _aiService.SetApiKey(newKey);
+                }
+            }
         }
 
         private void RefreshTelemetrySidebar()

@@ -8,3 +8,5 @@ obj/
 *.sln.docstates
 .DS_Store
 *.log
+config/
+*.config

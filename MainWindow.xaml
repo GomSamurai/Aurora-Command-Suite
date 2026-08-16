@@ -246,7 +246,7 @@
             </TabItem>
 
             <!-- DIVISION 5: IA E INTELIGENCIA -->
-            <TabItem x:Name="TabAI" Header="🤖 MATRIZ IA IMPERIAL">
+            <TabItem x:Name="TabAI" Header="🧠 INTELIGENCIA ESTRATÉGICA">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="2,0"/>

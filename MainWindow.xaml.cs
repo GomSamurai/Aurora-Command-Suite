@@ -74,6 +74,11 @@ namespace AuroraDesignSuite
 
             int raceId = emp.RaceID;
 
+            if (TabAI != null && emp != null && !string.IsNullOrEmpty(emp.RaceName))
+            {
+                TabAI.Header = $"🧠 INTELIGENCIA DE {emp.RaceName.ToUpper()}";
+            }
+
             if (MainTabControl.SelectedItem == TabBlueprint && ViewBlueprint != null)
             {
                 ViewBlueprint.SetSelectedEmpire(emp);

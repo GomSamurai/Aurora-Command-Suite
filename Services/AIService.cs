@@ -19,7 +19,7 @@ namespace AuroraDesignSuite.Services
         public AIService(string apiKey = "")
         {
             _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(25) };
-            _apiKey = apiKey;
+            _apiKey = string.IsNullOrWhiteSpace(apiKey) ? ApiKeyManager.GetApiKey() : apiKey;
             _promptsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "custom_prompts.json");
         }
 
@@ -151,13 +151,18 @@ namespace AuroraDesignSuite.Services
 
         public async Task<string> AskAIAsync(string userQuery, string imperialContext = "", bool useOnlineGemini = true)
         {
+            if (string.IsNullOrWhiteSpace(_apiKey))
+            {
+                _apiKey = ApiKeyManager.GetApiKey();
+            }
+
             if (useOnlineGemini && !string.IsNullOrWhiteSpace(_apiKey))
             {
                 try
                 {
                     string systemInstruction = @"Eres la Matriz Computacional de Inteligencia Imperial para Aurora 4X (v2.7.1).
 Tus análisis deben ser precisos, ejecutivos, con terminología de ciencia ficción militar/científica.
-Sigue estrictamente el formato solicitado por el usuario.";
+Sigue strictly el formato solicitado por el usuario.";
 
                     string fullPrompt = $"{systemInstruction}\n\n[CONTEXTO IMPERIAL]\n{imperialContext}\n\n[CONSULTA DEL COMANDANTE]\n{userQuery}";
 

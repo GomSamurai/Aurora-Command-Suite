@@ -212,6 +212,53 @@ namespace AuroraSpanish
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern void SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
 
+        private static bool IsSubWindow(Form form)
+        {
+            if (form == null) return true;
+            string title = (form.Text ?? "").ToLower();
+
+            string[] subWindowKeywords = new string[]
+            {
+                "naval", "fuerzas", "ground", "terrestres", "order of battle", "oob",
+                "economía", "economy", "investigación", "research", "astillero", "shipyard",
+                "diseño", "class", "comandante", "commander", "officer", "oficial",
+                "flota", "fleet", "evento", "event", "sistema", "system", "industria", "industry",
+                "minería", "mining", "misil", "ordnance", "torreta", "turret", "diplomac",
+                "intel", "sector", "comparaci", "formation", "plantilla", "admin command",
+                "logistica", "shipping line", "oob by system", "combat report"
+            };
+
+            foreach (string kw in subWindowKeywords)
+            {
+                if (title.Contains(kw)) return true;
+            }
+
+            try
+            {
+                foreach (Control c in form.Controls)
+                {
+                    TabControl tc = c as TabControl;
+                    if (tc != null)
+                    {
+                        foreach (TabPage tp in tc.TabPages)
+                        {
+                            string tabText = (tp.Text ?? "").ToLower();
+                            if (tabText.Contains("order of battle") || tabText.Contains("formation") ||
+                                tabText.Contains("ship overview") || tabText.Contains("logistica") ||
+                                tabText.Contains("sto targeting") || tabText.Contains("admin command") ||
+                                tabText.Contains("fleet") || tabText.Contains("shipping line"))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            return false;
+        }
+
         private static void FormConstructorPostfix(Form __instance)
         {
             // Make ALL forms in Aurora 4X resizable from window borders like standard Windows apps!
@@ -222,7 +269,7 @@ namespace AuroraSpanish
             }
             catch { }
 
-            // Inject Master Suite Button ONLY on the main map window
+            // Inject Master Suite Buttons ONLY on the main system map window
             try
             {
                 __instance.Shown += delegate
@@ -231,48 +278,18 @@ namespace AuroraSpanish
                     {
                         if (__instance.Controls.Find("btnMasterSuiteNav", true).Length > 0) return;
 
-                        string formTypeName = __instance.GetType().Name.ToLower();
-                        string formTitle = __instance.Text ?? "";
-
-                        // Explicitly exclude all secondary dialogs and sub-windows
-                        if (formTitle.StartsWith("Economía", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Economy", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Investigación", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Research", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Astilleros", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Shipyards", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Diseño", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Class", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Comandantes", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Commanders", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Flotas", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Fleets", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Eventos", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Events", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Sistemas", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Systems", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Industria", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Industry", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Minería", StringComparison.OrdinalIgnoreCase) ||
-                            formTitle.StartsWith("Mining", StringComparison.OrdinalIgnoreCase))
-                        {
-                            return;
-                        }
+                        // Explicitly exclude ALL secondary sub-windows
+                        if (IsSubWindow(__instance)) return;
 
                         // Skip modal dialogs or child controls
                         if (__instance.Modal || __instance.Parent != null) return;
 
-                        // Identify the Main Tactical System Map Window
+                        string formTypeName = __instance.GetType().Name.ToLower();
+
+                        // Identify ONLY the Main Tactical System Map Window (hf form class or OpenForms[0])
                         bool isMainMap = false;
 
-                        if (formTitle.Contains("Racial") || formTitle.Contains("Riqueza") || 
-                            formTitle.Contains("Wealth") || formTitle.Contains("Sol") || 
-                            formTitle.Contains("System Map") || formTitle.Contains("Tactical") ||
-                            formTitle.Contains("Imperio"))
-                        {
-                            isMainMap = true;
-                        }
-                        else if (formTypeName == "f5" || formTypeName == "hf" || formTypeName == "gu" || formTypeName == "bd")
+                        if (formTypeName == "hf")
                         {
                             isMainMap = true;
                         }

@@ -200,7 +200,7 @@ NO inventes datos si el contexto teleférico contiene la información exacta.";
                         }
                     });
 
-                    string[] models = new[] { "gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash", "gemini-2.0-flash-exp" };
+                    string[] models = new[] { "gemini-1.5-flash", "gemini-1.5-pro" };
 
                     foreach (var model in models)
                     {
@@ -210,11 +210,11 @@ NO inventes datos si el contexto teleférico contiene la información exacta.";
                             using var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
                             var response = await _httpClient.PostAsync(endpoint, content);
+                            string respBody = await response.Content.ReadAsStringAsync();
+
                             if (response.IsSuccessStatusCode)
                             {
-                                string jsonResp = await response.Content.ReadAsStringAsync();
-                                using var doc = JsonDocument.Parse(jsonResp);
-
+                                using var doc = JsonDocument.Parse(respBody);
                                 var candidates = doc.RootElement.GetProperty("candidates");
                                 if (candidates.GetArrayLength() > 0)
                                 {
@@ -228,13 +228,19 @@ NO inventes datos si el contexto teleférico contiene la información exacta.";
                             }
                             else
                             {
-                                string errContent = await response.Content.ReadAsStringAsync();
-                                lastError = $"[Modelo: {model}] HTTP {(int)response.StatusCode}: {errContent}";
+                                int code = (int)response.StatusCode;
+                                lastError = $"[Modelo {model}] HTTP {code}: {respBody}";
+
+                                // If API key is invalid or quota exceeded or permission denied, stop loop and report immediately!
+                                if (code == 400 || code == 403)
+                                {
+                                    break;
+                                }
                             }
                         }
                         catch (Exception mEx)
                         {
-                            lastError = $"[Modelo: {model}] Exception: {mEx.Message}";
+                            lastError = $"[Modelo {model}] Excepción: {mEx.Message}";
                         }
                     }
                 }
@@ -254,7 +260,7 @@ NO inventes datos si el contexto teleférico contiene la información exacta.";
                 }
                 else if (!string.IsNullOrEmpty(lastError))
                 {
-                    return $"⚠️ ERROR DE CONEXIÓN CON GEMINI API:\n{lastError}\n\n---\n{localDiag}";
+                    return $"⚠️ ERROR AL COMUNICAR CON GEMINI API:\n{lastError}\n\n💡 Sugerencia: Revisa o renueva tu API Key en aistudio.google.com mediante el botón '⚙️ Configurar API Key'.\n\n---\n{localDiag}";
                 }
             }
 

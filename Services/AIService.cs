@@ -172,6 +172,7 @@ namespace AuroraDesignSuite.Services
             {
                 _apiKey = ApiKeyManager.GetApiKey();
             }
+            _apiKey = ApiKeyManager.CleanApiKey(_apiKey);
 
             string lastError = "";
 

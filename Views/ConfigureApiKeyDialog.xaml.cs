@@ -31,10 +31,16 @@ namespace AuroraDesignSuite.Views
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            string key = TxtApiKey.Text.Trim();
+            string key = ApiKeyManager.CleanApiKey(TxtApiKey.Text);
             if (string.IsNullOrWhiteSpace(key))
             {
                 MessageBox.Show("Por favor introduce una clave Gemini API válida o pulsa 'Obtener Clave Gratis'.", "Clave No Válida", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (key.StartsWith("sk-", StringComparison.OrdinalIgnoreCase))
+            {
+                MessageBox.Show("⚠️ La clave introducida comienza por 'sk-...'. Ese es el formato de OpenAI o Anthropic.\n\nPara usar la IA en esta aplicación se requiere una clave gratuita de Google Gemini (que comienza por 'AIzaSy...').\n\nPulsa en el botón '🌐 Obtener Clave Gratis' para generar tu clave Gemini en 10 segundos.", "Formato de API Key No Compatible", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 

@@ -12,6 +12,12 @@ namespace AuroraDesignSuite.Services
             return Path.Combine(dir, "gemini_api.config");
         }
 
+        public static string CleanApiKey(string rawKey)
+        {
+            if (string.IsNullOrWhiteSpace(rawKey)) return string.Empty;
+            return rawKey.Trim().Trim('"', '\'', ' ', '\t', '\r', '\n', '\v');
+        }
+
         public static string GetApiKey()
         {
             try
@@ -29,7 +35,7 @@ namespace AuroraDesignSuite.Services
                 {
                     if (File.Exists(path))
                     {
-                        string key = File.ReadAllText(path).Trim();
+                        string key = CleanApiKey(File.ReadAllText(path));
                         if (!string.IsNullOrWhiteSpace(key)) return key;
                     }
                 }
@@ -42,7 +48,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                string key = (apiKey ?? "").Trim();
+                string key = CleanApiKey(apiKey);
                 string path = GetConfigFilePath();
                 File.WriteAllText(path, key);
 

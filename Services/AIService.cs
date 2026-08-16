@@ -174,11 +174,6 @@ namespace AuroraDesignSuite.Services
             }
             _apiKey = ApiKeyManager.CleanApiKey(_apiKey);
 
-            if (!string.IsNullOrWhiteSpace(_apiKey) && !_apiKey.StartsWith("AIzaSy", StringComparison.Ordinal) && _apiKey.Length >= 30)
-            {
-                _apiKey = "AIzaSy" + _apiKey;
-            }
-
             string lastError = "";
 
             if (useOnlineGemini && !string.IsNullOrWhiteSpace(_apiKey))
@@ -206,7 +201,16 @@ NO inventes datos si el contexto teleférico contiene la información exacta.";
                         }
                     });
 
-                    string[] models = new[] { "gemini-1.5-flash", "gemini-1.5-pro" };
+                    string[] models = new[]
+                    {
+                        "gemini-pro-latest",
+                        "gemini-flash-latest",
+                        "gemini-3.5-flash",
+                        "gemini-3.7-flash",
+                        "gemini-flash-lite-latest",
+                        "gemini-1.5-flash",
+                        "gemini-1.5-pro"
+                    };
 
                     foreach (var model in models)
                     {

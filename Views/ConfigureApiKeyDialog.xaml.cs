@@ -40,32 +40,40 @@ namespace AuroraDesignSuite.Views
                 return;
             }
 
-            if (!key.StartsWith("AIzaSy", StringComparison.Ordinal) && key.Length >= 30)
-            {
-                key = "AIzaSy" + key;
-                TxtApiKey.Text = key;
-            }
-
             BtnTestKey.IsEnabled = false;
             BtnTestKey.Content = "⏳ Probando...";
 
             try
             {
                 using var client = new System.Net.Http.HttpClient();
-                string url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={key}";
-                string payload = "{\"contents\":[{\"parts\":[{\"text\":\"Hola, responde OK.\"}]}]}";
-                using var content = new System.Net.Http.StringContent(payload, System.Text.Encoding.UTF8, "application/json");
+                string[] models = new[] { "gemini-pro-latest", "gemini-flash-latest", "gemini-3.5-flash", "gemini-3.7-flash", "gemini-1.5-flash" };
+                bool success = false;
+                string lastErr = "";
 
-                var resp = await client.PostAsync(url, content);
-                string body = await resp.Content.ReadAsStringAsync();
-
-                if (resp.IsSuccessStatusCode)
+                foreach (var model in models)
                 {
-                    MessageBox.Show("✅ ¡CONEXIÓN CON GEMINI API COMPLETADA CON ÉXITO!\n\nTu clave está 100% activa y funcionando correctamente.", "Prueba Exitosa", MessageBoxButton.OK, MessageBoxImage.Information);
+                    string url = $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}";
+                    string payload = "{\"contents\":[{\"parts\":[{\"text\":\"Hola, responde OK.\"}]}]}";
+                    using var content = new System.Net.Http.StringContent(payload, System.Text.Encoding.UTF8, "application/json");
+
+                    var resp = await client.PostAsync(url, content);
+                    string body = await resp.Content.ReadAsStringAsync();
+
+                    if (resp.IsSuccessStatusCode)
+                    {
+                        success = true;
+                        MessageBox.Show($"✅ ¡CONEXIÓN CON GEMINI API COMPLETADA CON ÉXITO!\n\nModelo enlazado: '{model}'.\nTu clave está 100% activa y funcionando correctamente.", "Prueba Exitosa", MessageBoxButton.OK, MessageBoxImage.Information);
+                        break;
+                    }
+                    else
+                    {
+                        lastErr = $"[Modelo {model}] HTTP {(int)resp.StatusCode}: {body}";
+                    }
                 }
-                else
+
+                if (!success)
                 {
-                    MessageBox.Show($"❌ GOOGLE GEMINI API DEVUELVE ERROR HTTP {(int)resp.StatusCode}:\n\n{body}\n\n💡 Revisa que la clave provenga de aistudio.google.com/app/apikey y esté habilitada.", "Error en la Prueba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"❌ GOOGLE GEMINI API DEVUELVE ERROR:\n\n{lastErr}\n\n💡 Revisa que la clave provenga de aistudio.google.com/app/apikey y esté habilitada.", "Error en la Prueba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
@@ -90,29 +98,8 @@ namespace AuroraDesignSuite.Views
 
             if (key.StartsWith("sk-", StringComparison.OrdinalIgnoreCase))
             {
-                MessageBox.Show("⚠️ La clave introducida comienza por 'sk-...'. Ese es el formato de OpenAI o Anthropic.\n\nPara usar la IA en esta aplicación se requiere una clave gratuita de Google Gemini (que comienza por 'AIzaSy...').\n\nPulsa en el botón '🌐 Obtener Clave Gratis' para generar tu clave Gemini en 10 segundos.", "Formato de API Key No Compatible", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("⚠️ La clave introducida comienza por 'sk-...'. Ese es el formato de OpenAI o Anthropic.\n\nPara usar la IA en esta aplicación se requiere una clave gratuita de Google Gemini.\n\nPulsa en el botón '🌐 Obtener Clave Gratis' para generar tu clave Gemini en 10 segundos.", "Formato de API Key No Compatible", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
-            }
-
-            if (!key.StartsWith("AIzaSy", StringComparison.Ordinal))
-            {
-                var result = MessageBox.Show(
-                    $"⚠️ ATENCIÓN: Las claves de Google Gemini API deben comenzar SIEMPRE por el prefijo 'AIzaSy...'.\n\n" +
-                    $"Tu clave actual ('{key}') no tiene el prefijo 'AIzaSy'. Es muy habitual que al copiar desde la web de Google AI Studio se haya omitido las primeras letras 'AIzaSy'.\n\n" +
-                    $"¿Deseas añadir automáticamente 'AIzaSy' al principio de tu clave?",
-                    "Prefijo 'AIzaSy' Faltante",
-                    MessageBoxButton.YesNoCancel,
-                    MessageBoxImage.Question);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    key = "AIzaSy" + key;
-                    TxtApiKey.Text = key;
-                }
-                else if (result == MessageBoxResult.Cancel)
-                {
-                    return;
-                }
             }
 
             if (ApiKeyManager.SaveApiKey(key))

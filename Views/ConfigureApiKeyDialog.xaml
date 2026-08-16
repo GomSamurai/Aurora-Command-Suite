@@ -51,8 +51,9 @@
 
             <!-- Buttons -->
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="BtnTestKey" Content="🧪 Probar Conexión" Click="BtnTestKey_Click" Padding="14,6" Margin="0,0,8,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" ToolTip="Envía una prueba instantánea a la API de Google Gemini para verificar si la clave está activa y funcionando."/>
                 <Button Content="💾 Guardar y Conectar API" Click="BtnSave_Click" Padding="16,6" Margin="0,0,8,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12"/>
-                <Button Content="❌ Cancelar / Usar Modo Local" Click="BtnCancel_Click" Padding="14,6" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource TextSecondaryBrush}" BorderBrush="{DynamicResource BorderBrush}" FontSize="12"/>
+                <Button Content="❌ Cancelar" Click="BtnCancel_Click" Padding="14,6" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource TextSecondaryBrush}" BorderBrush="{DynamicResource BorderBrush}" FontSize="12"/>
             </StackPanel>
         </Grid>
     </Border>

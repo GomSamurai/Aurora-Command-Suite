@@ -174,6 +174,11 @@ namespace AuroraDesignSuite.Services
             }
             _apiKey = ApiKeyManager.CleanApiKey(_apiKey);
 
+            if (!string.IsNullOrWhiteSpace(_apiKey) && !_apiKey.StartsWith("AIzaSy", StringComparison.Ordinal) && _apiKey.Length >= 30)
+            {
+                _apiKey = "AIzaSy" + _apiKey;
+            }
+
             string lastError = "";
 
             if (useOnlineGemini && !string.IsNullOrWhiteSpace(_apiKey))

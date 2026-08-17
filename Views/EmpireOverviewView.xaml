@@ -234,6 +234,41 @@
                         </StackPanel>
                     </Border>
 
+                    <!-- Card 0.5: Empire Naming Themes Suite (Live DB Connection to 621 Themes) -->
+                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="📜 GESTIÓN DE LOTES Y TEMAS DE NOMBRES (621 TEMAS DE AURORADB.DB)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12.5" Margin="0,0,0,6"/>
+                            <TextBlock Text="Asigna los lotes oficiales de nombres (Español, Warhammer 40K, Mitología, Batallas) para cada función del imperio:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,8" TextWrapping="Wrap"/>
+
+                            <StackPanel Margin="0,0,0,6">
+                                <TextBlock Text="Nombres de Clases de Naves:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
+                                <ComboBox x:Name="CmbClassTheme" Padding="4,2" FontSize="10.5" ToolTip="Lote de nombres utilizado para nombrar nuevas clases de naves."/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,6">
+                                <TextBlock Text="Nombres de Sistemas Estelares:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
+                                <ComboBox x:Name="CmbSystemTheme" Padding="4,2" FontSize="10.5" ToolTip="Lote de nombres para rebautizar sistemas estelares."/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,6">
+                                <TextBlock Text="Nombres de Componentes e I+D:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
+                                <ComboBox x:Name="CmbDesignTheme" Padding="4,2" FontSize="10.5" ToolTip="Lote de nombres para prototipos de I+D y componentes."/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,6">
+                                <TextBlock Text="Nombres de Formaciones Terrestres:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
+                                <ComboBox x:Name="CmbGroundTheme" Padding="4,2" FontSize="10.5" ToolTip="Lote de nombres para divisiones y brigadas terrestres."/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,6">
+                                <TextBlock Text="Nombres de Misiles y Torpedos:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
+                                <ComboBox x:Name="CmbMissileTheme" Padding="4,2" FontSize="10.5" ToolTip="Lote de nombres para familias de misiles y torpedos."/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,8">
+                                <TextBlock Text="Nombres de Líderes y Almirantes:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
+                                <ComboBox x:Name="CmbNameTheme" Padding="4,2" FontSize="10.5" ToolTip="Lote de nombres para la generación de comandantes."/>
+                            </StackPanel>
+
+                            <Button x:Name="BtnSaveEmpireNamingConfig" Content="💾 Guardar Lotes de Nombres en AuroraDB.db" Click="BtnSaveEmpireNamingConfig_Click" Padding="8,5" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Actualiza la configuración oficial de nombres de tu imperio en la base de datos viva de Aurora 4X."/>
+                        </StackPanel>
+                    </Border>
+
                     <!-- Card 1: Officer Corps Breakdown -->
                     <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                         <StackPanel>

@@ -131,6 +131,8 @@ namespace AuroraDesignSuite.Views
             {
                 LblAdvisorText.Text = "💡 PLANIFICACIÓN ESTRATÉGICA IMPERIAL: Priorizar la investigación de motores de salto y sensores de prospección geológica para descubrir nuevos yacimientos de minerales exóticos.";
             }
+
+            LoadEmpireNamingThemes();
         }
 
         private void UpdatePreviewImages(string flagPath, string portraitPath)
@@ -227,6 +229,62 @@ namespace AuroraDesignSuite.Views
             {
                 MessageBox.Show(msg, "Auditoría de Suministros Completada", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadEmpireData(_dbService, _currentRaceId);
+            }
+        }
+
+        private void LoadEmpireNamingThemes()
+        {
+            if (_dbService == null) return;
+
+            var themes = _dbService.GetNamingThemes();
+            var config = _dbService.GetEmpireNamingConfig(_currentRaceId);
+
+            PopulateThemeCombo(CmbClassTheme, themes, config.ClassThemeID);
+            PopulateThemeCombo(CmbSystemTheme, themes, config.SystemThemeID);
+            PopulateThemeCombo(CmbDesignTheme, themes, config.DesignThemeID);
+            PopulateThemeCombo(CmbGroundTheme, themes, config.GroundThemeID);
+            PopulateThemeCombo(CmbMissileTheme, themes, config.MissileThemeID);
+            PopulateThemeCombo(CmbNameTheme, themes, config.NameThemeID);
+        }
+
+        private void PopulateThemeCombo(ComboBox? combo, List<NamingThemeItem> themes, int currentThemeId)
+        {
+            if (combo == null) return;
+            combo.ItemsSource = themes;
+            var match = themes.FirstOrDefault(t => t.ThemeID == currentThemeId);
+            if (match != null)
+            {
+                combo.SelectedItem = match;
+            }
+            else if (themes.Count > 0)
+            {
+                combo.SelectedIndex = 0;
+            }
+        }
+
+        private void BtnSaveEmpireNamingConfig_Click(object sender, RoutedEventArgs e)
+        {
+            if (_dbService == null) return;
+
+            var config = new EmpireNamingConfig
+            {
+                RaceID = _currentRaceId,
+                ClassThemeID = CmbClassTheme?.SelectedItem is NamingThemeItem c ? c.ThemeID : 0,
+                SystemThemeID = CmbSystemTheme?.SelectedItem is NamingThemeItem s ? s.ThemeID : 0,
+                DesignThemeID = CmbDesignTheme?.SelectedItem is NamingThemeItem d ? d.ThemeID : 0,
+                GroundThemeID = CmbGroundTheme?.SelectedItem is NamingThemeItem g ? g.ThemeID : 0,
+                MissileThemeID = CmbMissileTheme?.SelectedItem is NamingThemeItem m ? m.ThemeID : 0,
+                NameThemeID = CmbNameTheme?.SelectedItem is NamingThemeItem n ? n.ThemeID : 0
+            };
+
+            bool success = _dbService.SaveEmpireNamingConfig(_currentRaceId, config, out string msg);
+            if (success)
+            {
+                MessageBox.Show(msg, "Lotes de Nombres Actualizados", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

@@ -217,38 +217,56 @@ namespace AuroraSpanish
             if (form == null || form.IsDisposed) return false;
             if (form.Modal || form.Parent != null) return false;
 
-            // ONLY inject on the primary main window of the game (Application.OpenForms[0])
+            string typeName = form.GetType().Name;
+            string title = (form.Text ?? "").Trim();
+
+            // 1. Primary check: If form class name is Form1 (Aurora 4X main window class)
+            if (typeName.Equals("Form1", StringComparison.OrdinalIgnoreCase) || typeName.Equals("MainForm", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            // 2. Main Star Map Window title contains "Racial Riqueza" or "Racial Wealth" or "System Map"
+            if (title.IndexOf("Racial Riqueza", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                title.IndexOf("Racial Wealth", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                title.IndexOf("System Map", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                title.Equals("Aurora", StringComparison.OrdinalIgnoreCase) ||
+                title.StartsWith("Aurora 4X", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!title.StartsWith("Create", StringComparison.OrdinalIgnoreCase) &&
+                    !title.StartsWith("Crear", StringComparison.OrdinalIgnoreCase) &&
+                    !title.StartsWith("Select", StringComparison.OrdinalIgnoreCase) &&
+                    !title.StartsWith("Edit", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            // 3. Fallback: Check if Application.OpenForms[0] is this form AND title does NOT contain subwindow keywords
             try
             {
-                if (Application.OpenForms != null && Application.OpenForms.Count > 0)
+                if (Application.OpenForms != null && Application.OpenForms.Count > 0 && Application.OpenForms[0] == form)
                 {
-                    if (Application.OpenForms[0] != form) return false;
+                    string[] excludeSubKeywords = new string[]
+                    {
+                        "Create", "Crear", "Select", "Seleccionar", "Edit", "Editar", "New", "Nuevo",
+                        "Project", "Proyecto", "Naval", "Organización", "Organization", "Fuerzas", "Ground",
+                        "Economía", "Economy", "Investigación", "Research", "Astilleros", "Shipyard",
+                        "Diseño", "Design", "Comandantes", "Commanders", "Flotas", "Fleets", "Eventos", "Events",
+                        "Cuerpos", "System Bodies", "Industria", "Industry", "Misil", "Missile", "Torreta", "Turret"
+                    };
+
+                    foreach (string kw in excludeSubKeywords)
+                    {
+                        if (title.IndexOf(kw, StringComparison.OrdinalIgnoreCase) >= 0) return false;
+                    }
+
+                    return true;
                 }
             }
             catch { }
 
-            string title = (form.Text ?? "").Trim();
-
-            // Known secondary keywords to EXCLUDE anywhere in title
-            string[] excludeKeywords = new string[]
-            {
-                "Create", "Crear", "Select", "Seleccionar", "Edit", "Editar", "New", "Nuevo",
-                "Naval", "Organización", "Organization", "Fuerzas", "Ground", "Terrestres",
-                "Order of Battle", "OOB", "Economía", "Economy", "Economics", "Investigación",
-                "Research", "Astilleros", "Shipyard", "Shipyards", "Diseño", "Class Design",
-                "Comandantes", "Commanders", "Officers", "Oficiales", "Flotas", "Fleets",
-                "Eventos", "Events", "Event Log", "Cuerpos", "System Bodies", "System Body",
-                "Industria", "Industry", "Minería", "Mining", "Misil", "Missile", "Torreta",
-                "Turret", "Diplomac", "Intel", "Sector", "Comparaci", "Comparison", "Setup",
-                "Configurac", "Options", "Opciones", "Fast Forward", "Project", "Proyecto"
-            };
-
-            foreach (string kw in excludeKeywords)
-            {
-                if (title.IndexOf(kw, StringComparison.OrdinalIgnoreCase) >= 0) return false;
-            }
-
-            return true;
+            return false;
         }
 
         private static void FormConstructorPostfix(Form __instance)

@@ -64,6 +64,17 @@ namespace AuroraDesignSuite
         {
             try
             {
+                if (_timeEventsWidgetWindow != null)
+                {
+                    _timeEventsWidgetWindow.CloseWidget();
+                    _timeEventsWidgetWindow.Close();
+                    _timeEventsWidgetWindow = null;
+                }
+            }
+            catch { }
+
+            try
+            {
                 var prefs = new UserPreferences
                 {
                     WindowWidth = Width,
@@ -73,6 +84,12 @@ namespace AuroraDesignSuite
                     SelectedEmpireId = (CmbGlobalEmpire.SelectedItem as Empire)?.RaceID ?? -1
                 };
                 UserPreferencesService.SavePreferences(prefs);
+            }
+            catch { }
+
+            try
+            {
+                Application.Current.Shutdown();
             }
             catch { }
         }

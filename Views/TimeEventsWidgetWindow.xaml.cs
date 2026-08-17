@@ -56,11 +56,22 @@ namespace AuroraDesignSuite.Views
             }
         }
 
-        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        public void CloseWidget()
         {
             StopAutoPass();
             _eventPollTimer.Stop();
             LiveSyncBridge.OnGameSyncReceived -= HandleLiveSync;
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            CloseWidget();
+            base.OnClosing(e);
+        }
+
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            CloseWidget();
             Hide();
         }
 

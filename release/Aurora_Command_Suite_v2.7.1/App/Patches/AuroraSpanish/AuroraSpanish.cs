@@ -265,17 +265,20 @@ namespace AuroraSpanish
                         Button btnSuite = new Button
                         {
                             Name = "btnMasterSuiteNav",
-                            Text = "🚀 AURORA COMMAND SUITE",
-                            Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                            Text = "🚀",
+                            Font = new Font("Segoe UI Emoji", 10.0f, FontStyle.Bold),
                             BackColor = Color.FromArgb(13, 26, 38),
                             ForeColor = Color.FromArgb(0, 240, 255),
                             FlatStyle = FlatStyle.Flat,
-                            Size = new Size(215, 26),
-                            Location = new Point(Math.Max(10, __instance.ClientSize.Width - 225), 4),
+                            Size = new Size(28, 26),
+                            Location = new Point(Math.Max(10, __instance.ClientSize.Width - 34), 4),
                             Anchor = AnchorStyles.Top | AnchorStyles.Right,
                             Cursor = Cursors.Hand
                         };
                         btnSuite.FlatAppearance.BorderColor = Color.FromArgb(0, 240, 255);
+                        ToolTip tipSuite = new ToolTip();
+                        tipSuite.SetToolTip(btnSuite, "Abrir / Enfocar Aurora Command Suite");
+
                         btnSuite.Click += delegate
                         {
                             try
@@ -311,17 +314,20 @@ namespace AuroraSpanish
                             Button btnRefreshSuite = new Button
                             {
                                 Name = "btnSuiteRefreshNav",
-                                Text = "🔄 REFRESCAR SUITE",
-                                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                                Text = "🔄",
+                                Font = new Font("Segoe UI Emoji", 10.0f, FontStyle.Bold),
                                 BackColor = Color.FromArgb(13, 26, 38),
                                 ForeColor = Color.FromArgb(255, 184, 108),
                                 FlatStyle = FlatStyle.Flat,
-                                Size = new Size(160, 26),
-                                Location = new Point(Math.Max(10, __instance.ClientSize.Width - 392), 4),
+                                Size = new Size(28, 26),
+                                Location = new Point(Math.Max(10, __instance.ClientSize.Width - 66), 4),
                                 Anchor = AnchorStyles.Top | AnchorStyles.Right,
                                 Cursor = Cursors.Hand
                             };
                             btnRefreshSuite.FlatAppearance.BorderColor = Color.FromArgb(255, 184, 108);
+                            ToolTip tipRefresh = new ToolTip();
+                            tipRefresh.SetToolTip(btnRefreshSuite, "Refrescar Sincronización con Aurora Command Suite");
+
                             btnRefreshSuite.Click += delegate
                             {
                                 TriggerInGameRefresh();

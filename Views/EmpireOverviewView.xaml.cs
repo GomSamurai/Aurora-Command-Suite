@@ -191,14 +191,14 @@ namespace AuroraDesignSuite.Views
             if (CmbFlagPic?.SelectedItem is string flagFile) emp.FlagPic = flagFile;
             if (CmbRacePic?.SelectedItem is string raceFile) emp.RacePic = raceFile;
 
-            if (_dbService.UpdateEmpireDetails(emp))
+            if (_dbService.UpdateEmpireDetails(emp, out string errorMsg))
             {
                 MessageBox.Show("✅ ¡Identidad, Bandera y Retrato Imperial guardados con éxito en AuroraDB.db!\n\nTodos los cambios están reflejados en directo. Abre o pulsa 'Refrescar Suite' en Aurora 4X para ver los nuevos emblemas en tu juego.", "Identidad Imperial Sincronizada", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadEmpireData(_dbService, _currentRaceId);
             }
             else
             {
-                MessageBox.Show("❌ No se pudieron guardar los detalles del Imperio en AuroraDB.db.", "Error de Guardado", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"❌ No se pudieron guardar los detalles del Imperio en AuroraDB.db.\n\nDetalle técnico: {errorMsg}", "Error de Guardado", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

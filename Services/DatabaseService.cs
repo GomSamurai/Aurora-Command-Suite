@@ -168,11 +168,13 @@ namespace AuroraDesignSuite.Services
             return emp;
         }
 
-        public bool UpdateEmpireDetails(Empire emp)
+        public bool UpdateEmpireDetails(Empire emp, out string errorMsg)
         {
+            errorMsg = "";
             try
             {
                 using var conn = GetConnection();
+
                 string raceQuery = @"
                     UPDATE FCT_Race 
                     SET RaceName = @raceName, 
@@ -182,9 +184,9 @@ namespace AuroraDesignSuite.Services
 
                 using (var cmd = new SqliteCommand(raceQuery, conn))
                 {
-                    cmd.Parameters.AddWithValue("@raceName", emp.RaceName);
-                    cmd.Parameters.AddWithValue("@raceTitle", emp.RaceTitle);
-                    cmd.Parameters.AddWithValue("@flagPic", emp.FlagPic);
+                    cmd.Parameters.AddWithValue("@raceName", emp.RaceName ?? "");
+                    cmd.Parameters.AddWithValue("@raceTitle", emp.RaceTitle ?? "");
+                    cmd.Parameters.AddWithValue("@flagPic", emp.FlagPic ?? "flag0000.jpg");
                     cmd.Parameters.AddWithValue("@raceId", emp.RaceID);
                     cmd.ExecuteNonQuery();
                 }
@@ -194,47 +196,28 @@ namespace AuroraDesignSuite.Services
                     string specQuery = @"
                         UPDATE FCT_Species 
                         SET SpeciesName = @speciesName, 
-                            RacePic = @racePic,
-                            Temperature = @temp,
-                            TempDev = @tempDev,
-                            Gravity = @grav,
-                            GravDev = @gravDev,
-                            Oxygen = @oxy,
-                            PressMax = @pressMax,
-                            ProductionRateModifier = @prodMod,
-                            ResearchRateModifier = @resMod,
-                            PopulationGrowthModifier = @popMod,
-                            Xenophobia = @xeno,
-                            Diplomacy = @diplo,
-                            Militancy = @mili
+                            RacePic = @racePic
                         WHERE SpeciesID = @speciesId";
 
                     using var sCmd = new SqliteCommand(specQuery, conn);
-                    sCmd.Parameters.AddWithValue("@speciesName", emp.SpeciesName);
-                    sCmd.Parameters.AddWithValue("@racePic", emp.RacePic);
-                    sCmd.Parameters.AddWithValue("@temp", emp.IdealTemperature);
-                    sCmd.Parameters.AddWithValue("@tempDev", emp.TempDev);
-                    sCmd.Parameters.AddWithValue("@grav", emp.IdealGravity);
-                    sCmd.Parameters.AddWithValue("@gravDev", emp.GravDev);
-                    sCmd.Parameters.AddWithValue("@oxy", emp.IdealOxygen);
-                    sCmd.Parameters.AddWithValue("@pressMax", emp.MaxPressure);
-                    sCmd.Parameters.AddWithValue("@prodMod", emp.ProductionRateModifier);
-                    sCmd.Parameters.AddWithValue("@resMod", emp.ResearchRateModifier);
-                    sCmd.Parameters.AddWithValue("@popMod", emp.PopulationGrowthModifier);
-                    sCmd.Parameters.AddWithValue("@xeno", emp.Xenophobia);
-                    sCmd.Parameters.AddWithValue("@diplo", emp.Diplomacy);
-                    sCmd.Parameters.AddWithValue("@mili", emp.Militancy);
+                    sCmd.Parameters.AddWithValue("@speciesName", emp.SpeciesName ?? "Human");
+                    sCmd.Parameters.AddWithValue("@racePic", emp.RacePic ?? "Race001.bmp");
                     sCmd.Parameters.AddWithValue("@speciesId", emp.SpeciesID);
                     sCmd.ExecuteNonQuery();
                 }
+
+                LiveSyncBridge.NotifyGameSync("EMPIRE_DETAILS_UPDATED");
                 return true;
             }
             catch (Exception ex)
             {
+                errorMsg = ex.Message;
                 System.Diagnostics.Debug.WriteLine($"Error updating Empire details: {ex.Message}");
                 return false;
             }
         }
+
+        public bool UpdateEmpireDetails(Empire emp) => UpdateEmpireDetails(emp, out _);
 
         public List<string> GetAvailableFlags()
         {

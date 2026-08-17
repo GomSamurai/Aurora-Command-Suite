@@ -18,7 +18,7 @@ namespace AuroraDesignSuite.Services
 
         public string DbPath => _dbPath;
 
-        private SqliteConnection GetConnection(bool readOnly = true)
+        private SqliteConnection GetConnection(bool readOnly = false)
         {
             var connStr = readOnly ? $"Data Source={_dbPath};Mode=ReadOnly;" : $"Data Source={_dbPath};Mode=ReadWrite;";
             var conn = new SqliteConnection(connStr);
@@ -173,7 +173,7 @@ namespace AuroraDesignSuite.Services
             errorMsg = "";
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
 
                 string raceQuery = @"
                     UPDATE FCT_Race 
@@ -2831,7 +2831,7 @@ namespace AuroraDesignSuite.Services
         {
             try
             {
-                using var conn = GetConnection();
+                using var conn = GetWriteConnection();
                 string sql = @"
                     UPDATE FCT_Race 
                     SET ClassThemeID = @classTheme,

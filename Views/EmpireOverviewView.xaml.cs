@@ -98,6 +98,29 @@ namespace AuroraDesignSuite.Views
             if (LblGovsCount != null) LblGovsCount.Text = $"{officerSummary.GovernorsCount} Gobernadores";
             if (LblTotalOfficersCount != null) LblTotalOfficersCount.Text = $"{officerSummary.TotalOfficers} Oficiales";
 
+            // Imperial Identity & Emblems
+            var empireDetails = dbService.GetFullEmpireDetails(raceId);
+            if (TxtEmpireName != null) TxtEmpireName.Text = empireDetails.RaceName;
+            if (TxtEmpireTitle != null) TxtEmpireTitle.Text = empireDetails.RaceTitle;
+            if (TxtSpeciesName != null) TxtSpeciesName.Text = empireDetails.SpeciesName;
+
+            // Load Flag & Portrait Combo Options
+            var flags = dbService.GetAvailableFlags();
+            if (CmbFlagPic != null)
+            {
+                CmbFlagPic.ItemsSource = flags;
+                if (flags.Contains(empireDetails.FlagPic)) CmbFlagPic.SelectedItem = empireDetails.FlagPic;
+            }
+
+            var portraits = dbService.GetAvailablePortraits();
+            if (CmbRacePic != null)
+            {
+                CmbRacePic.ItemsSource = portraits;
+                if (portraits.Contains(empireDetails.RacePic)) CmbRacePic.SelectedItem = empireDetails.RacePic;
+            }
+
+            UpdatePreviewImages(empireDetails.FlagPath, empireDetails.PortraitPath);
+
             // Strategic Advisor
             string capitalName = colonies.Count > 0 ? colonies.First().PopName : "Sol";
             if (totalPop > 0)
@@ -107,6 +130,73 @@ namespace AuroraDesignSuite.Views
             else
             {
                 LblAdvisorText.Text = "💡 PLANIFICACIÓN ESTRATÉGICA IMPERIAL: Priorizar la investigación de motores de salto y sensores de prospección geológica para descubrir nuevos yacimientos de minerales exóticos.";
+            }
+        }
+
+        private void UpdatePreviewImages(string flagPath, string portraitPath)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(flagPath) && System.IO.File.Exists(flagPath) && ImgFlag != null)
+                {
+                    var bmp = new System.Windows.Media.Imaging.BitmapImage();
+                    bmp.BeginInit();
+                    bmp.UriSource = new Uri(flagPath, UriKind.Absolute);
+                    bmp.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+                    bmp.EndInit();
+                    ImgFlag.Source = bmp;
+                }
+
+                if (!string.IsNullOrEmpty(portraitPath) && System.IO.File.Exists(portraitPath) && ImgPortrait != null)
+                {
+                    var bmp = new System.Windows.Media.Imaging.BitmapImage();
+                    bmp.BeginInit();
+                    bmp.UriSource = new Uri(portraitPath, UriKind.Absolute);
+                    bmp.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+                    bmp.EndInit();
+                    ImgPortrait.Source = bmp;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading preview images: {ex.Message}");
+            }
+        }
+
+        private void CmbFlagPic_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_dbService == null || CmbFlagPic?.SelectedItem is not string flagFile) return;
+            string dbDir = System.IO.Path.GetDirectoryName(_dbService.DbPath) ?? @"C:\VSCODE\Aurora271Full";
+            string flagPath = System.IO.Path.Combine(dbDir, "Flags", flagFile);
+            UpdatePreviewImages(flagPath, null!);
+        }
+
+        private void CmbRacePic_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_dbService == null || CmbRacePic?.SelectedItem is not string raceFile) return;
+            string dbDir = System.IO.Path.GetDirectoryName(_dbService.DbPath) ?? @"C:\VSCODE\Aurora271Full";
+            string racePath = System.IO.Path.Combine(dbDir, "Races", raceFile);
+            UpdatePreviewImages(null!, racePath);
+        }
+
+        private void BtnSaveEmpireDetails_Click(object sender, RoutedEventArgs e)
+        {
+            if (_dbService == null) return;
+            var emp = _dbService.GetFullEmpireDetails(_currentRaceId);
+            if (TxtEmpireName != null) emp.RaceName = TxtEmpireName.Text;
+            if (TxtEmpireTitle != null) emp.RaceTitle = TxtEmpireTitle.Text;
+            if (TxtSpeciesName != null) emp.SpeciesName = TxtSpeciesName.Text;
+            if (CmbFlagPic?.SelectedItem is string flagFile) emp.FlagPic = flagFile;
+            if (CmbRacePic?.SelectedItem is string raceFile) emp.RacePic = raceFile;
+
+            if (_dbService.UpdateEmpireDetails(emp))
+            {
+                MessageBox.Show("✅ ¡Identidad, Bandera y Retrato Imperial guardados con éxito en AuroraDB.db!\n\nTodos los cambios están reflejados en directo. Abre o pulsa 'Refrescar Suite' en Aurora 4X para ver los nuevos emblemas en tu juego.", "Identidad Imperial Sincronizada", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadEmpireData(_dbService, _currentRaceId);
+            }
+            else
+            {
+                MessageBox.Show("❌ No se pudieron guardar los detalles del Imperio en AuroraDB.db.", "Error de Guardado", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

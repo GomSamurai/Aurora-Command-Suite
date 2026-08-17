@@ -15,6 +15,8 @@ namespace AuroraDesignSuite.Services
             _dbPath = dbPath;
         }
 
+        public string DbPath => _dbPath;
+
         private SqliteConnection GetConnection(bool readOnly = true)
         {
             var connStr = readOnly ? $"Data Source={_dbPath};Mode=ReadOnly;" : $"Data Source={_dbPath};Mode=ReadWrite;";
@@ -101,6 +103,176 @@ namespace AuroraDesignSuite.Services
                 result.Add(new Empire { RaceID = 1, GameID = 140, RaceName = "Imperio Epistocrático" });
             }
             return result;
+        }
+
+        public Empire GetFullEmpireDetails(int raceId)
+        {
+            var emp = new Empire { RaceID = raceId };
+            try
+            {
+                using var conn = GetConnection();
+                string query = @"
+                    SELECT r.RaceID, r.GameID, r.RaceName, r.RaceTitle, r.FlagPic,
+                           s.SpeciesID, s.SpeciesName, s.RacePic, s.Temperature, s.TempDev,
+                           s.Gravity, s.GravDev, s.Oxygen, s.PressMax, s.ProductionRateModifier,
+                           s.ResearchRateModifier, s.PopulationGrowthModifier, s.Xenophobia, s.Diplomacy, s.Militancy
+                    FROM FCT_Race r
+                    LEFT JOIN FCT_Species s ON r.GameID = s.GameID
+                    WHERE r.RaceID = @raceId
+                    LIMIT 1";
+
+                using var cmd = new SqliteCommand(query, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                using var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    emp.GameID = Convert.ToInt32(reader["GameID"]);
+                    emp.RaceName = reader["RaceName"].ToString() ?? "";
+                    emp.RaceTitle = reader["RaceTitle"] != DBNull.Value ? reader["RaceTitle"].ToString() ?? "" : "";
+                    emp.FlagPic = reader["FlagPic"] != DBNull.Value ? reader["FlagPic"].ToString() ?? "flag0000.jpg" : "flag0000.jpg";
+                    emp.SpeciesID = reader["SpeciesID"] != DBNull.Value ? Convert.ToInt32(reader["SpeciesID"]) : 0;
+                    emp.SpeciesName = reader["SpeciesName"] != DBNull.Value ? reader["SpeciesName"].ToString() ?? "Human" : "Human";
+                    emp.RacePic = reader["RacePic"] != DBNull.Value ? reader["RacePic"].ToString() ?? "Race001.bmp" : "Race001.bmp";
+
+                    emp.IdealTemperature = reader["Temperature"] != DBNull.Value ? Convert.ToDouble(reader["Temperature"]) : 287.03;
+                    emp.TempDev = reader["TempDev"] != DBNull.Value ? Convert.ToDouble(reader["TempDev"]) : 24.0;
+                    emp.IdealGravity = reader["Gravity"] != DBNull.Value ? Convert.ToDouble(reader["Gravity"]) : 1.0;
+                    emp.GravDev = reader["GravDev"] != DBNull.Value ? Convert.ToDouble(reader["GravDev"]) : 0.9;
+                    emp.IdealOxygen = reader["Oxygen"] != DBNull.Value ? Convert.ToDouble(reader["Oxygen"]) : 0.20;
+                    emp.MaxPressure = reader["PressMax"] != DBNull.Value ? Convert.ToDouble(reader["PressMax"]) : 4.0;
+
+                    emp.ProductionRateModifier = reader["ProductionRateModifier"] != DBNull.Value ? Convert.ToDouble(reader["ProductionRateModifier"]) : 1.0;
+                    emp.ResearchRateModifier = reader["ResearchRateModifier"] != DBNull.Value ? Convert.ToDouble(reader["ResearchRateModifier"]) : 1.0;
+                    emp.PopulationGrowthModifier = reader["PopulationGrowthModifier"] != DBNull.Value ? Convert.ToDouble(reader["PopulationGrowthModifier"]) : 1.0;
+
+                    emp.Xenophobia = reader["Xenophobia"] != DBNull.Value ? Convert.ToInt32(reader["Xenophobia"]) : 50;
+                    emp.Diplomacy = reader["Diplomacy"] != DBNull.Value ? Convert.ToInt32(reader["Diplomacy"]) : 50;
+                    emp.Militancy = reader["Militancy"] != DBNull.Value ? Convert.ToInt32(reader["Militancy"]) : 50;
+                }
+
+                // Resolve absolute image paths
+                string dbDir = System.IO.Path.GetDirectoryName(_dbPath) ?? @"C:\VSCODE\Aurora271Full";
+                string flagFile = System.IO.Path.Combine(dbDir, "Flags", emp.FlagPic);
+                string raceFile = System.IO.Path.Combine(dbDir, "Races", emp.RacePic);
+                string shipFile = System.IO.Path.Combine(dbDir, "ShipIcons", "Ship001.png");
+
+                if (System.IO.File.Exists(flagFile)) emp.FlagPath = flagFile;
+                if (System.IO.File.Exists(raceFile)) emp.PortraitPath = raceFile;
+                if (System.IO.File.Exists(shipFile)) emp.ShipIconPath = shipFile;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error reading Empire details: {ex.Message}");
+            }
+            return emp;
+        }
+
+        public bool UpdateEmpireDetails(Empire emp)
+        {
+            try
+            {
+                using var conn = GetConnection();
+                string raceQuery = @"
+                    UPDATE FCT_Race 
+                    SET RaceName = @raceName, 
+                        RaceTitle = @raceTitle, 
+                        FlagPic = @flagPic 
+                    WHERE RaceID = @raceId";
+
+                using (var cmd = new SqliteCommand(raceQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@raceName", emp.RaceName);
+                    cmd.Parameters.AddWithValue("@raceTitle", emp.RaceTitle);
+                    cmd.Parameters.AddWithValue("@flagPic", emp.FlagPic);
+                    cmd.Parameters.AddWithValue("@raceId", emp.RaceID);
+                    cmd.ExecuteNonQuery();
+                }
+
+                if (emp.SpeciesID > 0)
+                {
+                    string specQuery = @"
+                        UPDATE FCT_Species 
+                        SET SpeciesName = @speciesName, 
+                            RacePic = @racePic,
+                            Temperature = @temp,
+                            TempDev = @tempDev,
+                            Gravity = @grav,
+                            GravDev = @gravDev,
+                            Oxygen = @oxy,
+                            PressMax = @pressMax,
+                            ProductionRateModifier = @prodMod,
+                            ResearchRateModifier = @resMod,
+                            PopulationGrowthModifier = @popMod,
+                            Xenophobia = @xeno,
+                            Diplomacy = @diplo,
+                            Militancy = @mili
+                        WHERE SpeciesID = @speciesId";
+
+                    using var sCmd = new SqliteCommand(specQuery, conn);
+                    sCmd.Parameters.AddWithValue("@speciesName", emp.SpeciesName);
+                    sCmd.Parameters.AddWithValue("@racePic", emp.RacePic);
+                    sCmd.Parameters.AddWithValue("@temp", emp.IdealTemperature);
+                    sCmd.Parameters.AddWithValue("@tempDev", emp.TempDev);
+                    sCmd.Parameters.AddWithValue("@grav", emp.IdealGravity);
+                    sCmd.Parameters.AddWithValue("@gravDev", emp.GravDev);
+                    sCmd.Parameters.AddWithValue("@oxy", emp.IdealOxygen);
+                    sCmd.Parameters.AddWithValue("@pressMax", emp.MaxPressure);
+                    sCmd.Parameters.AddWithValue("@prodMod", emp.ProductionRateModifier);
+                    sCmd.Parameters.AddWithValue("@resMod", emp.ResearchRateModifier);
+                    sCmd.Parameters.AddWithValue("@popMod", emp.PopulationGrowthModifier);
+                    sCmd.Parameters.AddWithValue("@xeno", emp.Xenophobia);
+                    sCmd.Parameters.AddWithValue("@diplo", emp.Diplomacy);
+                    sCmd.Parameters.AddWithValue("@mili", emp.Militancy);
+                    sCmd.Parameters.AddWithValue("@speciesId", emp.SpeciesID);
+                    sCmd.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error updating Empire details: {ex.Message}");
+                return false;
+            }
+        }
+
+        public List<string> GetAvailableFlags()
+        {
+            var list = new List<string>();
+            try
+            {
+                string dbDir = System.IO.Path.GetDirectoryName(_dbPath) ?? @"C:\VSCODE\Aurora271Full";
+                string flagsFolder = System.IO.Path.Combine(dbDir, "Flags");
+                if (System.IO.Directory.Exists(flagsFolder))
+                {
+                    foreach (var file in System.IO.Directory.GetFiles(flagsFolder, "*.jpg"))
+                    {
+                        list.Add(System.IO.Path.GetFileName(file));
+                    }
+                }
+            }
+            catch { }
+            list.Sort();
+            return list;
+        }
+
+        public List<string> GetAvailablePortraits()
+        {
+            var list = new List<string>();
+            try
+            {
+                string dbDir = System.IO.Path.GetDirectoryName(_dbPath) ?? @"C:\VSCODE\Aurora271Full";
+                string racesFolder = System.IO.Path.Combine(dbDir, "Races");
+                if (System.IO.Directory.Exists(racesFolder))
+                {
+                    foreach (var file in System.IO.Directory.GetFiles(racesFolder, "*.bmp"))
+                    {
+                        list.Add(System.IO.Path.GetFileName(file));
+                    }
+                }
+            }
+            catch { }
+            list.Sort();
+            return list;
         }
 
         public GameTimeInfo GetGameTimeInfo(int raceId)

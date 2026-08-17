@@ -18,4 +18,12 @@ namespace AuroraDesignSuite.Models
         public int MissileThemeID { get; set; }
         public int NameThemeID { get; set; }
     }
+
+    public class NamingCategoryOption
+    {
+        public string Key { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
+
+        public override string ToString() => DisplayName;
+    }
 }

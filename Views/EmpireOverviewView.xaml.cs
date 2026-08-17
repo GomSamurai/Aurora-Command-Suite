@@ -232,59 +232,108 @@ namespace AuroraDesignSuite.Views
             }
         }
 
+        private readonly List<NamingCategoryOption> _namingCategories = new()
+        {
+            new NamingCategoryOption { Key = "Class", DisplayName = "🚢 Clases de Naves" },
+            new NamingCategoryOption { Key = "System", DisplayName = "🪐 Sistemas Estelares" },
+            new NamingCategoryOption { Key = "Design", DisplayName = "⚙️ Componentes e I+D" },
+            new NamingCategoryOption { Key = "Ground", DisplayName = "🎖️ Formaciones Terrestres" },
+            new NamingCategoryOption { Key = "Missile", DisplayName = "🚀 Misiles y Torpedos" },
+            new NamingCategoryOption { Key = "Name", DisplayName = "👨‍✈️ Líderes y Almirantes" }
+        };
+
+        private List<NamingThemeItem> _allNamingThemes = new();
+        private EmpireNamingConfig _currentNamingConfig = new();
+        private bool _isUpdatingThemeCombo = false;
+
         private void LoadEmpireNamingThemes()
         {
-            if (_dbService == null) return;
+            if (_dbService == null || CmbNamingCategory == null || CmbNamingTheme == null) return;
 
-            var themes = _dbService.GetNamingThemes();
-            var config = _dbService.GetEmpireNamingConfig(_currentRaceId);
+            _allNamingThemes = _dbService.GetNamingThemes();
+            _currentNamingConfig = _dbService.GetEmpireNamingConfig(_currentRaceId);
 
-            PopulateThemeCombo(CmbClassTheme, themes, config.ClassThemeID);
-            PopulateThemeCombo(CmbSystemTheme, themes, config.SystemThemeID);
-            PopulateThemeCombo(CmbDesignTheme, themes, config.DesignThemeID);
-            PopulateThemeCombo(CmbGroundTheme, themes, config.GroundThemeID);
-            PopulateThemeCombo(CmbMissileTheme, themes, config.MissileThemeID);
-            PopulateThemeCombo(CmbNameTheme, themes, config.NameThemeID);
+            _isUpdatingThemeCombo = true;
+            CmbNamingCategory.ItemsSource = _namingCategories;
+            if (CmbNamingCategory.SelectedIndex < 0) CmbNamingCategory.SelectedIndex = 0;
+
+            CmbNamingTheme.ItemsSource = _allNamingThemes;
+            _isUpdatingThemeCombo = false;
+
+            SyncActiveCategoryThemeSelection();
         }
 
-        private void PopulateThemeCombo(ComboBox? combo, List<NamingThemeItem> themes, int currentThemeId)
+        private void CmbNamingCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (combo == null) return;
-            combo.ItemsSource = themes;
-            var match = themes.FirstOrDefault(t => t.ThemeID == currentThemeId);
-            if (match != null)
-            {
-                combo.SelectedItem = match;
-            }
-            else if (themes.Count > 0)
-            {
-                combo.SelectedIndex = 0;
-            }
+            if (_isUpdatingThemeCombo) return;
+            SyncActiveCategoryThemeSelection();
         }
 
-        private void BtnSaveEmpireNamingConfig_Click(object sender, RoutedEventArgs e)
+        private void SyncActiveCategoryThemeSelection()
         {
-            if (_dbService == null) return;
+            if (CmbNamingCategory?.SelectedItem is not NamingCategoryOption catOpt || CmbNamingTheme == null) return;
 
-            var config = new EmpireNamingConfig
+            int activeThemeId = catOpt.Key switch
             {
-                RaceID = _currentRaceId,
-                ClassThemeID = CmbClassTheme?.SelectedItem is NamingThemeItem c ? c.ThemeID : 0,
-                SystemThemeID = CmbSystemTheme?.SelectedItem is NamingThemeItem s ? s.ThemeID : 0,
-                DesignThemeID = CmbDesignTheme?.SelectedItem is NamingThemeItem d ? d.ThemeID : 0,
-                GroundThemeID = CmbGroundTheme?.SelectedItem is NamingThemeItem g ? g.ThemeID : 0,
-                MissileThemeID = CmbMissileTheme?.SelectedItem is NamingThemeItem m ? m.ThemeID : 0,
-                NameThemeID = CmbNameTheme?.SelectedItem is NamingThemeItem n ? n.ThemeID : 0
+                "Class" => _currentNamingConfig.ClassThemeID,
+                "System" => _currentNamingConfig.SystemThemeID,
+                "Design" => _currentNamingConfig.DesignThemeID,
+                "Ground" => _currentNamingConfig.GroundThemeID,
+                "Missile" => _currentNamingConfig.MissileThemeID,
+                "Name" => _currentNamingConfig.NameThemeID,
+                _ => 0
             };
 
-            bool success = _dbService.SaveEmpireNamingConfig(_currentRaceId, config, out string msg);
-            if (success)
+            _isUpdatingThemeCombo = true;
+            var match = _allNamingThemes.FirstOrDefault(t => t.ThemeID == activeThemeId);
+            if (match != null)
             {
-                MessageBox.Show(msg, "Lotes de Nombres Actualizados", MessageBoxButton.OK, MessageBoxImage.Information);
+                CmbNamingTheme.SelectedItem = match;
             }
-            else
+            else if (_allNamingThemes.Count > 0)
             {
-                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                CmbNamingTheme.SelectedIndex = 0;
+            }
+            _isUpdatingThemeCombo = false;
+        }
+
+        private void CmbNamingTheme_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isUpdatingThemeCombo) return;
+            ApplyCurrentThemeSelection();
+        }
+
+        private void BtnAssignTheme_Click(object sender, RoutedEventArgs e)
+        {
+            ApplyCurrentThemeSelection();
+        }
+
+        private async void ApplyCurrentThemeSelection()
+        {
+            if (_dbService == null || CmbNamingCategory?.SelectedItem is not NamingCategoryOption catOpt || CmbNamingTheme?.SelectedItem is not NamingThemeItem themeItem) return;
+
+            switch (catOpt.Key)
+            {
+                case "Class": _currentNamingConfig.ClassThemeID = themeItem.ThemeID; break;
+                case "System": _currentNamingConfig.SystemThemeID = themeItem.ThemeID; break;
+                case "Design": _currentNamingConfig.DesignThemeID = themeItem.ThemeID; break;
+                case "Ground": _currentNamingConfig.GroundThemeID = themeItem.ThemeID; break;
+                case "Missile": _currentNamingConfig.MissileThemeID = themeItem.ThemeID; break;
+                case "Name": _currentNamingConfig.NameThemeID = themeItem.ThemeID; break;
+            }
+
+            bool success = _dbService.SaveEmpireNamingConfig(_currentRaceId, _currentNamingConfig, out string msg);
+            if (success && BtnAssignTheme != null)
+            {
+                BtnAssignTheme.Background = System.Windows.Media.Brushes.DarkGreen;
+                BtnAssignTheme.Foreground = System.Windows.Media.Brushes.Lime;
+                BtnAssignTheme.Content = "✔ OK";
+
+                await System.Threading.Tasks.Task.Delay(1500);
+
+                BtnAssignTheme.Background = (System.Windows.Media.Brush)FindResource("CardHeaderBrush");
+                BtnAssignTheme.Foreground = (System.Windows.Media.Brush)FindResource("AccentGreenBrush");
+                BtnAssignTheme.Content = "✔";
             }
         }
     }

@@ -75,10 +75,16 @@ namespace AuroraDesignSuite.Views
             var presetCatFilters = new List<string>
             {
                 "📂 Todas las Categorías",
-                "🏭 Naves Comerciales",
-                "🛡️ Naves de Guerra",
-                "🚀 Fuerzas Especiales",
-                "🏰 Fortalezas Orbitales",
+                "1. Destructores (DD / DDG / PD)",
+                "2. Cruceros (CA / CC / CG / BC)",
+                "3. Portaaviones (CV / CVL / CVE)",
+                "4. Cazas y Naves Parásitas",
+                "5. Exploración y Ciencia",
+                "6. Petroleros y Reabastecimiento",
+                "7. Naves de Misiles y Asedio",
+                "8. Combate Compacto y Corbetas",
+                "9. Formaciones Terrestres",
+                "10. Logística Modular",
                 "💾 Diseños del Usuario"
             };
             CmbPresetCategoryFilter.ItemsSource = presetCatFilters;
@@ -90,35 +96,77 @@ namespace AuroraDesignSuite.Views
             _allPresetsList.Clear();
             int idx = 0;
 
-            // Categoría 1: Naves Comerciales e Industriales
-            AddPreset(ref idx, "🚢 Carguero Comercial Estándar (10,000 t)", "🏭 Naves Comerciales");
-            AddPreset(ref idx, "🚚 Carguero de Colonias Horizonte (25,000 t)", "🏭 Naves Comerciales");
-            AddPreset(ref idx, "⛏️ Estación Minera Orbital Vulcano (15,000 t)", "🏭 Naves Comerciales");
-            AddPreset(ref idx, "⛽ Refinería Móvil y Tanquero Prometeo (12,000 t)", "🏭 Naves Comerciales");
-            AddPreset(ref idx, "🔍 Buque Geológico de Exploración Vigía (3,000 t)", "🏭 Naves Comerciales");
-            AddPreset(ref idx, "🌌 Buque Gravitacional de Salto Nebulosa (4,500 t)", "🏭 Naves Comerciales");
-            AddPreset(ref idx, "🛠️ Buque de Rescate y Salvamento (8,000 t)", "🏭 Naves Comerciales");
+            // 1. Destructores
+            AddPreset(ref idx, "🚀 DDG Artemis - Destructor Lanzamisiles de Flota (9,000 t)", "1. Destructores (DD / DDG / PD)");
+            AddPreset(ref idx, "🛡️ DD-PD Aegis-G - Destructor Escolta Defensa de Punto (8,500 t)", "1. Destructores (DD / DDG / PD)");
+            AddPreset(ref idx, "💥 DD-Beam Lancer - Destructor Láser Espinal (9,500 t)", "1. Destructores (DD / DDG / PD)");
+            AddPreset(ref idx, "🌌 DDJ Pathbreaker - Destructor Líder de Salto (10,000 t)", "1. Destructores (DD / DDG / PD)");
+            AddPreset(ref idx, "📦 DDB Barrage - Destructor Emboscada Box Launchers (8,000 t)", "1. Destructores (DD / DDG / PD)");
 
-            // Categoría 2: Naves de Guerra y Escolta Militares
-            AddPreset(ref idx, "🛡️ Destructor de Escolta Picket (5,000 t)", "🛡️ Naves de Guerra");
-            AddPreset(ref idx, "🚀 Fragata Lanzamisiles Ligera Relámpago (4,000 t)", "🛡️ Naves de Guerra");
-            AddPreset(ref idx, "💥 Crucero Pesado de Haz Láser Leviatán (12,000 t)", "🛡️ Naves de Guerra");
-            AddPreset(ref idx, "🛡️ Fragata Anti-Misil / Defensa de Punto (3,500 t)", "🛡️ Naves de Guerra");
-            AddPreset(ref idx, "⚔️ Corbeta Sigilosa Stealth (2,500 t)", "🛡️ Naves de Guerra");
-            AddPreset(ref idx, "🛰️ Nieve de Reconocimiento ELINT (2,000 t)", "🛡️ Naves de Guerra");
+            // 2. Cruceros
+            AddPreset(ref idx, "💥 CA Vindicator - Crucero Pesado Beam de Línea (20,000 t)", "2. Cruceros (CA / CC / CG / BC)");
+            AddPreset(ref idx, "📡 CC Oracle - Crucero de Mando y Sensores AWACS (18,000 t)", "2. Cruceros (CA / CC / CG / BC)");
+            AddPreset(ref idx, "🚀 CG Titan - Crucero Lanzamisiles Pesado (22,000 t)", "2. Cruceros (CA / CC / CG / BC)");
+            AddPreset(ref idx, "⚡ BC Stalker - Crucero de Batalla Rápido (25,000 t)", "2. Cruceros (CA / CC / CG / BC)");
+            AddPreset(ref idx, "🌌 CJ Aether Gate - Crucero de Salto de Flota (25,000 t)", "2. Cruceros (CA / CC / CG / BC)");
 
-            // Categoría 3: Fuerzas Especiales, Cazas y Desembarco
-            AddPreset(ref idx, "🛸 Portanaves Escolta Olympus (20,000 t)", "🚀 Fuerzas Especiales");
-            AddPreset(ref idx, "🛩️ Caza Estelar Interceptor Ligero (250 t)", "🚀 Fuerzas Especiales");
-            AddPreset(ref idx, "🚀 Bombardero Espacial de Torpedos (500 t)", "🚀 Fuerzas Especiales");
-            AddPreset(ref idx, "🛡️ Barcaza de Desembarco de Tropas (10,000 t)", "🚀 Fuerzas Especiales");
+            // 3. Portaaviones
+            AddPreset(ref idx, "🚢 CV Valhalla - Superportaaviones de Flota (40,000 t)", "3. Portaaviones (CV / CVL / CVE)");
+            AddPreset(ref idx, "🛡️ CVL Dauntless - Portaaviones Ligero de Escolta (15,000 t)", "3. Portaaviones (CV / CVL / CVE)");
+            AddPreset(ref idx, "🐝 CVE Hive - Nodriza de Lanchas de Asalto / FAC Tender (25,000 t)", "3. Portaaviones (CV / CVL / CVE)");
+            AddPreset(ref idx, "🏰 CVB Iron Haven - Portaaviones Blindado de Asalto (30,000 t)", "3. Portaaviones (CV / CVL / CVE)");
+            AddPreset(ref idx, "🤖 CVD Nexus - Portadrones Automatizado (10,000 t)", "3. Portaaviones (CV / CVL / CVE)");
 
-            // Categoría 4: Fortalezas y Estaciones Orbitales
-            AddPreset(ref idx, "🏰 Monitor Defensivo Bastión de Hierro (30,000 t)", "🏰 Fortalezas Orbitales");
-            AddPreset(ref idx, "📡 Puesto de Escucha y Alerta Temprana (8,000 t)", "🏰 Fortalezas Orbitales");
-            AddPreset(ref idx, "🛡️ Fortaleza Planetaria de Escudos (25,000 t)", "🏰 Fortalezas Orbitales");
+            // 4. Cazas y Parásitas
+            AddPreset(ref idx, "🐝 F-01 Hornet - Caza Interceptor Gauss (250 t)", "4. Cazas y Naves Parásitas");
+            AddPreset(ref idx, "🚀 B-01 Viper - Caza Torpedeo Misiles (500 t)", "4. Cazas y Naves Parásitas");
+            AddPreset(ref idx, "💥 FB-02 Sabre - Caza Cañonero Beam (500 t)", "4. Cazas y Naves Parásitas");
+            AddPreset(ref idx, "🔍 R-01 Eye - Caza de Reconocimiento Pasivo (200 t)", "4. Cazas y Naves Parásitas");
+            AddPreset(ref idx, "💣 D-01 Wasp - Drone Kamikaze / Señuelo (150 t)", "4. Cazas y Naves Parásitas");
 
-            // Categoría 5: User-saved custom presets
+            // 5. Exploración y Ciencia
+            AddPreset(ref idx, "🌌 ES-Grav Compass - Explorador Gravitacional Rápido (3,000 t)", "5. Exploración y Ciencia");
+            AddPreset(ref idx, "🔍 ES-Geo Prospector - Explorador Geológico Celular (3,000 t)", "5. Exploración y Ciencia");
+            AddPreset(ref idx, "🧭 GSV Pathfinder - Explorador Combinado de Largo Alcance (7,000 t)", "5. Exploración y Ciencia");
+            AddPreset(ref idx, "🛰️ Probe - Lancha Científica Parásita (300 t)", "5. Exploración y Ciencia");
+            AddPreset(ref idx, "📡 SV-Scout Sentinel - Piquete Científico Alerta Temprana (4,000 t)", "5. Exploración y Ciencia");
+
+            // 6. Petroleros y Reabastecimiento
+            AddPreset(ref idx, "⚡ AOF Endurance - Petrolero de Flota Rápido (25,000 t)", "6. Petroleros y Reabastecimiento");
+            AddPreset(ref idx, "⛽ AO Prometheus - Supertanquero Comercial Estratégico (60,000 t)", "6. Petroleros y Reabastecimiento");
+            AddPreset(ref idx, "🪐 AOH Harvester Primus - Cosechadora de Sorium Orbital (50,000 t)", "6. Petroleros y Reabastecimiento");
+            AddPreset(ref idx, "📦 AOR Atlas Fleet - Aprovisionamiento Logístico Combinado (35,000 t)", "6. Petroleros y Reabastecimiento");
+            AddPreset(ref idx, "🏰 Safehaven - Estación Tanque de Almacenamiento (80,000 t)", "6. Petroleros y Reabastecimiento");
+
+            // 7. Naves de Misiles y Asedio
+            AddPreset(ref idx, "💣 BBG Nemesis - Monitor de Misiles Asedio Planetario (20,000 t)", "7. Naves de Misiles y Asedio");
+            AddPreset(ref idx, "🛡️ FFG-AMM Shield - Fragata Antimisil Cobertura Área (6,000 t)", "7. Naves de Misiles y Asedio");
+            AddPreset(ref idx, "🚢 ML Trapdoor - Crucero Lanzaminas Espacial (12,000 t)", "7. Naves de Misiles y Asedio");
+            AddPreset(ref idx, "🚀 CG Universal - Crucero VLS Multipropósito (15,000 t)", "7. Naves de Misiles y Asedio");
+            AddPreset(ref idx, "👻 SSG Shadow - Submarino Espacial Sigiloso de Misiles (8,000 t)", "7. Naves de Misiles y Asedio");
+
+            // 8. Combate Compacto y Corbetas
+            AddPreset(ref idx, "⚡ FAC Strikefast - Lancha Torpedera Rápida (1,000 t)", "8. Combate Compacto y Corbetas");
+            AddPreset(ref idx, "💥 Gunboat Warp Hammer - Cañonera Mesón de Salto (1,200 t)", "8. Combate Compacto y Corbetas");
+            AddPreset(ref idx, "🛡️ Corvette Gargoyle - Corbeta Escolta Gauss (2,500 t)", "8. Combate Compacto y Corbetas");
+            AddPreset(ref idx, "👮 Corvette Watchman - Corbeta Patrullera de Frontera (3,000 t)", "8. Combate Compacto y Corbetas");
+            AddPreset(ref idx, "👻 Raider Specter - Cazador Sigiloso de Emboscada (2,000 t)", "8. Combate Compacto y Corbetas");
+
+            // 9. Formaciones Terrestres
+            AddPreset(ref idx, "🪖 Marine Strike Battalion - Asalto Planetario Helitransportado", "9. Formaciones Terrestres");
+            AddPreset(ref idx, "🏛️ Garrison Battalion - Infantería de Guarnición y Policía", "9. Formaciones Terrestres");
+            AddPreset(ref idx, "🚜 Heavy Armor Regiment - Regimiento Blindado de Ruptura", "9. Formaciones Terrestres");
+            AddPreset(ref idx, "💣 Bombardment Artillery Element - Batería Artillería Pesada", "9. Formaciones Terrestres");
+            AddPreset(ref idx, "🛡️ Air & Orbital Defense Battery - Batería Antiaérea / Antidroga", "9. Formaciones Terrestres");
+
+            // 10. Logística Modular
+            AddPreset(ref idx, "📦 Freighter Atlas Heavy - Carguero Modular Pesado (50,000 t)", "10. Logística Modular");
+            AddPreset(ref idx, "🪖 Troop Transport Colossus - Transporte Tropas Invasión (30,000 t)", "10. Logística Modular");
+            AddPreset(ref idx, "⛏️ Mining Ship Titan Core - Minero Espacial de Asteroides (60,000 t)", "10. Logística Modular");
+            AddPreset(ref idx, "🚜 Tugboat Hercules - Remolcador Espacial Despliegue Rápido (20,000 t)", "10. Logística Modular");
+            AddPreset(ref idx, "🛠️ Maint Vessel Hephaestus - Taller Orbital y Dique Móvil (50,000 t)", "10. Logística Modular");
+
+            // User-saved custom presets
             LoadUserSavedPresetsIntoList(ref idx);
 
             FilterPresetsByCategory();

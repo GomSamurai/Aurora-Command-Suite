@@ -96,6 +96,20 @@ namespace AuroraDesignSuite.Views
             }
         }
 
+        private void TxtSearchBody_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_selectedSystem == null || DgBodies == null) return;
+            string searchText = TxtSearchBody?.Text.Trim().ToLower() ?? "";
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                DgBodies.ItemsSource = _selectedSystem.Bodies;
+            }
+            else
+            {
+                DgBodies.ItemsSource = _selectedSystem.Bodies.Where(b => b.Name.ToLower().Contains(searchText) || b.BodyTypeName.ToLower().Contains(searchText)).ToList();
+            }
+        }
+
         private void DgBodies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (DgBodies.SelectedItem is SystemBodyInfo body)

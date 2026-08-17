@@ -341,5 +341,28 @@ namespace AuroraDesignSuite.Views
                 MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void BtnAdd1Lab_Click(object sender, RoutedEventArgs e) => ModifySelectedProjectLabs(1);
+        private void BtnRemove1Lab_Click(object sender, RoutedEventArgs e) => ModifySelectedProjectLabs(-1);
+        private void BtnAdd5Labs_Click(object sender, RoutedEventArgs e) => ModifySelectedProjectLabs(5);
+        private void BtnRemove5Labs_Click(object sender, RoutedEventArgs e) => ModifySelectedProjectLabs(-5);
+
+        private void ModifySelectedProjectLabs(int delta)
+        {
+            if (_dbService == null || _selectedActiveProject == null)
+            {
+                MessageBox.Show("Por favor selecciona un proyecto activo de la lista para modificar sus laboratorios asignados.", "Atención", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (_dbService.UpdateResearchProjectLabs(_selectedActiveProject.ProjectID, delta, out string msg))
+            {
+                RefreshData();
+            }
+            else
+            {
+                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }

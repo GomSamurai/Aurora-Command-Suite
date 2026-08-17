@@ -33,17 +33,24 @@
             <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,6">
-                        <TextBlock Text="🔬 PROYECTOS DE INVESTIGACIÓN ACTIVOS EN VIVO (FCT_ResearchProject)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="LblActiveLabsCount" Text="17 Labs en Uso" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock Text="🔬 PROYECTOS DE INVESTIGACIÓN ACTIVOS EN VIVO (CON FECHA ESTIMADA DE COMPLETADO)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock x:Name="LblActiveLabsCount" Text="17 Labs en Uso" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <Button Content="-5 Labs" Click="BtnRemove5Labs_Click" Padding="6,2" Margin="0,0,3,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontSize="10" FontWeight="Bold"/>
+                            <Button Content="-1 Lab" Click="BtnRemove1Lab_Click" Padding="6,2" Margin="0,0,3,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontSize="10" FontWeight="Bold"/>
+                            <Button Content="+1 Lab" Click="BtnAdd1Lab_Click" Padding="6,2" Margin="0,0,3,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontSize="10" FontWeight="Bold"/>
+                            <Button Content="+5 Labs" Click="BtnAdd5Labs_Click" Padding="6,2" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontSize="10" FontWeight="Bold"/>
+                        </StackPanel>
                     </DockPanel>
 
-                    <DataGrid x:Name="DgResearchProjects" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgResearchProjects_SelectionChanged" ToolTip="Proyectos científicos en curso en tus instalaciones imperiales. Selecciona uno para inspeccionar o cancelar.">
+                    <DataGrid x:Name="DgResearchProjects" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgResearchProjects_SelectionChanged" ToolTip="Proyectos científicos en curso en tus instalaciones imperiales. Utiliza los botones de la derecha para sumar o restar laboratorios en tiempo real.">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Tecnología en Desarrollo" Binding="{Binding TechName}" Width="*"/>
-                            <DataGridTextColumn Header="Labs" Binding="{Binding FacilitiesCount}" Width="55"/>
-                            <DataGridTextColumn Header="Progreso RP" Binding="{Binding ProgressDisplay}" Width="160"/>
-                            <DataGridTextColumn Header="Científico Líder" Binding="{Binding AssignedScientistName}" Width="160"/>
-                            <DataGridTextColumn Header="Especialidad" Binding="{Binding ScientistFieldDisplay}" Width="140"/>
+                            <DataGridTextColumn Header="Tecnología en Desarrollo" Binding="{Binding TechName}" Width="190"/>
+                            <DataGridTextColumn Header="Labs" Binding="{Binding FacilitiesCount}" Width="50"/>
+                            <DataGridTextColumn Header="Progreso RP" Binding="{Binding ProgressDisplay}" Width="140"/>
+                            <DataGridTextColumn Header="Fecha Finalización" Binding="{Binding CompletionDateDisplay}" Width="*"/>
+                            <DataGridTextColumn Header="Científico Líder" Binding="{Binding AssignedScientistName}" Width="140"/>
+                            <DataGridTextColumn Header="Especialidad" Binding="{Binding ScientistFieldDisplay}" Width="120"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>

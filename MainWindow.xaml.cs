@@ -21,7 +21,24 @@ namespace AuroraDesignSuite
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             CmbThemeSelector.ItemsSource = ThemeManager.AvailableThemes;
-            CmbThemeSelector.SelectedIndex = 0;
+
+            // Restore User Preferences
+            var prefs = UserPreferencesService.LoadPreferences();
+            if (prefs.WindowWidth > 600) Width = prefs.WindowWidth;
+            if (prefs.WindowHeight > 400) Height = prefs.WindowHeight;
+            if (prefs.IsMaximized) WindowState = WindowState.Maximized;
+
+            var matchTheme = ThemeManager.AvailableThemes.FirstOrDefault(t => t.Name.Equals(prefs.SelectedTheme, StringComparison.OrdinalIgnoreCase));
+            if (matchTheme != null)
+            {
+                CmbThemeSelector.SelectedItem = matchTheme;
+            }
+            else
+            {
+                CmbThemeSelector.SelectedIndex = 0;
+            }
+
+            Closing += MainWindow_Closing;
 
             string[] args = Environment.GetCommandLineArgs();
             string? dbArg = (args.Length > 1 && File.Exists(args[1])) ? args[1] : null;
@@ -29,6 +46,7 @@ namespace AuroraDesignSuite
             string[] candidatePaths = new[]
             {
                 dbArg ?? "",
+                prefs.LastDbPath,
                 Path.Combine(Directory.GetCurrentDirectory(), "AuroraDB.db"),
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AuroraDB.db"),
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "AuroraDB.db"),
@@ -39,6 +57,23 @@ namespace AuroraDesignSuite
 
             string dbPath = candidatePaths.FirstOrDefault(f => !string.IsNullOrEmpty(f) && File.Exists(f)) ?? @"c:\VSCODE\Aurora271Full\AuroraDB.db";
             LoadDatabasePath(dbPath);
+        }
+
+        private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                var prefs = new UserPreferences
+                {
+                    WindowWidth = Width,
+                    WindowHeight = Height,
+                    IsMaximized = WindowState == WindowState.Maximized,
+                    SelectedTheme = (CmbThemeSelector.SelectedItem as ThemeOption)?.Name ?? "Cyberpunk Obsidian",
+                    SelectedEmpireId = (CmbGlobalEmpire.SelectedItem as Empire)?.RaceID ?? -1
+                };
+                UserPreferencesService.SavePreferences(prefs);
+            }
+            catch { }
         }
 
         private void LoadDatabasePath(string dbPath)
@@ -52,7 +87,9 @@ namespace AuroraDesignSuite
                 CmbGlobalEmpire.ItemsSource = empires;
                 if (empires.Count > 0)
                 {
-                    CmbGlobalEmpire.SelectedIndex = 0;
+                    var prefs = UserPreferencesService.LoadPreferences();
+                    var savedEmp = empires.FirstOrDefault(x => x.RaceID == prefs.SelectedEmpireId);
+                    CmbGlobalEmpire.SelectedItem = savedEmp ?? empires[0];
                 }
                 RefreshActiveTab();
             }
@@ -104,6 +141,11 @@ namespace AuroraDesignSuite
             if (CmbGlobalEmpire?.SelectedItem is not Empire emp || _dbService == null) return;
 
             int raceId = emp.RaceID;
+
+            // Update Global Game Time & Start Year indicators
+            var gameTime = _dbService.GetGameTimeInfo(raceId);
+            if (TxtHeaderGameDate != null) TxtHeaderGameDate.Text = $"FECHA: {gameTime.FormattedCurrentDate}";
+            if (TxtHeaderStartYear != null) TxtHeaderStartYear.Text = gameTime.FormattedStartYear;
 
             if (TabAI != null && emp != null && !string.IsNullOrEmpty(emp.RaceName))
             {

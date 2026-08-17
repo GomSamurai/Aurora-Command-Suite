@@ -103,6 +103,48 @@ namespace AuroraDesignSuite.Services
             return result;
         }
 
+        public GameTimeInfo GetGameTimeInfo(int raceId)
+        {
+            var info = new GameTimeInfo();
+            try
+            {
+                using var conn = GetConnection();
+                string query = @"
+                    SELECT g.GameTime, g.StartYear
+                    FROM FCT_Game g
+                    INNER JOIN FCT_Race r ON r.GameID = g.GameID
+                    WHERE r.RaceID = @raceId
+                    LIMIT 1";
+
+                using var cmd = new SqliteCommand(query, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                using var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    double gameTime = reader["GameTime"] != DBNull.Value ? Convert.ToDouble(reader["GameTime"]) : 0.0;
+                    int startYear = reader["StartYear"] != DBNull.Value ? Convert.ToInt32(reader["StartYear"]) : 2026;
+
+                    info.GameTimeSeconds = gameTime;
+                    info.StartYear = startYear;
+
+                    try
+                    {
+                        DateTime baseDate = new DateTime(startYear, 1, 1);
+                        info.CurrentGameDate = baseDate.AddSeconds(gameTime);
+                    }
+                    catch
+                    {
+                        info.CurrentGameDate = new DateTime(startYear, 1, 1);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching game time: {ex.Message}");
+            }
+            return info;
+        }
+
         public string GetRaceName(int raceId)
         {
             try
@@ -162,17 +204,106 @@ namespace AuroraDesignSuite.Services
             try
             {
                 using var conn = GetWriteConnection();
+
+                // 1. Get Capital PopulationID, SpeciesID, GameID for this RaceID
+                int gameId = 140;
+                int popId = 0;
+                int speciesId = 0;
+
+                string popSql = @"
+                    SELECT GameID, PopulationID, SpeciesID 
+                    FROM FCT_Population 
+                    WHERE RaceID = @raceId 
+                    ORDER BY Capital DESC, PopulationID ASC 
+                    LIMIT 1";
+
+                using (var pCmd = new SqliteCommand(popSql, conn))
+                {
+                    pCmd.Parameters.AddWithValue("@raceId", raceId);
+                    using var pReader = pCmd.ExecuteReader();
+                    if (pReader.Read())
+                    {
+                        gameId = Convert.ToInt32(pReader["GameID"]);
+                        popId = Convert.ToInt32(pReader["PopulationID"]);
+                        speciesId = Convert.ToInt32(pReader["SpeciesID"]);
+                    }
+                }
+
+                if (popId == 0)
+                {
+                    msg = "❌ Error: No se encontró una colonia válida para este imperio en la base de datos.";
+                    return false;
+                }
+
+                // 2. Get Installation Data from DIM_PlanetaryInstallation
+                int instId = 5; // Default Construction Factory
+                double cost = 120.0;
+                double dur = 0, neu = 0, cor = 0, tri = 0, bor = 0, mer = 0, ven = 0, sor = 0, uri = 0, crd = 0, gal = 0;
+
+                string instSql = @"
+                    SELECT PlanetaryInstallationID, Cost, Duranium, Neutronium, Corbomite, Tritanium, Boronide, Mercassium, Vendarite, Sorium, Uridium, Corundium, Gallicite
+                    FROM DIM_PlanetaryInstallation
+                    WHERE Name = @desc OR Abbreviation = @desc
+                    LIMIT 1";
+
+                using (var iCmd = new SqliteCommand(instSql, conn))
+                {
+                    iCmd.Parameters.AddWithValue("@desc", description);
+                    using var iReader = iCmd.ExecuteReader();
+                    if (iReader.Read())
+                    {
+                        instId = Convert.ToInt32(iReader["PlanetaryInstallationID"]);
+                        cost = Convert.ToDouble(iReader["Cost"]);
+                        dur = Convert.ToDouble(iReader["Duranium"]);
+                        neu = Convert.ToDouble(iReader["Neutronium"]);
+                        cor = Convert.ToDouble(iReader["Corbomite"]);
+                        tri = Convert.ToDouble(iReader["Tritanium"]);
+                        bor = Convert.ToDouble(iReader["Boronide"]);
+                        mer = Convert.ToDouble(iReader["Mercassium"]);
+                        ven = Convert.ToDouble(iReader["Vendarite"]);
+                        sor = Convert.ToDouble(iReader["Sorium"]);
+                        uri = Convert.ToDouble(iReader["Uridium"]);
+                        crd = Convert.ToDouble(iReader["Corundium"]);
+                        gal = Convert.ToDouble(iReader["Gallicite"]);
+                    }
+                }
+
                 string sql = @"
-                    INSERT INTO FCT_IndustrialProjects (GameID, RaceID, PopulationID, Description, Amount, Percentage, PartialCompletion, Pause)
-                    VALUES (1, @raceId, 1, @desc, @amount, 0.0, 0.0, 0)";
+                    INSERT INTO FCT_IndustrialProjects (
+                        GameID, RaceID, PopulationID, SpeciesID, Percentage, ProductionType, ProductionID, 
+                        RefitClassID, WealthUse, Amount, PartialCompletion, ProdPerUnit, Description, Pause, Queue, 
+                        FuelRequired, Duranium, Neutronium, Corbomite, Tritanium, Boronide, Mercassium, Vendarite, Sorium, Uridium, Corundium, Gallicite
+                    ) VALUES (
+                        @gameId, @raceId, @popId, @speciesId, 100.0, 0, @instId,
+                        0, 4, @amount, 0.0, @cost, @desc, 0, 0,
+                        0, @dur, @neu, @cor, @tri, @bor, @mer, @ven, @sor, @uri, @crd, @gal
+                    )";
 
                 using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@gameId", gameId);
                 cmd.Parameters.AddWithValue("@raceId", raceId);
-                cmd.Parameters.AddWithValue("@desc", description);
+                cmd.Parameters.AddWithValue("@popId", popId);
+                cmd.Parameters.AddWithValue("@speciesId", speciesId);
+                cmd.Parameters.AddWithValue("@instId", instId);
                 cmd.Parameters.AddWithValue("@amount", amount);
+                cmd.Parameters.AddWithValue("@cost", cost);
+                cmd.Parameters.AddWithValue("@desc", description);
+
+                cmd.Parameters.AddWithValue("@dur", dur);
+                cmd.Parameters.AddWithValue("@neu", neu);
+                cmd.Parameters.AddWithValue("@cor", cor);
+                cmd.Parameters.AddWithValue("@tri", tri);
+                cmd.Parameters.AddWithValue("@bor", bor);
+                cmd.Parameters.AddWithValue("@mer", mer);
+                cmd.Parameters.AddWithValue("@ven", ven);
+                cmd.Parameters.AddWithValue("@sor", sor);
+                cmd.Parameters.AddWithValue("@uri", uri);
+                cmd.Parameters.AddWithValue("@crd", crd);
+                cmd.Parameters.AddWithValue("@gal", gal);
+
                 cmd.ExecuteNonQuery();
 
-                msg = $"✅ Orden industrial para '{description}' ({amount} ud) registrada con éxito en tu colonia.";
+                msg = $"✅ Orden industrial para '{description}' ({amount} ud) registrada con éxito en tu colonia principal.";
                 LiveSyncBridge.NotifyGameSync("INDUSTRIAL_PROJECT_ADDED");
                 return true;
             }
@@ -825,6 +956,28 @@ namespace AuroraDesignSuite.Services
             catch (Exception ex)
             {
                 message = $"Error asignando proyecto de I+D: {ex.Message}";
+                return false;
+            }
+        }
+
+        public bool UpdateResearchProjectLabs(int projectId, int deltaLabs, out string message)
+        {
+            try
+            {
+                using var conn = GetWriteConnection();
+                string sql = "UPDATE FCT_ResearchProject SET Facilities = MAX(0, Facilities + @delta) WHERE ProjectID = @projId";
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@delta", deltaLabs);
+                cmd.Parameters.AddWithValue("@projId", projectId);
+                cmd.ExecuteNonQuery();
+
+                message = $"✅ Asignación de laboratorios actualizada en tu colonia (Modificación: {(deltaLabs >= 0 ? "+" : "")}{deltaLabs} laboratorios).";
+                LiveSyncBridge.NotifyGameSync("RESEARCH_LABS_UPDATED");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                message = $"❌ Error al actualizar laboratorios: {ex.Message}";
                 return false;
             }
         }

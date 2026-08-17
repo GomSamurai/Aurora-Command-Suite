@@ -14,6 +14,15 @@
         <!-- COLUMN 1: DISTANCES, KINEMATICS, TERRAFORMING -->
         <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,5,0">
             <StackPanel>
+                <!-- Card 0: Guidance & Instructions Header Banner -->
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                    <StackPanel>
+                        <TextBlock Text="🛠️ AUDITORÍA Y MATRIZ DE HERRAMIENTAS DE NAVEGACIÓN INTERESTELAR" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,4"/>
+                        <TextBlock Text="Módulo científico de utilidades tácticas y cinemáticas para optimizar tus decisiones en Aurora 4X:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                        <TextBlock Text="• Convierte distancias entre UA, Segundos-Luz y Años-Luz en tiempo real.&#10;• Calcula los tiempos exactos de viaje espacial según la velocidad de tus flotas.&#10;• Estima el tiempo de terraformación para lograr Colony Cost 0.00.&#10;• Analiza la capacidad de penetración de blindaje y alcance de detección de tus radares." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
                 <!-- Card 1: Astronomical Distance Converter -->
                 <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                     <StackPanel>

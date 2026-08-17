@@ -38,13 +38,14 @@
             <!-- Middle Card: Projects DataGrid -->
             <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Margin="0,0,0,8" Padding="10">
                 <DockPanel>
-                    <TextBlock DockPanel.Dock="Top" Text="⚡ PROYECTOS Y ÓRDENES INDUSTRIALES EN CURSO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                    <DataGrid x:Name="DgIndustrialProjects" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Proyectos de construcción industrial en curso.">
+                    <TextBlock DockPanel.Dock="Top" Text="⚡ PROYECTOS Y ÓRDENES INDUSTRIALES EN CURSO (CON FECHA ESTIMADA DE FINALIZACIÓN)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                    <DataGrid x:Name="DgIndustrialProjects" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Proyectos de construcción industrial en curso con fecha estimada de finalización calculada.">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Proyecto / Construcción" Binding="{Binding Description}" Width="*"/>
-                            <DataGridTextColumn Header="Cantidad Unidades" Binding="{Binding AmountDisplay}" Width="140"/>
-                            <DataGridTextColumn Header="Progreso BP" Binding="{Binding ProgressDisplay}" Width="200"/>
-                            <DataGridTextColumn Header="Estado Operativo" Binding="{Binding StatusDisplay}" Width="140"/>
+                            <DataGridTextColumn Header="Proyecto / Construcción" Binding="{Binding Description}" Width="220"/>
+                            <DataGridTextColumn Header="Cantidad" Binding="{Binding AmountDisplay}" Width="110"/>
+                            <DataGridTextColumn Header="Progreso BP" Binding="{Binding ProgressDisplay}" Width="160"/>
+                            <DataGridTextColumn Header="Fecha de Finalización" Binding="{Binding CompletionDateDisplay}" Width="*"/>
+                            <DataGridTextColumn Header="Estado" Binding="{Binding StatusDisplay}" Width="120"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>
@@ -129,7 +130,31 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Card 3: Industrial Build Time & Throughput Calculator -->
+                <!-- Card 3: Building Encyclopedia & Guide -->
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                    <StackPanel>
+                        <TextBlock Text="📖 GUÍA DE INSTALACIONES Y EDIFICIOS IMPERIALES" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                        <TextBlock Text="Función y utilidad táctica de cada instalación planetaria:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,8"/>
+
+                        <ScrollViewer Height="180" VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <TextBlock Text="🏭 Fábrica de Construcción (120 BP): Produce otras instalaciones y convierte la industria convencional." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
+                                <TextBlock Text="⛏️ Mina Convencional (120 BP): Extrae minerales en planetas habitables requiriendo población." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
+                                <TextBlock Text="🤖 Mina Automatizada (240 BP): Extrae minerales sin necesidad de población humana (ideal para cometas/asteroides)." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
+                                <TextBlock Text="⛽ Refinería de Sorium (120 BP): Refina el Sorium mineral convirtiéndolo en combustible espacial." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
+                                <TextBlock Text="💣 Fábrica de Armamento (120 BP): Fabrica misiles, torpedos y cargas de combate para naves." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
+                                <TextBlock Text="🛩️ Fábrica de Cazas (120 BP): Construye cazas y pequeñas naves parásitas de menos de 500t." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
+                                <TextBlock Text="🏛️ Centro Financiero (120 BP): Genera riqueza y créditos imperiales sostenidos." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
+                                <TextBlock Text="🌐 Catapulta de Masa / Mass Driver (120 BP): Lanza minerales extraídos hacia otras colonias del sistema." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
+                                <TextBlock Text="🌍 Estación de Terraformación (300 BP): Modifica la atmósfera para reducir el costo colonial a 0.00." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
+                                <TextBlock Text="📡 Rastreador de Espacio Profundo / DSTS (300 BP): Detecta naves enemigas a millones de km." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
+                                <TextBlock Text="🚀 Puerto Espacial (600 BP): Acelera la carga/descarga de cargueros y el movimiento de minerales." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card 4: Industrial Build Time & Throughput Calculator -->
                 <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                     <StackPanel>
                         <TextBlock Text="🧮 CALCULADORA DE TIEMPOS DE FABRICACIÓN" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,10"/>
@@ -155,7 +180,7 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Card 4: Construction Exotic Mineral Requirements -->
+                <!-- Card 5: Construction Exotic Mineral Requirements -->
                 <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
                     <StackPanel>
                         <TextBlock Text="💎 CONSUMO ESTIMADO DE MINERALES EN CONSTRUCCIÓN" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,10"/>

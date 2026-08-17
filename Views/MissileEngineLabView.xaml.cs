@@ -15,6 +15,7 @@ namespace AuroraDesignSuite.Views
 
         private List<CustomProjectItem> _allProjects = new List<CustomProjectItem>();
         private List<CustomProjectItem> _appUserPresets = new List<CustomProjectItem>();
+        private List<ResearchedTechItem> _researchedTechs = new List<ResearchedTechItem>();
 
         public MissileEngineLabView()
         {
@@ -25,6 +26,13 @@ namespace AuroraDesignSuite.Views
         {
             _dbService = dbService;
             _currentRaceId = raceId;
+
+            if (_dbService != null)
+            {
+                _researchedTechs = _dbService.GetResearchedTechsForRace(_currentRaceId);
+            }
+
+            PopulateCategoryTechs();
             RefreshCatalogData();
             CalculateCurrentProjectSpecs();
         }
@@ -48,36 +56,104 @@ namespace AuroraDesignSuite.Views
             }
         }
 
-        private void OnCategoryChanged(object sender, RoutedEventArgs e)
+        private void CmbMasterCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (TxtProjectName == null) return;
-
-            if (RbCatSensors?.IsChecked == true)
-            {
-                TxtProjectName.Text = "Active Sensor Buscar AS8-R100";
-            }
-            else if (RbCatWeapons?.IsChecked == true)
-            {
-                TxtProjectName.Text = "Láser Focalizado de Frecuencia 15cm";
-            }
-            else if (RbCatMissiles?.IsChecked == true)
-            {
-                TxtProjectName.Text = "Misil Antibuque Víbora MK-I";
-            }
-            else if (RbCatTurrets?.IsChecked == true)
-            {
-                TxtProjectName.Text = "Torreta Doble Gauss R400-100";
-            }
-            else if (RbCatEngines?.IsChecked == true)
-            {
-                TxtProjectName.Text = "Motor de Impulso Ion Militar 500";
-            }
-            else if (RbCatGround?.IsChecked == true)
-            {
-                TxtProjectName.Text = "Formación de Tanques de Asalto Pesados";
-            }
-
+            PopulateCategoryTechs();
             CalculateCurrentProjectSpecs();
+        }
+
+        private void PopulateCategoryTechs()
+        {
+            if (CmbMasterCategory == null || CmbSubTech1 == null || CmbSubTech2 == null || CmbSubTech3 == null) return;
+
+            string selectedCat = "Active Sensors";
+            if (CmbMasterCategory.SelectedItem is ComboBoxItem item && item.Content != null)
+            {
+                selectedCat = item.Content.ToString()!;
+            }
+
+            CmbSubTech1.ItemsSource = null;
+            CmbSubTech2.ItemsSource = null;
+            CmbSubTech3.ItemsSource = null;
+
+            // Filter tech for Sub-ComboBox 1 from DB
+            var categoryTechs = _researchedTechs
+                .Where(t => CategoryMatches(t, selectedCat))
+                .ToList();
+
+            if (categoryTechs.Count == 0)
+            {
+                // Fallback default researched options if specific tech is not yet researched
+                categoryTechs.Add(new ResearchedTechItem
+                {
+                    TechID = 1,
+                    Name = $"Standard {selectedCat} Technology",
+                    CategoryID = 1,
+                    TechTypeID = 1,
+                    AdditionalInfo = 1.0
+                });
+            }
+
+            CmbSubTech1.ItemsSource = categoryTechs;
+            CmbSubTech1.SelectedIndex = 0;
+
+            // Setup Sub Tech 2 & 3 based on category
+            if (selectedCat.Contains("Engines") || selectedCat.Contains("Motores"))
+            {
+                LblSubTech1.Text = "Tipo de Propulsión Investigada:";
+                LblSubTech2.Text = "Eficiencia de Combustible (L/EP/Hr):";
+                LblSubTech3.Text = "Reducción de Firma Térmica:";
+
+                CmbSubTech2.ItemsSource = new List<string> { "1.0 Litro por EP/Hora (Básico)", "0.8 Litros por EP/Hora", "0.6 Litros por EP/Hora (Avanzado)" };
+                CmbSubTech2.SelectedIndex = 0;
+
+                CmbSubTech3.ItemsSource = new List<string> { "Normal (100% Firma)", "Reducción 50%", "Reducción 25% (Sigiloso)" };
+                CmbSubTech3.SelectedIndex = 0;
+
+                if (TxtProjectName != null) TxtProjectName.Text = "Nuclear Thermal Engine EP50";
+            }
+            else if (selectedCat.Contains("Lasers"))
+            {
+                LblSubTech1.Text = "Focalización de Longitud de Onda (Wavelength):";
+                LblSubTech2.Text = "Tasa de Recarga de Condensador (Capacitor):";
+                LblSubTech3.Text = "Opticas Focalizadas y Lentes:";
+
+                CmbSubTech2.ItemsSource = new List<string> { "Capacitor Recharge Rate 1 (1 EU/5s)", "Capacitor Recharge Rate 2 (2 EU/5s)", "Capacitor Recharge Rate 4" };
+                CmbSubTech2.SelectedIndex = 0;
+
+                CmbSubTech3.ItemsSource = new List<string> { "Estándar 10cm", "Focalizado 15cm", "Pesado 20cm" };
+                CmbSubTech3.SelectedIndex = 0;
+
+                if (TxtProjectName != null) TxtProjectName.Text = "Infrared Laser 15cm";
+            }
+            else
+            {
+                LblSubTech1.Text = "Tecnología Base Investigada (AuroraDB.db):";
+                LblSubTech2.Text = "Modificador de Eficiencia:";
+                LblSubTech3.Text = "Módulo de Control Electrónico:";
+
+                CmbSubTech2.ItemsSource = new List<string> { "Estándar 100%", "Mejorado 120%", "Optimizado 150%" };
+                CmbSubTech2.SelectedIndex = 0;
+
+                CmbSubTech3.ItemsSource = new List<string> { "Básico (Sin ECCM)", "ECCM-1", "ECCM-2 Avanzado" };
+                CmbSubTech3.SelectedIndex = 0;
+
+                if (TxtProjectName != null) TxtProjectName.Text = $"{selectedCat.Replace("📡 ", "").Replace("⚙️ ", "").Replace("💥 ", "")} Component MK-I";
+            }
+        }
+
+        private bool CategoryMatches(ResearchedTechItem tech, string categoryName)
+        {
+            string clean = categoryName.ToLower();
+            string techName = tech.Name.ToLower();
+            string techDesc = tech.Description.ToLower();
+
+            if (clean.Contains("sensor") && (techName.Contains("sensor") || techDesc.Contains("sensor"))) return true;
+            if (clean.Contains("engine") && (techName.Contains("engine") || techDesc.Contains("engine") || tech.CategoryID == 7)) return true;
+            if (clean.Contains("laser") && (techName.Contains("laser") || techDesc.Contains("laser"))) return true;
+            if (clean.Contains("shield") && (techName.Contains("shield") || techDesc.Contains("shield"))) return true;
+
+            return tech.CategoryID == 1 || tech.CategoryID == 4;
         }
 
         private void OnParamChanged(object sender, SelectionChangedEventArgs e) => CalculateCurrentProjectSpecs();
@@ -87,18 +163,19 @@ namespace AuroraDesignSuite.Views
         {
             if (LblSpecSize == null || LblSpecCostRP == null || LblSpecCostBP == null || IcProjectMinerals == null) return;
 
-            double hs = SldSensorSize != null ? SldSensorSize.Value : 1.0;
-            double res = SldSensorRes != null ? SldSensorRes.Value : 100.0;
-            double powerMod = SldPowerMod != null ? SldPowerMod.Value : 1.0;
+            string selectedCat = "Active Sensors";
+            if (CmbMasterCategory?.SelectedItem is ComboBoxItem item && item.Content != null)
+            {
+                selectedCat = item.Content.ToString()!;
+            }
 
-            if (LblValSensorSize != null) LblValSensorSize.Text = $"{hs:F1} HS ({hs * 50.0:N0} t)";
-            if (LblValSensorRes != null) LblValSensorRes.Text = $"Res {res:F0} ({res * 50.0:N0}t)";
-            if (LblValPowerMod != null) LblValPowerMod.Text = $"{powerMod:F2}x";
+            double hs = SldParam1 != null ? SldParam1.Value : 1.0;
+            double mult = SldParam2 != null ? SldParam2.Value : 1.0;
 
-            // Live range calculation: Sensor Range = Strength * Size * SQRT(Res) * 10000 km
-            double strength = 2.0 * powerMod;
-            double maxRangeKm = strength * hs * Math.Sqrt(res) * 40000.0;
-            double costRP = Math.Round(hs * strength * 50.0, 0);
+            if (LblValParam1 != null) LblValParam1.Text = $"{hs:F1} HS ({hs * 50.0:N0} t)";
+            if (LblValParam2 != null) LblValParam2.Text = $"Mod {mult:F0}";
+
+            double costRP = Math.Round(hs * 100.0 * mult, 0);
             double costBP = Math.Round(costRP / 50.0, 1);
             int crew = (int)Math.Max(1, hs * 2);
             int htk = (int)Math.Max(1, hs);
@@ -108,15 +185,34 @@ namespace AuroraDesignSuite.Views
             LblSpecCostBP.Text = $"{costBP:F1} BP";
             LblSpecCrew.Text = $"{crew} Personas";
             LblSpecHTK.Text = $"{htk} HTK";
-            LblSpecPerformance.Text = $"{maxRangeKm / 1_000_000.0:F2} Mkm";
 
-            LblSpecDescription.Text = $"Potencia Sensor: {strength:F1} | Mod. Sensibilidad: 50% | Resolución {res:F0} | Alcance Máximo vs {res * 50.0:N0}t: {maxRangeKm / 1_000_000.0:F2} Mkm | Rango vs 1000t: {maxRangeKm / 5_000_000.0:F2} Mkm";
+            string tech1Name = CmbSubTech1?.SelectedItem is ResearchedTechItem t ? t.Name : "Tecnología Investigada";
 
-            // Minerals
+            if (selectedCat.Contains("Engines") || selectedCat.Contains("Motores"))
+            {
+                double ep = hs * 50.0 * mult;
+                LblSpecPerformance.Text = $"{ep:N0} EP";
+                LblSpecDescription.Text = $"Motor Naval ({tech1Name}) | Potencia Total: {ep:N0} EP | Masa: {hs * 50.0:N0}t | Consumo: {1.0 / mult:F2} L/EP/Hr | Firma Térmica: {ep:N0} W";
+            }
+            else if (selectedCat.Contains("Lasers"))
+            {
+                double damage = Math.Round(hs * 4.0 * mult, 1);
+                LblSpecPerformance.Text = $"{damage:F1} Dmg";
+                LblSpecDescription.Text = $"Láser Naval ({tech1Name}) | Calibre: {hs * 10:F0}cm | Daño Focal: {damage:F1} HP | Consumo Energía: {damage * 2:F0} EU | Rango Máximo: {hs * 100_000:N0} km";
+            }
+            else
+            {
+                double rangeMkm = hs * mult * 4.0;
+                LblSpecPerformance.Text = $"{rangeMkm:F2} Mkm";
+                LblSpecDescription.Text = $"Componente Táctico ({selectedCat}) | Basado en: {tech1Name} | Alcance Operativo: {rangeMkm:F2} Mkm | Resistencia: {htk} HTK";
+            }
+
+            // Minerals Breakdown
             var minerals = new Dictionary<string, double>
             {
-                { "Uridium (Circuitos de Control)", Math.Round(costBP * 0.6, 1) },
-                { "Corbonite (Estructura y Chasis)", Math.Round(costBP * 0.4, 1) }
+                { "Duranium (Chasis Estructural)", Math.Round(costBP * 0.3, 1) },
+                { "Corbonite (Blindaje Térmico)", Math.Round(costBP * 0.3, 1) },
+                { "Uridium / Gallicite (Sistemas Avanzados)", Math.Round(costBP * 0.4, 1) }
             };
             IcProjectMinerals.ItemsSource = minerals;
         }
@@ -130,16 +226,12 @@ namespace AuroraDesignSuite.Views
             }
 
             string name = TxtProjectName != null ? TxtProjectName.Text : "Nuevo Proyecto";
-            double hs = SldSensorSize != null ? SldSensorSize.Value : 1.0;
-            double costRP = Math.Round(hs * 100.0, 0);
+            double hs = SldParam1 != null ? SldParam1.Value : 1.0;
+            double mult = SldParam2 != null ? SldParam2.Value : 1.0;
+            double costRP = Math.Round(hs * 100.0 * mult, 0);
             double costBP = Math.Round(costRP / 50.0, 1);
 
-            string category = "📡 Sensores";
-            if (RbCatWeapons?.IsChecked == true) category = "💥 Armas Energía";
-            else if (RbCatMissiles?.IsChecked == true) category = "🚀 Misiles";
-            else if (RbCatTurrets?.IsChecked == true) category = "🛡️ Torretas";
-            else if (RbCatEngines?.IsChecked == true) category = "⚡ Motores";
-            else if (RbCatGround?.IsChecked == true) category = "⚔️ Terrestre";
+            string category = CmbMasterCategory?.SelectedItem is ComboBoxItem item && item.Content != null ? item.Content.ToString()! : "Componente Naval";
 
             var newProject = new CustomProjectItem
             {
@@ -169,13 +261,12 @@ namespace AuroraDesignSuite.Views
         private void BtnSaveAppPreset_Click(object sender, RoutedEventArgs e)
         {
             string name = TxtProjectName != null ? TxtProjectName.Text : "Preset Usuario";
-            double hs = SldSensorSize != null ? SldSensorSize.Value : 1.0;
-            double costRP = Math.Round(hs * 100.0, 0);
+            double hs = SldParam1 != null ? SldParam1.Value : 1.0;
+            double mult = SldParam2 != null ? SldParam2.Value : 1.0;
+            double costRP = Math.Round(hs * 100.0 * mult, 0);
             double costBP = Math.Round(costRP / 50.0, 1);
 
-            string category = "📡 Sensores";
-            if (RbCatWeapons?.IsChecked == true) category = "💥 Armas Energía";
-            else if (RbCatMissiles?.IsChecked == true) category = "🚀 Misiles";
+            string category = CmbMasterCategory?.SelectedItem is ComboBoxItem item && item.Content != null ? item.Content.ToString()! : "Componente Naval";
 
             var userPreset = new CustomProjectItem
             {

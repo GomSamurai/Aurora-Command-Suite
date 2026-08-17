@@ -21,7 +21,7 @@
 
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="🧪 CENTRO DE CREACIÓN Y DISEÑO DE PROYECTOS I+D" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="14"/>
-                    <TextBlock Text="Modelado paramétrico en tiempo real emparejado en vivo con AuroraDB.db y catálogo de proyectos del imperio." Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,2,0,0"/>
+                    <TextBlock Text="Generador paramétrico de proyectos de investigación emparejado en vivo con las tecnologías investigadas en AuroraDB.db." Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,2,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
@@ -31,72 +31,86 @@
             </Grid>
         </Border>
 
-        <!-- Main Workspace -->
+        <!-- Main Workspace with Resizable Grid Splitters -->
         <Grid Grid.Row="1">
             <!-- MODE 1: MULTI-CATEGORY PROJECT DESIGNER -->
             <Grid x:Name="PnlProjectDesigner" Visibility="Visible">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="440"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="460" MinWidth="320"/>
+                    <ColumnDefinition Width="6"/>
+                    <ColumnDefinition Width="*" MinWidth="400"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Left Column: Category Navigation & Dynamic Controls -->
-                <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,5,0">
+                <!-- Left Column: Master Category Dropdown & Dynamic Researched Tech Options -->
+                <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,2,0">
                     <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
                         <StackPanel>
-                            <TextBlock Text="🛠️ SELECCIONAR CATEGORÍA DE PROYECTO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                            
-                            <!-- Creation Categories Grid -->
-                            <UniformGrid Columns="2" Margin="0,0,0,10">
-                                <RadioButton x:Name="RbCatSensors" Content="📡 Sensores" IsChecked="True" Checked="OnCategoryChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="8,6" Margin="2" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Diseño de sensores activos comerciales/militares, térmicos y electromagnéticos pasivos."/>
-                                <RadioButton x:Name="RbCatWeapons" Content="💥 Armas Energía" Checked="OnCategoryChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="8,6" Margin="2" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Láseres, mesones, cañones Gauss, railguns y carronadas de plasma."/>
-                                <RadioButton x:Name="RbCatMissiles" Content="🚀 Misiles" Checked="OnCategoryChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="8,6" Margin="2" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Misiles antibuque (ASM), antimisil (AMM), torpedos y señuelos navales."/>
-                                <RadioButton x:Name="RbCatTurrets" Content="🛡️ Torretas" Checked="OnCategoryChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="8,6" Margin="2" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Montajes de torretas simples, dobles o cuádruples con velocidad de seguimiento."/>
-                                <RadioButton x:Name="RbCatEngines" Content="⚡ Motores" Checked="OnCategoryChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="8,6" Margin="2" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Propulsores militares, comerciales, para cazas y blindaje térmico."/>
-                                <RadioButton x:Name="RbCatGround" Content="⚔️ Terrestre" Checked="OnCategoryChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="8,6" Margin="2" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Formaciones de infantería, tanques de asalto y piezas de artillería."/>
-                            </UniformGrid>
+                            <TextBlock Text="🛠️ SELECCIONAR CATEGORÍA DE PROYECTO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
+                            <TextBlock Text="Categorías oficiales de componentes de Aurora 4X:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" Margin="0,0,0,6"/>
+
+                            <!-- MASTER CATEGORY DROPDOWN (Matches Screenshot #2 of Aurora 4X) -->
+                            <ComboBox x:Name="CmbMasterCategory" SelectionChanged="CmbMasterCategory_SelectionChanged" Margin="0,0,0,12" Padding="8,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Selecciona la categoría del componente a diseñar. Carga automáticamente las tecnologías investigadas de tu imperio desde AuroraDB.db.">
+                                <ComboBoxItem Content="📡 Active Sensors" IsSelected="True"/>
+                                <ComboBoxItem Content="🛡️ CIWS"/>
+                                <ComboBoxItem Content="👻 Cloaking Device"/>
+                                <ComboBoxItem Content="🛰️ Decoy Launcher"/>
+                                <ComboBoxItem Content="🎯 Direct Fire Control"/>
+                                <ComboBoxItem Content="⚡ EM Detection Sensors"/>
+                                <ComboBoxItem Content="⚙️ Engines"/>
+                                <ComboBoxItem Content="✈️ Fighter Pod Bay"/>
+                                <ComboBoxItem Content="🔫 Gauss Cannon"/>
+                                <ComboBoxItem Content="📡 High Power Microwave"/>
+                                <ComboBoxItem Content="🌀 Jump Engines"/>
+                                <ComboBoxItem Content="💥 Lasers"/>
+                                <ComboBoxItem Content="📦 Magazine"/>
+                                <ComboBoxItem Content="🔮 Meson Cannon"/>
+                                <ComboBoxItem Content="🛠️ Miscellaneous Components"/>
+                                <ComboBoxItem Content="🎯 Missile Fire Control"/>
+                                <ComboBoxItem Content="🚀 Missile Launchers"/>
+                                <ComboBoxItem Content="⚡ Particle Beam"/>
+                                <ComboBoxItem Content="🔥 Plasma Carronade"/>
+                                <ComboBoxItem Content="⚡ Power Plants"/>
+                                <ComboBoxItem Content="🚅 Railgun"/>
+                                <ComboBoxItem Content="🛡️ Shield Generators"/>
+                                <ComboBoxItem Content="🔥 Thermal Sensors"/>
+                            </ComboBox>
 
                             <Separator Background="{DynamicResource BorderBrush}" Margin="0,0,0,10"/>
 
-                            <!-- Common Project Name Input -->
+                            <!-- Component Name Input -->
                             <TextBlock Text="Nombre del Proyecto / Componente:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                            <TextBox x:Name="TxtProjectName" Text="Active Sensor Buscar AS8-R100" Margin="0,0,0,12" Padding="6,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource BorderBrush}" ToolTip="Nombre descriptivo único con el que se registrará el proyecto en el árbol de investigación."/>
+                            <TextBox x:Name="TxtProjectName" Text="Commercial Active Sensor AS8-R100" Margin="0,0,0,12" Padding="6,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource BorderBrush}" ToolTip="Nombre descriptivo único con el que se registrará el proyecto en la base de datos de Aurora 4X."/>
 
-                            <!-- Dynamic Parameters Box (Sensors / Engines / Missiles / Weapons) -->
-                            <StackPanel x:Name="PnlSensorControls" Visibility="Visible">
-                                <TextBlock Text="Tipo de Sensor:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <ComboBox x:Name="CmbSensorType" SelectionChanged="OnParamChanged" Margin="0,0,0,10">
-                                    <ComboBoxItem Content="📡 Active Search Sensor (Militar)" IsSelected="True"/>
-                                    <ComboBoxItem Content="📦 Commercial Active Sensor (Comercial)"/>
-                                    <ComboBoxItem Content="🔥 Thermal Passive Sensor (Térmico)"/>
-                                    <ComboBoxItem Content="⚡ EM Passive Sensor (Electromagnético)"/>
-                                </ComboBox>
+                            <!-- DYNAMIC RESEARCHED TECH SUB-DROPDOWNS (Matches Screenshot #3 of Aurora 4X) -->
+                            <StackPanel x:Name="PnlSubTechControls">
+                                <!-- Sub Tech 1 -->
+                                <TextBlock x:Name="LblSubTech1" Text="Tecnología Base Investigada:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                <ComboBox x:Name="CmbSubTech1" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4" ToolTip="Tecnologías base investigadas por tu imperio en esta categoría (extraídas en vivo de FCT_RaceTech)."/>
 
-                                <Grid Margin="0,0,0,4">
-                                    <TextBlock Text="Tamaño del Sensor (HS / Tons):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                    <TextBlock x:Name="LblValSensorSize" Text="1.0 HS (50 t)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                                </Grid>
-                                <Slider x:Name="SldSensorSize" Minimum="0.1" Maximum="20" Value="1.0" TickFrequency="0.5" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,10" ToolTip="Tamaño en cascos (1 HS = 50 Tons). Sensores más grandes ofrecen mayor alcance de detección."/>
+                                <!-- Sub Tech 2 -->
+                                <TextBlock x:Name="LblSubTech2" Text="Eficiencia / Consumo de Combustible:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                <ComboBox x:Name="CmbSubTech2" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4" ToolTip="Nivel tecnológico de eficiencia operativa investigado."/>
 
-                                <Grid Margin="0,0,0,4">
-                                    <TextBlock Text="Resolución de Destino (Res):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                    <TextBlock x:Name="LblValSensorRes" Text="Res 100 (5,000t)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                                </Grid>
-                                <Slider x:Name="SldSensorRes" Minimum="1" Maximum="100" Value="100" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,10" ToolTip="Resolución del radar. Res 1 para cazas/misiles, Res 20 para corbetas, Res 100 para cruceros."/>
-
-                                <Grid Margin="0,0,0,4">
-                                    <TextBlock Text="Contra-contramedidas (ECCM):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                    <TextBlock x:Name="LblValSensorEccm" Text="ECCM-0" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                                </Grid>
-                                <Slider x:Name="SldSensorEccm" Minimum="0" Maximum="5" Value="0" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,12" ToolTip="Nivel de protección contra jamming e interferencias electrónicas enemigas."/>
+                                <!-- Sub Tech 3 -->
+                                <TextBlock x:Name="LblSubTech3" Text="Reducción de Firma Térmica / Blindaje:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                <ComboBox x:Name="CmbSubTech3" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4" ToolTip="Aislamiento térmico y capas protectoras disponibles."/>
                             </StackPanel>
 
-                            <!-- Generic Parameters Sliders -->
+                            <!-- PARAMETER SLIDERS -->
                             <Grid Margin="0,0,0,4">
-                                <TextBlock Text="Multiplicador de Rendimiento:" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblValPowerMod" Text="1.00x" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                <TextBlock x:Name="LblParam1Title" Text="Tamaño del Componente (HS / Tons):" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblValParam1" Text="1.0 HS (50 t)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
                             </Grid>
-                            <Slider x:Name="SldPowerMod" Minimum="0.5" Maximum="3.0" Value="1.0" TickFrequency="0.25" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,12" ToolTip="Aumenta el rendimiento y la efectividad operativa a cambio de mayor consumo de recursos."/>
+                            <Slider x:Name="SldParam1" Minimum="0.1" Maximum="100" Value="1.0" TickFrequency="0.5" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,10" ToolTip="Volumen total ocupado por el componente en cascos (1 HS = 50 Tons)."/>
+
+                            <Grid Margin="0,0,0,4">
+                                <TextBlock x:Name="LblParam2Title" Text="Modificador de Potencia / Resolución:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblValParam2" Text="Res 100 (5,000t)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Slider x:Name="SldParam2" Minimum="1" Maximum="100" Value="100" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,12" ToolTip="Multiplicador de potencia operativa o resolución de radar de destino."/>
 
                             <!-- Action Buttons -->
                             <Grid Margin="0,8,0,0">
@@ -111,8 +125,11 @@
                     </Border>
                 </ScrollViewer>
 
+                <!-- VERTICAL GRID SPLITTER (Resizable left/right) -->
+                <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource BorderBrush}" Cursor="SizeWE" ToolTip="Arrastra hacia la izquierda o derecha para cambiar el tamaño de los paneles."/>
+
                 <!-- Right Column: Live Specifications & Mineral Breakdown -->
-                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="5,0,0,0">
+                <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" Margin="2,0,0,0">
                     <StackPanel>
                         <!-- Card 1: Performance Specifications -->
                         <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
@@ -152,8 +169,8 @@
                                     </Border>
                                     <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
                                         <StackPanel>
-                                            <TextBlock Text="Rango Máximo Detección:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblSpecPerformance" Text="8,281,161 km" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="13"/>
+                                            <TextBlock Text="Rendimiento / Alcance:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                            <TextBlock x:Name="LblSpecPerformance" Text="8.28 Mkm" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="13"/>
                                         </StackPanel>
                                     </Border>
                                 </UniformGrid>
@@ -161,7 +178,7 @@
                                 <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,10,0,0">
                                     <StackPanel>
                                         <TextBlock Text="💡 DESCRIPCIÓN TÁCTICA DEL DISEÑO:" Foreground="{DynamicResource AccentAmberBrush}" FontSize="11" FontWeight="Bold"/>
-                                        <TextBlock x:Name="LblSpecDescription" Text="Active Sensor Strength 2 | Sensitivity Modifier: 50% | Resolution 100 | Maximum Range vs 5000 ton object: 8,281,161 km | Range vs 1000 ton object: 331,246 km" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                        <TextBlock x:Name="LblSpecDescription" Text="Active Sensor Strength 2 | Sensitivity Modifier: 50% | Resolution 100 | Maximum Range vs 5000 ton object: 8.28 Mkm" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" TextWrapping="Wrap" Margin="0,4,0,0"/>
                                     </StackPanel>
                                 </Border>
                             </StackPanel>
@@ -205,7 +222,7 @@
 
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Filtrar por Origen del Proyecto:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <ComboBox x:Name="CmbCatalogSourceFilter" SelectionChanged="CmbCatalogSourceFilter_SelectionChanged" Width="220" Padding="6,4">
+                            <ComboBox x:Name="CmbCatalogSourceFilter" SelectionChanged="CmbCatalogSourceFilter_SelectionChanged" Width="240" Padding="6,4">
                                 <ComboBoxItem Content="🌐 Todos los Proyectos (Juego + App)" IsSelected="True"/>
                                 <ComboBoxItem Content="🎮 Solo Creados en el Juego (Aurora 4X)"/>
                                 <ComboBoxItem Content="💻 Solo Creados en la App"/>

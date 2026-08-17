@@ -62,4 +62,16 @@ namespace AuroraDesignSuite.Models
 
         public override string ToString() => $"{Name} ({SizeHS:F1} HS)";
     }
+
+    public class ResearchedTechItem
+    {
+        public int TechID { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public int CategoryID { get; set; }
+        public int TechTypeID { get; set; }
+        public double AdditionalInfo { get; set; }
+        public string Description { get; set; } = string.Empty;
+
+        public override string ToString() => Name;
+    }
 }

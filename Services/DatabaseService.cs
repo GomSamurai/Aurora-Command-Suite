@@ -2029,6 +2029,42 @@ namespace AuroraDesignSuite.Services
             }
         }
 
+        public List<ResearchedTechItem> GetResearchedTechsForRace(int raceId)
+        {
+            var list = new List<ResearchedTechItem>();
+            try
+            {
+                using var conn = GetConnection();
+                string sql = @"
+                    SELECT rt.TechID, ts.Name, ts.CategoryID, ts.TechTypeID, ts.AdditionalInfo, ts.TechDescription
+                    FROM FCT_RaceTech rt
+                    JOIN FCT_TechSystem ts ON rt.TechID = ts.TechSystemID
+                    WHERE rt.RaceID = @raceId
+                    ORDER BY ts.CategoryID, ts.TechTypeID, ts.Name";
+
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    list.Add(new ResearchedTechItem
+                    {
+                        TechID = Convert.ToInt32(reader["TechID"]),
+                        Name = reader["Name"] != DBNull.Value ? reader["Name"].ToString()! : "Tecnología Investigada",
+                        CategoryID = reader["CategoryID"] != DBNull.Value ? Convert.ToInt32(reader["CategoryID"]) : 1,
+                        TechTypeID = reader["TechTypeID"] != DBNull.Value ? Convert.ToInt32(reader["TechTypeID"]) : 1,
+                        AdditionalInfo = reader["AdditionalInfo"] != DBNull.Value ? Convert.ToDouble(reader["AdditionalInfo"]) : 0.0,
+                        Description = reader["TechDescription"] != DBNull.Value ? reader["TechDescription"].ToString()! : ""
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching researched techs: {ex.Message}");
+            }
+            return list;
+        }
+
         public List<CustomProjectItem> GetCustomProjects(int raceId)
         {
             var list = new List<CustomProjectItem>();

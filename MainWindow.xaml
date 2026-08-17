@@ -26,48 +26,44 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="🚀 AURORA MASTER COMMAND SUITE" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="17" VerticalAlignment="Center"/>
-                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="4" Margin="10,0,0,0" Padding="6,2">
-                        <TextBlock Text="v2.7.1 LIVE BRIDGE (12 MÓDULOS)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5"/>
-                    </Border>
+                    <TextBlock Text="🚀 AMCS v2.7.1" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" ToolTip="Aurora Master Command Suite v2.7.1 (12 Módulos Tácticos)"/>
                 </StackPanel>
 
                 <!-- Unified Imperial Command Telemetry Header Panel -->
-                <Border Grid.Column="1" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1.5" CornerRadius="8" Padding="12,5" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="Panel Unificado de Comando Imperial: Selector de Imperio activo, Fecha actual del juego, Antigüedad de la dinastía y Conexión a Base de Datos.">
+                <Border Grid.Column="1" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1.5" CornerRadius="8" Padding="10,4" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="Panel Unificado de Comando Imperial: Selector de Imperio activo, Fecha actual del juego, Antigüedad de la dinastía y Conexión a Base de Datos.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <!-- 1. Empire Selector -->
-                        <TextBlock Text="👑 IMPERIO:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                        <ComboBox x:Name="CmbGlobalEmpire" SelectionChanged="CmbGlobalEmpire_SelectionChanged" Width="185" VerticalAlignment="Center" ToolTip="Selecciona el Imperio de tu partida actual cuyos datos deseas conectar en toda la suite."/>
+                        <TextBlock Text="👑" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <ComboBox x:Name="CmbGlobalEmpire" SelectionChanged="CmbGlobalEmpire_SelectionChanged" Width="160" VerticalAlignment="Center" ToolTip="Selecciona el Imperio de tu partida actual cuyos datos deseas conectar en toda la suite."/>
 
                         <!-- Vertical Divider -->
-                        <Border Width="1" Height="16" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
+                        <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="8,0"/>
 
                         <!-- 2. Game Date -->
-                        <TextBlock Text="📅 FECHA:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                        <TextBlock x:Name="TxtHeaderGameDate" Text="Cargando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center"/>
+                        <TextBlock Text="📅" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock x:Name="TxtHeaderGameDate" Text="Cargando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
 
                         <!-- Vertical Divider -->
-                        <Border Width="1" Height="16" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
+                        <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="8,0"/>
 
                         <!-- 3. Start Year & Service Lifetime -->
-                        <TextBlock Text="🏛️ INICIO:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                        <TextBlock x:Name="TxtHeaderStartYear" Text="2026 (0.0 a. de servicio)" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                        <TextBlock Text="🏛️" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock x:Name="TxtHeaderStartYear" Text="2026 (0.0a)" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="10.5" VerticalAlignment="Center"/>
 
                         <!-- Vertical Divider -->
-                        <Border Width="1" Height="16" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
+                        <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="8,0"/>
 
                         <!-- 4. Sync & Change DB Buttons -->
-                        <Button x:Name="BtnManualSync" Content="🔄 SINCRONIZAR VIVO" Click="BtnManualSync_Click" Padding="8,2" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5" ToolTip="Fuerza un refresco inmediato al 100% de la Base de Datos SQLite y la memoria RAM de todas las pestañas."/>
-                        <Button Content="📁 BD" Click="BtnChangeDb_Click" Padding="6,2" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" ToolTip="Selecciona el archivo AuroraDB.db de cualquier otra carpeta."/>
+                        <Button x:Name="BtnManualSync" Content="🔄 SINCRONIZAR" Click="BtnManualSync_Click" Padding="6,2" Margin="0,0,4,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10" ToolTip="Fuerza un refresco inmediato al 100% de la Base de Datos SQLite y la memoria RAM de todas las pestañas."/>
+                        <Button Content="📁 BD" Click="BtnChangeDb_Click" Padding="5,2" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" ToolTip="Selecciona el archivo AuroraDB.db de cualquier otra carpeta."/>
                     </StackPanel>
                 </Border>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <TextBlock Text="STATUS: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center"/>
-                    <TextBlock Text="● CONECTADO" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                    <TextBlock Text="● ONLINE" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5" VerticalAlignment="Center"/>
 
-                    <TextBlock Text="🎨 ESTILO VISUAL:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="14,0,6,0"/>
-                    <ComboBox x:Name="CmbThemeSelector" SelectionChanged="CmbThemeSelector_SelectionChanged" Width="220" VerticalAlignment="Center" ToolTip="Cambia drásticamente la paleta de colores y el esquema visual de toda la aplicación en tiempo real.">
+                    <TextBlock Text="🎨 ESTILO:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5" VerticalAlignment="Center" Margin="10,0,4,0"/>
+                    <ComboBox x:Name="CmbThemeSelector" SelectionChanged="CmbThemeSelector_SelectionChanged" Width="160" VerticalAlignment="Center" ToolTip="Cambia drásticamente la paleta de colores y el esquema visual de toda la aplicación en tiempo real.">
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
                                 <Style.Triggers>

@@ -194,6 +194,10 @@ namespace AuroraDesignSuite
             {
                 ViewExploration.LoadData(_dbService, raceId);
             }
+            else if (MainTabControl.SelectedItem == TabMissile && ViewMissile != null)
+            {
+                ViewMissile.LoadData(_dbService, raceId);
+            }
             else if (MainTabControl.SelectedItem == TabAI && ViewAI != null)
             {
                 ViewAI.LoadData(_dbService, raceId);

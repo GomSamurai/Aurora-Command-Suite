@@ -2076,7 +2076,7 @@ namespace AuroraDesignSuite.Services
                 string tsSql = @"
                     SELECT TechSystemID, Name, CategoryID, TechDescription, DevelopCost
                     FROM FCT_TechSystem
-                    WHERE RaceID = @raceId OR TechDescription LIKE '%Race-designed%' OR TechDescription LIKE '%Custom%'
+                    WHERE RaceID = @raceId OR TechDescription LIKE '%Race-designed%' OR TechDescription LIKE '%Custom%' OR CategoryID > 0
                     ORDER BY TechSystemID DESC";
 
                 using (var cmd = new SqliteCommand(tsSql, conn))

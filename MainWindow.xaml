@@ -83,7 +83,7 @@
         <TabControl Grid.Row="1" x:Name="MainTabControl" TabStripPlacement="Left" SelectionChanged="MainTabControl_SelectionChanged" Background="Transparent" BorderThickness="0" Margin="6">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
-                    <Setter Property="Margin" Value="0,1.5"/>
+                    <Setter Property="Margin" Value="0,3"/>
                     <Setter Property="Padding" Value="0"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -91,19 +91,21 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TabItem">
-                                <Border x:Name="BdrTab" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8,6" Margin="0,1.5" Cursor="Hand">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="4"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
+                                <Grid Margin="0,3,0,3">
+                                    <Border x:Name="BdrTab" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8,6" Cursor="Hand">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="4"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <!-- Active Left Bar Indicator -->
-                                        <Border x:Name="IndBar" Grid.Column="0" Background="Transparent" CornerRadius="2" Margin="0,1,6,1"/>
+                                            <!-- Active Left Bar Indicator -->
+                                            <Border x:Name="IndBar" Grid.Column="0" Background="Transparent" CornerRadius="2" Margin="0,1,6,1"/>
 
-                                        <ContentPresenter Grid.Column="1" x:Name="ContentSite" ContentSource="Header" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
-                                    </Grid>
-                                </Border>
+                                            <ContentPresenter Grid.Column="1" x:Name="ContentSite" ContentSource="Header" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter TargetName="BdrTab" Property="Background" Value="{DynamicResource CardHeaderBrush}"/>

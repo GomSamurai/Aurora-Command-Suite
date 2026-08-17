@@ -170,7 +170,7 @@
                                     </Grid.ColumnDefinitions>
 
                                     <!-- Category Icon -->
-                                    <TextBlock Text="{Binding CategoryIcon}" FontSize="12.5" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding CategoryIcon}" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{Binding CategoryColor}" FontSize="13" VerticalAlignment="Center"/>
 
                                     <!-- Timestamp -->
                                     <TextBlock Grid.Column="1" Text="{Binding FormattedTime}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5" VerticalAlignment="Center"/>

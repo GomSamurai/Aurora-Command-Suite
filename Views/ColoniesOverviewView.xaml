@@ -107,7 +107,7 @@
                         <TextBlock Text="🪐 DOSSIER DE DETALLE COLONIAL" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
 
                         <DockPanel Margin="0,0,0,6">
-                            <TextBlock Text="🪐" FontSize="26" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="🪐" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontSize="26" VerticalAlignment="Center" Margin="0,0,6,0"/>
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock x:Name="LblColonyTitle" Text="Earth (Sol)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13"/>
                                 <TextBlock x:Name="LblColonyStatus" Text="Capital Imperial | Colony Cost: 0.00 (Mundo Nativo)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>

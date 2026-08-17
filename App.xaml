@@ -32,7 +32,12 @@
         <Style TargetType="Window">
             <Setter Property="Background" Value="{DynamicResource BgDarkBrush}"/>
             <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
-            <Setter Property="FontFamily" Value="Segoe UI, Consolas"/>
+            <Setter Property="FontFamily" Value="Segoe UI Emoji, Segoe UI, Consolas"/>
+        </Style>
+
+        <!-- Global TextBlock Style for Emoji Rendering -->
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI Emoji, Segoe UI, Consolas"/>
         </Style>
 
         <!-- Sci-Fi Button Style -->

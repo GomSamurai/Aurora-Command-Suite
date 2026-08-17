@@ -96,7 +96,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock x:Name="TxtDossierIcon" Text="🎓" FontSize="32" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBlock x:Name="TxtDossierIcon" Text="🎓" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontSize="32" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <StackPanel Grid.Column="1">
                                     <TextBlock x:Name="LblDossierName" Text="Dr. Aarón Cordero Burgos" Foreground="White" FontWeight="Bold" FontSize="14" TextWrapping="Wrap"/>
                                     <TextBlock x:Name="LblDossierTitle" Text="Director de I+D Imperial" Foreground="{DynamicResource AccentCyanBrush}" FontSize="12"/>

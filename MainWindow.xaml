@@ -206,7 +206,7 @@
                         </Border>
                         <DockPanel LastChildFill="True">
                             <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" Margin="0,0,8,0">
-                                <TextBlock Text="🏰" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="🏰" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <TextBlock Text="Mi Imperio" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                         </DockPanel>
@@ -218,8 +218,8 @@
             <TabItem x:Name="TabColonies">
                 <TabItem.Header>
                     <DockPanel LastChildFill="True">
-                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,8,0">
-                            <TextBlock Text="🪐" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="🪐" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="Colonias y Minerales" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                     </DockPanel>
@@ -230,8 +230,8 @@
             <TabItem x:Name="TabCommanders">
                 <TabItem.Header>
                     <DockPanel LastChildFill="True">
-                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,8,0">
-                            <TextBlock Text="🎖️" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="🎖️" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="Alto Mando &amp; Líderes" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                     </DockPanel>
@@ -250,7 +250,7 @@
                         </Border>
                         <DockPanel LastChildFill="True">
                             <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentPurpleBrush}" BorderThickness="1" Margin="0,0,8,0">
-                                <TextBlock Text="🔬" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="🔬" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentPurpleBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <TextBlock Text="Investigación I+D" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                         </DockPanel>
@@ -262,8 +262,8 @@
             <TabItem x:Name="TabIndustrial">
                 <TabItem.Header>
                     <DockPanel LastChildFill="True">
-                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,8,0">
-                            <TextBlock Text="⚡" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="⚡" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="Industria &amp; Fábricas" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                     </DockPanel>
@@ -274,8 +274,8 @@
             <TabItem x:Name="TabShipyards">
                 <TabItem.Header>
                     <DockPanel LastChildFill="True">
-                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,8,0">
-                            <TextBlock Text="🏭" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="🏭" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentCyanBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="Operaciones Astillero" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                     </DockPanel>
@@ -294,7 +294,7 @@
                         </Border>
                         <DockPanel LastChildFill="True">
                             <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" Margin="0,0,8,0">
-                                <TextBlock Text="🛠️" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="🛠️" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentCyanBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <TextBlock Text="Diseñador de Naves" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                         </DockPanel>
@@ -306,8 +306,8 @@
             <TabItem x:Name="TabMissile">
                 <TabItem.Header>
                     <DockPanel LastChildFill="True">
-                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,8,0">
-                            <TextBlock Text="🧪" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="🧪" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentCyanBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="Proyectos I+D" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                     </DockPanel>
@@ -318,8 +318,8 @@
             <TabItem x:Name="TabActiveFleets">
                 <TabItem.Header>
                     <DockPanel LastChildFill="True">
-                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,8,0">
-                            <TextBlock Text="🛸" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="🛸" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentCyanBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="Mis Flotas &amp; Naves" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                     </DockPanel>
@@ -330,8 +330,8 @@
             <TabItem x:Name="TabFleet">
                 <TabItem.Header>
                     <DockPanel LastChildFill="True">
-                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,8,0">
-                            <TextBlock Text="⚓" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="⚓" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentCyanBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="Auditoría Naval" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                     </DockPanel>
@@ -342,8 +342,8 @@
             <TabItem x:Name="TabExploration">
                 <TabItem.Header>
                     <DockPanel LastChildFill="True">
-                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,8,0">
-                            <TextBlock Text="🌌" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="🌌" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentCyanBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="Exploración &amp; Sistemas" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                     </DockPanel>
@@ -362,7 +362,7 @@
                         </Border>
                         <DockPanel LastChildFill="True">
                             <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" BorderThickness="1" Margin="0,0,8,0">
-                                <TextBlock Text="📐" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="📐" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentGreenBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <TextBlock Text="Auditoría y Herramientas" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                         </DockPanel>
@@ -392,7 +392,7 @@
                         <Border Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1.5" CornerRadius="6" Padding="8,6">
                             <DockPanel LastChildFill="True">
                                 <Border Width="28" Height="28" CornerRadius="6" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" Margin="0,0,8,0">
-                                    <TextBlock Text="🧠" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <TextBlock Text="🧠" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentCyanBrush}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="MATRIZ TÁCTICA DE IA" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12"/>

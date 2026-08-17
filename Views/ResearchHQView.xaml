@@ -169,7 +169,7 @@
                         <TextBlock Text="📖 DOSSIER Y UTILIDAD TÁCTICA DE LA TECNOLOGÍA" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
 
                         <DockPanel Margin="0,0,0,6">
-                            <TextBlock Text="🔬" FontSize="22" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="🔬" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentCyanBrush}" FontSize="22" VerticalAlignment="Center" Margin="0,0,6,0"/>
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock x:Name="LblTacticalTechName" Text="Tecnología Seleccionada" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12"/>
                                 <TextBlock x:Name="LblTacticalCategory" Text="Categoría: General" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
@@ -193,7 +193,7 @@
                         <TextBlock Text="📂 DOSSIER OFICIAL DEL CIENTÍFICO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
 
                         <DockPanel Margin="0,0,0,6">
-                            <TextBlock Text="👨‍🔬" FontSize="24" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="👨‍🔬" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontSize="24" VerticalAlignment="Center" Margin="0,0,6,0"/>
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock x:Name="LblDossierScientistName" Text="Científico Seleccionado" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12"/>
                                 <TextBlock x:Name="LblDossierRating" Text="Antigüedad: 79 Rating | Puesto: Investigador Principal" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>

@@ -33,6 +33,11 @@ namespace AuroraDesignSuite.Models
         public int ShipCount => Ships.Count;
         public double TotalTonnage { get; set; }
 
+        public string CurrentActivity { get; set; } = "🛡️ Patrulla Orbital y Vigilancia Espacial";
+        public double NearestColonyDistanceAU { get; set; } = 0.0;
+        public string NearestColonyDisplay => NearestColonyDistanceAU <= 0.05 ? "📍 En Órbita Colonial (0.0 AU)" : $"📍 {NearestColonyDistanceAU:F2} AU de la Colonia";
+        public string StrategicRecommendation { get; set; } = "🟢 Mantener postura defensiva. Nivel de combustible y suministros de mantenimiento en estado óptimo.";
+
         public List<ActiveShip> Ships { get; set; } = new List<ActiveShip>();
 
         public override string ToString() => $"{FleetName} ({ShipCount} Naves, {SystemName})";

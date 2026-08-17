@@ -38,12 +38,13 @@
 
                     <DataGrid x:Name="DgActiveFleets" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgActiveFleets_SelectionChanged" ToolTip="Lista de agrupaciones de combate navales y flotas comerciales en servicio activo en AuroraDB.db.">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Nombre de la Flota" Binding="{Binding FleetName}" Width="*"/>
-                            <DataGridTextColumn Header="Naves" Binding="{Binding ShipCount}" Width="70"/>
-                            <DataGridTextColumn Header="Masa Flota" Binding="{Binding TotalTonnage, StringFormat={}{0:N0} t}" Width="100"/>
-                            <DataGridTextColumn Header="Velocidad" Binding="{Binding SpeedKmS, StringFormat={}{0:N0} km/s}" Width="95"/>
-                            <DataGridTextColumn Header="Combustible Actual" Binding="{Binding TotalFuelLiters, StringFormat={}{0:N0} L}" Width="140"/>
-                            <DataGridTextColumn Header="Combustible Máx." Binding="{Binding MaxFuelLiters, StringFormat={}{0:N0} L}" Width="140"/>
+                            <DataGridTextColumn Header="Nombre de la Flota" Binding="{Binding FleetName}" Width="170"/>
+                            <DataGridTextColumn Header="Actividad Actual / Misión" Binding="{Binding CurrentActivity}" Width="*"/>
+                            <DataGridTextColumn Header="Ubicación / Colonia" Binding="{Binding NearestColonyDisplay}" Width="170"/>
+                            <DataGridTextColumn Header="Naves" Binding="{Binding ShipCount}" Width="55"/>
+                            <DataGridTextColumn Header="Masa Flota" Binding="{Binding TotalTonnage, StringFormat={}{0:N0} t}" Width="90"/>
+                            <DataGridTextColumn Header="Velocidad" Binding="{Binding SpeedKmS, StringFormat={}{0:N0} km/s}" Width="90"/>
+                            <DataGridTextColumn Header="Combustible Actual" Binding="{Binding TotalFuelLiters, StringFormat={}{0:N0} L}" Width="130"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>

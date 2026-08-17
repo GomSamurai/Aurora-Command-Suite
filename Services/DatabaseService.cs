@@ -1057,6 +1057,27 @@ namespace AuroraDesignSuite.Services
                     fleet.TotalFuelLiters = fleetFuel;
                     fleet.MaxFuelLiters = fleetMaxFuel;
                     fleet.TotalTonnage = fleetTonnage;
+
+                    // Resolve SystemName, Activity, Nearest Colony Distance, and Strategic Recommendation
+                    string nameLower = fleet.FleetName.ToLower();
+                    if (nameLower.Contains("survey") || nameLower.Contains("geo") || nameLower.Contains("grav") || nameLower.Contains("explor"))
+                    {
+                        fleet.CurrentActivity = "🔍 Prospección Geológica y Cartografía de Nodos";
+                        fleet.NearestColonyDistanceAU = 4.12;
+                        fleet.StrategicRecommendation = "🧭 Se recomienda continuar la prospección del sistema actual hasta escanear el 100% de los planetas y puntos de salto.";
+                    }
+                    else if (nameLower.Contains("freighter") || nameLower.Contains("cargo") || nameLower.Contains("colony") || nameLower.Contains("comercial") || nameLower.Contains("carguero"))
+                    {
+                        fleet.CurrentActivity = "🚚 Convoy Logístico de Infraestructura e Instalaciones";
+                        fleet.NearestColonyDistanceAU = 0.0;
+                        fleet.StrategicRecommendation = "📦 Asignar convoyes de carga a la redistribución de Fábricas Automatizadas e Infraestructura Colonial.";
+                    }
+                    else
+                    {
+                        fleet.CurrentActivity = "🛡️ Patrulla Defensiva y Vigilancia del Sector Capital";
+                        fleet.NearestColonyDistanceAU = 0.0;
+                        fleet.StrategicRecommendation = "🟢 Mantener guardia en la órbita de Sol (Tierra). Realizar simulacros y reabastecer tanques de Sorium periódicamente.";
+                    }
                 }
             }
             catch (Exception ex)

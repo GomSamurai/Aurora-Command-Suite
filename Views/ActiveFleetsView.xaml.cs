@@ -93,7 +93,7 @@ namespace AuroraDesignSuite.Views
                     }
                     else
                     {
-                        LblTacticalAdvisorText.Text = $"💡 EVALUACIÓN TÁCTICA: Escuadra de {fleet.ShipCount} navíos con velocidad máxima de {fleet.SpeedKmS:N0} km/s. Operaciones en espacio profundo autorizadas.";
+                        LblTacticalAdvisorText.Text = $"💡 EVALUACIÓN Y RECOMENDACIÓN TÁCTICA:\nActividad: {fleet.CurrentActivity}\nUbicación: {fleet.NearestColonyDisplay}\n\n{fleet.StrategicRecommendation}";
                     }
                 }
 

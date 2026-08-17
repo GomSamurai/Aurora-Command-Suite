@@ -194,6 +194,14 @@
                                         </StackPanel>
                                     </Border>
                                 </Grid>
+
+                                <!-- Card 4: Imperial Exploration Advisor & Recommended Next Steps -->
+                                <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,8,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="💡 ASESOR IMPERIAL DE EXPLORACIÓN Y PRÓXIMOS PASOS RECOMENDADOS" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                                        <TextBlock x:Name="LblExplorationAdvisor" Text="💡 CONSEJO TÁCTICO: Explora primero cuerpos con Colony Cost 0.00 para establecer colonias de baja infraestructura. Si detectas yacimientos de Sorium y Gallicite con accesibilidad > 0.8, asigna Minas Automáticas de inmediato." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Border>
                             </StackPanel>
                         </Border>
 

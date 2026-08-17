@@ -24,6 +24,15 @@
         <!-- Column 0: Fleet Aggregator, Fuel & Mineral Workbench -->
         <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,4,0">
             <StackPanel>
+                <!-- Guidance Banner: Purpose of Naval Audit -->
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                    <StackPanel>
+                        <TextBlock Text="🛡️ AUDITORÍA NAVAL Y PREPARACIÓN DOCTRINAL (FCT_Fleet &amp; FCT_Ship)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,4"/>
+                        <TextBlock Text="Módulo táctico para auditar la factibilidad operacional y doctrinal de tus escuadras imperiales:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                        <TextBlock Text="• Combina planos del Diseñador, clases guardadas en tu imperio y flotas operativas reales de AuroraDB.db.&#10;• Calcula los requerimientos totales de combustible de campaña y Sorium refinado.&#10;• Agrega la demanda completa de minerales exóticos necesarios para construir la flota.&#10;• Evalúa la factibilidad de construcción en tus astilleros e importa tus flotas reales en vivo." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
                 <!-- Fleet Add & Formations Section -->
                 <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                     <StackPanel>

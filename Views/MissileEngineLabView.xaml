@@ -11,517 +11,168 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Top Mode Toolbar -->
-        <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,0,0,10">
-            <DockPanel DockPanel.Dock="Top">
-                <TextBlock Text="🔬 SUITE DE INGENIERÍA DE MISILES Y MOTORES NAVALES" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" Margin="5,0,20,0"/>
-                
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <RadioButton x:Name="BtnModeMissiles" Content="🚀 Diseñador de Misiles" IsChecked="True" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Herramientas paramétricas para proyectar ojivas, maniobrabilidad, alcance y probabilidad de acierto de misiles."/>
-                    <RadioButton x:Name="BtnModeEngines" Content="⚙️ Diseñador de Motores Navales" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Simulador para diseñar motores comerciales y militares, calculando potencia, huella térmica y rendimiento según el tonelaje de cascos."/>
-                    <RadioButton x:Name="BtnModeCatalog" Content="📦 Catálogo de Diseños Guardados" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Visualizador interactivo de todos los misiles y motores navales guardados en tu base de datos de Aurora 4X."/>
+        <!-- Top Header & Mode Toolbar -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="🧪 CENTRO DE CREACIÓN Y DISEÑO DE PROYECTOS I+D" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock Text="Modelado paramétrico en tiempo real emparejado en vivo con AuroraDB.db y catálogo de proyectos del imperio." Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,2,0,0"/>
                 </StackPanel>
-            </DockPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <RadioButton x:Name="BtnModeDesigner" Content="➕ Diseñador de Nuevos Proyectos" IsChecked="True" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="12,6" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Herramientas avanzadas de diseño para crear sensores, armas, misiles, torretas, motores y formaciones."/>
+                    <RadioButton x:Name="BtnModeCatalog" Content="📚 Catálogo de Proyectos (Juego + App)" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="12,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Visualizador unificado de todos los proyectos creados en el juego Aurora 4X y guardados en la app."/>
+                </StackPanel>
+            </Grid>
         </Border>
 
-        <!-- Main Mode Container -->
+        <!-- Main Workspace -->
         <Grid Grid.Row="1">
-            <!-- MODE 1: MISSILE DESIGNER -->
-            <Grid x:Name="PnlMissileDesigner" Visibility="Visible">
+            <!-- MODE 1: MULTI-CATEGORY PROJECT DESIGNER -->
+            <Grid x:Name="PnlProjectDesigner" Visibility="Visible">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="420"/>
+                    <ColumnDefinition Width="440"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Left Column: Missile Sliders & Categorized Presets -->
+                <!-- Left Column: Category Navigation & Dynamic Controls -->
                 <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,5,0">
                     <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
                         <StackPanel>
-                            <TextBlock Text="🚀 OPTIMIZADOR PARAMÉTRICO DE MISILES" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                            <TextBlock Text="🛠️ SELECCIONAR CATEGORÍA DE PROYECTO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                            
+                            <!-- Creation Categories Grid -->
+                            <UniformGrid Columns="2" Margin="0,0,0,10">
+                                <RadioButton x:Name="RbCatSensors" Content="📡 Sensores" IsChecked="True" Checked="OnCategoryChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="8,6" Margin="2" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Diseño de sensores activos comerciales/militares, térmicos y electromagnéticos pasivos."/>
+                                <RadioButton x:Name="RbCatWeapons" Content="💥 Armas Energía" Checked="OnCategoryChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="8,6" Margin="2" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Láseres, mesones, cañones Gauss, railguns y carronadas de plasma."/>
+                                <RadioButton x:Name="RbCatMissiles" Content="🚀 Misiles" Checked="OnCategoryChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="8,6" Margin="2" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Misiles antibuque (ASM), antimisil (AMM), torpedos y señuelos navales."/>
+                                <RadioButton x:Name="RbCatTurrets" Content="🛡️ Torretas" Checked="OnCategoryChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="8,6" Margin="2" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Montajes de torretas simples, dobles o cuádruples con velocidad de seguimiento."/>
+                                <RadioButton x:Name="RbCatEngines" Content="⚡ Motores" Checked="OnCategoryChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="8,6" Margin="2" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Propulsores militares, comerciales, para cazas y blindaje térmico."/>
+                                <RadioButton x:Name="RbCatGround" Content="⚔️ Terrestre" Checked="OnCategoryChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="8,6" Margin="2" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Formaciones de infantería, tanques de asalto y piezas de artillería."/>
+                            </UniformGrid>
 
-                            <!-- Category & Preset Selector -->
-                            <TextBlock Text="Categoría de Misil:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                            <ComboBox x:Name="CmbMissileCategory" SelectionChanged="CmbMissileCategory_SelectionChanged" Margin="0,0,0,6" ToolTip="Filtra las plantillas predefinidas por función militar (Antinave, Antimisil, Sondas, Presets de Usuario)."/>
+                            <Separator Background="{DynamicResource BorderBrush}" Margin="0,0,0,10"/>
 
-                            <TextBlock Text="Plantilla Preestablecida (Preset):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                            <ComboBox x:Name="CmbMissilePreset" SelectionChanged="CmbMissilePreset_SelectionChanged" Margin="0,0,0,10" ToolTip="Carga un diseño predeterminado optimizado para misiones específicas."/>
+                            <!-- Common Project Name Input -->
+                            <TextBlock Text="Nombre del Proyecto / Componente:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                            <TextBox x:Name="TxtProjectName" Text="Active Sensor Buscar AS8-R100" Margin="0,0,0,12" Padding="6,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource BorderBrush}" ToolTip="Nombre descriptivo único con el que se registrará el proyecto en el árbol de investigación."/>
 
-                            <TextBlock Text="Nombre del Misil:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                            <TextBox x:Name="TxtMissileName" Text="Misil Antinave Víbora MK-I" Margin="0,0,0,10" ToolTip="Denominación militar única del plano. Al guardar, este nombre figurará en los arsenales imperiales."/>
+                            <!-- Dynamic Parameters Box (Sensors / Engines / Missiles / Weapons) -->
+                            <StackPanel x:Name="PnlSensorControls" Visibility="Visible">
+                                <TextBlock Text="Tipo de Sensor:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                <ComboBox x:Name="CmbSensorType" SelectionChanged="OnParamChanged" Margin="0,0,0,10">
+                                    <ComboBoxItem Content="📡 Active Search Sensor (Militar)" IsSelected="True"/>
+                                    <ComboBoxItem Content="📦 Commercial Active Sensor (Comercial)"/>
+                                    <ComboBoxItem Content="🔥 Thermal Passive Sensor (Térmico)"/>
+                                    <ComboBoxItem Content="⚡ EM Passive Sensor (Electromagnético)"/>
+                                </ComboBox>
 
+                                <Grid Margin="0,0,0,4">
+                                    <TextBlock Text="Tamaño del Sensor (HS / Tons):" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                    <TextBlock x:Name="LblValSensorSize" Text="1.0 HS (50 t)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <Slider x:Name="SldSensorSize" Minimum="0.1" Maximum="20" Value="1.0" TickFrequency="0.5" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,10" ToolTip="Tamaño en cascos (1 HS = 50 Tons). Sensores más grandes ofrecen mayor alcance de detección."/>
+
+                                <Grid Margin="0,0,0,4">
+                                    <TextBlock Text="Resolución de Destino (Res):" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                    <TextBlock x:Name="LblValSensorRes" Text="Res 100 (5,000t)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <Slider x:Name="SldSensorRes" Minimum="1" Maximum="100" Value="100" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,10" ToolTip="Resolución del radar. Res 1 para cazas/misiles, Res 20 para corbetas, Res 100 para cruceros."/>
+
+                                <Grid Margin="0,0,0,4">
+                                    <TextBlock Text="Contra-contramedidas (ECCM):" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                    <TextBlock x:Name="LblValSensorEccm" Text="ECCM-0" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <Slider x:Name="SldSensorEccm" Minimum="0" Maximum="5" Value="0" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,12" ToolTip="Nivel de protección contra jamming e interferencias electrónicas enemigas."/>
+                            </StackPanel>
+
+                            <!-- Generic Parameters Sliders -->
                             <Grid Margin="0,0,0,4">
-                                <TextBlock Text="Tamaño del Misil (MSP/HS):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblValMissileSize" Text="6,0 MSP" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                <TextBlock Text="Multiplicador de Rendimiento:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock x:Name="LblValPowerMod" Text="1.00x" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
                             </Grid>
-                            <Slider x:Name="SldMissileSize" Minimum="1" Maximum="30" Value="6" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnMissileParamChanged" Margin="0,0,0,10" ToolTip="Volumen total en Puntos de Suministro de Misiles (1 MSP = 50 Tons). Misiles más grandes permiten mayores ojivas y motores, pero requieren lanzadores más pesados."/>
+                            <Slider x:Name="SldPowerMod" Minimum="0.5" Maximum="3.0" Value="1.0" TickFrequency="0.25" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,12" ToolTip="Aumenta el rendimiento y la efectividad operativa a cambio de mayor consumo de recursos."/>
 
-                            <Grid Margin="0,0,0,4">
-                                <TextBlock Text="Proporción de Motor (% del Misil):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblValEngineSize" Text="40%" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <Slider x:Name="SldEngineSize" Minimum="10" Maximum="80" Value="40" TickFrequency="5" IsSnapToTickEnabled="True" ValueChanged="OnMissileParamChanged" Margin="0,0,0,10" ToolTip="Fracción del espacio interno asignada al propulsor. Un mayor % de motor eleva la velocidad punta a costa de reducir la carga explosiva o el alcance."/>
-
-                            <Grid Margin="0,0,0,4">
-                                <TextBlock Text="Modificador de Potencia del Motor:" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblValPowerMod" Text="2.00x" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <Slider x:Name="SldPowerMod" Minimum="0.5" Maximum="4.0" Value="2.0" TickFrequency="0.25" IsSnapToTickEnabled="True" ValueChanged="OnMissileParamChanged" Margin="0,0,0,10" ToolTip="Multiplicador térmico del motor. Incrementar la potencia aumenta la velocidad exponencialmente pero dispara el consumo de combustible de Sorium."/>
-
-                            <Grid Margin="0,0,0,4">
-                                <TextBlock Text="Tamaño de Ojiva Explosiva (MSP):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblValWarhead" Text="2,0 MSP" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <Slider x:Name="SldWarhead" Minimum="0.5" Maximum="15" Value="2.0" TickFrequency="0.5" IsSnapToTickEnabled="True" ValueChanged="OnMissileParamChanged" Margin="0,0,0,10" ToolTip="Masa de carga explosiva convencional o nuclear. Determina la profundidad de daño infligido al blindaje metálico enemigo según la regla de penetración por raíz cuadrada."/>
-
-                            <Grid Margin="0,0,0,4">
-                                <TextBlock Text="Almacenamiento de Combustible (MSP):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblValFuel" Text="1,0 MSP" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <Slider x:Name="SldFuel" Minimum="0.1" Maximum="10" Value="1.0" TickFrequency="0.1" IsSnapToTickEnabled="True" ValueChanged="OnMissileParamChanged" Margin="0,0,0,10" ToolTip="Capacidad de tanques de combustible. Un combustible insuficiente dejará al misil sin propulsión antes de alcanzar a su objetivo en distancias largas."/>
-
-                            <Grid Margin="0,0,0,4">
-                                <TextBlock Text="Puntos de Agilidad / Maniobrabilidad:" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblValAgility" Text="5,0" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <Slider x:Name="SldAgility" Minimum="0" Maximum="20" Value="5" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnMissileParamChanged" Margin="0,0,0,12" ToolTip="Propulsores de maniobra vernier. Mejoran la probabilidad de acierto (Hit Chance) contra naves evasivas de alta velocidad o interceptación de misiles."/>
-
-                            <Grid Margin="0,0,0,4">
+                            <!-- Action Buttons -->
+                            <Grid Margin="0,8,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" Content="⭐ Guardar Preset" Click="BtnSaveUserMissilePreset_Click" Padding="6,6" Margin="0,0,4,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Guarda esta configuración como un preset del usuario en el programa."/>
-                                <Button Grid.Column="1" Content="💾 Guardar en DB" Click="BtnSaveMissile_Click" Padding="6,6" Margin="4,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Registra la plantilla de este misil directamente en FCT_MissileType en AuroraDB.db."/>
+                                <Button Grid.Column="0" Content="⭐ Guardar Preset App" Click="BtnSaveAppPreset_Click" Padding="6,8" Margin="0,0,4,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Guarda esta configuración como una plantilla del usuario en la aplicación."/>
+                                <Button Grid.Column="1" Content="🚀 Crear en DB" Click="BtnCreateProjectInDB_Click" Padding="6,8" Margin="4,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Registra este proyecto de investigación e instala el componente directamente en AuroraDB.db."/>
                             </Grid>
                         </StackPanel>
                     </Border>
                 </ScrollViewer>
 
-                <!-- Right Column: Missile Telemetry, Crater Penetration & Hit Matrix -->
+                <!-- Right Column: Live Specifications & Mineral Breakdown -->
                 <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="5,0,0,0">
                     <StackPanel>
-                        <!-- Card 1: Live Performance Telemetry -->
+                        <!-- Card 1: Performance Specifications -->
                         <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                             <StackPanel>
-                                <TextBlock Text="📊 RENDIMIENTO Y TELEMETRÍA EN VIVO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,10"/>
+                                <TextBlock Text="📊 ESPECIFICACIONES TÉCNICAS Y RENDIMIENTO I+D" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,10"/>
+                                
                                 <UniformGrid Columns="3">
                                     <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
                                         <StackPanel>
-                                            <TextBlock Text="Tamaño Misil:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblResSize" Text="6.0 MSP" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                            <TextBlock Text="Masa Total Componente:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                            <TextBlock x:Name="LblSpecSize" Text="1.0 HS (50 Tons)" Foreground="White" FontWeight="Bold" FontSize="13"/>
                                         </StackPanel>
                                     </Border>
                                     <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
                                         <StackPanel>
-                                            <TextBlock Text="Velocidad Punta:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblResSpeed" Text="16,667 km/s" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="14"/>
+                                            <TextBlock Text="Costo Investigación (RP):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                            <TextBlock x:Name="LblSpecCostRP" Text="100 RP" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13"/>
                                         </StackPanel>
                                     </Border>
                                     <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
                                         <StackPanel>
-                                            <TextBlock Text="Daño de Ojiva:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblResDamage" Text="8.0 Dmg" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="14"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel>
-                                            <TextBlock Text="Alcance Máximo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblResRange" Text="1.87 Mill. km" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="14"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel>
-                                            <TextBlock Text="Tiempo Vuelo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblResFlightTime" Text="112 Segundos" Foreground="White" FontWeight="Bold" FontSize="14"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel>
-                                            <TextBlock Text="Costo Fabricación:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblResCost" Text="72.00 BP" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="14"/>
-                                        </StackPanel>
-                                    </Border>
-                                </UniformGrid>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Card 2: Armor Penetration & Crater Profile -->
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                            <StackPanel>
-                                <TextBlock Text="💥 ANÁLISIS DE PENETRACIÓN DE BLINDAJE (PATRÓN DE CRÁTER DE DAÑO)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <TextBlock Text="Profundidad de boquete en armadura enemiga (Fórmula de penetración de raíz cuadrada de Aurora 4X):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,8"/>
-
-                                <UniformGrid Columns="5">
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Profundidad alcanzada contra naves con 1 capa de blindaje.">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Blindaje 1 Capa" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblCrater1" Text="Penetrante (2.8)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Profundidad alcanzada contra naves con 2 capas de blindaje.">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Blindaje 2 Capas" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblCrater2" Text="Penetrante (2.8)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Profundidad alcanzada contra naves con 4 capas de blindaje.">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Blindaje 4 Capas" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblCrater4" Text="Brecha Parcial" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Profundidad alcanzada contra naves pesadas con 8 capas de blindaje.">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Blindaje 8 Capas" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblCrater8" Text="Daño Superficial" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Profundidad alcanzada contra supercruceros con 12 capas de blindaje.">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Blindaje 12 Capas" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblCrater12" Text="Absorbido" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                </UniformGrid>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Card 3: Missile Interception & Pk Simulation Matrix -->
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                            <StackPanel x:Name="PnlMissilePkMatrix">
-                                <TextBlock Text="⚔️ MATRIZ DE INTERCEPTACIÓN Y PROBABILIDAD DE IMPACTO (Pk)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <TextBlock Text="Cálculo de probabilidad de acierto (Pk %) enfrentado a la velocidad y maniobrabilidad del objetivo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,8"/>
-
-                                <UniformGrid Columns="3">
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Probabilidad de acierto contra una nave enemiga lenta (3,000 km/s).">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Objetivo Lento (3,000 km/s)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblPkSlow" Text="100% Pk" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Probabilidad de acierto contra una nave enemiga estándar (6,000 km/s).">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Objetivo Estándar (6,000 km/s)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblPkStd" Text="85% Pk" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Probabilidad de acierto contra un objetivo rápido de alta maniobra (12,000 km/s).">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Objetivo Rápido (12,000 km/s)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblPkFast" Text="45% Pk" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                </UniformGrid>
-
-                                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,8,0,0">
-                                    <TextBlock x:Name="LblPkAdvice" Text="💡 Táctica recomendada: Añade puntos de agilidad para mantener un Pk > 80% frente a objetivos veloces." Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" TextWrapping="Wrap"/>
-                                </Border>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Card 3: Target Hit Probability Matrix -->
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                            <StackPanel>
-                                <TextBlock Text="🎯 MATRIZ DE PROBABILIDAD DE IMPACTO VS VELOCIDAD DEL OBJETIVO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <TextBlock Text="Eficacia de interceptación simulada contra diferentes perfiles de velocidad enemiga:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,8"/>
-
-                                <UniformGrid Columns="5">
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Vs 2,000 km/s" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblHit2k" Text="100.0%" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Vs 5,000 km/s" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblHit5k" Text="100.0%" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Vs 10,000 km/s" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblHit10k" Text="92.5%" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Vs 15,000 km/s" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblHit15k" Text="68.0%" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Vs 20,000 km/s" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblHit20k" Text="45.2%" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                </UniformGrid>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Card 4: Missile Salvo & Magazine Logistics -->
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                            <StackPanel>
-                                <TextBlock Text="🚀 LOGÍSTICA DE SALVOS Y PAÑOL DE MUNICIÓN IMPERIAL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <Grid Margin="0,2">
-                                    <TextBlock Text="Tamaño de Lanzador Recomendado:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                    <TextBlock x:Name="LblLauncherSize" Text="6.0 MSP (300 Tons)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
-                                </Grid>
-                                <Grid Margin="0,2">
-                                    <TextBlock Text="Tiempo de Recarga por Tubo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                    <TextBlock x:Name="LblReloadTime" Text="30 Segundos" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
-                                </Grid>
-                                <Grid Margin="0,2">
-                                    <TextBlock Text="Capacidad en Pañol Estándar (100 MSP):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                    <TextBlock x:Name="LblMagCapacity" Text="16 Misiles" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
-                                </Grid>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Card 5: Minerals Breakdown -->
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
-                            <StackPanel>
-                                <TextBlock Text="💎 REQUERIMIENTO DE MINERALES EXÓTICOS POR MISIL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <ItemsControl x:Name="IcMissileMinerals">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="0,2">
-                                                <TextBlock Text="{Binding Key}" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
-                                                <TextBlock Text="{Binding Value, StringFormat={}{0:N2} Tons}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right" FontSize="11"/>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </ScrollViewer>
-            </Grid>
-
-            <!-- MODE 2: SHIP ENGINE DESIGNER -->
-            <Grid x:Name="PnlEngineDesigner" Visibility="Collapsed">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="420"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Left Column: Engine Parameters & Categorized Presets -->
-                <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,5,0">
-                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
-                        <StackPanel>
-                            <TextBlock Text="⚙️ OPTIMIZADOR DE MOTORES NAVALES" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-
-                            <!-- Category & Preset Selector -->
-                            <TextBlock Text="Categoría de Motor:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                            <ComboBox x:Name="CmbEngineCategory" SelectionChanged="CmbEngineCategory_SelectionChanged" Margin="0,0,0,6" ToolTip="Filtra los motores por tipo de diseño (Militar, Comercial, Sigiloso, Usuario)."/>
-
-                            <TextBlock Text="Plantilla Preestablecida (Preset):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                            <ComboBox x:Name="CmbEnginePreset" SelectionChanged="CmbEnginePreset_SelectionChanged" Margin="0,0,0,10" ToolTip="Carga un diseño de motor preconcebido para el perfil de nave deseado."/>
-
-                            <TextBlock Text="Nombre del Motor Naval:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                            <TextBox x:Name="TxtEngineName" Text="Motor de Impulso Ion 500" Margin="0,0,0,10" ToolTip="Nombre con el que se registrará el motor en las plantillas de componentes imperiales."/>
-
-                            <TextBlock Text="Clasificación Operativa del Motor:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,4"/>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                <RadioButton x:Name="RbEngMil" Content="⚔️ Motor Militar (Alta Potencia)" IsChecked="True" Checked="OnEngineParamChanged" Margin="0,0,15,0" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Motores de alto empuje diseñados para naves de guerra. Tienen un costo y firma térmica superiores."/>
-                                <RadioButton x:Name="RbEngComm" Content="📦 Motor Comercial (Eficiente)" Checked="OnEngineParamChanged" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Motores optimizados para cargueros y tanqueros. Tienen consumo reducido pero velocidad limitada."/>
-                            </StackPanel>
-
-                            <Grid Margin="0,0,0,4">
-                                <TextBlock Text="Tamaño del Motor (HS / Tons):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblValEngSize" Text="10.0 HS (500 t)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <Slider x:Name="SldEngSize" Minimum="1" Maximum="100" Value="10" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnEngineParamChanged" Margin="0,0,0,10" ToolTip="Masa del motor medida en cascos (1 HS = 50 Tons). Motores más grandes entregan mayor empuje en EP."/>
-
-                            <Grid Margin="0,0,0,4">
-                                <TextBlock Text="Modificador de Potencia del Motor:" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblValEngPowerMod" Text="1.25x" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <Slider x:Name="SldEngPowerMod" Minimum="0.1" Maximum="3.0" Value="1.25" TickFrequency="0.05" IsSnapToTickEnabled="True" ValueChanged="OnEngineParamChanged" Margin="0,0,0,10" ToolTip="Multiplicador de fuerza propulsora. Aumentar la potencia eleva la velocidad pero incrementa exponencialmente el consumo de combustible de Sorium y la firma térmica."/>
-
-                            <Grid Margin="0,0,0,4">
-                                <TextBlock Text="Blindaje y Reducción Térmica:" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblValEngThermal" Text="Normal (100%)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <Slider x:Name="SldEngThermal" Minimum="0.2" Maximum="1.0" Value="1.0" TickFrequency="0.1" IsSnapToTickEnabled="True" ValueChanged="OnEngineParamChanged" Margin="0,0,0,12" ToolTip="Aislamiento térmico del motor. Reduce las emisiones pasivas para evitar ser detectado por sensores infrarrojos enemigos a larga distancia."/>
-
-                            <Grid Margin="0,0,0,4">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" Content="⭐ Guardar Preset" Click="BtnSaveUserEnginePreset_Click" Padding="6,6" Margin="0,0,4,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Guarda esta configuración de motor como un preset del usuario."/>
-                                <Button Grid.Column="1" Content="💾 Guardar en DB" Click="BtnSaveEngine_Click" Padding="6,6" Margin="4,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Guarda este componente de motor directamente en FCT_ShipComponentTemplate en AuroraDB.db."/>
-                            </Grid>
-                        </StackPanel>
-                    </Border>
-                </ScrollViewer>
-
-                <!-- Right Column: Engine Telemetry, Speed Simulator, Endurance & Thermal Detection -->
-                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="5,0,0,0">
-                    <StackPanel>
-                        <!-- Card 1: Engine Telemetry -->
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                            <StackPanel>
-                                <TextBlock Text="📊 RENDIMIENTO Y FIRMA TÉRMICA DEL MOTOR" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,10"/>
-                                <UniformGrid Columns="3">
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel>
-                                            <TextBlock Text="Potencia Total (EP):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblEngResPower" Text="625 EP" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="14"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel>
-                                            <TextBlock Text="Consumo Combustible:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblEngResFuel" Text="1.25 L/EP/Hr" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="14"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel>
-                                            <TextBlock Text="Firma Térmica Emitida:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblEngResThermal" Text="625.0 W" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="14"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel>
-                                            <TextBlock Text="Costo de Fabricación:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblEngResCost" Text="62.5 BP" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="14"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel>
-                                            <TextBlock Text="Masa Total Motor:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblEngResSize" Text="500 Tons" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                            <TextBlock Text="Costo Fabricación (BP):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                            <TextBlock x:Name="LblSpecCostBP" Text="2.0 BP" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="13"/>
                                         </StackPanel>
                                     </Border>
                                     <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
                                         <StackPanel>
                                             <TextBlock Text="Tripulación Necesaria:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                            <TextBlock x:Name="LblEngResCrew" Text="10 Personas" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                            <TextBlock x:Name="LblSpecCrew" Text="2 Personas" Foreground="White" FontWeight="Bold" FontSize="13"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
+                                        <StackPanel>
+                                            <TextBlock Text="Resistencia HTK:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                            <TextBlock x:Name="LblSpecHTK" Text="1 Hit To Kill" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
+                                        <StackPanel>
+                                            <TextBlock Text="Rango Máximo Detección:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                            <TextBlock x:Name="LblSpecPerformance" Text="8,281,161 km" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="13"/>
                                         </StackPanel>
                                     </Border>
                                 </UniformGrid>
+
+                                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,10,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="💡 DESCRIPCIÓN TÁCTICA DEL DISEÑO:" Foreground="{DynamicResource AccentAmberBrush}" FontSize="11" FontWeight="Bold"/>
+                                        <TextBlock x:Name="LblSpecDescription" Text="Active Sensor Strength 2 | Sensitivity Modifier: 50% | Resolution 100 | Maximum Range vs 5000 ton object: 8,281,161 km | Range vs 1000 ton object: 331,246 km" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                    </StackPanel>
+                                </Border>
                             </StackPanel>
                         </Border>
 
-                        <!-- Card 2: Hull Speed Simulator -->
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                            <StackPanel>
-                                <TextBlock Text="🚢 SIMULADOR DE VELOCIDAD SEGÚN TONELAJE DEL CASCO IMPERIAL" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <TextBlock Text="Velocidad punta estimada (km/s) equipando 1 unidad de este motor en cascos de distinto tamaño:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,8"/>
-
-                                <UniformGrid Columns="5">
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Casco 1,000 t" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblSpeed1k" Text="31,250 km/s" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Casco 5,000 t" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblSpeed5k" Text="6,250 km/s" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Casco 10,000 t" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblSpeed10k" Text="3,125 km/s" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Casco 20,000 t" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblSpeed20k" Text="1,562 km/s" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Casco 50,000 t" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblSpeed50k" Text="625 km/s" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                </UniformGrid>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Card 3: Fuel Endurance & Continuous Burn Time -->
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                            <StackPanel>
-                                <TextBlock Text="⛽ AUTONOMÍA Y TIEMPO DE QUEMA CONTINUA DE COMBUSTIBLE" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <TextBlock Text="Tiempo ininterrumpido de empuje a máxima potencia según la capacidad de los tanques de la nave:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,8"/>
-
-                                <UniformGrid Columns="4">
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Tanque 50,000 L" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblBurn50k" Text="2.7 Días" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Tanque 100,000 L" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblBurn100k" Text="5.4 Días" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Tanque 250,000 L" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblBurn250k" Text="13.5 Días" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Tanque 1,000,000 L" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblBurn1M" Text="54 Días" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                </UniformGrid>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Card 4: Enemy Passive Thermal Sensor Detection Range -->
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                            <StackPanel>
-                                <TextBlock Text="📡 SIMULACIÓN DE DETECTABILIDAD INFRARROJA ENEMIGA" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <TextBlock Text="Distancia estimada en Millones de km a la que sensores pasivos enemigos detectarán la firma térmica:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,8"/>
-
-                                <UniformGrid Columns="4">
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Sensor TH-10 (Básico)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblDet10" Text="62.5 Mill. km" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Sensor TH-25 (Estándar)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblDet25" Text="156.2 Mill. km" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Sensor TH-50 (Avanzado)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblDet50" Text="312.5 Mill. km" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="Sensor TH-100 (Supremo)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                            <TextBlock x:Name="LblDet100" Text="625.0 Mill. km" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                </UniformGrid>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Card 5: Engine Minerals Breakdown -->
+                        <!-- Card 2: Minerals & Material Requirements -->
                         <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
                             <StackPanel>
-                                <TextBlock Text="💎 REQUERIMIENTO DE MINERALES PARA FABRICAR ESTE MOTOR" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <ItemsControl x:Name="IcEngineMinerals">
+                                <TextBlock Text="💎 REQUERIMIENTO DE MINERALES EXÓTICOS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,10"/>
+                                
+                                <ItemsControl x:Name="IcProjectMinerals">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Grid Margin="0,2">
@@ -537,45 +188,46 @@
                 </ScrollViewer>
             </Grid>
 
-            <!-- MODE 3: DATABASE CATALOG -->
-            <Grid x:Name="PnlCatalog" Visibility="Collapsed">
+            <!-- MODE 2: UNIFIED PROJECTS CATALOG (GAME + APP) -->
+            <Grid x:Name="PnlProjectCatalog" Visibility="Collapsed">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- Top: Saved Missiles -->
-                <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Margin="0,0,0,8" Padding="10">
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Top" Text="🚀 MISILES REGISTRADOS EN LA BASE DE DATOS (FCT_MissileType)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                        <DataGrid x:Name="DgSavedMissiles" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Misiles y municiones registradas en AuroraDB.db.">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Nombre del Misil" Binding="{Binding Name}" Width="*"/>
-                                <DataGridTextColumn Header="Tamaño (MSP)" Binding="{Binding SizeDisplay}" Width="150"/>
-                                <DataGridTextColumn Header="Velocidad" Binding="{Binding SpeedDisplay}" Width="150"/>
-                                <DataGridTextColumn Header="Daño Ojiva" Binding="{Binding DamageDisplay}" Width="130"/>
-                                <DataGridTextColumn Header="Alcance Máximo" Binding="{Binding RangeDisplay}" Width="180"/>
-                                <DataGridTextColumn Header="Costo (BP)" Binding="{Binding CostDisplay}" Width="120"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </DockPanel>
+                <!-- Filter Bar -->
+                <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Filtrar por Origen del Proyecto:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <ComboBox x:Name="CmbCatalogSourceFilter" SelectionChanged="CmbCatalogSourceFilter_SelectionChanged" Width="220" Padding="6,4">
+                                <ComboBoxItem Content="🌐 Todos los Proyectos (Juego + App)" IsSelected="True"/>
+                                <ComboBoxItem Content="🎮 Solo Creados en el Juego (Aurora 4X)"/>
+                                <ComboBoxItem Content="💻 Solo Creados en la App"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <TextBlock x:Name="LblCatalogTotalCount" Grid.Column="1" Text="Proyectos Cargados: 0" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                    </Grid>
                 </Border>
 
-                <!-- Bottom: Saved Engines -->
+                <!-- Catalog DataGrid -->
                 <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Top" Text="⚙️ MOTORES NAVALES REGISTRADOS EN LA BASE DE DATOS (FCT_ShipComponentTemplate)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                        <DataGrid x:Name="DgSavedEngines" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Plantillas de componentes de propulsión registradas en AuroraDB.db.">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Nombre del Motor" Binding="{Binding Name}" Width="*"/>
-                                <DataGridTextColumn Header="Tipo" Binding="{Binding TypeDisplay}" Width="130"/>
-                                <DataGridTextColumn Header="Masa (HS / Tons)" Binding="{Binding SizeDisplay}" Width="150"/>
-                                <DataGridTextColumn Header="Potencia (EP)" Binding="{Binding PowerDisplay}" Width="140"/>
-                                <DataGridTextColumn Header="Firma Térmica" Binding="{Binding ThermalDisplay}" Width="140"/>
-                                <DataGridTextColumn Header="Costo (BP)" Binding="{Binding CostDisplay}" Width="120"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </DockPanel>
+                    <DataGrid x:Name="DgProjectCatalog" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Proyectos de investigación y componentes personalizados registrados en AuroraDB.db y guardados en la app.">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Origen" Binding="{Binding SourceBadge}" Width="150"/>
+                            <DataGridTextColumn Header="Nombre del Proyecto / Componente" Binding="{Binding Name}" Width="280"/>
+                            <DataGridTextColumn Header="Categoría" Binding="{Binding Category}" Width="180"/>
+                            <DataGridTextColumn Header="Costo I+D" Binding="{Binding CostDisplay}" Width="110"/>
+                            <DataGridTextColumn Header="Tamaño (HS/Masa)" Binding="{Binding SizeDisplay}" Width="130"/>
+                            <DataGridTextColumn Header="Especificaciones Tácticas / Descripción" Binding="{Binding SpecificationsSummary}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Border>
             </Grid>
         </Grid>

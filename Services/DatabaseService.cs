@@ -2019,12 +2019,197 @@ namespace AuroraDesignSuite.Services
                 cmd.Parameters.AddWithValue("@powerMod", ep / Math.Max(1.0, hs * 50.0));
 
                 cmd.ExecuteNonQuery();
-                msg = $"⚙️ Motor Naval '{name}' registrado con éxito en AuroraDB.db.";
+                msg = $"⚡ Motor Naval '{name}' guardado con éxito en AuroraDB.db.";
                 return true;
             }
             catch (Exception ex)
             {
                 msg = $"❌ Error al guardar motor: {ex.Message}";
+                return false;
+            }
+        }
+
+        public List<CustomProjectItem> GetCustomProjects(int raceId)
+        {
+            var list = new List<CustomProjectItem>();
+            try
+            {
+                using var conn = GetConnection();
+
+                // 1. Fetch Custom TechSystem projects
+                string tsSql = @"
+                    SELECT TechSystemID, Name, CategoryID, TechDescription, DevelopCost
+                    FROM FCT_TechSystem
+                    WHERE RaceID = @raceId OR TechDescription LIKE '%Race-designed%' OR TechDescription LIKE '%Custom%'
+                    ORDER BY TechSystemID DESC";
+
+                using (var cmd = new SqliteCommand(tsSql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@raceId", raceId);
+                    using var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int id = Convert.ToInt32(reader["TechSystemID"]);
+                        string name = reader["Name"] != DBNull.Value ? reader["Name"].ToString()! : "Proyecto I+D";
+                        int catId = reader["CategoryID"] != DBNull.Value ? Convert.ToInt32(reader["CategoryID"]) : 1;
+                        double cost = reader["DevelopCost"] != DBNull.Value ? Convert.ToDouble(reader["DevelopCost"]) : 100.0;
+                        string desc = reader["TechDescription"] != DBNull.Value ? reader["TechDescription"].ToString()! : "Diseño del Imperio";
+
+                        string categoryName = catId switch
+                        {
+                            1 => "⚡ Propulsión y Potencia",
+                            2 => "💥 Energía y Láseres",
+                            3 => "🚀 Misiles y Cinéticas",
+                            4 => "📡 Sensores y Control",
+                            5 => "🧬 Biología y Ciencias",
+                            6 => "🏗️ Construcción y Logística",
+                            _ => "⚙️ General e Industria"
+                        };
+
+                        list.Add(new CustomProjectItem
+                        {
+                            ProjectID = id,
+                            Name = name,
+                            Category = categoryName,
+                            Source = ProjectSource.Aurora4XGame,
+                            DevelopmentCostRP = cost,
+                            BuildCostBP = Math.Round(cost / 10.0, 1),
+                            SizeHS = 1.0,
+                            Crew = 5,
+                            HTK = 1,
+                            SpecificationsSummary = string.IsNullOrEmpty(desc) ? "Proyecto personalizado registrado en el juego Aurora 4X" : desc
+                        });
+                    }
+                }
+
+                // 2. Fetch Custom Component Templates
+                string sctSql = @"
+                    SELECT ShipComponentTemplateID, ComponentName, ComponentValue, ComponentSize, ComponentTypeID
+                    FROM FCT_ShipComponentTemplate
+                    ORDER BY ShipComponentTemplateID DESC";
+
+                using (var cmd = new SqliteCommand(sctSql, conn))
+                {
+                    using var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int id = Convert.ToInt32(reader["ShipComponentTemplateID"]);
+                        string name = reader["ComponentName"] != DBNull.Value ? reader["ComponentName"].ToString()! : "Componente Naval";
+                        double cost = reader["ComponentValue"] != DBNull.Value ? Convert.ToDouble(reader["ComponentValue"]) : 10.0;
+                        double size = reader["ComponentSize"] != DBNull.Value ? Convert.ToDouble(reader["ComponentSize"]) : 1.0;
+                        int typeId = reader["ComponentTypeID"] != DBNull.Value ? Convert.ToInt32(reader["ComponentTypeID"]) : 1;
+
+                        string category = typeId switch
+                        {
+                            1 => "⚡ Motor Naval",
+                            8 or 24 => "📡 Sensor Táctico",
+                            15 => "💥 Arma de Energía",
+                            22 => "🚀 Lanzador de Misiles",
+                            _ => "🛠️ Componente Especial"
+                        };
+
+                        if (!list.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            list.Add(new CustomProjectItem
+                            {
+                                ProjectID = id + 100000,
+                                Name = name,
+                                Category = category,
+                                Source = ProjectSource.Aurora4XGame,
+                                DevelopmentCostRP = cost * 5.0,
+                                BuildCostBP = cost,
+                                SizeHS = size,
+                                Crew = (int)Math.Max(1, size * 2),
+                                HTK = (int)Math.Max(1, size),
+                                SpecificationsSummary = $"Componente personalizado en el juego | Tamaño: {size:F1} HS ({size * 50:N0} t) | Costo: {cost:N1} BP"
+                            });
+                        }
+                    }
+                }
+
+                // 3. Fetch Custom Missile Types
+                string mtSql = @"
+                    SELECT MissileID, Name, Size, Speed, WarheadStrength, Cost
+                    FROM FCT_MissileType
+                    ORDER BY MissileID DESC";
+
+                using (var cmd = new SqliteCommand(mtSql, conn))
+                {
+                    using var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int id = Convert.ToInt32(reader["MissileID"]);
+                        string name = reader["Name"] != DBNull.Value ? reader["Name"].ToString()! : "Misil";
+                        double msp = reader["Size"] != DBNull.Value ? Convert.ToDouble(reader["Size"]) : 1.0;
+                        double speed = reader["Speed"] != DBNull.Value ? Convert.ToDouble(reader["Speed"]) : 1000.0;
+                        double damage = reader["WarheadStrength"] != DBNull.Value ? Convert.ToDouble(reader["WarheadStrength"]) : 1.0;
+                        double cost = reader["Cost"] != DBNull.Value ? Convert.ToDouble(reader["Cost"]) : 1.0;
+
+                        if (!list.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            list.Add(new CustomProjectItem
+                            {
+                                ProjectID = id + 200000,
+                                Name = name,
+                                Category = "🚀 Misil / Torpedo",
+                                Source = ProjectSource.Aurora4XGame,
+                                DevelopmentCostRP = cost * 10.0,
+                                BuildCostBP = cost,
+                                SizeHS = msp / 20.0,
+                                Crew = 0,
+                                HTK = 1,
+                                SpecificationsSummary = $"Misil guardado en Aurora 4X | Tamaño: {msp:F1} MSP | Vel: {speed:N0} km/s | Daño: {damage:F1} HP | Costo: {cost:N2} BP"
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching custom projects: {ex.Message}");
+            }
+            return list;
+        }
+
+        public bool CreateCustomProjectInDatabase(int raceId, CustomProjectItem project, out string msg)
+        {
+            try
+            {
+                using var conn = GetWriteConnection();
+
+                // 1. Insert into FCT_TechSystem
+                string tsSql = @"
+                    INSERT INTO FCT_TechSystem (GameID, RaceID, Name, CategoryID, DevelopCost, TechDescription, TechTypeID, NoTechScan, RuinOnly, StartingSystem, ConventionalSystem, AutomaticResearch)
+                    VALUES (1, @raceId, @name, 4, @cost, @desc, 100, 0, 0, 0, 0, 0)";
+
+                using (var cmd = new SqliteCommand(tsSql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@raceId", raceId);
+                    cmd.Parameters.AddWithValue("@name", project.Name);
+                    cmd.Parameters.AddWithValue("@cost", project.DevelopmentCostRP > 0 ? project.DevelopmentCostRP : project.BuildCostBP * 10.0);
+                    cmd.Parameters.AddWithValue("@desc", $"Diseñado en Aurora Master Command Suite | {project.Category} | {project.SpecificationsSummary}");
+                    cmd.ExecuteNonQuery();
+                }
+
+                // 2. Insert into FCT_ShipComponentTemplate if applicable
+                string sctSql = @"
+                    INSERT INTO FCT_ShipComponentTemplate (ComponentTypeID, ComponentName, ComponentSize, ComponentValue, EnginePowerMod)
+                    VALUES (1, @name, @size, @cost, 1.0)";
+
+                using (var cmd = new SqliteCommand(sctSql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@name", project.Name);
+                    cmd.Parameters.AddWithValue("@size", project.SizeHS);
+                    cmd.Parameters.AddWithValue("@cost", project.BuildCostBP);
+                    cmd.ExecuteNonQuery();
+                }
+
+                msg = $"🚀 Proyecto '{project.Name}' creado y registrado con éxito en AuroraDB.db.";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                msg = $"❌ Error al guardar proyecto en base de datos: {ex.Message}";
                 return false;
             }
         }

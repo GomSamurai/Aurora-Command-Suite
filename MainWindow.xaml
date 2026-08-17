@@ -291,9 +291,9 @@
                 <TabItem.Header>
                     <DockPanel LastChildFill="True">
                         <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,8,0">
-                            <TextBlock Text="🚀" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="🧪" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <TextBlock Text="Lab Misiles/Motores" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                        <TextBlock Text="Proyectos I+D" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
                     </DockPanel>
                 </TabItem.Header>
                 <views:MissileEngineLabView x:Name="ViewMissile"/>

@@ -185,5 +185,122 @@ namespace AuroraDesignSuite.Services
                 return false;
             }
         }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+        private const uint WM_KEYDOWN = 0x0100;
+        private const uint WM_KEYUP = 0x0101;
+
+        /// <summary>
+        /// Retrieves the window handle of the active Aurora 4X game window.
+        /// </summary>
+        public static bool GetAuroraGameHandle(out IntPtr targetHWnd)
+        {
+            targetHWnd = IntPtr.Zero;
+            uint currentAppPid = (uint)Process.GetCurrentProcess().Id;
+            IntPtr foundHandle = IntPtr.Zero;
+
+            EnumWindows((hWnd, lParam) =>
+            {
+                if (IsWindowVisible(hWnd))
+                {
+                    GetWindowThreadProcessId(hWnd, out uint procId);
+                    if (procId == currentAppPid) return true;
+
+                    StringBuilder sb = new StringBuilder(256);
+                    GetWindowText(hWnd, sb, 256);
+                    string title = sb.ToString();
+
+                    if (title.Contains("AURORA MASTER COMMAND SUITE") || title.Contains("Aurora Design Suite"))
+                        return true;
+
+                    try
+                    {
+                        var proc = Process.GetProcessById((int)procId);
+                        string pname = proc.ProcessName.ToLower();
+                        if (pname == "aurora" || pname == "aurorapatch" || pname == "aurora4x")
+                        {
+                            foundHandle = hWnd;
+                            return false;
+                        }
+                    }
+                    catch { }
+
+                    if (!string.IsNullOrEmpty(title) &&
+                        (title.StartsWith("Aurora v") || title.StartsWith("Aurora 2") || title.Contains("System Map") || title.Contains("Tactical Map")))
+                    {
+                        foundHandle = hWnd;
+                        return false;
+                    }
+                }
+                return true;
+            }, IntPtr.Zero);
+
+            if (foundHandle != IntPtr.Zero)
+            {
+                targetHWnd = foundHandle;
+                return true;
+            }
+
+            Process[] processes = Process.GetProcessesByName("Aurora");
+            if (processes.Length == 0) processes = Process.GetProcessesByName("AuroraPatch");
+            if (processes.Length == 0) processes = Process.GetProcessesByName("Aurora4X");
+
+            foreach (var proc in processes)
+            {
+                if (proc.Id != currentAppPid && proc.MainWindowHandle != IntPtr.Zero)
+                {
+                    targetHWnd = proc.MainWindowHandle;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Sends a native time step shortcut key directly to the Aurora 4X game process window.
+        /// Falls back to SQLite database update if the game is not running.
+        /// </summary>
+        public static bool SendTimeStepToGame(double seconds, DatabaseService dbService, int raceId, out string statusMessage)
+        {
+            if (GetAuroraGameHandle(out IntPtr hWnd))
+            {
+                IntPtr vk = seconds switch
+                {
+                    5 => (IntPtr)0x70,        // F1 (+5 Seg)
+                    30 => (IntPtr)0x71,       // F2 (+30 Seg)
+                    300 => (IntPtr)0x72,      // F3 (+5 Min)
+                    1200 => (IntPtr)0x73,     // F4 (+20 Min)
+                    3600 => (IntPtr)0x74,     // F5 (+1 Hora)
+                    10800 => (IntPtr)0x75,    // F6 (+3 Horas)
+                    28800 => (IntPtr)0x76,    // F7 (+8 Horas)
+                    86400 => (IntPtr)0x77,    // F8 (+1 Día)
+                    432000 => (IntPtr)0x78,   // F9 (+5 Días)
+                    2592000 => (IntPtr)0x79,  // F10 (+30 Días)
+                    31536000 => (IntPtr)0x7A, // F11 (+1 Año)
+                    _ => (IntPtr)0x77
+                };
+
+                PostMessage(hWnd, WM_KEYDOWN, vk, IntPtr.Zero);
+                System.Threading.Thread.Sleep(30);
+                PostMessage(hWnd, WM_KEYUP, vk, IntPtr.Zero);
+
+                statusMessage = "⚡ Pulsación enviada nativamente a Aurora 4X en tiempo real.";
+                return true;
+            }
+
+            // Fallback: Standalone DB advancement
+            bool dbSuccess = dbService.AdvanceGameTimeSeconds(raceId, seconds, out _, out _);
+            if (dbSuccess)
+            {
+                statusMessage = "⚙️ Aurora 4X no detectado. Tiempo actualizado en SQLite en modo simulación independiente.";
+                return true;
+            }
+
+            statusMessage = "⚠️ No se pudo avanzar el tiempo.";
+            return false;
+        }
     }
 }

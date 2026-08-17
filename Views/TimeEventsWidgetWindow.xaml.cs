@@ -169,17 +169,18 @@ namespace AuroraDesignSuite.Views
         {
             if (_dbService == null) return;
 
-            bool success = _dbService.AdvanceGameTimeSeconds(_currentRaceId, seconds, out string newDate, out bool hasInterrupt);
-            if (success)
-            {
-                RefreshCalendar();
-                LoadEvents();
+            bool success = WindowBridge.SendTimeStepToGame(seconds, _dbService, _currentRaceId, out string statusMsg);
 
-                if (hasInterrupt && _isAutoPassRunning && ChkStopOnCombat?.IsChecked == true)
-                {
-                    StopAutoPass();
-                    MessageBox.Show("🔴 El Modo Auto-Avanzar se ha detenido automáticamente debido a un evento de Alerta Roja o Combate.", "Interrupción de Seguridad", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
+            RefreshCalendar();
+            LoadEvents();
+
+            var recentEvents = _dbService.GetRecentGameEvents(_currentRaceId, 1, "Todas");
+            bool hasInterrupt = recentEvents.Count > 0 && (recentEvents[0].IsCombat || recentEvents[0].IsInterrupt);
+
+            if (hasInterrupt && _isAutoPassRunning && ChkStopOnCombat?.IsChecked == true)
+            {
+                StopAutoPass();
+                MessageBox.Show("🔴 El Modo Auto-Avanzar se ha detenido automáticamente debido a un evento de Alerta Roja o Combate en Aurora 4X.", "Interrupción de Seguridad", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 

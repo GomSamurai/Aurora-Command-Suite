@@ -152,9 +152,9 @@
                                     </DockPanel>
                                 </Border>
 
-                                <!-- Scrollable Vertical Tab Panel -->
+                                <!-- Scrollable Vertical Tab Panel (StackPanel prevents WPF TabPanel border clipping) -->
                                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                                    <TabPanel IsItemsHost="True"/>
+                                    <StackPanel IsItemsHost="True"/>
                                 </ScrollViewer>
                             </Grid>
                         </Border>

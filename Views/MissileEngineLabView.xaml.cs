@@ -349,6 +349,98 @@ namespace AuroraDesignSuite.Views
                 { "Uridium / Gallicite (Sistemas Avanzados)", Math.Round(costBP * 0.4, 1) }
             };
             IcProjectMinerals.ItemsSource = minerals;
+
+            // Calculate Research Time Estimation
+            double monthsEst = Math.Max(0.1, Math.Round(costRP / 200.0, 1));
+            if (LblEstResearchTime != null) LblEstResearchTime.Text = $"{monthsEst:F1} Meses (1 Lab)";
+
+            // Update Thermal Signature Advice
+            if (LblThermalSignatureAdvice != null)
+            {
+                if (selectedCat.Contains("Engines") || selectedCat.Contains("Motores"))
+                {
+                    double ep = hs * 50.0 * mult;
+                    LblThermalSignatureAdvice.Text = $"{ep:N0} W ({ep / 10.0:N0} Mkm IR)";
+                }
+                else
+                {
+                    LblThermalSignatureAdvice.Text = "Baja Firma (< 10 W)";
+                }
+            }
+
+            // Update Doctrinal Advisor Guidance
+            if (LblAdvisorGuidance != null)
+            {
+                if (selectedCat.Contains("Engines") || selectedCat.Contains("Motores"))
+                {
+                    LblAdvisorGuidance.Text = "💡 DOCTRINA DE PROPULSIÓN NAVAL: Motores de mayor tamaño en HS obtienen mejor consumo de combustible por EP. Para cargueros comerciales, mantén el modificador de potencia en 1.0x o inferior.";
+                }
+                else if (selectedCat.Contains("Lasers"))
+                {
+                    LblAdvisorGuidance.Text = "💡 DOCTRINA DE ARMAS DE ENERGÍA: Los láseres causan daño penetrante en columna. A mayor calibre focal, mayor penetración de blindaje en combate a corta/media distancia.";
+                }
+                else if (selectedCat.Contains("Active Sensors"))
+                {
+                    LblAdvisorGuidance.Text = "💡 DOCTRINA DE SENSORES: Ajusta la resolución (Res) al tipo de amenaza. Res 1 detecta misiles/cazas (0.1 MSP a 1 HS), mientras que Res 100 detecta cruceros de 5,000t a máxima distancia.";
+                }
+                else if (selectedCat.Contains("Missile Launchers"))
+                {
+                    LblAdvisorGuidance.Text = "💡 DOCTRINA DE MISILES: Los tubos de lanzamiento deben coincidir exactamente con el tamaño MSP de la munición. Lanzadores reducidos disminuyen la masa pero aumentan el tiempo de recarga.";
+                }
+                else
+                {
+                    LblAdvisorGuidance.Text = "💡 DOCTRINA GENERAL DE I+D: Maximiza la eficiencia tecnológica investigando prerrequisitos en el Árbol Tecnológico antes de prototipar componentes pesados.";
+                }
+            }
+
+            // Update Simulation Matrix
+            if (LblSimCol1Title != null && LblSimCol1Value != null)
+            {
+                if (selectedCat.Contains("Engines") || selectedCat.Contains("Motores"))
+                {
+                    double ep = hs * 50.0 * mult;
+                    LblSimCol1Title.Text = "Casco 1,000 t";
+                    LblSimCol1Value.Text = $"{ep * 1000.0 / 1000.0:N0} km/s";
+
+                    LblSimCol2Title.Text = "Casco 5,000 t";
+                    LblSimCol2Value.Text = $"{ep * 1000.0 / 5000.0:N0} km/s";
+
+                    LblSimCol3Title.Text = "Casco 10,000 t";
+                    LblSimCol3Value.Text = $"{ep * 1000.0 / 10000.0:N0} km/s";
+
+                    LblSimCol4Title.Text = "Casco 25,000 t";
+                    LblSimCol4Value.Text = $"{ep * 1000.0 / 25000.0:N0} km/s";
+                }
+                else if (selectedCat.Contains("Active Sensors"))
+                {
+                    double maxRangeKm = 2.0 * mult * hs * 40000.0;
+                    LblSimCol1Title.Text = "Vs Caza (250t)";
+                    LblSimCol1Value.Text = $"{maxRangeKm / 20.0 / 1_000_000.0:F2} Mkm";
+
+                    LblSimCol2Title.Text = "Vs Corbeta (1,000t)";
+                    LblSimCol2Value.Text = $"{maxRangeKm / 5.0 / 1_000_000.0:F2} Mkm";
+
+                    LblSimCol3Title.Text = "Vs Fragata (5,000t)";
+                    LblSimCol3Value.Text = $"{maxRangeKm / 1_000_000.0:F2} Mkm";
+
+                    LblSimCol4Title.Text = "Vs Nave Capital (50k t)";
+                    LblSimCol4Value.Text = $"{maxRangeKm * 3.16 / 1_000_000.0:F2} Mkm";
+                }
+                else
+                {
+                    LblSimCol1Title.Text = "Rango 10,000 km";
+                    LblSimCol1Value.Text = "100% Eficacia";
+
+                    LblSimCol2Title.Text = "Rango 50,000 km";
+                    LblSimCol2Value.Text = "85% Eficacia";
+
+                    LblSimCol3Title.Text = "Rango 100,000 km";
+                    LblSimCol3Value.Text = "60% Eficacia";
+
+                    LblSimCol4Title.Text = "Rango 200,000 km";
+                    LblSimCol4Value.Text = "25% Eficacia";
+                }
+            }
         }
 
         private void BtnCreateProjectInDB_Click(object sender, RoutedEventArgs e)

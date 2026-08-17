@@ -128,7 +128,7 @@
                 <!-- VERTICAL GRID SPLITTER (Resizable left/right) -->
                 <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource BorderBrush}" Cursor="SizeWE" ToolTip="Arrastra hacia la izquierda o derecha para cambiar el tamaño de los paneles."/>
 
-                <!-- Right Column: Live Specifications & Mineral Breakdown -->
+                <!-- Right Column: Live Specifications, Telemetry, Advice Cards & Simulator -->
                 <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" Margin="2,0,0,0">
                     <StackPanel>
                         <!-- Card 1: Performance Specifications -->
@@ -137,37 +137,37 @@
                                 <TextBlock Text="📊 ESPECIFICACIONES TÉCNICAS Y RENDIMIENTO I+D" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,10"/>
                                 
                                 <UniformGrid Columns="3">
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Masa total del componente en Puntos de Casco (HS) y Toneladasmétricas (1 HS = 50 Tons).">
                                         <StackPanel>
                                             <TextBlock Text="Masa Total Componente:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                                             <TextBlock x:Name="LblSpecSize" Text="1.0 HS (50 Tons)" Foreground="White" FontWeight="Bold" FontSize="13"/>
                                         </StackPanel>
                                     </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Costo en Puntos de Investigación (RP) para desarrollar este prototipo en los Laboratorios de I+D del imperio.">
                                         <StackPanel>
                                             <TextBlock Text="Costo Investigación (RP):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                                             <TextBlock x:Name="LblSpecCostRP" Text="100 RP" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13"/>
                                         </StackPanel>
                                     </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Costo en Puntos de Construcción Industrial (BP) para fabricar una unidad física de este componente en fábrica o astillero.">
                                         <StackPanel>
                                             <TextBlock Text="Costo Fabricación (BP):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                                             <TextBlock x:Name="LblSpecCostBP" Text="2.0 BP" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="13"/>
                                         </StackPanel>
                                     </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Personal militar o técnico necesario para operar y mantener este módulo a bordo de la nave.">
                                         <StackPanel>
                                             <TextBlock Text="Tripulación Necesaria:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                                             <TextBlock x:Name="LblSpecCrew" Text="2 Personas" Foreground="White" FontWeight="Bold" FontSize="13"/>
                                         </StackPanel>
                                     </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Hits To Kill (HTK): Número de impactos directos que puede absorber antes de quedar inhabilitado por daño interno.">
                                         <StackPanel>
                                             <TextBlock Text="Resistencia HTK:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                                             <TextBlock x:Name="LblSpecHTK" Text="1 Hit To Kill" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13"/>
                                         </StackPanel>
                                     </Border>
-                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Indicador principal de rendimiento táctico (EP de empuje, Alcance en Mkm o Daño focal).">
                                         <StackPanel>
                                             <TextBlock Text="Rendimiento / Alcance:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                                             <TextBlock x:Name="LblSpecPerformance" Text="8.28 Mkm" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="13"/>
@@ -185,9 +185,9 @@
                         </Border>
 
                         <!-- Card 2: Minerals & Material Requirements -->
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                             <StackPanel>
-                                <TextBlock Text="💎 REQUERIMIENTO DE MINERALES EXÓTICOS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,10"/>
+                                <TextBlock Text="💎 REQUERIMIENTO DE MINERALES EXÓTICOS IMPERIALES" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,10"/>
                                 
                                 <ItemsControl x:Name="IcProjectMinerals">
                                     <ItemsControl.ItemTemplate>
@@ -199,6 +199,79 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 3: Imperial R&D Engineering Advisor & Doctrinal Guidance -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="🎓 ASESOR DE INGENIERÍA IMPERIAL Y CONSEJOS TÁCTICOS" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                                
+                                <UniformGrid Columns="2" Margin="0,0,0,8">
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Tiempo estimado en meses terrestres para completar la investigación del proyecto con 1 laboratoria activo.">
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <TextBlock Text="Tiempo Est. I+D (1 Lab):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="LblEstResearchTime" Text="1.2 Meses" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2" ToolTip="Firma electromagnética o infrarroja emitida por este componente durante la operación.">
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <TextBlock Text="Firma Emitida / Visibilidad:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="LblThermalSignatureAdvice" Text="Firma Normal (100%)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </UniformGrid>
+
+                                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="10">
+                                    <StackPanel>
+                                        <TextBlock Text="📜 RECOMENDACIÓN DOCTRINAL DE INGENIERÍA:" Foreground="{DynamicResource AccentGreenBrush}" FontSize="11" FontWeight="Bold"/>
+                                        <TextBlock x:Name="LblAdvisorGuidance" Text="💡 Diseña componentes equilibrando la masa en HS. Los motores más grandes ofrecen mayor eficiencia de combustible por EP, mientras que las ojivas más grandes provocan cráteres penetrantes profundos en el blindaje enemigo." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 4: Tactical Simulator Matrix -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                            <StackPanel x:Name="PnlSimulatorMatrix">
+                                <TextBlock Text="🚀 MATRIZ DE SIMULACIÓN OPERATIVA EN VIVO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                                <TextBlock Text="Rendimiento simulado según el tamaño del casco o distancia de combate:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" Margin="0,0,0,8"/>
+
+                                <UniformGrid Columns="4">
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <TextBlock x:Name="LblSimCol1Title" Text="Casco 1,000 t" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="LblSimCol1Value" Text="2,500 km/s" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <TextBlock x:Name="LblSimCol2Title" Text="Casco 5,000 t" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="LblSimCol2Value" Text="1,000 km/s" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <TextBlock x:Name="LblSimCol3Title" Text="Casco 10,000 t" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="LblSimCol3Value" Text="500 km/s" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="2">
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <TextBlock x:Name="LblSimCol4Title" Text="Casco 25,000 t" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
+                                            <TextBlock x:Name="LblSimCol4Value" Text="200 km/s" Foreground="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 5: Aurora 4X Physics Formulas & Math Rules -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="📐 FÓRMULAS FÍSICAS Y REGLAS MATEMÁTICAS DE AURORA 4X" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                                <TextBlock x:Name="LblPhysicsFormulas" Text="• Potencia Motor (EP) = Masa (HS) × 50 × Modificador Potencia&#10;• Consumo Combustible = EP × Litros/EP/Hora&#10;• Alcance Radar = Fuerza × Masa (HS) × √(Resolución) × 40,000 km&#10;• Penetración de Daño = √(Daño Ojiva) en capas de blindaje" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" TextWrapping="Wrap"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>

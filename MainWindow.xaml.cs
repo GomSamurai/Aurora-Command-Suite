@@ -152,7 +152,7 @@ namespace AuroraDesignSuite
                 TabAI.ToolTip = $"Matriz Computacional de Inteligencia Táctica conectada al Imperio {emp.RaceName}";
             }
 
-            if (MainTabControl.SelectedItem == TabBlueprint && ViewBlueprint != null)
+            if (MainTabControl.SelectedItem == TabBlueprint && ViewBlueprint != null && emp != null)
             {
                 ViewBlueprint.SetSelectedEmpire(emp);
             }

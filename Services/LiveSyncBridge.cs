@@ -7,8 +7,16 @@ namespace AuroraDesignSuite.Services
 {
     public static class LiveSyncBridge
     {
+        public static event Action<string>? OnGameSyncReceived;
+
         public static void NotifyGameSync(string action = "REFRESH")
         {
+            try
+            {
+                OnGameSyncReceived?.Invoke(action);
+            }
+            catch { }
+
             Task.Run(() =>
             {
                 try

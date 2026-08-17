@@ -301,6 +301,171 @@ namespace AuroraDesignSuite.Services
             return info;
         }
 
+        public bool AdvanceGameTimeSeconds(int raceId, double secondsToAdvance, out string newDateStr, out bool hasInterruptEvents)
+        {
+            newDateStr = "";
+            hasInterruptEvents = false;
+            try
+            {
+                using var conn = GetWriteConnection();
+
+                string getGameSql = @"
+                    SELECT g.GameID, g.GameTime, g.StartYear
+                    FROM FCT_Game g
+                    INNER JOIN FCT_Race r ON r.GameID = g.GameID
+                    WHERE r.RaceID = @raceId
+                    LIMIT 1";
+
+                int gameId = 0;
+                double currentGameTime = 0.0;
+                int startYear = 2026;
+
+                using (var cmd = new SqliteCommand(getGameSql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@raceId", raceId);
+                    using var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        gameId = Convert.ToInt32(reader["GameID"]);
+                        currentGameTime = Convert.ToDouble(reader["GameTime"]);
+                        startYear = Convert.ToInt32(reader["StartYear"]);
+                    }
+                }
+
+                if (gameId == 0) return false;
+
+                double newGameTime = currentGameTime + secondsToAdvance;
+
+                string updateSql = "UPDATE FCT_Game SET GameTime = @newTime WHERE GameID = @gameId";
+                using (var uCmd = new SqliteCommand(updateSql, conn))
+                {
+                    uCmd.Parameters.AddWithValue("@newTime", newGameTime);
+                    uCmd.Parameters.AddWithValue("@gameId", gameId);
+                    uCmd.ExecuteNonQuery();
+                }
+
+                try
+                {
+                    DateTime baseDate = new DateTime(startYear, 1, 1);
+                    newDateStr = baseDate.AddSeconds(newGameTime).ToString("dd/MM/yyyy HH:mm");
+                }
+                catch
+                {
+                    newDateStr = "20/10/2037 08:00";
+                }
+
+                string checkInterruptSql = @"
+                    SELECT COUNT(1) 
+                    FROM FCT_GameLog l
+                    LEFT JOIN DIM_EventType t ON l.EventType = t.EventTypeID
+                    WHERE l.RaceID = @raceId 
+                      AND l.Time >= @oldTime 
+                      AND l.Time <= @newTime
+                      AND (t.PlayerInterrupt = 1 OR t.CombatDisplay = 1 OR t.AttackEvent = 1)";
+
+                using (var iCmd = new SqliteCommand(checkInterruptSql, conn))
+                {
+                    iCmd.Parameters.AddWithValue("@raceId", raceId);
+                    iCmd.Parameters.AddWithValue("@oldTime", currentGameTime);
+                    iCmd.Parameters.AddWithValue("@newTime", newGameTime);
+                    long count = Convert.ToInt64(iCmd.ExecuteScalar() ?? 0);
+                    hasInterruptEvents = count > 0;
+                }
+
+                LiveSyncBridge.NotifyGameSync("TIME_ADVANCED");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error advancing game time: {ex.Message}");
+                return false;
+            }
+        }
+
+        public List<GameEventLogItem> GetRecentGameEvents(int raceId, int maxEvents = 100, string categoryFilter = "Todas")
+        {
+            var list = new List<GameEventLogItem>();
+            try
+            {
+                using var conn = GetConnection();
+                string sql = @"
+                    SELECT l.IncrementID, l.Time, l.EventType, l.MessageText,
+                           COALESCE(t.Description, 'Evento General') as EventDesc,
+                           COALESCE(t.PlayerInterrupt, 0) as PlayerInterrupt,
+                           COALESCE(t.CombatDisplay, 0) as CombatDisplay,
+                           g.StartYear
+                    FROM FCT_GameLog l
+                    INNER JOIN FCT_Race r ON l.RaceID = r.RaceID
+                    INNER JOIN FCT_Game g ON r.GameID = g.GameID
+                    LEFT JOIN DIM_EventType t ON l.EventType = t.EventTypeID
+                    WHERE l.RaceID = @raceId
+                    ORDER BY l.IncrementID DESC
+                    LIMIT @maxEvents";
+
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                cmd.Parameters.AddWithValue("@maxEvents", maxEvents);
+                using var reader = cmd.ExecuteReader();
+
+                var converter = new System.Windows.Media.BrushConverter();
+
+                while (reader.Read())
+                {
+                    long incId = Convert.ToInt64(reader["IncrementID"]);
+                    double timeSec = Convert.ToDouble(reader["Time"]);
+                    int eventTypeId = Convert.ToInt32(reader["EventType"]);
+                    string msg = reader["MessageText"].ToString() ?? "";
+                    string desc = reader["EventDesc"].ToString() ?? "";
+                    int playerInterrupt = Convert.ToInt32(reader["PlayerInterrupt"]);
+                    int combatDisplay = Convert.ToInt32(reader["CombatDisplay"]);
+                    int startYear = Convert.ToInt32(reader["StartYear"]);
+
+                    string timeStr = "";
+                    try
+                    {
+                        DateTime baseDate = new DateTime(startYear, 1, 1);
+                        timeStr = baseDate.AddSeconds(timeSec).ToString("dd/MM/yyyy HH:mm");
+                    }
+                    catch
+                    {
+                        timeStr = $"{timeSec}s";
+                    }
+
+                    var catInfo = GameEventLogItem.Categorize(eventTypeId, desc, msg);
+
+                    if (categoryFilter != "Todas" && catInfo.Category != categoryFilter)
+                    {
+                        continue;
+                    }
+
+                    var brush = (System.Windows.Media.Brush)converter.ConvertFromString(catInfo.HexColor)!;
+
+                    var item = new GameEventLogItem
+                    {
+                        IncrementID = incId,
+                        GameTimeSeconds = timeSec,
+                        FormattedTime = timeStr,
+                        EventTypeID = eventTypeId,
+                        EventTypeDescription = desc,
+                        MessageText = msg,
+                        Category = catInfo.Category,
+                        CategoryIcon = catInfo.Icon,
+                        CategoryColor = brush,
+                        BorderColor = catInfo.HexColor == "#FF4A4A" ? System.Windows.Media.Brushes.Red : System.Windows.Media.Brushes.Transparent,
+                        IsInterrupt = playerInterrupt == 1,
+                        IsCombat = combatDisplay == 1 || catInfo.Category == "Combate"
+                    };
+
+                    list.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error reading Game Events: {ex.Message}");
+            }
+            return list;
+        }
+
         public string GetRaceName(int raceId)
         {
             try

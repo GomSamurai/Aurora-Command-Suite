@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using AuroraDesignSuite.Models;
 using AuroraDesignSuite.Services;
+using AuroraDesignSuite.Views;
 
 namespace AuroraDesignSuite
 {
@@ -235,6 +236,23 @@ namespace AuroraDesignSuite
             {
                 MessageBox.Show(status, "Enfoque de Aurora 4X", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+        }
+
+        private TimeEventsWidgetWindow? _timeEventsWidgetWindow;
+
+        private void BtnOpenTimeEventsWidget_Click(object sender, RoutedEventArgs e)
+        {
+            if (_dbService == null) return;
+            int raceId = (CmbGlobalEmpire.SelectedItem as Empire)?.RaceID ?? 784;
+
+            if (_timeEventsWidgetWindow == null || !_timeEventsWidgetWindow.IsLoaded)
+            {
+                _timeEventsWidgetWindow = new TimeEventsWidgetWindow();
+            }
+
+            _timeEventsWidgetWindow.InitializeWidget(_dbService, raceId);
+            _timeEventsWidgetWindow.Show();
+            _timeEventsWidgetWindow.Activate();
         }
     }
 }

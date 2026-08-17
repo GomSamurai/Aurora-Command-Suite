@@ -217,11 +217,22 @@ namespace AuroraSpanish
             if (form == null || form.IsDisposed) return false;
             if (form.Modal || form.Parent != null) return false;
 
+            // ONLY inject on the primary main window of the game (Application.OpenForms[0])
+            try
+            {
+                if (Application.OpenForms != null && Application.OpenForms.Count > 0)
+                {
+                    if (Application.OpenForms[0] != form) return false;
+                }
+            }
+            catch { }
+
             string title = (form.Text ?? "").Trim();
 
-            // Known secondary sub-window prefixes to EXCLUDE
-            string[] subWindowPrefixes = new string[]
+            // Known secondary keywords to EXCLUDE anywhere in title
+            string[] excludeKeywords = new string[]
             {
+                "Create", "Crear", "Select", "Seleccionar", "Edit", "Editar", "New", "Nuevo",
                 "Naval", "Organización", "Organization", "Fuerzas", "Ground", "Terrestres",
                 "Order of Battle", "OOB", "Economía", "Economy", "Economics", "Investigación",
                 "Research", "Astilleros", "Shipyard", "Shipyards", "Diseño", "Class Design",
@@ -229,12 +240,12 @@ namespace AuroraSpanish
                 "Eventos", "Events", "Event Log", "Cuerpos", "System Bodies", "System Body",
                 "Industria", "Industry", "Minería", "Mining", "Misil", "Missile", "Torreta",
                 "Turret", "Diplomac", "Intel", "Sector", "Comparaci", "Comparison", "Setup",
-                "Configurac", "Options", "Opciones", "Fast Forward"
+                "Configurac", "Options", "Opciones", "Fast Forward", "Project", "Proyecto"
             };
 
-            foreach (string prefix in subWindowPrefixes)
+            foreach (string kw in excludeKeywords)
             {
-                if (title.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return false;
+                if (title.IndexOf(kw, StringComparison.OrdinalIgnoreCase) >= 0) return false;
             }
 
             return true;

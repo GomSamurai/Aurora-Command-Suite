@@ -144,16 +144,84 @@ namespace AuroraDesignSuite.Views
 
         private bool CategoryMatches(ResearchedTechItem tech, string categoryName)
         {
-            string clean = categoryName.ToLower();
-            string techName = tech.Name.ToLower();
-            string techDesc = tech.Description.ToLower();
+            string cat = categoryName.ToLower();
+            string name = tech.Name.ToLower();
+            string desc = tech.Description.ToLower();
+            int type = tech.TechTypeID;
 
-            if (clean.Contains("sensor") && (techName.Contains("sensor") || techDesc.Contains("sensor"))) return true;
-            if (clean.Contains("engine") && (techName.Contains("engine") || techDesc.Contains("engine") || tech.CategoryID == 7)) return true;
-            if (clean.Contains("laser") && (techName.Contains("laser") || techDesc.Contains("laser"))) return true;
-            if (clean.Contains("shield") && (techName.Contains("shield") || techDesc.Contains("shield"))) return true;
+            if (cat.Contains("engine") || cat.Contains("motor"))
+            {
+                return type == 119 || type == 65 || type == 127 || type == 130 || type == 198 || type == 214
+                       || (name.Contains("engine") && !name.Contains("jump engine") && !name.Contains("fire control"))
+                       || (desc.Contains("engine") && !desc.Contains("jump engine"));
+            }
+            if (cat.Contains("active sensor"))
+            {
+                return type == 20 || type == 152 || (name.Contains("active") && name.Contains("sensor"));
+            }
+            if (cat.Contains("em detection"))
+            {
+                return type == 125 || (name.Contains("em") && name.Contains("sensor"));
+            }
+            if (cat.Contains("thermal sensor"))
+            {
+                return type == 28 || (name.Contains("thermal") && name.Contains("sensor"));
+            }
+            if (cat.Contains("laser"))
+            {
+                return type == 3 || type == 1 || type == 140 || name.Contains("laser") || desc.Contains("laser");
+            }
+            if (cat.Contains("shield"))
+            {
+                return type == 215 || name.Contains("shield") || desc.Contains("shield");
+            }
+            if (cat.Contains("missile launcher"))
+            {
+                return type == 10 || type == 129 || type == 216 || name.Contains("launcher");
+            }
+            if (cat.Contains("fire control"))
+            {
+                return type == 17 || type == 18 || name.Contains("fire control");
+            }
+            if (cat.Contains("jump engine"))
+            {
+                return type == 169 || name.Contains("jump drive") || name.Contains("jump engine");
+            }
+            if (cat.Contains("power plant") || cat.Contains("reactor"))
+            {
+                return name.Contains("reactor") || name.Contains("power plant") || desc.Contains("power plant");
+            }
+            if (cat.Contains("gauss"))
+            {
+                return type == 143 || name.Contains("gauss");
+            }
+            if (cat.Contains("meson"))
+            {
+                return name.Contains("meson");
+            }
+            if (cat.Contains("particle"))
+            {
+                return name.Contains("particle");
+            }
+            if (cat.Contains("railgun"))
+            {
+                return name.Contains("railgun");
+            }
+            if (cat.Contains("carronade"))
+            {
+                return name.Contains("carronade");
+            }
+            if (cat.Contains("ciws"))
+            {
+                return type == 43 || name.Contains("ciws");
+            }
+            if (cat.Contains("cloak"))
+            {
+                return type == 46 || name.Contains("cloak");
+            }
 
-            return tech.CategoryID == 1 || tech.CategoryID == 4;
+            string targetKeyword = cat.Replace("📡", "").Replace("⚙️", "").Replace("💥", "").Replace("🛡️", "").Replace("🚀", "").Trim();
+            return name.Contains(targetKeyword) || desc.Contains(targetKeyword);
         }
 
         private void OnParamChanged(object sender, SelectionChangedEventArgs e) => CalculateCurrentProjectSpecs();

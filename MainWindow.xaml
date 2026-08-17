@@ -56,7 +56,8 @@
                         <!-- Vertical Divider -->
                         <Border Width="1" Height="16" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
 
-                        <!-- 4. Change DB Button -->
+                        <!-- 4. Sync & Change DB Buttons -->
+                        <Button x:Name="BtnManualSync" Content="🔄 SINCRONIZAR VIVO" Click="BtnManualSync_Click" Padding="8,2" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5" ToolTip="Fuerza un refresco inmediato al 100% de la Base de Datos SQLite y la memoria RAM de todas las pestañas."/>
                         <Button Content="📁 BD" Click="BtnChangeDb_Click" Padding="6,2" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" ToolTip="Selecciona el archivo AuroraDB.db de cualquier otra carpeta."/>
                     </StackPanel>
                 </Border>

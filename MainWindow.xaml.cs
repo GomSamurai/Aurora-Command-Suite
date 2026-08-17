@@ -185,6 +185,48 @@ namespace AuroraDesignSuite
             }, System.Windows.Threading.DispatcherPriority.Background);
         }
 
+        private void BtnManualSync_Click(object sender, RoutedEventArgs e)
+        {
+            if (_dbService == null) return;
+
+            try
+            {
+                // 1. Clear SQLite Connection pools to bypass cached pages
+                Microsoft.Data.Sqlite.SqliteConnection.ClearAllPools();
+
+                // 2. Reload empire selector list with fresh names/titles from database
+                int currentRaceId = (CmbGlobalEmpire.SelectedItem as Empire)?.RaceID ?? -1;
+                var empires = _dbService.GetEmpires();
+                CmbGlobalEmpire.ItemsSource = empires;
+
+                if (empires.Count > 0)
+                {
+                    var savedEmp = empires.FirstOrDefault(x => x.RaceID == currentRaceId);
+                    CmbGlobalEmpire.SelectedItem = savedEmp ?? empires[0];
+                }
+
+                // 3. Force complete refresh of current tab
+                RefreshActiveTab();
+
+                // 4. Visual Feedback
+                if (BtnManualSync != null)
+                {
+                    BtnManualSync.Content = "✅ SINCRONIZADO";
+                    var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromSeconds(1.5) };
+                    timer.Tick += (s, ev) =>
+                    {
+                        BtnManualSync.Content = "🔄 SINCRONIZAR VIVO";
+                        timer.Stop();
+                    };
+                    timer.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al sincronizar datos de la base de datos: {ex.Message}", "Error de Sincronización", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
         private void BtnChangeDb_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new Microsoft.Win32.OpenFileDialog

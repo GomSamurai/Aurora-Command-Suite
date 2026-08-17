@@ -1269,9 +1269,10 @@ namespace AuroraDesignSuite.Services
             {
                 using var conn = GetConnection();
 
-                // 1. Search for Fleet Commander (CommandType = 2, CommandID = fleetId)
+                // 1. Search for explicit Fleet Commander (CommandType = 2, CommandID = fleetId)
                 string fleetCmdQuery = @"
-                    SELECT c.CommanderID, c.Name, c.Title, r.RankName, r.RankAbbrev
+                    SELECT c.CommanderID, c.Name, c.Title, c.Seniority, c.Loyalty, c.HealthRisk,
+                           c.KillTonnageMilitary, c.KillTonnageCommercial, r.RankName, r.RankAbbrev
                     FROM FCT_Commander c
                     LEFT JOIN FCT_Ranks r ON c.RankID = r.RankID
                     WHERE c.RaceID = @raceId AND c.CommandType = 2 AND c.CommandID = @fleetId
@@ -1286,19 +1287,17 @@ namespace AuroraDesignSuite.Services
                     if (reader.Read())
                     {
                         foundCommanderId = Convert.ToInt32(reader["CommanderID"]);
-                        info.CommanderID = foundCommanderId;
-                        info.Name = reader["Name"].ToString() ?? "Comandante";
-                        info.RankName = reader["RankName"] != DBNull.Value ? reader["RankName"].ToString() ?? "Oficial" : "Oficial";
-                        info.RankAbbrev = reader["RankAbbrev"] != DBNull.Value ? reader["RankAbbrev"].ToString() ?? "" : "";
+                        PopulateCommanderBaseInfo(reader, info);
                     }
                 }
 
-                // 2. If no Fleet Commander found, search for Ship Commander on ships in this fleet
+                // 2. If no explicit Fleet Commander found, search for Ship Commander on ships in this fleet (ONLY if fleet has ships!)
                 if (foundCommanderId == 0 && shipIds != null && shipIds.Count > 0)
                 {
                     string shipIdsCsv = string.Join(",", shipIds);
                     string shipCmdQuery = $@"
-                        SELECT c.CommanderID, c.Name, c.Title, r.RankName, r.RankAbbrev
+                        SELECT c.CommanderID, c.Name, c.Title, c.Seniority, c.Loyalty, c.HealthRisk,
+                               c.KillTonnageMilitary, c.KillTonnageCommercial, r.RankName, r.RankAbbrev
                         FROM FCT_Commander c
                         LEFT JOIN FCT_Ranks r ON c.RankID = r.RankID
                         WHERE c.RaceID = @raceId AND c.CommandType = 1 AND c.CommandID IN ({shipIdsCsv})
@@ -1311,18 +1310,16 @@ namespace AuroraDesignSuite.Services
                     if (sReader.Read())
                     {
                         foundCommanderId = Convert.ToInt32(sReader["CommanderID"]);
-                        info.CommanderID = foundCommanderId;
-                        info.Name = sReader["Name"].ToString() ?? "Comandante";
-                        info.RankName = sReader["RankName"] != DBNull.Value ? sReader["RankName"].ToString() ?? "Oficial" : "Oficial";
-                        info.RankAbbrev = sReader["RankAbbrev"] != DBNull.Value ? sReader["RankAbbrev"].ToString() ?? "" : "";
+                        PopulateCommanderBaseInfo(sReader, info);
                     }
                 }
 
-                // 3. Fallback to active naval officer of race
-                if (foundCommanderId == 0)
+                // 3. Fallback to active naval officer of race ONLY if fleet has ships!
+                if (foundCommanderId == 0 && shipIds != null && shipIds.Count > 0)
                 {
                     string fallbackQuery = @"
-                        SELECT c.CommanderID, c.Name, c.Title, r.RankName, r.RankAbbrev
+                        SELECT c.CommanderID, c.Name, c.Title, c.Seniority, c.Loyalty, c.HealthRisk,
+                               c.KillTonnageMilitary, c.KillTonnageCommercial, r.RankName, r.RankAbbrev
                         FROM FCT_Commander c
                         LEFT JOIN FCT_Ranks r ON c.RankID = r.RankID
                         WHERE c.RaceID = @raceId AND (c.CommanderType = 1 OR c.CommanderType = 2)
@@ -1335,24 +1332,83 @@ namespace AuroraDesignSuite.Services
                     if (fReader.Read())
                     {
                         foundCommanderId = Convert.ToInt32(fReader["CommanderID"]);
-                        info.CommanderID = foundCommanderId;
-                        info.Name = fReader["Name"].ToString() ?? "Comandante";
-                        info.RankName = fReader["RankName"] != DBNull.Value ? fReader["RankName"].ToString() ?? "Oficial" : "Oficial";
-                        info.RankAbbrev = fReader["RankAbbrev"] != DBNull.Value ? fReader["RankAbbrev"].ToString() ?? "" : "";
+                        PopulateCommanderBaseInfo(fReader, info);
                     }
                 }
 
-                // 4. Query Commander Bonuses
-                if (foundCommanderId > 0)
+                // If no commander is assigned to this fleet or its ships, return empty/inactive status
+                if (foundCommanderId == 0)
                 {
-                    string bonusQuery = @"
-                        SELECT cb.BonusValue, bt.Description, bt.BonusAbbrev
-                        FROM FCT_CommanderBonuses cb
-                        JOIN DIM_CommanderBonusType bt ON cb.BonusID = bt.BonusID
-                        WHERE cb.CommanderID = @cid
-                        ORDER BY cb.BonusValue DESC";
+                    info.HasCommander = false;
+                    info.Name = "⚠️ Sin Comandante (Flota Inactiva / Sin Naves)";
+                    info.PrimaryBonusDisplay = "0% (Escuadra sin buques)";
+                    info.SecondaryBonusDisplay = "0% (Escuadra sin buques)";
+                    return info;
+                }
 
-                    using var bCmd = new SqliteCommand(bonusQuery, conn);
+                // 4. Query Commander Traits / Personalidad / Salud
+                string traitsQuery = @"
+                    SELECT t.Name as TraitName
+                    FROM FCT_CommanderTraits ct
+                    JOIN DIM_TraitsList t ON ct.TraitID = t.TraitID
+                    WHERE ct.CmdrID = @cid";
+
+                using (var tCmd = new SqliteCommand(traitsQuery, conn))
+                {
+                    tCmd.Parameters.AddWithValue("@cid", foundCommanderId);
+                    using var tReader = tCmd.ExecuteReader();
+                    while (tReader.Read())
+                    {
+                        string rawTrait = tReader["TraitName"] != DBNull.Value ? tReader["TraitName"].ToString() ?? "" : "";
+                        string spanishTrait = rawTrait switch
+                        {
+                            "Follows orders without question" => "Obediencia Ciega",
+                            "Ambitious" => "Ambicioso",
+                            "Doesn't accept change easily" => "Conservador",
+                            "Callous" => "Insensible",
+                            "Cheerful" => "Alegre",
+                            "Gloomy" => "Melancólico",
+                            "Inconsiderate" => "Poco Considerado",
+                            "Combative" => "Combativo",
+                            "Aggressive" => "Agresivo",
+                            "Cautious" => "Cauteloso",
+                            "Strange Medical Condition" => "🏥 Condición Médica Extraña",
+                            "Impoverished" => "Origen Humilde",
+                            "Self-confident" => "Autoconfiante",
+                            "Authoritarian" => "Autoritario",
+                            "Patient" => "Paciente",
+                            "Astronomy Geek" => "🔭 Apasionado de la Astronomía",
+                            "Philosophy Buff" => "📜 Aficionado a la Filosofía",
+                            "Professional" => "Profesional",
+                            "Results-oriented" => "Orientado a Resultados",
+                            "Survivalist" => "Superviviente",
+                            "Observant" => "Observador",
+                            "Jealous" => "Receloso",
+                            "Intolerant" => "Intolerante",
+                            "Neurotic" => "⚠️ Neurótico / Inestable",
+                            "Dispassionate" => "Imparcial",
+                            "Insightful" => "Perspicaz",
+                            "Science Fiction Buff" => "🛸 Fan de la Ciencia Ficción",
+                            "Wealthy" => "Cuna Acaudalada",
+                            "Analytical" => "Analítico",
+                            "Imaginative" => "Imaginativo",
+                            "Modest" => "Modesto",
+                            _ => rawTrait
+                        };
+                        if (!string.IsNullOrEmpty(spanishTrait)) info.Traits.Add(spanishTrait);
+                    }
+                }
+
+                // 5. Query Commander Bonuses
+                string bonusQuery = @"
+                    SELECT cb.BonusValue, bt.Description, bt.BonusAbbrev
+                    FROM FCT_CommanderBonuses cb
+                    JOIN DIM_CommanderBonusType bt ON cb.BonusID = bt.BonusID
+                    WHERE cb.CommanderID = @cid
+                    ORDER BY cb.BonusValue DESC";
+
+                using (var bCmd = new SqliteCommand(bonusQuery, conn))
+                {
                     bCmd.Parameters.AddWithValue("@cid", foundCommanderId);
                     using var bReader = bCmd.ExecuteReader();
                     int bIdx = 0;
@@ -1393,6 +1449,30 @@ namespace AuroraDesignSuite.Services
                 System.Diagnostics.Debug.WriteLine($"Error resolving fleet commander: {ex.Message}");
             }
             return info;
+        }
+
+        private static void PopulateCommanderBaseInfo(SqliteDataReader reader, FleetCommanderInfo info)
+        {
+            info.HasCommander = true;
+            info.CommanderID = Convert.ToInt32(reader["CommanderID"]);
+            info.Name = reader["Name"].ToString() ?? "Comandante";
+            info.RankName = reader["RankName"] != DBNull.Value ? reader["RankName"].ToString() ?? "Oficial" : "Oficial";
+            info.RankAbbrev = reader["RankAbbrev"] != DBNull.Value ? reader["RankAbbrev"].ToString() ?? "" : "";
+
+            info.Seniority = reader["Seniority"] != DBNull.Value ? Convert.ToInt32(reader["Seniority"]) : 0;
+            info.Loyalty = reader["Loyalty"] != DBNull.Value ? Convert.ToDouble(reader["Loyalty"]) : 100.0;
+            
+            int healthRisk = reader["HealthRisk"] != DBNull.Value ? Convert.ToInt32(reader["HealthRisk"]) : 0;
+            info.HealthStatus = healthRisk switch
+            {
+                0 => "🟢 Saludable (Riesgo Bajo)",
+                1 => "🟡 Salud Normal",
+                2 => "🟠 Riesgo Moderado de Salud",
+                _ => "🔴 Observación Médica Requerida"
+            };
+
+            info.MilitaryKillsTons = reader["KillTonnageMilitary"] != DBNull.Value ? Convert.ToInt32(reader["KillTonnageMilitary"]) : 0;
+            info.CommercialKillsTons = reader["KillTonnageCommercial"] != DBNull.Value ? Convert.ToInt32(reader["KillTonnageCommercial"]) : 0;
         }
 
         public List<ColonyInfo> GetColonies(int raceId)

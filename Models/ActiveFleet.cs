@@ -48,13 +48,24 @@ namespace AuroraDesignSuite.Models
     public class FleetCommanderInfo
     {
         public int CommanderID { get; set; }
-        public string Name { get; set; } = "Sin Comandante Asignado";
+        public bool HasCommander { get; set; } = false;
+        public string Name { get; set; } = "⚠️ Sin Comandante (Flota Inactiva / Sin Naves)";
         public string RankName { get; set; } = "Oficial";
         public string RankAbbrev { get; set; } = "";
-        public string FullTitleAndName => string.IsNullOrEmpty(RankName) ? Name : $"{RankName} {Name}";
+        public string FullTitleAndName => HasCommander ? (string.IsNullOrEmpty(RankName) ? Name : $"{RankName} {Name}") : "⚠️ Sin Comandante (Flota Inactiva / Sin Naves)";
 
-        public string PrimaryBonusDisplay { get; set; } = "+0% Sin Bonificación";
-        public string SecondaryBonusDisplay { get; set; } = "+0% Sin Bonificación";
+        public int Seniority { get; set; } = 0;
+        public double Loyalty { get; set; } = 100.0;
+        public string HealthStatus { get; set; } = "Salud Normal";
+        public int MilitaryKillsTons { get; set; } = 0;
+        public int CommercialKillsTons { get; set; } = 0;
+
+        public List<string> Traits { get; set; } = new List<string>();
+        public string TraitsDisplay => Traits.Count > 0 ? string.Join(", ", Traits) : "Sin Rasgos Destacados";
+
+        public string PrimaryBonusDisplay { get; set; } = "0% (Sin Naves Asignadas)";
+        public string SecondaryBonusDisplay { get; set; } = "0% (Sin Naves Asignadas)";
         public List<string> AllBonuses { get; set; } = new List<string>();
+        public string AllBonusesDisplay => AllBonuses.Count > 0 ? string.Join(" • ", AllBonuses) : "Ninguna (Agrupación vacía)";
     }
 }

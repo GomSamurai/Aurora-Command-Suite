@@ -82,8 +82,23 @@ namespace AuroraDesignSuite.Views
                 {
                     var cmdInfo = fleet.AssignedCommander;
                     if (LblCommanderName != null) LblCommanderName.Text = cmdInfo.FullTitleAndName;
-                    if (LblCommanderBonus != null) LblCommanderBonus.Text = cmdInfo.PrimaryBonusDisplay;
-                    if (LblCommanderMorale != null) LblCommanderMorale.Text = cmdInfo.SecondaryBonusDisplay;
+
+                    if (cmdInfo.HasCommander)
+                    {
+                        if (LblCommanderHealth != null) LblCommanderHealth.Text = cmdInfo.HealthStatus;
+                        if (LblCommanderLoyaltySeniority != null) LblCommanderLoyaltySeniority.Text = $"{cmdInfo.Loyalty:F0}% Lealtad | Antigüedad #{cmdInfo.Seniority}";
+                        if (LblCommanderKills != null) LblCommanderKills.Text = $"{cmdInfo.MilitaryKillsTons:N0}t Militar | {cmdInfo.CommercialKillsTons:N0}t Comercial";
+                        if (LblCommanderTraits != null) LblCommanderTraits.Text = cmdInfo.TraitsDisplay;
+                        if (LblCommanderAllBonuses != null) LblCommanderAllBonuses.Text = cmdInfo.AllBonusesDisplay;
+                    }
+                    else
+                    {
+                        if (LblCommanderHealth != null) LblCommanderHealth.Text = "N/A (Flota Inactiva)";
+                        if (LblCommanderLoyaltySeniority != null) LblCommanderLoyaltySeniority.Text = "N/A";
+                        if (LblCommanderKills != null) LblCommanderKills.Text = "0t Militar | 0t Comercial";
+                        if (LblCommanderTraits != null) LblCommanderTraits.Text = "Ninguno (Agrupación sin buques)";
+                        if (LblCommanderAllBonuses != null) LblCommanderAllBonuses.Text = "0% (Escuadra sin buques)";
+                    }
                 }
 
                 // Tactical Advisor

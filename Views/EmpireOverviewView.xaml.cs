@@ -193,7 +193,13 @@ namespace AuroraDesignSuite.Views
 
             if (_dbService.UpdateEmpireDetails(emp, out string errorMsg))
             {
-                MessageBox.Show("✅ ¡Identidad, Bandera y Retrato Imperial guardados con éxito en AuroraDB.db!\n\nTodos los cambios están reflejados en directo. Abre o pulsa 'Refrescar Suite' en Aurora 4X para ver los nuevos emblemas en tu juego.", "Identidad Imperial Sincronizada", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("✅ ¡Identidad, Bandera y Retrato Imperial modificados con éxito en la Base de Datos!\n\n" +
+                                "⚠️ CÓMO VER LA NUEVA BANDERA EN AURORA 4X:\n" +
+                                "Aurora 4X mantiene la bandera y nombres cargados en la memoria RAM del sistema mientras la ventana del juego está abierta.\n\n" +
+                                "👉 Pasos para que Aurora 4X muestre tus cambios:\n" +
+                                "1. Si Aurora 4X está abierto: Guarda tu partida en Aurora 4X y vuelve a cargarla (o reinicia Aurora 4X).\n" +
+                                "2. Si realizas cambios con Aurora 4X cerrado: Al abrir el juego se cargará tu nueva bandera inmediatamente.", 
+                                "Identidad Imperial Actualizada", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadEmpireData(_dbService, _currentRaceId);
             }
             else

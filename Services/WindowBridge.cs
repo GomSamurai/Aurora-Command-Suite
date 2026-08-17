@@ -186,11 +186,52 @@ namespace AuroraDesignSuite.Services
             }
         }
 
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
+        [DllImport("user32.dll")]
+        private static extern bool EnumChildWindows(IntPtr hWndParent, EnumWindowsProc lpEnumFunc, IntPtr lParam);
+
+        private const uint BM_CLICK = 0x00F5;
         private const uint WM_KEYDOWN = 0x0100;
         private const uint WM_KEYUP = 0x0101;
+
+        /// <summary>
+        /// Attempts to locate a child button control inside Aurora 4X matching the time step text and clicks it natively via BM_CLICK.
+        /// </summary>
+        public static bool TriggerChildButton(IntPtr parentHWnd, string[] buttonTextMatches)
+        {
+            IntPtr targetButtonHWnd = IntPtr.Zero;
+
+            EnumChildWindows(parentHWnd, (hWnd, lParam) =>
+            {
+                StringBuilder sb = new StringBuilder(256);
+                GetWindowText(hWnd, sb, 256);
+                string text = sb.ToString().Trim();
+
+                if (!string.IsNullOrEmpty(text))
+                {
+                    foreach (var match in buttonTextMatches)
+                    {
+                        if (text.Equals(match, StringComparison.OrdinalIgnoreCase) || 
+                            text.Contains(match, StringComparison.OrdinalIgnoreCase))
+                        {
+                            targetButtonHWnd = hWnd;
+                            return false; // Found matching control!
+                        }
+                    }
+                }
+                return true;
+            }, IntPtr.Zero);
+
+            if (targetButtonHWnd != IntPtr.Zero)
+            {
+                SendMessage(targetButtonHWnd, BM_CLICK, IntPtr.Zero, IntPtr.Zero);
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Retrieves the window handle of the active Aurora 4X game window.
@@ -260,35 +301,44 @@ namespace AuroraDesignSuite.Services
         }
 
         /// <summary>
-        /// Sends a native time step shortcut key directly to the Aurora 4X game process window.
+        /// Sends a native time step button click directly to the Aurora 4X game process window using BM_CLICK.
+        /// Does NOT send function keys (F1-F12) to avoid opening game windows like Economy (F2).
         /// Falls back to SQLite database update if the game is not running.
         /// </summary>
         public static bool SendTimeStepToGame(double seconds, DatabaseService dbService, int raceId, out string statusMessage)
         {
             if (GetAuroraGameHandle(out IntPtr hWnd))
             {
-                IntPtr vk = seconds switch
+                string[] matches = seconds switch
                 {
-                    5 => (IntPtr)0x70,        // F1 (+5 Seg)
-                    30 => (IntPtr)0x71,       // F2 (+30 Seg)
-                    300 => (IntPtr)0x72,      // F3 (+5 Min)
-                    1200 => (IntPtr)0x73,     // F4 (+20 Min)
-                    3600 => (IntPtr)0x74,     // F5 (+1 Hora)
-                    10800 => (IntPtr)0x75,    // F6 (+3 Horas)
-                    28800 => (IntPtr)0x76,    // F7 (+8 Horas)
-                    86400 => (IntPtr)0x77,    // F8 (+1 Día)
-                    432000 => (IntPtr)0x78,   // F9 (+5 Días)
-                    2592000 => (IntPtr)0x79,  // F10 (+30 Días)
-                    31536000 => (IntPtr)0x7A, // F11 (+1 Año)
-                    _ => (IntPtr)0x77
+                    5 => new[] { "5 Sec", "5Sec", "5 s", "5s" },
+                    30 => new[] { "30 Sec", "30Sec", "30 s", "30s" },
+                    300 => new[] { "5 Min", "5Min", "5 m", "5m" },
+                    1200 => new[] { "20 Min", "20Min", "20 m", "20m" },
+                    3600 => new[] { "1 Hour", "1 Hr", "1Hour", "1Hr", "1 h", "1h" },
+                    10800 => new[] { "3 Hours", "3 Hr", "3Hours", "3Hr", "3 h", "3h" },
+                    28800 => new[] { "8 Hours", "8 Hr", "8Hours", "8Hr", "8 h", "8h" },
+                    86400 => new[] { "1 Day", "1Day", "1 d", "1d" },
+                    432000 => new[] { "5 Days", "5Days", "5 d", "5d" },
+                    2592000 => new[] { "30 Days", "30Days", "30 d", "30d" },
+                    31536000 => new[] { "1 Year", "1 Yr", "1Year", "1Yr", "1 y", "1y" },
+                    _ => new[] { "1 Day", "1Day", "1 d", "1d" }
                 };
 
-                PostMessage(hWnd, WM_KEYDOWN, vk, IntPtr.Zero);
-                System.Threading.Thread.Sleep(30);
-                PostMessage(hWnd, WM_KEYUP, vk, IntPtr.Zero);
+                // Try clicking the native WinForms button directly!
+                if (TriggerChildButton(hWnd, matches))
+                {
+                    statusMessage = "⚡ Clic enviado nativamente al botón de Aurora 4X sin interferir con atajos de teclado.";
+                    return true;
+                }
 
-                statusMessage = "⚡ Pulsación enviada nativamente a Aurora 4X en tiempo real.";
-                return true;
+                // If button control handle not found, fall back to SQLite time step to avoid firing unwanted F-keys!
+                bool success = dbService.AdvanceGameTimeSeconds(raceId, seconds, out _, out _);
+                if (success)
+                {
+                    statusMessage = "⚡ Tiempo avanzado directamente en el registro de partida.";
+                    return true;
+                }
             }
 
             // Fallback: Standalone DB advancement

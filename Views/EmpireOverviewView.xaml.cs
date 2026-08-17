@@ -29,6 +29,10 @@ namespace AuroraDesignSuite.Views
             var infrastructure = dbService.GetEmpireInfrastructure(raceId);
             var fleetSummary = dbService.GetEmpireFleetSummary(raceId);
             var officerSummary = dbService.GetOfficerSummary(raceId);
+            var gameTime = dbService.GetGameTimeInfo(raceId);
+
+            if (LblEmpGameDate != null) LblEmpGameDate.Text = gameTime.FormattedCurrentDate;
+            if (LblEmpLifetime != null) LblEmpLifetime.Text = $"Fundación: {gameTime.StartYear} ({gameTime.YearsElapsed:F1} a. de vida)";
 
             double totalPop = colonies.Sum(c => c.PopulationMillions);
             int colonyCount = colonies.Count;

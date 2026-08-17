@@ -35,14 +35,17 @@
                 <!-- Global Empire Selector & Database Path Selector -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock Text="👑 IMPERIO:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                    <ComboBox x:Name="CmbGlobalEmpire" SelectionChanged="CmbGlobalEmpire_SelectionChanged" Width="200" VerticalAlignment="Center" ToolTip="Selecciona el Imperio de tu partida actual cuyos datos deseas conectar en toda la suite."/>
+                    <ComboBox x:Name="CmbGlobalEmpire" SelectionChanged="CmbGlobalEmpire_SelectionChanged" Width="190" VerticalAlignment="Center" ToolTip="Selecciona el Imperio de tu partida actual cuyos datos deseas conectar en toda la suite."/>
                     
-                    <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Margin="8,0,0,0" Padding="8,3" ToolTip="Fecha actual en el universo del juego Aurora 4X y antigüedad de tu imperio.">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="📅 " FontSize="11" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="TxtHeaderGameDate" Text="FECHA: Cargando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
-                            <TextBlock Text="  |  " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="TxtHeaderStartYear" Text="INICIO: --" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" VerticalAlignment="Center"/>
+                    <Border Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" BorderThickness="1.5" CornerRadius="6" Margin="10,0,0,0" Padding="10,4" ToolTip="Fecha actual en el universo del juego Aurora 4X y años transcurridos desde la fundación del imperio.">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="📅 FECHA:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <TextBlock x:Name="TxtHeaderGameDate" Text="Cargando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center"/>
+                            
+                            <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="8,0"/>
+                            
+                            <TextBlock Text="🏛️" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <TextBlock x:Name="TxtHeaderStartYear" Text="INICIO: --" Foreground="White" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
 

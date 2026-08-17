@@ -24,6 +24,18 @@
                 <StackPanel>
                     <TextBlock Text="🏛️ TELEMETRÍA Y ESTADÍSTICAS GLOBALES DEL IMPERIO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
                     <UniformGrid Columns="2">
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Fecha exacta en tiempo real dentro del universo de juego.">
+                            <StackPanel>
+                                <TextBlock Text="📅 Fecha Actual del Juego:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock x:Name="LblEmpGameDate" Text="01/01/2035 00:00" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12.5"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Año de fundación y tiempo de vida / antigüedad del imperio.">
+                            <StackPanel>
+                                <TextBlock Text="⏳ Antigüedad / Tiempo de Vida:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock x:Name="LblEmpLifetime" Text="Inicio: 2026 (9.0 Años)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12.5"/>
+                            </StackPanel>
+                        </Border>
                         <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Población total registrada en todos los sectores imperiales.">
                             <StackPanel>
                                 <TextBlock Text="Población Imperio:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>

@@ -78,7 +78,13 @@ namespace AuroraDesignSuite.Views
                 }
 
                 // Commander Dossier
-                if (LblCommanderName != null) LblCommanderName.Text = $"Almirante de {fleet.FleetName}";
+                if (fleet.AssignedCommander != null)
+                {
+                    var cmdInfo = fleet.AssignedCommander;
+                    if (LblCommanderName != null) LblCommanderName.Text = cmdInfo.FullTitleAndName;
+                    if (LblCommanderBonus != null) LblCommanderBonus.Text = cmdInfo.PrimaryBonusDisplay;
+                    if (LblCommanderMorale != null) LblCommanderMorale.Text = cmdInfo.SecondaryBonusDisplay;
+                }
 
                 // Tactical Advisor
                 if (LblTacticalAdvisorText != null)

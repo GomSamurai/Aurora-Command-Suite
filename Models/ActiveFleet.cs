@@ -38,8 +38,23 @@ namespace AuroraDesignSuite.Models
         public string NearestColonyDisplay => NearestColonyDistanceAU <= 0.05 ? "📍 En Órbita Colonial (0.0 AU)" : $"📍 {NearestColonyDistanceAU:F2} AU de la Colonia";
         public string StrategicRecommendation { get; set; } = "🟢 Mantener postura defensiva. Nivel de combustible y suministros de mantenimiento en estado óptimo.";
 
+        public FleetCommanderInfo AssignedCommander { get; set; } = new FleetCommanderInfo();
+
         public List<ActiveShip> Ships { get; set; } = new List<ActiveShip>();
 
         public override string ToString() => $"{FleetName} ({ShipCount} Naves, {SystemName})";
+    }
+
+    public class FleetCommanderInfo
+    {
+        public int CommanderID { get; set; }
+        public string Name { get; set; } = "Sin Comandante Asignado";
+        public string RankName { get; set; } = "Oficial";
+        public string RankAbbrev { get; set; } = "";
+        public string FullTitleAndName => string.IsNullOrEmpty(RankName) ? Name : $"{RankName} {Name}";
+
+        public string PrimaryBonusDisplay { get; set; } = "+0% Sin Bonificación";
+        public string SecondaryBonusDisplay { get; set; } = "+0% Sin Bonificación";
+        public List<string> AllBonuses { get; set; } = new List<string>();
     }
 }

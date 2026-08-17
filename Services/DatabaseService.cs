@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Data.Sqlite;
 using AuroraDesignSuite.Models;
 
@@ -1250,6 +1251,7 @@ namespace AuroraDesignSuite.Services
                         fleet.NearestColonyDistanceAU = 0.0;
                         fleet.StrategicRecommendation = "🟢 Mantener guardia en la órbita de Sol (Tierra). Realizar simulacros y reabastecer tanques de Sorium periódicamente.";
                     }
+                    fleet.AssignedCommander = GetFleetCommander(raceId, fleet.FleetID, fleet.Ships.Select(s => s.ShipID).ToList());
                 }
             }
             catch (Exception ex)
@@ -1258,6 +1260,139 @@ namespace AuroraDesignSuite.Services
             }
 
             return fleets;
+        }
+
+        public FleetCommanderInfo GetFleetCommander(int raceId, int fleetId, List<int> shipIds)
+        {
+            var info = new FleetCommanderInfo();
+            try
+            {
+                using var conn = GetConnection();
+
+                // 1. Search for Fleet Commander (CommandType = 2, CommandID = fleetId)
+                string fleetCmdQuery = @"
+                    SELECT c.CommanderID, c.Name, c.Title, r.RankName, r.RankAbbrev
+                    FROM FCT_Commander c
+                    LEFT JOIN FCT_Ranks r ON c.RankID = r.RankID
+                    WHERE c.RaceID = @raceId AND c.CommandType = 2 AND c.CommandID = @fleetId
+                    LIMIT 1";
+
+                int foundCommanderId = 0;
+                using (var cmd = new SqliteCommand(fleetCmdQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@raceId", raceId);
+                    cmd.Parameters.AddWithValue("@fleetId", fleetId);
+                    using var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        foundCommanderId = Convert.ToInt32(reader["CommanderID"]);
+                        info.CommanderID = foundCommanderId;
+                        info.Name = reader["Name"].ToString() ?? "Comandante";
+                        info.RankName = reader["RankName"] != DBNull.Value ? reader["RankName"].ToString() ?? "Oficial" : "Oficial";
+                        info.RankAbbrev = reader["RankAbbrev"] != DBNull.Value ? reader["RankAbbrev"].ToString() ?? "" : "";
+                    }
+                }
+
+                // 2. If no Fleet Commander found, search for Ship Commander on ships in this fleet
+                if (foundCommanderId == 0 && shipIds != null && shipIds.Count > 0)
+                {
+                    string shipIdsCsv = string.Join(",", shipIds);
+                    string shipCmdQuery = $@"
+                        SELECT c.CommanderID, c.Name, c.Title, r.RankName, r.RankAbbrev
+                        FROM FCT_Commander c
+                        LEFT JOIN FCT_Ranks r ON c.RankID = r.RankID
+                        WHERE c.RaceID = @raceId AND c.CommandType = 1 AND c.CommandID IN ({shipIdsCsv})
+                        ORDER BY r.Priority ASC, c.Seniority DESC
+                        LIMIT 1";
+
+                    using var sCmd = new SqliteCommand(shipCmdQuery, conn);
+                    sCmd.Parameters.AddWithValue("@raceId", raceId);
+                    using var sReader = sCmd.ExecuteReader();
+                    if (sReader.Read())
+                    {
+                        foundCommanderId = Convert.ToInt32(sReader["CommanderID"]);
+                        info.CommanderID = foundCommanderId;
+                        info.Name = sReader["Name"].ToString() ?? "Comandante";
+                        info.RankName = sReader["RankName"] != DBNull.Value ? sReader["RankName"].ToString() ?? "Oficial" : "Oficial";
+                        info.RankAbbrev = sReader["RankAbbrev"] != DBNull.Value ? sReader["RankAbbrev"].ToString() ?? "" : "";
+                    }
+                }
+
+                // 3. Fallback to active naval officer of race
+                if (foundCommanderId == 0)
+                {
+                    string fallbackQuery = @"
+                        SELECT c.CommanderID, c.Name, c.Title, r.RankName, r.RankAbbrev
+                        FROM FCT_Commander c
+                        LEFT JOIN FCT_Ranks r ON c.RankID = r.RankID
+                        WHERE c.RaceID = @raceId AND (c.CommanderType = 1 OR c.CommanderType = 2)
+                        ORDER BY r.Priority ASC, c.Seniority DESC
+                        LIMIT 1";
+
+                    using var fCmd = new SqliteCommand(fallbackQuery, conn);
+                    fCmd.Parameters.AddWithValue("@raceId", raceId);
+                    using var fReader = fCmd.ExecuteReader();
+                    if (fReader.Read())
+                    {
+                        foundCommanderId = Convert.ToInt32(fReader["CommanderID"]);
+                        info.CommanderID = foundCommanderId;
+                        info.Name = fReader["Name"].ToString() ?? "Comandante";
+                        info.RankName = fReader["RankName"] != DBNull.Value ? fReader["RankName"].ToString() ?? "Oficial" : "Oficial";
+                        info.RankAbbrev = fReader["RankAbbrev"] != DBNull.Value ? fReader["RankAbbrev"].ToString() ?? "" : "";
+                    }
+                }
+
+                // 4. Query Commander Bonuses
+                if (foundCommanderId > 0)
+                {
+                    string bonusQuery = @"
+                        SELECT cb.BonusValue, bt.Description, bt.BonusAbbrev
+                        FROM FCT_CommanderBonuses cb
+                        JOIN DIM_CommanderBonusType bt ON cb.BonusID = bt.BonusID
+                        WHERE cb.CommanderID = @cid
+                        ORDER BY cb.BonusValue DESC";
+
+                    using var bCmd = new SqliteCommand(bonusQuery, conn);
+                    bCmd.Parameters.AddWithValue("@cid", foundCommanderId);
+                    using var bReader = bCmd.ExecuteReader();
+                    int bIdx = 0;
+                    while (bReader.Read())
+                    {
+                        double rawVal = bReader["BonusValue"] != DBNull.Value ? Convert.ToDouble(bReader["BonusValue"]) : 1.0;
+                        double valPercent = Math.Round((rawVal - 1.0) * 100.0, 1);
+                        string desc = bReader["Description"] != DBNull.Value ? bReader["Description"].ToString() ?? "Bono" : "Bono";
+                        string abbrev = bReader["BonusAbbrev"] != DBNull.Value ? bReader["BonusAbbrev"].ToString() ?? "" : "";
+
+                        string spanishDesc = desc switch
+                        {
+                            "Crew Training" => "Entrenamiento de Tripulación",
+                            "Survey" => "Prospección y Sensores",
+                            "Carrier Operations" => "Operaciones de Cubierta",
+                            "Mining" => "Minería Exótica",
+                            "Engineering" => "Eficiencia de Mantenimiento",
+                            "Reaction" => "Velocidad de Reacción e Iniciativa",
+                            "Production" => "Rendimiento de Producción",
+                            "Shipbuilding" => "Construcción Naval",
+                            "Colony Administration" => "Administración Colonial",
+                            "Wealth Creation" => "Generación de Riqueza",
+                            "Population Growth" => "Crecimiento Demográfico",
+                            _ => desc
+                        };
+
+                        string formatted = $"+{valPercent:F1}% {spanishDesc} ({abbrev})";
+                        info.AllBonuses.Add(formatted);
+
+                        if (bIdx == 0) info.PrimaryBonusDisplay = formatted;
+                        else if (bIdx == 1) info.SecondaryBonusDisplay = formatted;
+                        bIdx++;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error resolving fleet commander: {ex.Message}");
+            }
+            return info;
         }
 
         public List<ColonyInfo> GetColonies(int raceId)

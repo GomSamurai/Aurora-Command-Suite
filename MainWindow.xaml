@@ -32,25 +32,34 @@
                     </Border>
                 </StackPanel>
 
-                <!-- Global Empire Selector & Database Path Selector -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="👑 IMPERIO:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                    <ComboBox x:Name="CmbGlobalEmpire" SelectionChanged="CmbGlobalEmpire_SelectionChanged" Width="190" VerticalAlignment="Center" ToolTip="Selecciona el Imperio de tu partida actual cuyos datos deseas conectar en toda la suite."/>
-                    
-                    <Border Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" BorderThickness="1.5" CornerRadius="6" Margin="10,0,0,0" Padding="10,4" ToolTip="Fecha actual en el universo del juego Aurora 4X y años transcurridos desde la fundación del imperio.">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="📅 FECHA:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                            <TextBlock x:Name="TxtHeaderGameDate" Text="Cargando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center"/>
-                            
-                            <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="8,0"/>
-                            
-                            <TextBlock Text="🏛️" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                            <TextBlock x:Name="TxtHeaderStartYear" Text="INICIO: --" Foreground="White" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
+                <!-- Unified Imperial Command Telemetry Header Panel -->
+                <Border Grid.Column="1" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1.5" CornerRadius="8" Padding="12,5" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="Panel Unificado de Comando Imperial: Selector de Imperio activo, Fecha actual del juego, Antigüedad de la dinastía y Conexión a Base de Datos.">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <!-- 1. Empire Selector -->
+                        <TextBlock Text="👑 IMPERIO:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <ComboBox x:Name="CmbGlobalEmpire" SelectionChanged="CmbGlobalEmpire_SelectionChanged" Width="185" VerticalAlignment="Center" ToolTip="Selecciona el Imperio de tu partida actual cuyos datos deseas conectar en toda la suite."/>
 
-                    <Button Content="📁 CAMBIAR BD" Click="BtnChangeDb_Click" Padding="6,3" Margin="8,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10.5" ToolTip="Selecciona el archivo AuroraDB.db de cualquier otra carpeta o partida guardada de Aurora 4X."/>
-                </StackPanel>
+                        <!-- Vertical Divider -->
+                        <Border Width="1" Height="16" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
+
+                        <!-- 2. Game Date -->
+                        <TextBlock Text="📅 FECHA:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBlock x:Name="TxtHeaderGameDate" Text="Cargando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center"/>
+
+                        <!-- Vertical Divider -->
+                        <Border Width="1" Height="16" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
+
+                        <!-- 3. Start Year & Service Lifetime -->
+                        <TextBlock Text="🏛️ INICIO:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBlock x:Name="TxtHeaderStartYear" Text="2026 (0.0 a. de servicio)" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+
+                        <!-- Vertical Divider -->
+                        <Border Width="1" Height="16" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
+
+                        <!-- 4. Change DB Button -->
+                        <Button Content="📁 BD" Click="BtnChangeDb_Click" Padding="6,2" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" ToolTip="Selecciona el archivo AuroraDB.db de cualquier otra carpeta."/>
+                    </StackPanel>
+                </Border>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <TextBlock Text="STATUS: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center"/>

@@ -144,7 +144,7 @@ namespace AuroraDesignSuite
 
             // Update Global Game Time & Start Year indicators
             var gameTime = _dbService.GetGameTimeInfo(raceId);
-            if (TxtHeaderGameDate != null) TxtHeaderGameDate.Text = $"FECHA: {gameTime.FormattedCurrentDate}";
+            if (TxtHeaderGameDate != null) TxtHeaderGameDate.Text = gameTime.FormattedCurrentDate;
             if (TxtHeaderStartYear != null) TxtHeaderStartYear.Text = gameTime.FormattedStartYear;
 
             if (TabAI != null && emp != null && !string.IsNullOrEmpty(emp.RaceName))

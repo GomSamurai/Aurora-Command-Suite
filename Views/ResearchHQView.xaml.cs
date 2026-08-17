@@ -32,11 +32,13 @@ namespace AuroraDesignSuite.Views
             {
                 "Todas las Categorías",
                 "⚡ Potencia y Propulsión",
+                "📡 Sensores y Control",
                 "💥 Energía y Láseres",
                 "🚀 Misiles y Cinéticas",
-                "📡 Sensores y Control",
+                "🏗️ Construcción y Logística",
+                "🛡️ Sistemas Defensivos",
                 "🧬 Biología y Ciencias",
-                "🏗️ Construcción y Logística"
+                "⚔️ Combate Terrestre"
             };
             CmbTechCategory.ItemsSource = categories;
             CmbTechCategory.SelectedIndex = 0;

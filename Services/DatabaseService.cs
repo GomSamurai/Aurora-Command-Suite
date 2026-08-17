@@ -1944,31 +1944,55 @@ namespace AuroraDesignSuite.Services
             {
                 using var conn = GetConnection();
                 string sql = @"
-                    SELECT TechSystemID, Name, CategoryID, DevelopCost
-                    FROM FCT_TechSystem
-                    ORDER BY CategoryID, Name";
+                    SELECT 
+                        t.TechSystemID,
+                        t.Name,
+                        tt.FieldID,
+                        rf.FieldName,
+                        t.DevelopCost,
+                        t.TechDescription
+                    FROM FCT_TechSystem t
+                    JOIN DIM_TechType tt ON t.TechTypeID = tt.TechTypeID
+                    LEFT JOIN DIM_ResearchField rf ON tt.FieldID = rf.ResearchFieldID
+                    WHERE t.TechSystemID NOT IN (SELECT TechID FROM FCT_RaceTech WHERE RaceID = @raceId)
+                      AND (t.RaceID = 0 OR t.RaceID = @raceId)
+                      AND (t.Prerequisite1 = 0 OR t.Prerequisite1 IN (SELECT TechID FROM FCT_RaceTech WHERE RaceID = @raceId))
+                      AND (t.Prerequisite2 = 0 OR t.Prerequisite2 IN (SELECT TechID FROM FCT_RaceTech WHERE RaceID = @raceId))
+                      AND t.AutomaticResearch = 0
+                    ORDER BY tt.FieldID, t.DevelopCost ASC, t.Name ASC";
 
                 using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    int catId = reader["CategoryID"] != DBNull.Value ? Convert.ToInt32(reader["CategoryID"]) : 1;
-                    string catName = catId switch
+                    int fieldId = reader["FieldID"] != DBNull.Value ? Convert.ToInt32(reader["FieldID"]) : 1;
+                    string catName = fieldId switch
                     {
                         1 => "⚡ Potencia y Propulsión",
-                        2 => "💥 Energía y Láseres",
-                        3 => "🚀 Misiles y Cinéticas",
-                        4 => "📡 Sensores y Control",
-                        5 => "🧬 Biología y Ciencias",
+                        2 => "📡 Sensores y Control",
+                        3 => "💥 Energía y Láseres",
+                        4 => "🚀 Misiles y Cinéticas",
+                        5 => "🏗️ Construcción y Logística",
                         6 => "🏗️ Construcción y Logística",
+                        7 => "🛡️ Sistemas Defensivos",
+                        8 => "🧬 Biología y Ciencias",
+                        9 => "⚔️ Combate Terrestre",
                         _ => "⚙️ General e Industria"
                     };
+
+                    string rawName = reader["Name"] != DBNull.Value ? reader["Name"].ToString()! : "Tecnología";
+                    string desc = reader["TechDescription"] != DBNull.Value ? reader["TechDescription"].ToString()! : "";
+                    if (string.IsNullOrWhiteSpace(desc))
+                    {
+                        desc = TechDescriptionResolver.ResolveDescription(rawName, catName);
+                    }
 
                     list.Add(new TechTreeItemInfo
                     {
                         TechSystemID = Convert.ToInt32(reader["TechSystemID"]),
-                        TechName = reader["Name"] != DBNull.Value ? reader["Name"].ToString()! : "Tecnología",
-                        CategoryID = catId,
+                        TechName = rawName,
+                        CategoryID = fieldId,
                         CategoryName = catName,
                         DevelopCost = reader["DevelopCost"] != DBNull.Value ? Convert.ToDouble(reader["DevelopCost"]) : 1000.0
                     });

@@ -1,27 +1,28 @@
 import sqlite3
-import sys
-
-sys.stdout.reconfigure(encoding='utf-8')
 
 db_path = r"C:\VSCODE\Aurora271Full\AuroraDB.db"
 conn = sqlite3.connect(db_path)
-conn.row_factory = sqlite3.Row
 cursor = conn.cursor()
 
-print("--- Inspecting DIM_TechType ---")
+print("--- DIM_TechType ---")
 try:
-    cursor.execute("SELECT TechTypeID, TypeName, CategoryID FROM DIM_TechType ORDER BY TechTypeID")
-    for r in cursor.fetchall()[:40]:
-        print(" ", dict(r))
+    for row in cursor.execute("SELECT * FROM DIM_TechType"):
+        print(row)
 except Exception as e:
-    print(f"Error querying DIM_TechType: {e}")
+    print(e)
 
-print("\n--- Inspecting DIM_ComponentType ---")
+print("\n--- Check how TechTypeID or CategoryID maps to Field ---")
 try:
-    cursor.execute("SELECT ComponentTypeID, TypeDescription FROM DIM_ComponentType ORDER BY ComponentTypeID")
-    for r in cursor.fetchall()[:40]:
-        print(" ", dict(r))
+    for row in cursor.execute("SELECT t.TechSystemID, t.Name, t.CategoryID, t.TechTypeID, tt.Name, tt.FieldID FROM FCT_TechSystem t LEFT JOIN DIM_TechType tt ON t.TechTypeID = tt.TechTypeID LIMIT 30"):
+        print(row)
 except Exception as e:
-    print(f"Error querying DIM_ComponentType: {e}")
+    print(e)
+
+print("\n--- Check distinct FieldIDs in DIM_TechType ---")
+try:
+    for row in cursor.execute("SELECT FieldID, COUNT(*) FROM DIM_TechType GROUP BY FieldID"):
+        print(row)
+except Exception as e:
+    print(e)
 
 conn.close()

@@ -12,6 +12,9 @@ namespace AuroraDesignSuite
     public partial class MainWindow : Window
     {
         private DatabaseService? _dbService;
+        private FileSystemWatcher? _dbWatcher;
+        private System.Windows.Threading.DispatcherTimer? _liveSyncTimer;
+        private DateTime _lastDbWriteTime = DateTime.MinValue;
 
         public MainWindow()
         {
@@ -64,6 +67,12 @@ namespace AuroraDesignSuite
         {
             try
             {
+                _dbWatcher?.Dispose();
+                _dbWatcher = null;
+                _liveSyncTimer?.Stop();
+                _liveSyncTimer = null;
+                LiveSyncBridge.OnGameSyncReceived -= HandleLiveSyncEvent;
+
                 if (_timeEventsWidgetWindow != null)
                 {
                     _timeEventsWidgetWindow.CloseWidget();
@@ -110,11 +119,76 @@ namespace AuroraDesignSuite
                     CmbGlobalEmpire.SelectedItem = savedEmp ?? empires[0];
                 }
                 RefreshActiveTab();
+                SetupLiveSyncWatcher(dbPath);
             }
             else
             {
                 MessageBox.Show($"No se pudo conectar a la base de datos de Aurora 4X en:\n{dbPath}", "Error de Conexión BD", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+        }
+
+        private void SetupLiveSyncWatcher(string dbPath)
+        {
+            try
+            {
+                _dbWatcher?.Dispose();
+                _dbWatcher = null;
+
+                string dir = Path.GetDirectoryName(dbPath) ?? "";
+                string filename = Path.GetFileName(dbPath);
+
+                if (Directory.Exists(dir))
+                {
+                    _dbWatcher = new FileSystemWatcher(dir, filename)
+                    {
+                        NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.FileName,
+                        EnableRaisingEvents = true
+                    };
+                    _dbWatcher.Changed += (s, e) => TriggerLiveRefresh();
+                    _dbWatcher.Created += (s, e) => TriggerLiveRefresh();
+                }
+
+                _liveSyncTimer?.Stop();
+                _liveSyncTimer = new System.Windows.Threading.DispatcherTimer
+                {
+                    Interval = TimeSpan.FromMilliseconds(1500)
+                };
+                _liveSyncTimer.Tick += (s, e) => CheckDatabaseFileUpdate(dbPath);
+                _liveSyncTimer.Start();
+
+                LiveSyncBridge.OnGameSyncReceived -= HandleLiveSyncEvent;
+                LiveSyncBridge.OnGameSyncReceived += HandleLiveSyncEvent;
+            }
+            catch { }
+        }
+
+        private void CheckDatabaseFileUpdate(string dbPath)
+        {
+            try
+            {
+                if (!File.Exists(dbPath)) return;
+                var currentWriteTime = File.GetLastWriteTimeUtc(dbPath);
+
+                if (currentWriteTime > _lastDbWriteTime)
+                {
+                    _lastDbWriteTime = currentWriteTime;
+                    RefreshActiveTab();
+                }
+            }
+            catch { }
+        }
+
+        private void HandleLiveSyncEvent(string action)
+        {
+            Dispatcher.Invoke(() => RefreshActiveTab());
+        }
+
+        private void TriggerLiveRefresh()
+        {
+            Dispatcher.InvokeAsync(() =>
+            {
+                RefreshActiveTab();
+            }, System.Windows.Threading.DispatcherPriority.Background);
         }
 
         private void BtnChangeDb_Click(object sender, RoutedEventArgs e)

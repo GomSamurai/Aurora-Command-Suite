@@ -20,7 +20,7 @@ namespace AuroraDesignSuite.Services
 
         private SqliteConnection GetConnection(bool readOnly = false)
         {
-            var connStr = readOnly ? $"Data Source={_dbPath};Mode=ReadOnly;" : $"Data Source={_dbPath};Mode=ReadWrite;";
+            var connStr = readOnly ? $"Data Source={_dbPath};Mode=ReadOnly;Pooling=False;" : $"Data Source={_dbPath};Mode=ReadWrite;Pooling=False;";
             var conn = new SqliteConnection(connStr);
             conn.Open();
             return conn;

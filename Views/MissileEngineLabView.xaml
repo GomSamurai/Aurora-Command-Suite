@@ -97,20 +97,28 @@
                                 <!-- Sub Tech 3 -->
                                 <TextBlock x:Name="LblSubTech3" Text="Reducción de Firma Térmica / Blindaje:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
                                 <ComboBox x:Name="CmbSubTech3" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4" ToolTip="Aislamiento térmico y capas protectoras disponibles."/>
+
+                                <!-- Sub Tech 4 -->
+                                <TextBlock x:Name="LblSubTech4" Text="Montaje Específico / Tipo de Cañón:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2" Visibility="Collapsed"/>
+                                <ComboBox x:Name="CmbSubTech4" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4" Visibility="Collapsed" ToolTip="Montajes especiales (Montaje Espinal, Reducido para Cazas, Torreta)."/>
                             </StackPanel>
 
                             <!-- PARAMETER SLIDERS -->
-                            <Grid Margin="0,0,0,4">
-                                <TextBlock x:Name="LblParam1Title" Text="Tamaño del Componente (HS / Tons):" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblValParam1" Text="1.0 HS (50 t)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <Slider x:Name="SldParam1" Minimum="0.1" Maximum="100" Value="1.0" TickFrequency="0.5" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,10" ToolTip="Volumen total ocupado por el componente en cascos (1 HS = 50 Tons)."/>
+                            <StackPanel x:Name="PnlParam1Container" Visibility="Visible">
+                                <Grid Margin="0,0,0,4">
+                                    <TextBlock x:Name="LblParam1Title" Text="Tamaño del Componente (HS / Tons):" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                    <TextBlock x:Name="LblValParam1" Text="1.0 HS (50 t)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <Slider x:Name="SldParam1" Minimum="0.1" Maximum="100" Value="1.0" TickFrequency="0.5" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,10" ToolTip="Volumen total ocupado por el componente en cascos (1 HS = 50 Tons)."/>
+                            </StackPanel>
 
-                            <Grid Margin="0,0,0,4">
-                                <TextBlock x:Name="LblParam2Title" Text="Modificador de Potencia / Resolución:" Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                <TextBlock x:Name="LblValParam2" Text="Res 100 (5,000t)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <Slider x:Name="SldParam2" Minimum="1" Maximum="100" Value="100" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,12" ToolTip="Multiplicador de potencia operativa o resolución de radar de destino."/>
+                            <StackPanel x:Name="PnlParam2Container" Visibility="Visible">
+                                <Grid Margin="0,0,0,4">
+                                    <TextBlock x:Name="LblParam2Title" Text="Modificador de Potencia / Resolución:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                    <TextBlock x:Name="LblValParam2" Text="Res 100 (5,000t)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <Slider x:Name="SldParam2" Minimum="1" Maximum="100" Value="100" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnParamChanged" Margin="0,0,0,12" ToolTip="Multiplicador de potencia operativa o resolución de radar de destino."/>
+                            </StackPanel>
 
                             <!-- Action Buttons -->
                             <Grid Margin="0,8,0,0">

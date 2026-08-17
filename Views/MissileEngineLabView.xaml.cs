@@ -75,12 +75,26 @@ namespace AuroraDesignSuite.Views
             CmbSubTech1.ItemsSource = null;
             CmbSubTech2.ItemsSource = null;
             CmbSubTech3.ItemsSource = null;
+            if (CmbSubTech4 != null) CmbSubTech4.ItemsSource = null;
+
+            // Default visibility settings
+            if (LblSubTech2 != null) LblSubTech2.Visibility = Visibility.Visible;
+            if (CmbSubTech2 != null) CmbSubTech2.Visibility = Visibility.Visible;
+            if (LblSubTech3 != null) LblSubTech3.Visibility = Visibility.Visible;
+            if (CmbSubTech3 != null) CmbSubTech3.Visibility = Visibility.Visible;
+            if (LblSubTech4 != null) LblSubTech4.Visibility = Visibility.Collapsed;
+            if (CmbSubTech4 != null) CmbSubTech4.Visibility = Visibility.Collapsed;
+            if (PnlParam1Container != null) PnlParam1Container.Visibility = Visibility.Visible;
+            if (PnlParam2Container != null) PnlParam2Container.Visibility = Visibility.Visible;
 
             if (selectedCat.Contains("Engines") || selectedCat.Contains("Motores"))
             {
-                LblSubTech1.Text = "Tecnología de Propulsión (Engine Tech):";
-                LblSubTech2.Text = "Consumo de Combustible (Fuel Consumption):";
-                LblSubTech3.Text = "Reducción de Firma Térmica (Thermal Reduction):";
+                if (LblSubTech1 != null) LblSubTech1.Text = "Tecnología de Propulsión (Engine Tech):";
+                if (LblSubTech2 != null) LblSubTech2.Text = "Consumo de Combustible (Fuel Consumption):";
+                if (LblSubTech3 != null) LblSubTech3.Text = "Reducción de Firma Térmica (Thermal Reduction):";
+
+                if (LblParam1Title != null) LblParam1Title.Text = "Tamaño del Motor (HS / Tons):";
+                if (LblParam2Title != null) LblParam2Title.Text = "Modificador de Potencia (Power Mod):";
 
                 // SubTech 1: Engine Propulsion Techs (Type 40, 119)
                 var engineTechs = _researchedTechs
@@ -101,22 +115,35 @@ namespace AuroraDesignSuite.Views
                 // SubTech 2: Fuel Consumption (Type 65)
                 var fuelTechs = _researchedTechs.Where(t => t.TechTypeID == 65 || t.Name.Contains("Fuel Consumption")).ToList();
                 if (fuelTechs.Count == 0) fuelTechs.Add(new ResearchedTechItem { TechID = 10, Name = "Fuel Consumption: 1 Litre per Engine Power Hour" });
-                CmbSubTech2.ItemsSource = fuelTechs;
-                CmbSubTech2.SelectedIndex = 0;
+                if (CmbSubTech2 != null)
+                {
+                    CmbSubTech2.ItemsSource = fuelTechs;
+                    CmbSubTech2.SelectedIndex = 0;
+                }
 
                 // SubTech 3: Thermal Reduction (Type 127)
                 var thermalTechs = _researchedTechs.Where(t => t.TechTypeID == 127 || t.Name.Contains("Thermal Reduction")).ToList();
                 if (thermalTechs.Count == 0) thermalTechs.Add(new ResearchedTechItem { TechID = 20, Name = "Thermal Reduction: Signature 100% Normal" });
-                CmbSubTech3.ItemsSource = thermalTechs;
-                CmbSubTech3.SelectedIndex = 0;
+                if (CmbSubTech3 != null)
+                {
+                    CmbSubTech3.ItemsSource = thermalTechs;
+                    CmbSubTech3.SelectedIndex = 0;
+                }
 
                 if (TxtProjectName != null) TxtProjectName.Text = "Nuclear Thermal Engine EP50";
             }
             else if (selectedCat.Contains("Lasers"))
             {
-                LblSubTech1.Text = "Tamaño Focal / Calibre (Laser Focal Size):";
-                LblSubTech2.Text = "Longitud de Onda del Láser (Wavelength):";
-                LblSubTech3.Text = "Tasa de Recarga de Condensador (Capacitor):";
+                if (LblSubTech1 != null) LblSubTech1.Text = "Tamaño Focal / Calibre (Laser Focal Size):";
+                if (LblSubTech2 != null) LblSubTech2.Text = "Longitud de Onda del Láser (Wavelength):";
+                if (LblSubTech3 != null) LblSubTech3.Text = "Tasa de Recarga de Condensador (Capacitor):";
+                if (LblSubTech4 != null) LblSubTech4.Text = "Tipo de Montaje / Cañón Focal:";
+                if (LblSubTech4 != null) LblSubTech4.Visibility = Visibility.Visible;
+                if (CmbSubTech4 != null) CmbSubTech4.Visibility = Visibility.Visible;
+
+                // Hide generic sliders for Lasers since size/power is fixed by Focal Size & Capacitor!
+                if (PnlParam1Container != null) PnlParam1Container.Visibility = Visibility.Collapsed;
+                if (PnlParam2Container != null) PnlParam2Container.Visibility = Visibility.Collapsed;
 
                 // SubTech 1: Focal Size (Type 15)
                 var focalTechs = _researchedTechs.Where(t => t.TechTypeID == 15 || t.Name.Contains("Focal Size")).ToList();
@@ -127,22 +154,38 @@ namespace AuroraDesignSuite.Views
                 // SubTech 2: Wavelength (Type 3)
                 var waveTechs = _researchedTechs.Where(t => t.TechTypeID == 3 || t.Name.Contains("Infrared") || t.Name.Contains("Laser")).ToList();
                 if (waveTechs.Count == 0) waveTechs.Add(new ResearchedTechItem { TechID = 31, Name = "Infrared Laser" });
-                CmbSubTech2.ItemsSource = waveTechs;
-                CmbSubTech2.SelectedIndex = 0;
+                if (CmbSubTech2 != null)
+                {
+                    CmbSubTech2.ItemsSource = waveTechs;
+                    CmbSubTech2.SelectedIndex = 0;
+                }
 
                 // SubTech 3: Capacitor Recharge Rate (Type 1)
                 var capTechs = _researchedTechs.Where(t => t.TechTypeID == 1 || t.Name.Contains("Capacitor")).ToList();
                 if (capTechs.Count == 0) capTechs.Add(new ResearchedTechItem { TechID = 32, Name = "Capacitor Recharge Rate 1" });
-                CmbSubTech3.ItemsSource = capTechs;
-                CmbSubTech3.SelectedIndex = 0;
+                if (CmbSubTech3 != null)
+                {
+                    CmbSubTech3.ItemsSource = capTechs;
+                    CmbSubTech3.SelectedIndex = 0;
+                }
+
+                // SubTech 4: Mount Types
+                if (CmbSubTech4 != null)
+                {
+                    CmbSubTech4.ItemsSource = new List<string> { "Standard Mount (Montaje Estándar)", "Spinal Mount 1.5x (Montaje Espinal Proa)", "Reduced Size 0.5 HS (Caza Parásito)" };
+                    CmbSubTech4.SelectedIndex = 0;
+                }
 
                 if (TxtProjectName != null) TxtProjectName.Text = "Infrared Laser 10cm";
             }
             else if (selectedCat.Contains("Active Sensors"))
             {
-                LblSubTech1.Text = "Fuerza del Sensor Activo (Active Sensor Strength):";
-                LblSubTech2.Text = "Endurecimiento Electrónico (Electronic Hardening):";
-                LblSubTech3.Text = "Contra-contramedidas (ECCM):";
+                if (LblSubTech1 != null) LblSubTech1.Text = "Fuerza del Sensor Activo (Active Sensor Strength):";
+                if (LblSubTech2 != null) LblSubTech2.Text = "Endurecimiento Electrónico (Electronic Hardening):";
+                if (LblSubTech3 != null) LblSubTech3.Text = "Contra-contramedidas (ECCM):";
+
+                if (LblParam1Title != null) LblParam1Title.Text = "Tamaño del Sensor (HS / Tons):";
+                if (LblParam2Title != null) LblParam2Title.Text = "Resolución de Radar (Target Resolution):";
 
                 // SubTech 1: Active Sensor Strength (Type 20, 152)
                 var sensorTechs = _researchedTechs.Where(t => t.TechTypeID == 20 || t.TechTypeID == 152 || t.Name.Contains("Active Sensor")).ToList();
@@ -153,22 +196,31 @@ namespace AuroraDesignSuite.Views
                 // SubTech 2: Hardening (Type 139)
                 var hardTechs = _researchedTechs.Where(t => t.TechTypeID == 139 || t.Name.Contains("Electronic Hardening")).ToList();
                 if (hardTechs.Count == 0) hardTechs.Add(new ResearchedTechItem { TechID = 41, Name = "Electronic Hardening Level 0" });
-                CmbSubTech2.ItemsSource = hardTechs;
-                CmbSubTech2.SelectedIndex = 0;
+                if (CmbSubTech2 != null)
+                {
+                    CmbSubTech2.ItemsSource = hardTechs;
+                    CmbSubTech2.SelectedIndex = 0;
+                }
 
                 // SubTech 3: ECCM (Type 83)
                 var eccmTechs = _researchedTechs.Where(t => t.TechTypeID == 83 || t.Name.Contains("ECCM")).ToList();
                 if (eccmTechs.Count == 0) eccmTechs.Add(new ResearchedTechItem { TechID = 42, Name = "Electronic Counter-countermeasures - 0" });
-                CmbSubTech3.ItemsSource = eccmTechs;
-                CmbSubTech3.SelectedIndex = 0;
+                if (CmbSubTech3 != null)
+                {
+                    CmbSubTech3.ItemsSource = eccmTechs;
+                    CmbSubTech3.SelectedIndex = 0;
+                }
 
                 if (TxtProjectName != null) TxtProjectName.Text = "Active Search Sensor AS10-R100";
             }
             else if (selectedCat.Contains("Missile Launchers"))
             {
-                LblSubTech1.Text = "Tamaño de Lanzador (Missile Launcher Size):";
-                LblSubTech2.Text = "Tasa de Recarga y Reducción (Reload Rate):";
-                LblSubTech3.Text = "Probabilidad de Explosión de Lanzador:";
+                if (LblSubTech1 != null) LblSubTech1.Text = "Tamaño de Lanzador (Missile Launcher Size):";
+                if (LblSubTech2 != null) LblSubTech2.Text = "Tasa de Recarga y Reducción (Reload Rate):";
+                if (LblSubTech3 != null) LblSubTech3.Text = "Protección de Pañol y Blindaje:";
+
+                if (PnlParam1Container != null) PnlParam1Container.Visibility = Visibility.Collapsed;
+                if (PnlParam2Container != null) PnlParam2Container.Visibility = Visibility.Collapsed;
 
                 // SubTech 1: Launcher Size (Type 10)
                 var launcherTechs = _researchedTechs.Where(t => t.TechTypeID == 10 || t.Name.Contains("Missile Launcher Size")).ToList();
@@ -179,30 +231,81 @@ namespace AuroraDesignSuite.Views
                 // SubTech 2: Reload (Type 129)
                 var reloadTechs = _researchedTechs.Where(t => t.TechTypeID == 129 || t.Name.Contains("Reload")).ToList();
                 if (reloadTechs.Count == 0) reloadTechs.Add(new ResearchedTechItem { TechID = 51, Name = "Standard Size and Reload Rate" });
-                CmbSubTech2.ItemsSource = reloadTechs;
-                CmbSubTech2.SelectedIndex = 0;
+                if (CmbSubTech2 != null)
+                {
+                    CmbSubTech2.ItemsSource = reloadTechs;
+                    CmbSubTech2.SelectedIndex = 0;
+                }
 
-                CmbSubTech3.ItemsSource = new List<string> { "Standard Box Launcher (100% Explosion)", "Safe Launcher (70% Explosion)" };
-                CmbSubTech3.SelectedIndex = 0;
+                if (CmbSubTech3 != null)
+                {
+                    CmbSubTech3.ItemsSource = new List<string> { "Standard Box Launcher (100% Explosion Chance)", "Safe Launcher (70% Explosion Chance)" };
+                    CmbSubTech3.SelectedIndex = 0;
+                }
 
                 if (TxtProjectName != null) TxtProjectName.Text = "Size 6 Missile Launcher";
             }
+            else if (selectedCat.Contains("Shield"))
+            {
+                if (LblSubTech1 != null) LblSubTech1.Text = "Tasa de Regeneración de Escudos (Regeneration Rate):";
+                if (LblSubTech2 != null) LblSubTech2.Visibility = Visibility.Collapsed;
+                if (CmbSubTech2 != null) CmbSubTech2.Visibility = Visibility.Collapsed;
+                if (LblSubTech3 != null) LblSubTech3.Visibility = Visibility.Collapsed;
+                if (CmbSubTech3 != null) CmbSubTech3.Visibility = Visibility.Collapsed;
+
+                if (LblParam1Title != null) LblParam1Title.Text = "Tamaño del Generador de Escudos (HS / Tons):";
+                if (PnlParam2Container != null) PnlParam2Container.Visibility = Visibility.Collapsed;
+
+                var shieldTechs = _researchedTechs.Where(t => t.TechTypeID == 215 || t.Name.Contains("Shield")).ToList();
+                if (shieldTechs.Count == 0) shieldTechs.Add(new ResearchedTechItem { TechID = 60, Name = "Shield Regeneration Rate 1" });
+                CmbSubTech1.ItemsSource = shieldTechs;
+                CmbSubTech1.SelectedIndex = 0;
+
+                if (TxtProjectName != null) TxtProjectName.Text = "Alpha Shield Generator MK-I";
+            }
+            else if (selectedCat.Contains("Power Plant") || selectedCat.Contains("Reactor"))
+            {
+                if (LblSubTech1 != null) LblSubTech1.Text = "Tecnología de Reactor (Power Plant Tech):";
+                if (LblSubTech2 != null) LblSubTech2.Visibility = Visibility.Collapsed;
+                if (CmbSubTech2 != null) CmbSubTech2.Visibility = Visibility.Collapsed;
+                if (LblSubTech3 != null) LblSubTech3.Visibility = Visibility.Collapsed;
+                if (CmbSubTech3 != null) CmbSubTech3.Visibility = Visibility.Collapsed;
+
+                if (LblParam1Title != null) LblParam1Title.Text = "Capacidad de Producción de Energía (EU):";
+                if (PnlParam2Container != null) PnlParam2Container.Visibility = Visibility.Collapsed;
+
+                var reactorTechs = _researchedTechs.Where(t => t.Name.Contains("Reactor") || t.Name.Contains("Power Plant")).ToList();
+                if (reactorTechs.Count == 0) reactorTechs.Add(new ResearchedTechItem { TechID = 70, Name = "Conventional Reactor R1" });
+                CmbSubTech1.ItemsSource = reactorTechs;
+                CmbSubTech1.SelectedIndex = 0;
+
+                if (TxtProjectName != null) TxtProjectName.Text = "Fission Power Plant R10";
+            }
             else
             {
-                LblSubTech1.Text = "Tecnología Base Investigada (AuroraDB.db):";
-                LblSubTech2.Text = "Modificador de Eficiencia:";
-                LblSubTech3.Text = "Módulo de Control Electrónico:";
+                if (LblSubTech1 != null) LblSubTech1.Text = "Tecnología Base Investigada (AuroraDB.db):";
+                if (LblSubTech2 != null) LblSubTech2.Text = "Modificador de Eficiencia:";
+                if (LblSubTech3 != null) LblSubTech3.Text = "Módulo de Control Electrónico:";
+
+                if (LblParam1Title != null) LblParam1Title.Text = "Tamaño del Componente (HS / Tons):";
+                if (LblParam2Title != null) LblParam2Title.Text = "Modificador de Rendimiento / Calidad:";
 
                 var generalTechs = _researchedTechs.Where(t => CategoryMatches(t, selectedCat)).ToList();
                 if (generalTechs.Count == 0) generalTechs.Add(new ResearchedTechItem { TechID = 99, Name = $"Standard {selectedCat} Tech" });
                 CmbSubTech1.ItemsSource = generalTechs;
                 CmbSubTech1.SelectedIndex = 0;
 
-                CmbSubTech2.ItemsSource = new List<string> { "Estándar 100%", "Mejorado 120%", "Optimizado 150%" };
-                CmbSubTech2.SelectedIndex = 0;
+                if (CmbSubTech2 != null)
+                {
+                    CmbSubTech2.ItemsSource = new List<string> { "Estándar 100%", "Mejorado 120%", "Optimizado 150%" };
+                    CmbSubTech2.SelectedIndex = 0;
+                }
 
-                CmbSubTech3.ItemsSource = new List<string> { "Básico (Sin ECCM)", "ECCM-1", "ECCM-2 Avanzado" };
-                CmbSubTech3.SelectedIndex = 0;
+                if (CmbSubTech3 != null)
+                {
+                    CmbSubTech3.ItemsSource = new List<string> { "Básico (Sin ECCM)", "ECCM-1", "ECCM-2 Avanzado" };
+                    CmbSubTech3.SelectedIndex = 0;
+                }
 
                 if (TxtProjectName != null) TxtProjectName.Text = $"{selectedCat.Replace("📡 ", "").Replace("⚙️ ", "").Replace("💥 ", "")} Component MK-I";
             }

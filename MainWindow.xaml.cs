@@ -167,13 +167,7 @@ namespace AuroraDesignSuite
             try
             {
                 if (!File.Exists(dbPath)) return;
-                var currentWriteTime = File.GetLastWriteTimeUtc(dbPath);
-
-                if (currentWriteTime > _lastDbWriteTime)
-                {
-                    _lastDbWriteTime = currentWriteTime;
-                    RefreshActiveTab();
-                }
+                RefreshActiveTab();
             }
             catch { }
         }

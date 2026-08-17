@@ -201,25 +201,16 @@ namespace AuroraDesignSuite.Views
         private void FilterPresetsByCategory()
         {
             if (CmbPresets == null || CmbPresetCategoryFilter == null) return;
-            int catIdx = CmbPresetCategoryFilter.SelectedIndex;
+            string selectedCat = CmbPresetCategoryFilter.SelectedItem?.ToString() ?? "📂 Todas las Categorías";
 
             List<PresetItem> filtered;
-            if (catIdx <= 0)
+            if (CmbPresetCategoryFilter.SelectedIndex <= 0 || selectedCat.Contains("Todas las Categorías"))
             {
                 filtered = new List<PresetItem>(_allPresetsList);
             }
             else
             {
-                string targetCat = catIdx switch
-                {
-                    1 => "🏭 Naves Comerciales",
-                    2 => "🛡️ Naves de Guerra",
-                    3 => "🚀 Fuerzas Especiales",
-                    4 => "🏰 Fortalezas Orbitales",
-                    5 => "💾 Diseños del Usuario",
-                    _ => string.Empty
-                };
-                filtered = _allPresetsList.Where(p => p.Category == targetCat).ToList();
+                filtered = _allPresetsList.Where(p => p.Category.Equals(selectedCat, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             CmbPresets.ItemsSource = filtered;

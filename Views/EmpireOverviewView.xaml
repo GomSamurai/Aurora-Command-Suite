@@ -19,49 +19,59 @@
                 <ColumnDefinition Width="360"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Card 1: Global Empire Stats (Sleek Single Compact Row) -->
-            <Border Grid.Column="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10,8" Margin="0,0,5,0">
+            <!-- Card 1: Global Empire Stats (2 Rows x 3 Columns Grid) -->
+            <Border Grid.Column="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,5,0">
                 <StackPanel>
-                    <TextBlock Text="🏛️ TELEMETRÍA Y ESTADÍSTICAS GLOBALES DEL IMPERIO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12.5" Margin="0,0,0,6"/>
-                    <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8,5">
-                        <UniformGrid Columns="6">
-                            <!-- Metric 1: Game Date -->
-                            <StackPanel Margin="2,0" ToolTip="Fecha exacta en tiempo real dentro del universo de juego.">
-                                <TextBlock Text="📅 Fecha Juego:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
-                                <TextBlock x:Name="LblEmpGameDate" Text="01/01/2035 00:00" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
+                    <TextBlock Text="🏛️ TELEMETRÍA Y ESTADÍSTICAS GLOBALES DEL IMPERIO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                    <UniformGrid Columns="3">
+                        <!-- Metric 1: Game Date -->
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8,6" Margin="2" ToolTip="Fecha exacta en tiempo real dentro del universo de juego.">
+                            <StackPanel>
+                                <TextBlock Text="📅 Fecha Actual Juego:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock x:Name="LblEmpGameDate" Text="01/01/2035 00:00" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12.5"/>
                             </StackPanel>
+                        </Border>
 
-                            <!-- Metric 2: Lifetime -->
-                            <StackPanel Margin="2,0" ToolTip="Año de fundación y tiempo de vida / antigüedad del imperio.">
-                                <TextBlock Text="⏳ Antigüedad:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
-                                <TextBlock x:Name="LblEmpLifetime" Text="2026 (9.0 a. vida)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                        <!-- Metric 2: Lifetime -->
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8,6" Margin="2" ToolTip="Año de fundación y tiempo de vida / antigüedad del imperio.">
+                            <StackPanel>
+                                <TextBlock Text="⏳ Antigüedad / Tiempo de Vida:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock x:Name="LblEmpLifetime" Text="Inicio: 2026 (9.0 Años)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12"/>
                             </StackPanel>
+                        </Border>
 
-                            <!-- Metric 3: Empire Population -->
-                            <StackPanel Margin="2,0" ToolTip="Población total registrada en todos los sectores imperiales.">
-                                <TextBlock Text="👥 Población:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
-                                <TextBlock x:Name="LblEmpPop" Text="1,168.63 M" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                        <!-- Metric 3: Empire Population -->
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8,6" Margin="2" ToolTip="Población total registrada en todos los sectores imperiales.">
+                            <StackPanel>
+                                <TextBlock Text="👥 Población Imperio:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock x:Name="LblEmpPop" Text="1,168.63 M" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12.5"/>
                             </StackPanel>
+                        </Border>
 
-                            <!-- Metric 4: Colonial Capital -->
-                            <StackPanel Margin="2,0" ToolTip="Capital colonial y sede de gobierno de la civilización.">
-                                <TextBlock Text="★ Capital:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
-                                <TextBlock x:Name="LblEmpCapital" Text="Earth" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                        <!-- Metric 4: Colonial Capital -->
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8,6" Margin="2" ToolTip="Capital colonial y sede de gobierno de la civilización.">
+                            <StackPanel>
+                                <TextBlock Text="★ Capital Colonial:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock x:Name="LblEmpCapital" Text="★ Earth" Foreground="White" FontWeight="Bold" FontSize="12.5"/>
                             </StackPanel>
+                        </Border>
 
-                            <!-- Metric 5: Fuel Reserves -->
-                            <StackPanel Margin="2,0" ToolTip="Reserva total de combustible de Sorium refinado almacenado.">
-                                <TextBlock Text="⛽ Combustible:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
-                                <TextBlock x:Name="LblEmpFuel" Text="16,625,532 L" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                        <!-- Metric 5: Fuel Reserves -->
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8,6" Margin="2" ToolTip="Reserva total de combustible de Sorium refinado almacenado.">
+                            <StackPanel>
+                                <TextBlock Text="⛽ Reserva Combustible:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock x:Name="LblEmpFuel" Text="16,625,532 L" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12.5"/>
                             </StackPanel>
+                        </Border>
 
-                            <!-- Metric 6: Annual Revenue -->
-                            <StackPanel Margin="2,0" ToolTip="Renta fiscal bruta anual generada por la población y el comercio.">
-                                <TextBlock Text="💰 Ingreso Fiscal:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
-                                <TextBlock x:Name="LblEmpRevenue" Text="11,686 BP / Año" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
+                        <!-- Metric 6: Annual Revenue -->
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8,6" Margin="2" ToolTip="Renta fiscal bruta anual generada por la población y el comercio.">
+                            <StackPanel>
+                                <TextBlock Text="💰 Ingreso Fiscal Anual:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                <TextBlock x:Name="LblEmpRevenue" Text="11,686 BP / Año" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12.5"/>
                             </StackPanel>
-                        </UniformGrid>
-                    </Border>
+                        </Border>
+                    </UniformGrid>
                 </StackPanel>
             </Border>
 

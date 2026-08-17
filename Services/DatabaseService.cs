@@ -2791,5 +2791,137 @@ namespace AuroraDesignSuite.Services
             }
             return history;
         }
+
+        public List<NamingThemeItem> GetNamingThemes()
+        {
+            var themes = new List<NamingThemeItem>();
+            try
+            {
+                using var conn = GetConnection();
+                string query = "SELECT ThemeID, Description FROM DIM_NamingThemeTypes ORDER BY Description ASC";
+                using var cmd = new SqliteCommand(query, conn);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    themes.Add(new NamingThemeItem
+                    {
+                        ThemeID = Convert.ToInt32(reader["ThemeID"]),
+                        Description = reader["Description"] != DBNull.Value ? reader["Description"].ToString()! : "Sin Nombre"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"GetNamingThemes Error: {ex.Message}");
+            }
+            return themes;
+        }
+
+        public EmpireNamingConfig GetEmpireNamingConfig(int raceId)
+        {
+            var config = new EmpireNamingConfig { RaceID = raceId };
+            try
+            {
+                using var conn = GetConnection();
+                string query = "SELECT ClassThemeID, SystemThemeID, DesignThemeID, GroundThemeID, MissileThemeID, NameThemeID FROM FCT_Race WHERE RaceID = @raceId";
+                using var cmd = new SqliteCommand(query, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                using var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    config.ClassThemeID = reader["ClassThemeID"] != DBNull.Value ? Convert.ToInt32(reader["ClassThemeID"]) : 0;
+                    config.SystemThemeID = reader["SystemThemeID"] != DBNull.Value ? Convert.ToInt32(reader["SystemThemeID"]) : 0;
+                    config.DesignThemeID = reader["DesignThemeID"] != DBNull.Value ? Convert.ToInt32(reader["DesignThemeID"]) : 0;
+                    config.GroundThemeID = reader["GroundThemeID"] != DBNull.Value ? Convert.ToInt32(reader["GroundThemeID"]) : 0;
+                    config.MissileThemeID = reader["MissileThemeID"] != DBNull.Value ? Convert.ToInt32(reader["MissileThemeID"]) : 0;
+                    config.NameThemeID = reader["NameThemeID"] != DBNull.Value ? Convert.ToInt32(reader["NameThemeID"]) : 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"GetEmpireNamingConfig Error: {ex.Message}");
+            }
+            return config;
+        }
+
+        public bool SaveEmpireNamingConfig(int raceId, EmpireNamingConfig config, out string msg)
+        {
+            try
+            {
+                using var conn = GetConnection();
+                string sql = @"
+                    UPDATE FCT_Race 
+                    SET ClassThemeID = @classTheme,
+                        SystemThemeID = @sysTheme,
+                        DesignThemeID = @designTheme,
+                        GroundThemeID = @groundTheme,
+                        MissileThemeID = @missileTheme,
+                        NameThemeID = @nameTheme
+                    WHERE RaceID = @raceId";
+
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@classTheme", config.ClassThemeID);
+                cmd.Parameters.AddWithValue("@sysTheme", config.SystemThemeID);
+                cmd.Parameters.AddWithValue("@designTheme", config.DesignThemeID);
+                cmd.Parameters.AddWithValue("@groundTheme", config.GroundThemeID);
+                cmd.Parameters.AddWithValue("@missileTheme", config.MissileThemeID);
+                cmd.Parameters.AddWithValue("@nameTheme", config.NameThemeID);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+
+                cmd.ExecuteNonQuery();
+
+                LiveSyncBridge.NotifyGameSync("EMPIRE_NAMING_CONFIG_UPDATED");
+                msg = "✅ Configuración de Lotes de Nombres guardada con éxito en AuroraDB.db.";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                msg = $"❌ Error al guardar lotes de nombres: {ex.Message}";
+                return false;
+            }
+        }
+
+        public List<string> GetCompanyNames(int raceId)
+        {
+            var companies = new List<string>
+            {
+                "Carrasco-Nazario Turbines",
+                "Ybarra Engines Limited",
+                "Velazquez Aerospace",
+                "Navantia Imperial Defense",
+                "Adeptus Mechanicus Forge",
+                "Hispano-Suiza Naval Armaments",
+                "Sevilla Orbital Industries"
+            };
+
+            try
+            {
+                using var conn = GetConnection();
+                string query = @"
+                    SELECT DISTINCT Name FROM FCT_TechSystem 
+                    WHERE Name LIKE '%Limited%' OR Name LIKE '%Turbines%' OR Name LIKE '%Industries%' OR Name LIKE '%Corp%' OR Name LIKE '%Aerospace%'
+                    LIMIT 20";
+                using var cmd = new SqliteCommand(query, conn);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    string fullName = reader["Name"].ToString()!;
+                    string[] parts = fullName.Split(' ');
+                    if (parts.Length >= 2)
+                    {
+                        string companyName = string.Join(" ", parts.Take(3)).Trim();
+                        if (!companies.Contains(companyName))
+                        {
+                            companies.Add(companyName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"GetCompanyNames Error: {ex.Message}");
+            }
+            return companies;
+        }
     }
 }

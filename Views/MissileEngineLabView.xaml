@@ -80,6 +80,17 @@
 
                             <Separator Background="{DynamicResource BorderBrush}" Margin="0,0,0,10"/>
 
+                            <!-- COMPANY NAME SELECTION (Aurora 4X Feature) -->
+                            <TextBlock Text="🏢 Empresa Constructora / Fabricante (Company Name):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox x:Name="CmbCompanyName" SelectionChanged="CmbCompanyName_SelectionChanged" Padding="6,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Empresas y fabricantes de defensa registrados en AuroraDB.db."/>
+                                <Button Grid.Column="1" Content="🏢 Prefijar Empresa" Click="BtnApplyCompany_Click" Padding="8,4" Margin="6,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Agrega el nombre de la empresa como prefijo en el proyecto."/>
+                            </Grid>
+
                             <!-- Component Name Input -->
                             <TextBlock Text="Nombre del Proyecto / Componente:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
                             <TextBox x:Name="TxtProjectName" Text="Commercial Active Sensor AS8-R100" Margin="0,0,0,12" Padding="6,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource BorderBrush}" ToolTip="Nombre descriptivo único con el que se registrará el proyecto en la base de datos de Aurora 4X."/>
@@ -276,10 +287,47 @@
                         </Border>
 
                         <!-- Card 5: Aurora 4X Physics Formulas & Math Rules -->
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                             <StackPanel>
                                 <TextBlock Text="📐 FÓRMULAS FÍSICAS Y REGLAS MATEMÁTICAS DE AURORA 4X" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
                                 <TextBlock x:Name="LblPhysicsFormulas" Text="• Potencia Motor (EP) = Masa (HS) × 50 × Modificador Potencia&#10;• Consumo Combustible = EP × Litros/EP/Hora&#10;• Alcance Radar = Fuerza × Masa (HS) × √(Resolución) × 40,000 km&#10;• Penetración de Daño = √(Daño Ojiva) en capas de blindaje" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Card 6: Empire Naming Themes Suite (Live DB Connection to 621 Themes) -->
+                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="📜 GESTIÓN DE LOTES Y TEMAS DE NOMBRES DEL IMPERIO (621 TEMAS DE AURORADB.DB)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                                <TextBlock Text="Asigna los lotes de nombres oficiales de la base de datos (Español, Warhammer 40K, Mitología, Batallas) para cada función militar del imperio:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" Margin="0,0,0,10"/>
+
+                                <UniformGrid Columns="2" Margin="0,0,0,10">
+                                    <StackPanel Margin="0,0,4,6">
+                                        <TextBlock Text="Nombres de Clases de Naves:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                        <ComboBox x:Name="CmbClassTheme" Padding="6,4" ToolTip="Lote de nombres utilizado para nombrar nuevas clases de naves de combate y comerciales."/>
+                                    </StackPanel>
+                                    <StackPanel Margin="4,0,0,6">
+                                        <TextBlock Text="Nombres de Sistemas Estelares:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                        <ComboBox x:Name="CmbSystemTheme" Padding="6,4" ToolTip="Lote de nombres para rebautizar nuevos sistemas estelares descubiertos."/>
+                                    </StackPanel>
+                                    <StackPanel Margin="0,0,4,6">
+                                        <TextBlock Text="Nombres de Componentes e I+D:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                        <ComboBox x:Name="CmbDesignTheme" Padding="6,4" ToolTip="Lote de nombres para prototipos de I+D y componentes navales."/>
+                                    </StackPanel>
+                                    <StackPanel Margin="4,0,0,6">
+                                        <TextBlock Text="Nombres de Formaciones Terrestres:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                        <ComboBox x:Name="CmbGroundTheme" Padding="6,4" ToolTip="Lote de nombres para divisiones y brigadas terrestres."/>
+                                    </StackPanel>
+                                    <StackPanel Margin="0,0,4,6">
+                                        <TextBlock Text="Nombres de Misiles y Torpedos:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                        <ComboBox x:Name="CmbMissileTheme" Padding="6,4" ToolTip="Lote de nombres para familias de misiles y torpedos."/>
+                                    </StackPanel>
+                                    <StackPanel Margin="4,0,0,6">
+                                        <TextBlock Text="Nombres de Líderes y Almirantes:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
+                                        <ComboBox x:Name="CmbNameTheme" Padding="6,4" ToolTip="Lote de nombres para la generación de nuevos comandantes y gobernadores."/>
+                                    </StackPanel>
+                                </UniformGrid>
+
+                                <Button x:Name="BtnSaveEmpireNamingConfig" Content="💾 Guardar Configuración de Lotes de Nombres en AuroraDB.db" Click="BtnSaveEmpireNamingConfig_Click" Padding="10,6" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Actualiza la configuración oficial de nombres de tu imperio en la base de datos viva de Aurora 4X."/>
                             </StackPanel>
                         </Border>
                     </StackPanel>

@@ -32,6 +32,8 @@ namespace AuroraDesignSuite.Views
                 _researchedTechs = _dbService.GetResearchedTechsForRace(_currentRaceId);
             }
 
+            LoadCompanyNames();
+            LoadEmpireNamingThemes();
             PopulateCategoryTechs();
             RefreshCatalogData();
             CalculateCurrentProjectSpecs();
@@ -736,6 +738,85 @@ namespace AuroraDesignSuite.Views
             var list = filtered.ToList();
             DgProjectCatalog.ItemsSource = list;
             LblCatalogTotalCount.Text = $"Proyectos Cargados: {list.Count}";
+        }
+
+        private void LoadCompanyNames()
+        {
+            if (_dbService == null || CmbCompanyName == null) return;
+            var companies = _dbService.GetCompanyNames(_currentRaceId);
+            CmbCompanyName.ItemsSource = companies;
+            if (companies.Count > 0) CmbCompanyName.SelectedIndex = 0;
+        }
+
+        private void CmbCompanyName_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
+
+        private void BtnApplyCompany_Click(object sender, RoutedEventArgs e)
+        {
+            if (CmbCompanyName?.SelectedItem == null || TxtProjectName == null) return;
+            string company = CmbCompanyName.SelectedItem.ToString()!;
+            if (string.IsNullOrWhiteSpace(company) || company == "(Ninguna)") return;
+
+            string currentName = TxtProjectName.Text;
+            if (!currentName.StartsWith(company))
+            {
+                TxtProjectName.Text = $"{company} {currentName.Trim()}";
+            }
+        }
+
+        private void LoadEmpireNamingThemes()
+        {
+            if (_dbService == null) return;
+
+            var themes = _dbService.GetNamingThemes();
+            var config = _dbService.GetEmpireNamingConfig(_currentRaceId);
+
+            PopulateThemeCombo(CmbClassTheme, themes, config.ClassThemeID);
+            PopulateThemeCombo(CmbSystemTheme, themes, config.SystemThemeID);
+            PopulateThemeCombo(CmbDesignTheme, themes, config.DesignThemeID);
+            PopulateThemeCombo(CmbGroundTheme, themes, config.GroundThemeID);
+            PopulateThemeCombo(CmbMissileTheme, themes, config.MissileThemeID);
+            PopulateThemeCombo(CmbNameTheme, themes, config.NameThemeID);
+        }
+
+        private void PopulateThemeCombo(ComboBox? combo, List<NamingThemeItem> themes, int currentThemeId)
+        {
+            if (combo == null) return;
+            combo.ItemsSource = themes;
+            var match = themes.FirstOrDefault(t => t.ThemeID == currentThemeId);
+            if (match != null)
+            {
+                combo.SelectedItem = match;
+            }
+            else if (themes.Count > 0)
+            {
+                combo.SelectedIndex = 0;
+            }
+        }
+
+        private void BtnSaveEmpireNamingConfig_Click(object sender, RoutedEventArgs e)
+        {
+            if (_dbService == null) return;
+
+            var config = new EmpireNamingConfig
+            {
+                RaceID = _currentRaceId,
+                ClassThemeID = CmbClassTheme?.SelectedItem is NamingThemeItem c ? c.ThemeID : 0,
+                SystemThemeID = CmbSystemTheme?.SelectedItem is NamingThemeItem s ? s.ThemeID : 0,
+                DesignThemeID = CmbDesignTheme?.SelectedItem is NamingThemeItem d ? d.ThemeID : 0,
+                GroundThemeID = CmbGroundTheme?.SelectedItem is NamingThemeItem g ? g.ThemeID : 0,
+                MissileThemeID = CmbMissileTheme?.SelectedItem is NamingThemeItem m ? m.ThemeID : 0,
+                NameThemeID = CmbNameTheme?.SelectedItem is NamingThemeItem n ? n.ThemeID : 0
+            };
+
+            bool success = _dbService.SaveEmpireNamingConfig(_currentRaceId, config, out string msg);
+            if (success)
+            {
+                MessageBox.Show(msg, "Lotes de Nombres Actualizados", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

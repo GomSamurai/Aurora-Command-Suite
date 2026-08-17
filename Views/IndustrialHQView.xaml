@@ -7,20 +7,31 @@
              d:DesignHeight="800" d:DesignWidth="1200">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="380"/>
+            <ColumnDefinition Width="*" MinWidth="400"/>
+            <ColumnDefinition Width="6"/>
+            <ColumnDefinition Width="380" MinWidth="250"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Left Column: Installations & Projects -->
-        <Grid Grid.Column="0" Margin="0,0,10,0">
+        <!-- Column Splitter for Resizing Main Workplace vs Right Sidebar -->
+        <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Cursor="SizeWE" ShowsPreview="True" ToolTip="Arrastra horizontalmente para redimensionar la barra lateral de telemetría industrial">
+            <GridSplitter.Template>
+                <ControlTemplate TargetType="GridSplitter">
+                    <Border Background="{DynamicResource BorderBrush}" Width="2" HorizontalAlignment="Center"/>
+                </ControlTemplate>
+            </GridSplitter.Template>
+        </GridSplitter>
+
+        <!-- Left Column: Vertically Resizable Installations & Projects Sections -->
+        <Grid Grid.Column="0" Margin="0,0,2,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" MinHeight="140"/>
+                <RowDefinition Height="6"/>
+                <RowDefinition Height="*" MinHeight="140"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Top Card: Installations DataGrid -->
-            <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Margin="0,0,0,8" Padding="10">
+            <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Margin="0,0,0,4" Padding="10">
                 <DockPanel>
                     <TextBlock DockPanel.Dock="Top" Text="🏗️ INSTALACIONES INDUSTRIALES Y FÁBRICAS ACTIVAS EN TU IMPERIO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
                     <DataGrid x:Name="DgInstallations" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Instalaciones planetarias reales vs objetivos recomendados para tu población imperial.">
@@ -35,8 +46,17 @@
                 </DockPanel>
             </Border>
 
+            <!-- Row Splitter for Vertical Resizing between Installations and Projects -->
+            <GridSplitter Grid.Row="1" Height="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Cursor="SizeNS" ShowsPreview="True" ToolTip="Arrastra verticalmente hacia arriba o abajo para redimensionar el espacio de las secciones de Instalaciones y Proyectos">
+                <GridSplitter.Template>
+                    <ControlTemplate TargetType="GridSplitter">
+                        <Border Background="{DynamicResource BorderBrush}" Height="2" VerticalAlignment="Center"/>
+                    </ControlTemplate>
+                </GridSplitter.Template>
+            </GridSplitter>
+
             <!-- Middle Card: Projects DataGrid -->
-            <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Margin="0,0,0,8" Padding="10">
+            <Border Grid.Row="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Margin="0,4,0,8" Padding="10">
                 <DockPanel>
                     <TextBlock DockPanel.Dock="Top" Text="⚡ PROYECTOS Y ÓRDENES INDUSTRIALES EN CURSO (CON FECHA ESTIMADA DE FINALIZACIÓN)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
                     <DataGrid x:Name="DgIndustrialProjects" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Proyectos de construcción industrial en curso con fecha estimada de finalización calculada.">
@@ -52,7 +72,7 @@
             </Border>
 
             <!-- Action Toolbar -->
-            <Border Grid.Row="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+            <Border Grid.Row="3" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -70,7 +90,7 @@
         </Grid>
 
         <!-- Right Column: Industrial Telemetry, Strategic Advisor & Calculator -->
-        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" Margin="2,0,0,0">
             <StackPanel>
                 <!-- Card 1: Imperial Industrial Telemetry -->
                 <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">

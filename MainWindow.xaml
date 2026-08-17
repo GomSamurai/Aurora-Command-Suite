@@ -30,32 +30,46 @@
                 </StackPanel>
 
                 <!-- Unified Imperial Command Telemetry Header Panel -->
-                <Border Grid.Column="1" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1.5" CornerRadius="8" Padding="10,4" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="Panel Unificado de Comando Imperial: Selector de Imperio activo, Fecha actual del juego, Antigüedad de la dinastía y Conexión a Base de Datos.">
+                <Border Grid.Column="1" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1.5" CornerRadius="8" Padding="12,4" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="Panel Unificado de Comando Imperial: Selector de Imperio activo, Demografía, Colonias, Fecha actual del juego, Antigüedad de la dinastía y Sincronización en Vivo.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <!-- 1. Empire Selector -->
-                        <TextBlock Text="👑" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                        <ComboBox x:Name="CmbGlobalEmpire" SelectionChanged="CmbGlobalEmpire_SelectionChanged" Width="160" VerticalAlignment="Center" ToolTip="Selecciona el Imperio de tu partida actual cuyos datos deseas conectar en toda la suite."/>
+                        <TextBlock Text="👑 IMPERIO:" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox x:Name="CmbGlobalEmpire" SelectionChanged="CmbGlobalEmpire_SelectionChanged" Width="250" VerticalAlignment="Center" ToolTip="Selecciona el Imperio de tu partida actual cuyos datos deseas conectar en toda la suite."/>
 
                         <!-- Vertical Divider -->
-                        <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="8,0"/>
+                        <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
 
-                        <!-- 2. Game Date -->
-                        <TextBlock Text="📅" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                        <TextBlock x:Name="TxtHeaderGameDate" Text="Cargando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                        <!-- 2. Population Telemetry -->
+                        <TextBlock Text="👥" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock x:Name="TxtHeaderEmpirePop" Text="1,168.6 M" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" ToolTip="Población Imperial Total en millones de habitantes."/>
 
                         <!-- Vertical Divider -->
-                        <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="8,0"/>
+                        <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
 
-                        <!-- 3. Start Year & Service Lifetime -->
-                        <TextBlock Text="🏛️" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <!-- 3. Colonies Telemetry -->
+                        <TextBlock Text="🪐" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock x:Name="TxtHeaderColoniesCount" Text="1 Col" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" ToolTip="Número total de asentamientos y colonias habitadas."/>
+
+                        <!-- Vertical Divider -->
+                        <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
+
+                        <!-- 4. Game Date -->
+                        <TextBlock Text="📅 FECHA:" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock x:Name="TxtHeaderGameDate" Text="Cargando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center"/>
+
+                        <!-- Vertical Divider -->
+                        <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
+
+                        <!-- 5. Start Year & Service Lifetime -->
+                        <TextBlock Text="🏛️ INICIO:" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
                         <TextBlock x:Name="TxtHeaderStartYear" Text="2026 (0.0a)" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="10.5" VerticalAlignment="Center"/>
 
                         <!-- Vertical Divider -->
-                        <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="8,0"/>
+                        <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
 
-                        <!-- 4. Sync & Change DB Buttons -->
-                        <Button x:Name="BtnManualSync" Content="🔄 SINCRONIZAR" Click="BtnManualSync_Click" Padding="6,2" Margin="0,0,4,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10" ToolTip="Fuerza un refresco inmediato al 100% de la Base de Datos SQLite y la memoria RAM de todas las pestañas."/>
-                        <Button Content="📁 BD" Click="BtnChangeDb_Click" Padding="5,2" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" ToolTip="Selecciona el archivo AuroraDB.db de cualquier otra carpeta."/>
+                        <!-- 6. Sync & Change DB Buttons -->
+                        <Button x:Name="BtnManualSync" Content="🔄 SINCRONIZAR VIVO" Click="BtnManualSync_Click" Padding="7,2" Margin="0,0,5,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5" ToolTip="Fuerza un refresco inmediato al 100% de la Base de Datos SQLite y la memoria RAM de todas las pestañas."/>
+                        <Button Content="📁 BD" Click="BtnChangeDb_Click" Padding="6,2" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" ToolTip="Selecciona el archivo AuroraDB.db de cualquier otra carpeta."/>
                     </StackPanel>
                 </Border>
 

@@ -732,6 +732,24 @@ namespace AuroraDesignSuite.Services
             return 1168.0; // Default fallback in millions
         }
 
+        public int GetEmpireColonyCount(int raceId)
+        {
+            try
+            {
+                using var conn = GetConnection();
+                string sql = "SELECT COUNT(*) FROM FCT_Population WHERE RaceID = @raceId";
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                object? res = cmd.ExecuteScalar();
+                if (res != null && res != DBNull.Value)
+                {
+                    return Convert.ToInt32(res);
+                }
+            }
+            catch { }
+            return 1;
+        }
+
         public List<PopulationInstallationInfo> GetPopulationInstallations(int raceId)
         {
             var list = new List<PopulationInstallationInfo>();

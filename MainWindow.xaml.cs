@@ -270,10 +270,16 @@ namespace AuroraDesignSuite
 
             int raceId = emp.RaceID;
 
-            // Update Global Game Time & Start Year indicators
+            // Update Global Telemetry Header metrics
             var gameTime = _dbService.GetGameTimeInfo(raceId);
             if (TxtHeaderGameDate != null) TxtHeaderGameDate.Text = gameTime.FormattedCurrentDate;
             if (TxtHeaderStartYear != null) TxtHeaderStartYear.Text = gameTime.FormattedStartYear;
+
+            double popM = _dbService.GetTotalEmpirePopulation(raceId);
+            if (TxtHeaderEmpirePop != null) TxtHeaderEmpirePop.Text = $"{popM:N1} M habs";
+
+            int colonies = _dbService.GetEmpireColonyCount(raceId);
+            if (TxtHeaderColoniesCount != null) TxtHeaderColoniesCount.Text = $"{colonies} {(colonies == 1 ? "Colonia" : "Colonias")}";
 
             if (TabAI != null && emp != null && !string.IsNullOrEmpty(emp.RaceName))
             {

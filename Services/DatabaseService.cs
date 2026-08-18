@@ -25,7 +25,7 @@ namespace AuroraDesignSuite.Services
             conn.Open();
             try
             {
-                using var pragmaCmd = new SqliteCommand("PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000; PRAGMA synchronous=NORMAL;", conn);
+                using var pragmaCmd = new SqliteCommand("PRAGMA busy_timeout=5000;", conn);
                 pragmaCmd.ExecuteNonQuery();
             }
             catch { }

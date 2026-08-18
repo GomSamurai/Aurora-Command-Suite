@@ -23,11 +23,18 @@ namespace AuroraDesignSuite.Services
             var connStr = readOnly ? $"Data Source={_dbPath};Mode=ReadOnly;Pooling=False;" : $"Data Source={_dbPath};Mode=ReadWrite;Pooling=False;";
             var conn = new SqliteConnection(connStr);
             conn.Open();
+            try
+            {
+                using var pragmaCmd = new SqliteCommand("PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000; PRAGMA synchronous=NORMAL;", conn);
+                pragmaCmd.ExecuteNonQuery();
+            }
+            catch { }
             return conn;
         }
 
         private SqliteConnection GetWriteConnection()
         {
+            SqliteConnection.ClearAllPools();
             return GetConnection(readOnly: false);
         }
 

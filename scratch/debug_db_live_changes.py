@@ -1,36 +1,24 @@
-import os
 import sqlite3
-import psutil
+import time
 
-print("--- AURORA 4X LIVE DB DIAGNOSTIC ---")
+db_path = r"C:\VSCODE\Aurora271Full\AuroraDB.db"
 
-# Check running processes
-aurora_procs = [p for p in psutil.process_iter(['pid', 'name']) if 'aurora' in p.info['name'].lower()]
-print(f"Running Aurora processes: {[p.info for p in aurora_procs]}")
+# Check journal mode
+conn = sqlite3.connect(db_path)
+cursor = conn.cursor()
+cursor.execute("PRAGMA journal_mode")
+mode = cursor.fetchone()
+print(f"Current SQLite Journal Mode: {mode[0]}")
 
-db_paths = [
-    r"c:\VSCODE\Aurora271Full\AuroraDB.db",
-    r"C:\VSCODE\Aurora_Command_Suite_v2.7.1_Portable\App\AuroraDB.db"
-]
+cursor.execute("PRAGMA busy_timeout = 5000")
+cursor.execute("PRAGMA synchronous = NORMAL")
 
-for db in db_paths:
-    print(f"\nChecking: {db}")
-    if os.path.exists(db):
-        stat = os.stat(db)
-        print(f"  Main DB Size: {stat.st_size} bytes, MTime: {stat.st_mtime}")
-        wal = db + "-wal"
-        shm = db + "-shm"
-        print(f"  WAL File Exists? {os.path.exists(wal)} (Size: {os.stat(wal).st_size if os.path.exists(wal) else 0})")
-        print(f"  SHM File Exists? {os.path.exists(shm)}")
+print("\n--- Testing write and immediate read on AuroraDB.db ---")
+try:
+    cursor.execute("SELECT GameID, GameTime FROM FCT_Game LIMIT 1")
+    game_row = cursor.fetchone()
+    print(f"GameID: {game_row[0]}, GameTime: {game_row[1]}")
+except Exception as e:
+    print(f"Error: {e}")
 
-        try:
-            conn = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
-            cursor = conn.cursor()
-            cursor.execute("SELECT GameID, GameName, GameTime FROM FCT_Game")
-            rows = cursor.fetchall()
-            print(f"  FCT_Game Rows: {rows}")
-            conn.close()
-        except Exception as e:
-            print(f"  Error reading DB: {e}")
-    else:
-        print("  File DOES NOT EXIST!")
+conn.close()

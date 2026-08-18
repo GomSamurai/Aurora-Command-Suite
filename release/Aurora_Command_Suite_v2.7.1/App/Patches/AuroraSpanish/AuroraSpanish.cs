@@ -138,6 +138,24 @@ namespace AuroraSpanish
                     {
                         f.Invalidate(true);
                         f.Refresh();
+
+                        try
+                        {
+                            var methods = f.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                            foreach (var m in methods)
+                            {
+                                if (m.GetParameters().Length == 0 && 
+                                   (m.Name.StartsWith("Populate", StringComparison.OrdinalIgnoreCase) ||
+                                    m.Name.StartsWith("Refresh", StringComparison.OrdinalIgnoreCase) ||
+                                    m.Name.StartsWith("Display", StringComparison.OrdinalIgnoreCase) ||
+                                    m.Name.StartsWith("Load", StringComparison.OrdinalIgnoreCase) ||
+                                    m.Name.Equals("Requery", StringComparison.OrdinalIgnoreCase)))
+                                {
+                                    m.Invoke(f, null);
+                                }
+                            }
+                        }
+                        catch { }
                     }
                 }
             }

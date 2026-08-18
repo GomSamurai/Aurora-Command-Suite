@@ -151,7 +151,7 @@ namespace AuroraDesignSuite
                 _liveSyncTimer?.Stop();
                 _liveSyncTimer = new System.Windows.Threading.DispatcherTimer
                 {
-                    Interval = TimeSpan.FromMilliseconds(1500)
+                    Interval = TimeSpan.FromMilliseconds(1000)
                 };
                 _liveSyncTimer.Tick += (s, e) => CheckDatabaseFileUpdate(dbPath);
                 _liveSyncTimer.Start();
@@ -167,20 +167,32 @@ namespace AuroraDesignSuite
             try
             {
                 if (!File.Exists(dbPath)) return;
-                RefreshActiveTab();
+
+                var writeTime = File.GetLastWriteTimeUtc(dbPath);
+                if (writeTime != _lastDbWriteTime)
+                {
+                    _lastDbWriteTime = writeTime;
+                    Microsoft.Data.Sqlite.SqliteConnection.ClearAllPools();
+                    RefreshActiveTab();
+                }
             }
             catch { }
         }
 
         private void HandleLiveSyncEvent(string action)
         {
-            Dispatcher.Invoke(() => RefreshActiveTab());
+            Dispatcher.Invoke(() =>
+            {
+                Microsoft.Data.Sqlite.SqliteConnection.ClearAllPools();
+                RefreshActiveTab();
+            });
         }
 
         private void TriggerLiveRefresh()
         {
             Dispatcher.InvokeAsync(() =>
             {
+                Microsoft.Data.Sqlite.SqliteConnection.ClearAllPools();
                 RefreshActiveTab();
             }, System.Windows.Threading.DispatcherPriority.Background);
         }

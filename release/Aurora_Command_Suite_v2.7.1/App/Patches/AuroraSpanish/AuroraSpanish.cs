@@ -111,38 +111,79 @@ namespace AuroraSpanish
             thread.Start();
         }
 
+        private static object _cachedEngineInstance = null;
+        private static MethodInfo _cachedSaveMethod = null;
+
         public static void TriggerInGameSave()
         {
             try
             {
-                if (Application.OpenForms.Count == 0) return;
-                Form mainForm = Application.OpenForms[0];
-                if (mainForm == null || mainForm.IsDisposed) return;
-
-                if (mainForm.InvokeRequired)
+                // 1. Try to discover engine instance from all open forms if not already cached
+                if (_cachedEngineInstance == null)
                 {
-                    mainForm.BeginInvoke(new Action(TriggerInGameSave));
-                    return;
-                }
-
-                // 1. DIRECT ENGINE FLUSH: Access field 'a' on mainForm (which holds global 'a0' instance)
-                FieldInfo fieldA = mainForm.GetType().GetField("a", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                if (fieldA != null)
-                {
-                    object a0Instance = fieldA.GetValue(mainForm);
-                    if (a0Instance != null)
+                    if (Application.OpenForms != null)
                     {
-                        MethodInfo saveMethod = a0Instance.GetType().GetMethod("a5", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(bool) }, null);
-                        if (saveMethod != null)
+                        foreach (Form f in Application.OpenForms)
                         {
-                            saveMethod.Invoke(a0Instance, new object[] { true });
-                            return;
+                            if (f == null || f.IsDisposed) continue;
+                            FieldInfo[] fields = f.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                            foreach (FieldInfo fi in fields)
+                            {
+                                if (fi.FieldType.Name.Equals("a0", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    object val = fi.GetValue(f);
+                                    if (val != null)
+                                    {
+                                        _cachedEngineInstance = val;
+                                        Log("Discovered and cached global engine instance a0 from form " + f.GetType().Name);
+                                        break;
+                                    }
+                                }
+                            }
+                            if (_cachedEngineInstance != null) break;
                         }
                     }
                 }
 
-                // 2. Fallback: Search ToolStrip controls
-                foreach (Control c in mainForm.Controls)
+                // 2. Execute master save on cached engine instance
+                if (_cachedEngineInstance != null)
+                {
+                    if (_cachedSaveMethod == null)
+                    {
+                        _cachedSaveMethod = _cachedEngineInstance.GetType().GetMethod("a5", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(bool) }, null);
+                    }
+
+                    if (_cachedSaveMethod != null)
+                    {
+                        Form mainForm = (Application.OpenForms != null && Application.OpenForms.Count > 0) ? Application.OpenForms[0] : null;
+                        if (mainForm != null && mainForm.InvokeRequired)
+                        {
+                            mainForm.BeginInvoke(new Action(() =>
+                            {
+                                try { _cachedSaveMethod.Invoke(_cachedEngineInstance, new object[] { true }); } catch { }
+                            }));
+                        }
+                        else
+                        {
+                            _cachedSaveMethod.Invoke(_cachedEngineInstance, new object[] { true });
+                        }
+                        Log("Master game save executed via _cachedEngineInstance.a5(true)!");
+                        return;
+                    }
+                }
+
+                if (Application.OpenForms == null || Application.OpenForms.Count == 0) return;
+                Form fallbackForm = Application.OpenForms[0];
+                if (fallbackForm == null || fallbackForm.IsDisposed) return;
+
+                if (fallbackForm.InvokeRequired)
+                {
+                    fallbackForm.BeginInvoke(new Action(TriggerInGameSave));
+                    return;
+                }
+
+                // 3. Fallback: Search ToolStrip controls
+                foreach (Control c in fallbackForm.Controls)
                 {
                     ToolStrip ts = c as ToolStrip;
                     if (ts != null)
@@ -166,8 +207,8 @@ namespace AuroraSpanish
                     }
                 }
 
-                // 3. Fallback: Search controls for Save button
-                FindAndClickSaveButton(mainForm);
+                // 4. Fallback: Search controls for Save button
+                FindAndClickSaveButton(fallbackForm);
             }
             catch (Exception ex)
             {

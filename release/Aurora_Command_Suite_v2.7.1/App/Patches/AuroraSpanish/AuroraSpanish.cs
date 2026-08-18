@@ -80,54 +80,8 @@ namespace AuroraSpanish
                 Log("Error patching Graphics.DrawString: " + ex.Message);
             }
 
-            // 4. Patch a0.a6(decimal) turn pulse method to automatically save RAM to DB after every time pulse
-            try
-            {
-                Type a0Type = AuroraAssembly.GetType("a0");
-                if (a0Type != null)
-                {
-                    MethodInfo pulseMethod = a0Type.GetMethod("a6", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(decimal) }, null);
-                    MethodInfo pulsePostfix = typeof(AuroraSpanish).GetMethod("OnGamePulsePostfix", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-                    if (pulseMethod != null && pulsePostfix != null)
-                    {
-                        harmony.Patch(pulseMethod, postfix: new HarmonyMethod(pulsePostfix));
-                        Log("Successfully attached Harmony Postfix to turn pulse method a0.a6(decimal)!");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log("Error patching turn pulse method: " + ex.Message);
-            }
-
             Log("AuroraSpanish patch initialized completely!");
             StartLiveSyncPipeServer();
-            StartAutoSaveSyncLoop();
-        }
-
-        private static void OnGamePulsePostfix(object __instance)
-        {
-            try
-            {
-                if (__instance != null)
-                {
-                    if (_cachedEngineInstance == null)
-                    {
-                        _cachedEngineInstance = __instance;
-                    }
-
-                    MethodInfo masterSaveMethod = __instance.GetType().GetMethod("iy", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[0], null);
-                    if (masterSaveMethod != null)
-                    {
-                        masterSaveMethod.Invoke(__instance, null);
-                        Log("MASTER DB SAVE EXECUTED SUCCESSFULLY VIA a0.iy() after game turn pulse!");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log("Error in OnGamePulsePostfix: " + ex.Message);
-            }
         }
 
         private static bool isAutoSaveLoopStarted = false;
@@ -143,12 +97,12 @@ namespace AuroraSpanish
                 {
                     try
                     {
-                        System.Threading.Thread.Sleep(2000);
+                        System.Threading.Thread.Sleep(5000);
                         TriggerInGameSave();
                     }
                     catch
                     {
-                        System.Threading.Thread.Sleep(2000);
+                        System.Threading.Thread.Sleep(5000);
                     }
                 }
             });
@@ -156,49 +110,47 @@ namespace AuroraSpanish
             thread.Start();
         }
 
-        private static object _cachedEngineInstance = null;
-
         public static void TriggerInGameSave()
         {
             try
             {
-                if (_cachedEngineInstance != null)
+                if (Application.OpenForms == null || Application.OpenForms.Count == 0) return;
+                Form mainForm = Application.OpenForms[0];
+                if (mainForm == null || mainForm.IsDisposed) return;
+
+                if (mainForm.InvokeRequired)
                 {
-                    MethodInfo masterSaveMethod = _cachedEngineInstance.GetType().GetMethod("iy", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[0], null);
-                    if (masterSaveMethod != null)
-                    {
-                        masterSaveMethod.Invoke(_cachedEngineInstance, null);
-                        Log("MASTER DB SAVE EXECUTED SUCCESSFULLY VIA a0.iy() from timer!");
-                        return;
-                    }
+                    mainForm.BeginInvoke(new Action(TriggerInGameSave));
+                    return;
                 }
 
-                if (Application.OpenForms != null)
+                // Safely search ToolStrip controls for Save button
+                foreach (Control c in mainForm.Controls)
                 {
-                    foreach (Form f in Application.OpenForms)
+                    ToolStrip ts = c as ToolStrip;
+                    if (ts != null)
                     {
-                        if (f == null || f.IsDisposed) continue;
-                        FieldInfo[] fields = f.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                        foreach (FieldInfo fi in fields)
+                        foreach (ToolStripItem item in ts.Items)
                         {
-                            if (fi.FieldType.Name.Equals("a0", StringComparison.OrdinalIgnoreCase))
+                            ToolStripButton btn = item as ToolStripButton;
+                            if (btn != null)
                             {
-                                object val = fi.GetValue(f);
-                                if (val != null)
+                                string text = (btn.Text ?? "").ToLower();
+                                string name = (btn.Name ?? "").ToLower();
+                                string tooltip = (btn.ToolTipText ?? "").ToLower();
+                                if (text.Contains("save") || name.Contains("save") || tooltip.Contains("save") ||
+                                    text.Contains("guardar") || name.Contains("guardar") || tooltip.Contains("guardar"))
                                 {
-                                    _cachedEngineInstance = val;
-                                    MethodInfo masterSaveMethod = val.GetType().GetMethod("iy", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[0], null);
-                                    if (masterSaveMethod != null)
-                                    {
-                                        masterSaveMethod.Invoke(val, null);
-                                        Log("Discovered engine instance and executed MASTER DB SAVE VIA a0.iy()!");
-                                        return;
-                                    }
+                                    btn.PerformClick();
+                                    Log("Clicked native Save Game ToolStripButton safely.");
+                                    return;
                                 }
                             }
                         }
                     }
                 }
+
+                FindAndClickSaveButton(mainForm);
             }
             catch (Exception ex)
             {

@@ -80,9 +80,58 @@ namespace AuroraSpanish
                 Log("Error patching Graphics.DrawString: " + ex.Message);
             }
 
+            // 4. Patch a0.a6(decimal) turn pulse method to automatically save RAM to DB after every time pulse
+            try
+            {
+                Type a0Type = AuroraAssembly.GetType("a0");
+                if (a0Type != null)
+                {
+                    MethodInfo pulseMethod = a0Type.GetMethod("a6", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(decimal) }, null);
+                    MethodInfo pulsePostfix = typeof(AuroraSpanish).GetMethod("OnGamePulsePostfix", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                    if (pulseMethod != null && pulsePostfix != null)
+                    {
+                        harmony.Patch(pulseMethod, postfix: new HarmonyMethod(pulsePostfix));
+                        Log("Successfully attached Harmony Postfix to turn pulse method a0.a6(decimal)!");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log("Error patching turn pulse method: " + ex.Message);
+            }
+
             Log("AuroraSpanish patch initialized completely!");
             StartLiveSyncPipeServer();
             StartAutoSaveSyncLoop();
+        }
+
+        private static void OnGamePulsePostfix(object __instance)
+        {
+            try
+            {
+                if (__instance != null)
+                {
+                    if (_cachedEngineInstance == null)
+                    {
+                        _cachedEngineInstance = __instance;
+                    }
+
+                    if (_cachedSaveMethod == null)
+                    {
+                        _cachedSaveMethod = __instance.GetType().GetMethod("a5", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(bool) }, null);
+                    }
+
+                    if (_cachedSaveMethod != null)
+                    {
+                        _cachedSaveMethod.Invoke(__instance, new object[] { true });
+                        Log("Automatic DB save executed after game turn pulse!");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log("Error in OnGamePulsePostfix: " + ex.Message);
+            }
         }
 
         private static bool isAutoSaveLoopStarted = false;

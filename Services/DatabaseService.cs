@@ -71,7 +71,8 @@ namespace AuroraDesignSuite.Services
                     SELECT RaceID, GameID, COALESCE(NULLIF(RaceTitle, ''), RaceName) as DisplayName 
                     FROM FCT_Race 
                     WHERE (NPR = 0 OR NPR IS NULL)
-                    ORDER BY GameID DESC, DisplayName";
+                      AND GameID = (SELECT MAX(GameID) FROM FCT_Race WHERE NPR = 0 OR NPR IS NULL)
+                    ORDER BY DisplayName";
 
                 using var cmd = new SqliteCommand(query, conn);
                 using var reader = cmd.ExecuteReader();

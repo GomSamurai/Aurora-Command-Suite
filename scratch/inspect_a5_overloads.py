@@ -9,25 +9,32 @@ $asm = [System.Reflection.Assembly]::LoadFile('C:\\VSCODE\\Aurora271Full\\Aurora
 
 $a0 = $asm.GetTypes() | Where-Object { $_.Name -eq 'a0' -and $_.DeclaringType -eq $null }
 
+$module = $a0.Module
+
 foreach ($m in $a0.GetMethods([System.Reflection.BindingFlags]'Public,NonPublic,Instance,Static')) {
-    try {
+    if ($m.Name -eq 'a5') {
+        $params = $m.GetParameters() | ForEach-Object { "$($_.Name): $($_.ParameterType.Name)" }
+        $paramStr = $params -join ', '
         $body = $m.GetMethodBody()
-        if ($body -ne $null) {
+        $ilSize = if ($body) { $body.GetILAsByteArray().Length } else { 0 }
+        Write-Host "a5 OVERLOAD: a5($paramStr) -> Return: $($m.ReturnType.Name), IL Size: $ilSize bytes"
+        
+        if ($body -and $ilSize -gt 1000) {
+            # Check string tokens in this method
             $bytes = $body.GetILAsByteArray()
             for ($i = 0; $i -lt $bytes.Length - 4; $i++) {
                 if ($bytes[$i] -eq 0x72) { # ldstr
                     $token = [BitConverter]::ToInt32($bytes, $i + 1)
                     try {
-                        $str = $a0.Module.ResolveString($token)
-                        if ($str -like '*AuroraDB*' -or $str -like '*Data Source*' -or $str -like '*SQLiteConnection*') {
-                            $params = $m.GetParameters() | ForEach-Object { "$($_.Name): $($_.ParameterType.Name)" }
-                            Write-Host "SQLITE DB METHOD: Method '$($m.Name)' ($($params -join ', ')) | IL Size: $($bytes.Length) bytes | String: $str"
+                        $str = $module.ResolveString($token)
+                        if ($str -like '*UPDATE *' -or $str -like '*INSERT INTO*' -or $str -like '*FCT_*') {
+                            Write-Host "   -> SQL IN METHOD: $str"
                         }
                     } catch {}
                 }
             }
         }
-    } catch {}
+    }
 }
 """
 

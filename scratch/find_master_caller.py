@@ -9,21 +9,26 @@ $asm = [System.Reflection.Assembly]::LoadFile('C:\\VSCODE\\Aurora271Full\\Aurora
 
 $a0 = $asm.GetTypes() | Where-Object { $_.Name -eq 'a0' -and $_.DeclaringType -eq $null }
 
+$saveTokens = @()
+foreach ($m in $a0.GetMethods([System.Reflection.BindingFlags]'Public,NonPublic,Instance,Static')) {
+    if ($m.Name -eq 'ji' -or $m.Name -eq 'jk') {
+        $saveTokens += $m.MetadataToken
+        Write-Host "Save Method: $($m.Name) (Token: $($m.MetadataToken))"
+    }
+}
+
 foreach ($m in $a0.GetMethods([System.Reflection.BindingFlags]'Public,NonPublic,Instance,Static')) {
     try {
         $body = $m.GetMethodBody()
         if ($body -ne $null) {
             $bytes = $body.GetILAsByteArray()
             for ($i = 0; $i -lt $bytes.Length - 4; $i++) {
-                if ($bytes[$i] -eq 0x72) { # ldstr
+                if ($bytes[$i] -eq 0x28 -or $bytes[$i] -eq 0x6f) {
                     $token = [BitConverter]::ToInt32($bytes, $i + 1)
-                    try {
-                        $str = $a0.Module.ResolveString($token)
-                        if ($str -like '*AuroraDB*' -or $str -like '*Data Source*' -or $str -like '*SQLiteConnection*') {
-                            $params = $m.GetParameters() | ForEach-Object { "$($_.Name): $($_.ParameterType.Name)" }
-                            Write-Host "SQLITE DB METHOD: Method '$($m.Name)' ($($params -join ', ')) | IL Size: $($bytes.Length) bytes | String: $str"
-                        }
-                    } catch {}
+                    if ($saveTokens -contains $token) {
+                        Write-Host ">>> MASTER SAVE CALLER FOUND: Method '$($m.Name)' (Params: $($m.GetParameters().Length), IL Size: $($bytes.Length) bytes)"
+                        break
+                    }
                 }
             }
         }
@@ -32,7 +37,4 @@ foreach ($m in $a0.GetMethods([System.Reflection.BindingFlags]'Public,NonPublic,
 """
 
 res = subprocess.run(["powershell", "-Command", ps_script], capture_output=True, text=True)
-lines = res.stdout.splitlines()
-print(f"Total lines: {len(lines)}")
-for l in lines[:100]:
-    print(l)
+print(res.stdout)

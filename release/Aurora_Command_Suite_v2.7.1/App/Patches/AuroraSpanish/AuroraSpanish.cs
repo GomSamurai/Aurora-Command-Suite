@@ -355,35 +355,6 @@ namespace AuroraSpanish
 
                         __instance.Controls.Add(btnSuite);
                         btnSuite.BringToFront();
-
-                        if (__instance.Controls.Find("btnSuiteRefreshNav", true).Length == 0)
-                        {
-                            Button btnRefreshSuite = new Button
-                            {
-                                Name = "btnSuiteRefreshNav",
-                                Text = "🔄",
-                                Font = new Font("Segoe UI Emoji", 10.0f, FontStyle.Bold),
-                                BackColor = Color.FromArgb(13, 26, 38),
-                                ForeColor = Color.FromArgb(255, 184, 108),
-                                FlatStyle = FlatStyle.Flat,
-                                Size = new Size(28, 26),
-                                Location = new Point(Math.Max(10, __instance.ClientSize.Width - 66), 4),
-                                Anchor = AnchorStyles.Top | AnchorStyles.Right,
-                                Cursor = Cursors.Hand
-                            };
-                            btnRefreshSuite.FlatAppearance.BorderColor = Color.FromArgb(255, 184, 108);
-                            ToolTip tipRefresh = new ToolTip();
-                            tipRefresh.SetToolTip(btnRefreshSuite, "Refrescar Sincronización con Aurora Command Suite");
-
-                            btnRefreshSuite.Click += delegate
-                            {
-                                TriggerInGameRefresh();
-                                MessageBox.Show("🔄 Interfaz del juego refrescada con los datos de Aurora Command Suite.", "Sincronización Completada", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            };
-
-                            __instance.Controls.Add(btnRefreshSuite);
-                            btnRefreshSuite.BringToFront();
-                        }
                     }
                     catch { }
                 };

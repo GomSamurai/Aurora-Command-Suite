@@ -60,9 +60,13 @@ ping 127.0.0.1 -n 3 >nul
 goto LAUNCH_SUITE
 
 :LAUNCH_SUITE
+set "TARGET_DB="
+if exist "%~dp0AuroraDB.db" set "TARGET_DB=%~dp0AuroraDB.db"
+if exist "%~dp0..\AuroraDB.db" set "TARGET_DB=%~dp0..\AuroraDB.db"
+
 if exist "App\AuroraDesignSuite.exe" (
     echo [2/2] Iniciando Aurora Command Suite...
-    start /d "%~dp0App" "" "%~dp0App\AuroraDesignSuite.exe"
+    start /d "%~dp0App" "" "%~dp0App\AuroraDesignSuite.exe" "%TARGET_DB%"
     echo.
     echo [EXITO] Ambos programas se estan ejecutando en paralelo.
     ping 127.0.0.1 -n 2 >nul
@@ -72,7 +76,7 @@ if exist "App\AuroraDesignSuite.exe" (
 
 if exist "AuroraDesignSuite.exe" (
     echo [2/2] Iniciando Aurora Command Suite...
-    start /d "%~dp0" "" "%~dp0AuroraDesignSuite.exe"
+    start /d "%~dp0" "" "%~dp0AuroraDesignSuite.exe" "%TARGET_DB%"
     echo.
     echo [EXITO] Ambos programas se estan ejecutando en paralelo.
     ping 127.0.0.1 -n 2 >nul

@@ -125,7 +125,23 @@ namespace AuroraSpanish
                     return;
                 }
 
-                // 1. Search for ToolStrip on mainForm
+                // 1. DIRECT ENGINE FLUSH: Access field 'a' on mainForm (which holds global 'a0' instance)
+                FieldInfo fieldA = mainForm.GetType().GetField("a", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (fieldA != null)
+                {
+                    object a0Instance = fieldA.GetValue(mainForm);
+                    if (a0Instance != null)
+                    {
+                        MethodInfo saveMethod = a0Instance.GetType().GetMethod("a5", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(bool) }, null);
+                        if (saveMethod != null)
+                        {
+                            saveMethod.Invoke(a0Instance, new object[] { true });
+                            return;
+                        }
+                    }
+                }
+
+                // 2. Fallback: Search ToolStrip controls
                 foreach (Control c in mainForm.Controls)
                 {
                     ToolStrip ts = c as ToolStrip;
@@ -150,23 +166,13 @@ namespace AuroraSpanish
                     }
                 }
 
-                // 2. Check methods on mainForm
-                var type = mainForm.GetType();
-                var saveMethod = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                                     .FirstOrDefault(m => m.GetParameters().Length == 0 &&
-                                                         (m.Name.Equals("SaveGame", StringComparison.OrdinalIgnoreCase) ||
-                                                          m.Name.Equals("SaveDatabase", StringComparison.OrdinalIgnoreCase) ||
-                                                          m.Name.Equals("SaveData", StringComparison.OrdinalIgnoreCase)));
-                if (saveMethod != null)
-                {
-                    saveMethod.Invoke(mainForm, null);
-                    return;
-                }
-
                 // 3. Fallback: Search controls for Save button
                 FindAndClickSaveButton(mainForm);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Log("Error in TriggerInGameSave: " + ex.Message);
+            }
         }
 
         private static bool FindAndClickSaveButton(Control parent)

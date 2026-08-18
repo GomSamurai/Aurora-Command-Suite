@@ -28,6 +28,25 @@ namespace AuroraSpanish
         protected override void Loaded(Harmony harmony)
         {
             LoadDictionary();
+
+            // Patch Form constructors safely to inject rocket button 🚀 on main Star Map window
+            try
+            {
+                var formConstructorPostfix = new HarmonyMethod(GetType().GetMethod("FormConstructorPostfix", BindingFlags.NonPublic | BindingFlags.Static));
+                foreach (var type in AuroraAssembly.GetTypes().Where(t => typeof(Form).IsAssignableFrom(t)))
+                {
+                    foreach (var ctor in type.GetConstructors())
+                    {
+                        harmony.Patch(ctor, postfix: formConstructorPostfix);
+                    }
+                }
+                Log("Patched Form constructors for rocket navigation button!");
+            }
+            catch (Exception ex)
+            {
+                Log("Error patching form constructors: " + ex.Message);
+            }
+
             Log("AuroraSpanish patch initialized completely!");
             StartLiveSyncPipeServer();
         }
@@ -309,14 +328,6 @@ namespace AuroraSpanish
 
         private static void FormConstructorPostfix(Form __instance)
         {
-            // Make ALL forms in Aurora 4X resizable from window borders like standard Windows apps!
-            try
-            {
-                __instance.FormBorderStyle = FormBorderStyle.Sizable;
-                __instance.MaximizeBox = true;
-            }
-            catch { }
-
             // Inject Master Suite Buttons ONLY on the main system map window
             try
             {

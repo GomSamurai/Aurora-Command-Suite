@@ -124,8 +124,9 @@ namespace AuroraDesignSuite
                 if (empires.Count > 0)
                 {
                     var prefs = UserPreferencesService.LoadPreferences();
-                    var savedEmp = empires.FirstOrDefault(x => x.RaceID == prefs.SelectedEmpireId);
-                    CmbGlobalEmpire.SelectedItem = savedEmp ?? empires[0];
+                    var activeEmpire = empires.FirstOrDefault(x => x.RaceID == prefs.SelectedEmpireId) 
+                                      ?? empires.OrderByDescending(x => x.GameID).ThenByDescending(x => x.RaceID).FirstOrDefault();
+                    CmbGlobalEmpire.SelectedItem = activeEmpire ?? empires[0];
 
                     prefs.LastDbPath = dbPath;
                     UserPreferencesService.SavePreferences(prefs);

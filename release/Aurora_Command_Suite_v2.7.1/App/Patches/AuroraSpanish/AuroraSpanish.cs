@@ -28,58 +28,6 @@ namespace AuroraSpanish
         protected override void Loaded(Harmony harmony)
         {
             LoadDictionary();
-
-            // 1. Patch Control.set_Text for real-time translation and layout handling
-            try
-            {
-                var setTextMethod = typeof(Control).GetMethod("set_Text", BindingFlags.Public | BindingFlags.Instance);
-                if (setTextMethod != null)
-                {
-                    var prefix = new HarmonyMethod(GetType().GetMethod("ControlSetTextPrefix", BindingFlags.NonPublic | BindingFlags.Static));
-                    harmony.Patch(setTextMethod, prefix: prefix);
-                    Log("Patched Control.set_Text successfully!");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log("Error patching Control.set_Text: " + ex.Message);
-            }
-
-            // 2. Patch Form constructors to make ALL windows resizable (Sizable border)
-            try
-            {
-                var formConstructorPostfix = new HarmonyMethod(GetType().GetMethod("FormConstructorPostfix", BindingFlags.NonPublic | BindingFlags.Static));
-                foreach (var type in AuroraAssembly.GetTypes().Where(t => typeof(Form).IsAssignableFrom(t)))
-                {
-                    foreach (var ctor in type.GetConstructors())
-                    {
-                        harmony.Patch(ctor, postfix: formConstructorPostfix);
-                    }
-                }
-                Log("Patched Form constructors for resizable window borders!");
-            }
-            catch (Exception ex)
-            {
-                Log("Error patching form constructors: " + ex.Message);
-            }
-
-            // 3. Patch Graphics.DrawString for direct canvas/map text rendering
-            try
-            {
-                var drawStringMethods = typeof(Graphics).GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                                                        .Where(m => m.Name == "DrawString");
-                var drawPrefix = new HarmonyMethod(GetType().GetMethod("DrawStringPrefix", BindingFlags.NonPublic | BindingFlags.Static));
-                foreach (var method in drawStringMethods)
-                {
-                    harmony.Patch(method, prefix: drawPrefix);
-                }
-                Log("Patched Graphics.DrawString successfully!");
-            }
-            catch (Exception ex)
-            {
-                Log("Error patching Graphics.DrawString: " + ex.Message);
-            }
-
             Log("AuroraSpanish patch initialized completely!");
             StartLiveSyncPipeServer();
         }

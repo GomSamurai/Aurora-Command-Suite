@@ -84,32 +84,6 @@ namespace AuroraSpanish
             StartLiveSyncPipeServer();
         }
 
-        private static bool isAutoSaveLoopStarted = false;
-
-        private static void StartAutoSaveSyncLoop()
-        {
-            if (isAutoSaveLoopStarted) return;
-            isAutoSaveLoopStarted = true;
-
-            System.Threading.Thread thread = new System.Threading.Thread(delegate()
-            {
-                while (true)
-                {
-                    try
-                    {
-                        System.Threading.Thread.Sleep(5000);
-                        TriggerInGameSave();
-                    }
-                    catch
-                    {
-                        System.Threading.Thread.Sleep(5000);
-                    }
-                }
-            });
-            thread.IsBackground = true;
-            thread.Start();
-        }
-
         public static void TriggerInGameSave()
         {
             try

@@ -125,7 +125,32 @@ namespace AuroraSpanish
                     return;
                 }
 
-                // 1. Check if save method exists on mainForm via reflection
+                // 1. Search for ToolStrip on mainForm
+                foreach (Control c in mainForm.Controls)
+                {
+                    ToolStrip ts = c as ToolStrip;
+                    if (ts != null)
+                    {
+                        foreach (ToolStripItem item in ts.Items)
+                        {
+                            ToolStripButton btn = item as ToolStripButton;
+                            if (btn != null)
+                            {
+                                string text = (btn.Text ?? "").ToLower();
+                                string name = (btn.Name ?? "").ToLower();
+                                string tooltip = (btn.ToolTipText ?? "").ToLower();
+                                if (text.Contains("save") || name.Contains("save") || tooltip.Contains("save") ||
+                                    text.Contains("guardar") || name.Contains("guardar") || tooltip.Contains("guardar"))
+                                {
+                                    btn.PerformClick();
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 2. Check methods on mainForm
                 var type = mainForm.GetType();
                 var saveMethod = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                                      .FirstOrDefault(m => m.GetParameters().Length == 0 &&
@@ -138,7 +163,7 @@ namespace AuroraSpanish
                     return;
                 }
 
-                // 2. Fallback: Search controls for Save button
+                // 3. Fallback: Search controls for Save button
                 FindAndClickSaveButton(mainForm);
             }
             catch { }

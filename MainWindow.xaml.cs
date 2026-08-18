@@ -47,15 +47,21 @@ namespace AuroraDesignSuite
             string[] args = Environment.GetCommandLineArgs();
             string? dbArg = (args.Length > 1 && File.Exists(args[1])) ? args[1] : null;
 
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string currentDir = Directory.GetCurrentDirectory();
+
             string[] candidatePaths = new[]
             {
                 dbArg ?? "",
+                // 1. Search local/parent directory relative to where Portable App is pasted (HIGHEST PRIORITY)
+                Path.GetFullPath(Path.Combine(baseDir, "..", "..", "AuroraDB.db")),
+                Path.GetFullPath(Path.Combine(baseDir, "..", "AuroraDB.db")),
+                Path.GetFullPath(Path.Combine(baseDir, "AuroraDB.db")),
+                Path.GetFullPath(Path.Combine(currentDir, "..", "..", "AuroraDB.db")),
+                Path.GetFullPath(Path.Combine(currentDir, "..", "AuroraDB.db")),
+                Path.GetFullPath(Path.Combine(currentDir, "AuroraDB.db")),
+                // 2. Saved preference path
                 prefs.LastDbPath,
-                Path.Combine(Directory.GetCurrentDirectory(), "AuroraDB.db"),
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AuroraDB.db"),
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "AuroraDB.db"),
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "AuroraDB.db"),
-                Path.Combine(Directory.GetCurrentDirectory(), "..", "AuroraDB.db"),
                 @"c:\VSCODE\Aurora271Full\AuroraDB.db"
             };
 
@@ -84,14 +90,16 @@ namespace AuroraDesignSuite
 
             try
             {
-                var prefs = new UserPreferences
+                var prefs = UserPreferencesService.LoadPreferences();
+                prefs.WindowWidth = Width;
+                prefs.WindowHeight = Height;
+                prefs.IsMaximized = WindowState == WindowState.Maximized;
+                prefs.SelectedTheme = (CmbThemeSelector.SelectedItem as ThemeOption)?.Name ?? "Cyberpunk Obsidian";
+                prefs.SelectedEmpireId = (CmbGlobalEmpire.SelectedItem as Empire)?.RaceID ?? -1;
+                if (!string.IsNullOrEmpty(_dbService?.DbPath))
                 {
-                    WindowWidth = Width,
-                    WindowHeight = Height,
-                    IsMaximized = WindowState == WindowState.Maximized,
-                    SelectedTheme = (CmbThemeSelector.SelectedItem as ThemeOption)?.Name ?? "Cyberpunk Obsidian",
-                    SelectedEmpireId = (CmbGlobalEmpire.SelectedItem as Empire)?.RaceID ?? -1
-                };
+                    prefs.LastDbPath = _dbService.DbPath;
+                }
                 UserPreferencesService.SavePreferences(prefs);
             }
             catch { }
@@ -107,6 +115,7 @@ namespace AuroraDesignSuite
         {
             if (!File.Exists(dbPath)) return;
 
+            dbPath = Path.GetFullPath(dbPath);
             _dbService = new DatabaseService(dbPath);
             if (_dbService.TestConnection(out _))
             {
@@ -117,7 +126,16 @@ namespace AuroraDesignSuite
                     var prefs = UserPreferencesService.LoadPreferences();
                     var savedEmp = empires.FirstOrDefault(x => x.RaceID == prefs.SelectedEmpireId);
                     CmbGlobalEmpire.SelectedItem = savedEmp ?? empires[0];
+
+                    prefs.LastDbPath = dbPath;
+                    UserPreferencesService.SavePreferences(prefs);
                 }
+
+                if (BtnChangeDb != null)
+                {
+                    BtnChangeDb.ToolTip = $"📁 BD Activa:\n{dbPath}\n\nHaz clic para seleccionar otra BD.";
+                }
+
                 RefreshActiveTab();
                 SetupLiveSyncWatcher(dbPath);
             }

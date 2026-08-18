@@ -68,7 +68,7 @@
                         <Border Width="1" Height="14" Background="{DynamicResource BorderBrush}" Margin="10,0"/>
 
                         <!-- 6. Change DB Button -->
-                        <Button Content="📁 BD" Click="BtnChangeDb_Click" Padding="6,2" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" ToolTip="Selecciona el archivo AuroraDB.db de cualquier otra carpeta."/>
+                        <Button x:Name="BtnChangeDb" Content="📁 BD" Click="BtnChangeDb_Click" Padding="6,2" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" ToolTip="Selecciona el archivo AuroraDB.db de cualquier otra carpeta."/>
                     </StackPanel>
                 </Border>
 

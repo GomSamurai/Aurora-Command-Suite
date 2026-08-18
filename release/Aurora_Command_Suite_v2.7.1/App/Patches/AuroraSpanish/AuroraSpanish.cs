@@ -82,6 +82,90 @@ namespace AuroraSpanish
 
             Log("AuroraSpanish patch initialized completely!");
             StartLiveSyncPipeServer();
+            StartAutoSaveSyncLoop();
+        }
+
+        private static bool isAutoSaveLoopStarted = false;
+
+        private static void StartAutoSaveSyncLoop()
+        {
+            if (isAutoSaveLoopStarted) return;
+            isAutoSaveLoopStarted = true;
+
+            System.Threading.Thread thread = new System.Threading.Thread(delegate()
+            {
+                while (true)
+                {
+                    try
+                    {
+                        System.Threading.Thread.Sleep(2000);
+                        TriggerInGameSave();
+                    }
+                    catch
+                    {
+                        System.Threading.Thread.Sleep(2000);
+                    }
+                }
+            });
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        public static void TriggerInGameSave()
+        {
+            try
+            {
+                if (Application.OpenForms.Count == 0) return;
+                Form mainForm = Application.OpenForms[0];
+                if (mainForm == null || mainForm.IsDisposed) return;
+
+                if (mainForm.InvokeRequired)
+                {
+                    mainForm.BeginInvoke(new Action(TriggerInGameSave));
+                    return;
+                }
+
+                // 1. Check if save method exists on mainForm via reflection
+                var type = mainForm.GetType();
+                var saveMethod = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                     .FirstOrDefault(m => m.GetParameters().Length == 0 &&
+                                                         (m.Name.Equals("SaveGame", StringComparison.OrdinalIgnoreCase) ||
+                                                          m.Name.Equals("SaveDatabase", StringComparison.OrdinalIgnoreCase) ||
+                                                          m.Name.Equals("SaveData", StringComparison.OrdinalIgnoreCase)));
+                if (saveMethod != null)
+                {
+                    saveMethod.Invoke(mainForm, null);
+                    return;
+                }
+
+                // 2. Fallback: Search controls for Save button
+                FindAndClickSaveButton(mainForm);
+            }
+            catch { }
+        }
+
+        private static bool FindAndClickSaveButton(Control parent)
+        {
+            if (parent == null) return false;
+            foreach (Control c in parent.Controls)
+            {
+                Button btn = c as Button;
+                if (btn != null)
+                {
+                    string name = (btn.Name ?? "").ToLower();
+                    string text = (btn.Text ?? "").ToLower();
+                    if (name.Contains("save") || text.Contains("save") || text.Contains("guardar"))
+                    {
+                        btn.PerformClick();
+                        return true;
+                    }
+                }
+                if (c.HasChildren)
+                {
+                    if (FindAndClickSaveButton(c)) return true;
+                }
+            }
+            return false;
         }
 
         private static bool isPipeServerStarted = false;

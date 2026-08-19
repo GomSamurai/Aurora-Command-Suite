@@ -14,7 +14,7 @@ namespace AuroraDesignSuite.Views
     public partial class TimeEventsWidgetWindow : Window
     {
         private DatabaseService? _dbService;
-        private int _currentRaceId = 784;
+        private int _currentRaceId = 0;
         
         private readonly DispatcherTimer _autoPassTimer;
         private readonly DispatcherTimer _eventPollTimer;

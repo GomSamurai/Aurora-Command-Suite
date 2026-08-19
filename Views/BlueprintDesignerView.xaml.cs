@@ -983,7 +983,7 @@ namespace AuroraDesignSuite.Views
             }
 
             int raceId = SelectedRaceID;
-            if (raceId <= 0) raceId = 784;
+            if (raceId <= 0) return;
 
             var shipyards = _dbService.GetShipyards(raceId);
             double tonnage = CurrentDesign.TotalTonnage;

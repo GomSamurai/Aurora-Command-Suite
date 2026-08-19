@@ -377,7 +377,7 @@ namespace AuroraDesignSuite
         private void BtnOpenTimeEventsWidget_Click(object sender, RoutedEventArgs e)
         {
             if (_dbService == null) return;
-            int raceId = (CmbGlobalEmpire.SelectedItem as Empire)?.RaceID ?? 784;
+            int raceId = (CmbGlobalEmpire.SelectedItem as Empire)?.RaceID ?? 0;
 
             if (_timeEventsWidgetWindow == null || !_timeEventsWidgetWindow.IsLoaded)
             {

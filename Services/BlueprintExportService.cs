@@ -32,7 +32,13 @@ namespace AuroraDesignSuite.Services
                 // Get GameID for race
                 using var gameCmd = new SqliteCommand("SELECT GameID FROM FCT_Race WHERE RaceID = @raceId", conn);
                 gameCmd.Parameters.AddWithValue("@raceId", raceId);
-                int gameId = Convert.ToInt32(gameCmd.ExecuteScalar() ?? 140);
+                object? gRes = gameCmd.ExecuteScalar();
+                int gameId = gRes != null && gRes != DBNull.Value ? Convert.ToInt32(gRes) : 0;
+                if (gameId == 0)
+                {
+                    using var fallbackGameCmd = new SqliteCommand("SELECT GameID FROM FCT_Game LIMIT 1", conn);
+                    gameId = Convert.ToInt32(fallbackGameCmd.ExecuteScalar() ?? 1);
+                }
 
                 string insertClassSql = @"
                     INSERT INTO FCT_ShipClass (
@@ -107,12 +113,19 @@ namespace AuroraDesignSuite.Services
                 // Get GameID for race
                 using var gameCmd = new SqliteCommand("SELECT GameID FROM FCT_Race WHERE RaceID = @raceId", conn);
                 gameCmd.Parameters.AddWithValue("@raceId", raceId);
-                int gameId = Convert.ToInt32(gameCmd.ExecuteScalar() ?? 140);
+                object? gRes = gameCmd.ExecuteScalar();
+                int gameId = gRes != null && gRes != DBNull.Value ? Convert.ToInt32(gRes) : 0;
+                if (gameId == 0)
+                {
+                    using var fallbackGameCmd = new SqliteCommand("SELECT GameID FROM FCT_Game LIMIT 1", conn);
+                    gameId = Convert.ToInt32(fallbackGameCmd.ExecuteScalar() ?? 1);
+                }
 
                 // Get PopID for Earth or capital
-                using var popCmd = new SqliteCommand("SELECT PopulationID FROM FCT_Population WHERE RaceID = @raceId LIMIT 1", conn);
+                using var popCmd = new SqliteCommand("SELECT PopulationID FROM FCT_Population WHERE RaceID = @raceId ORDER BY Capital DESC LIMIT 1", conn);
                 popCmd.Parameters.AddWithValue("@raceId", raceId);
-                int popId = Convert.ToInt32(popCmd.ExecuteScalar() ?? 4642);
+                object? pRes = popCmd.ExecuteScalar();
+                int popId = pRes != null && pRes != DBNull.Value ? Convert.ToInt32(pRes) : 1;
 
                 // Get Next TechID
                 using var techIdCmd = new SqliteCommand("SELECT COALESCE(MAX(TechSystemID), 0) + 1 FROM FCT_TechSystem", conn);

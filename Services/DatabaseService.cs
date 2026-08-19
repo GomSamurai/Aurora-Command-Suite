@@ -732,12 +732,11 @@ namespace AuroraDesignSuite.Services
                 object? res = cmd.ExecuteScalar();
                 if (res != null && res != DBNull.Value)
                 {
-                    double pop = Convert.ToDouble(res);
-                    return pop > 0 ? pop : 1168.0;
+                    return Convert.ToDouble(res);
                 }
             }
             catch { }
-            return 1168.0; // Default fallback in millions
+            return 0.0;
         }
 
         public int GetEmpireColonyCount(int raceId)
@@ -1176,14 +1175,17 @@ namespace AuroraDesignSuite.Services
                 System.Diagnostics.Debug.WriteLine($"Error fetching components: {ex.Message}");
             }
 
-            // Always merge default standard components (Fuel Tanks, Quarters, Engineering, Shields, Lasers) so designs are always assembleable
-            var defaults = GetDefaultFallbackComponents();
-            foreach (var d in defaults)
+            // Only merge fallback standard components when in Sandbox mode (onlyResearched = false) or if no components exist at all
+            if (!onlyResearched || components.Count == 0)
             {
-                if (!seenIds.Contains(d.ComponentID))
+                var defaults = GetDefaultFallbackComponents();
+                foreach (var d in defaults)
                 {
-                    components.Add(d);
-                    seenIds.Add(d.ComponentID);
+                    if (!seenIds.Contains(d.ComponentID))
+                    {
+                        components.Add(d);
+                        seenIds.Add(d.ComponentID);
+                    }
                 }
             }
 

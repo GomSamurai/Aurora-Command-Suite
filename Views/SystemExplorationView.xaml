@@ -120,7 +120,7 @@
                         <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                             <StackPanel>
                                 <TextBlock x:Name="LblMineralsHeader" Text="💎 YACIMIENTOS MINERALES EN CUERPO CELESTE" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <DataGrid x:Name="DgMinerals" AutoGenerateColumns="False" IsReadOnly="True" MaxHeight="180" ToolTip="Depósitos de minerales exóticos trans-uranianos detectados en este planeta.">
+                                <DataGrid x:Name="DgMinerals" AutoGenerateColumns="False" IsReadOnly="True" MaxHeight="180" ToolTip="Depósitos de minerales exóticos trans-newtonianos detectados en este planeta.">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Mineral Exótico" Binding="{Binding MineralName}" Width="*"/>
                                         <DataGridTextColumn Header="Reservas Estimadas" Binding="{Binding AmountDisplay}" Width="180"/>

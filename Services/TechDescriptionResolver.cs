@@ -34,7 +34,7 @@ namespace AuroraDesignSuite.Services
             }
             if (t.Contains("mining") || t.Contains("mina"))
             {
-                return "Instalación de extracción exótica automatizada. Extrae los 11 minerales trans-uranianos sin requerir población civil ni infraestructura de habitabilidad en asteroides.";
+                return "Instalación de extracción exótica automatizada. Extrae los 11 minerales trans-newtonianos sin requerir población civil ni infraestructura de habitabilidad en asteroides.";
             }
             if (t.Contains("refuelling") || t.Contains("fuel") || t.Contains("refinería"))
             {

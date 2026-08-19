@@ -27,7 +27,7 @@
                         <TextBlock x:Name="LblColonyCount" Text="1 Colonia" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </DockPanel>
 
-                    <DataGrid x:Name="DgColonies" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgColonies_SelectionChanged" ToolTip="Poblaciones planetarias y reservas almacenadas de los 11 minerales exóticos trans-uranianos. Selecciona una fila para ver el dossier colonial.">
+                    <DataGrid x:Name="DgColonies" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgColonies_SelectionChanged" ToolTip="Poblaciones planetarias y reservas almacenadas de los 11 minerales exóticos trans-newtonianos. Selecciona una fila para ver el dossier colonial.">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Nombre Colonia" Binding="{Binding DisplayName}" Width="*"/>
                             <DataGridTextColumn Header="Población" Binding="{Binding PopulationMillions, StringFormat={}{0:N2} M}" Width="110"/>
@@ -83,9 +83,9 @@
             <!-- Card 3: 11 Trans-Uranic Minerals Breakdown Table (Row 2 - Fills 100% Remaining Height!) -->
             <Border Grid.Row="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
                 <DockPanel>
-                    <TextBlock DockPanel.Dock="Top" Text="💎 DESGLOSE Y ANÁLISIS DE LOS 11 MINERALES TRANS-URANIANOS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                    <TextBlock DockPanel.Dock="Top" Text="💎 DESGLOSE Y ANÁLISIS DE LOS 11 MINERALES TRANS-NEWTONIANOS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
 
-                    <DataGrid x:Name="DgMineralDetails" AutoGenerateColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" ToolTip="Catálogo detallado de los 11 minerales exóticos trans-uranianos, su utilidad táctica en juego y el tonelaje almacenado.">
+                    <DataGrid x:Name="DgMineralDetails" AutoGenerateColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" ToolTip="Catálogo detallado de los 11 minerales exóticos trans-newtonianos, su utilidad táctica en juego y el tonelaje almacenado.">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Mineral Exótico" Binding="{Binding Name}" Width="150"/>
                             <DataGridTextColumn Header="Reservas Totales" Binding="{Binding AmountDisplay}" Width="120"/>

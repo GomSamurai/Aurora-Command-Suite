@@ -55,8 +55,8 @@ Para que el lanzador **`🚀 ABRIR_SUITE.bat`** abra automáticamente el juego p
 - Distribución de almirantes, científicos y gobernadores activos.
 - Desglose de investigación acumulada e instalaciones de I+D.
 
-### 🪐 2. Colonias & Inventario Trans-Uraniano (`ColoniesOverviewView`)
-- Control de existencias de los **11 Minerales Trans-Uranianos**: *Duranium, Sorium, Neutronium, Corundium, Uridium, Gallicite, Boronide, Mercassium, Vendarite, Corbomite y Tritium*.
+### 🪐 2. Colonias & Inventario Trans-Newtoniano (`ColoniesOverviewView`)
+- Control de existencias de los **11 Minerales Trans-Newtonianos**: *Duranium, Sorium, Neutronium, Corundium, Uridium, Gallicite, Boronide, Mercassium, Vendarite, Corbomite y Tritium*.
 - Gráficos comparativos de producción minera, reservas coloniales e instalaciones industriales por planeta.
 
 ### 👥 3. Cuartel General de Oficiales (`CommandersHQView`)

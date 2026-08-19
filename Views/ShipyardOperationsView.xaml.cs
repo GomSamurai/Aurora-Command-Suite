@@ -93,10 +93,8 @@ namespace AuroraDesignSuite.Views
             var availableClasses = _dbService.GetRaceClasses(_currentRaceId);
             if (availableClasses.Count == 0)
             {
-                // Fallback demo classes if DB empty
-                availableClasses.Add(new ShipClassSimpleInfo { ClassName = "Fragata Relámpago", SizeHS = 80, CostBP = 200 });
-                availableClasses.Add(new ShipClassSimpleInfo { ClassName = "Carguero Comercial Estándar", SizeHS = 200, CostBP = 350 });
-                availableClasses.Add(new ShipClassSimpleInfo { ClassName = "Destructor Vanguardia", SizeHS = 100, CostBP = 280 });
+                MessageBox.Show("No hay clases de naves creadas en tu imperio todavía en Aurora 4X. Diseña una clase o créala antes de asignar órdenes de construcción.", "Sin Clases Registradas", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
             }
 
             var dlg = new NewShipyardOrderDialog(SelectedShipyard, availableClasses)

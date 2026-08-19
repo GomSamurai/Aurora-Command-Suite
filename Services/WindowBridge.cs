@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
@@ -136,13 +137,27 @@ namespace AuroraDesignSuite.Services
                 }
 
                 // 3. Auto-launch game if not running!
-                string gameLauncherPath = @"c:\VSCODE\Aurora271Full\AuroraPatch.exe";
-                if (File.Exists(gameLauncherPath))
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string currentDir = Directory.GetCurrentDirectory();
+                string[] candidates = new[]
                 {
+                    Path.GetFullPath(Path.Combine(baseDir, "..", "AuroraPatch.exe")),
+                    Path.GetFullPath(Path.Combine(baseDir, "..", "Aurora.exe")),
+                    Path.GetFullPath(Path.Combine(currentDir, "..", "AuroraPatch.exe")),
+                    Path.GetFullPath(Path.Combine(currentDir, "..", "Aurora.exe")),
+                    Path.GetFullPath(Path.Combine(baseDir, "AuroraPatch.exe")),
+                    Path.GetFullPath(Path.Combine(baseDir, "Aurora.exe")),
+                    @"c:\VSCODE\Aurora271Full\AuroraPatch.exe"
+                };
+
+                string? gameLauncherPath = candidates.FirstOrDefault(f => !string.IsNullOrEmpty(f) && File.Exists(f));
+                if (!string.IsNullOrEmpty(gameLauncherPath))
+                {
+                    string targetDir = Path.GetDirectoryName(gameLauncherPath) ?? "";
                     Process.Start(new ProcessStartInfo
                     {
                         FileName = gameLauncherPath,
-                        WorkingDirectory = @"c:\VSCODE\Aurora271Full"
+                        WorkingDirectory = targetDir
                     });
                     statusMessage = "🚀 Iniciando juego Aurora 4X v2.7.1 automáticamente...";
                     return true;

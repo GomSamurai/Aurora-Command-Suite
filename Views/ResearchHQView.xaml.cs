@@ -55,7 +55,6 @@ namespace AuroraDesignSuite.Views
 
             var infra = _dbService.GetEmpireInfrastructure(_currentRaceId);
             double totalEmpireLabs = infra.Where(i => i.Name.Contains("Laboratorio") || i.Name.Contains("Research")).Sum(i => i.Amount);
-            if (totalEmpireLabs <= 0) totalEmpireLabs = 17; // Default from DB population
 
             int labsInUse = activeProjects.Sum(p => p.FacilitiesCount);
             int freeLabs = Math.Max(0, (int)totalEmpireLabs - labsInUse);

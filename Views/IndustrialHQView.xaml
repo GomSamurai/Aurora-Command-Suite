@@ -21,12 +21,13 @@
             </GridSplitter.Template>
         </GridSplitter>
 
-        <!-- Left Column: Vertically Resizable Installations, Projects & Minerals Sections -->
+        <!-- Left Column: Resizable Installations, Projects, Toolbar, Mineral Bar & Building Guide -->
         <Grid Grid.Column="0" Margin="0,0,4,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" MinHeight="140"/>
+                <RowDefinition Height="*" MinHeight="130"/>
                 <RowDefinition Height="6"/>
-                <RowDefinition Height="*" MinHeight="140"/>
+                <RowDefinition Height="*" MinHeight="130"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -72,7 +73,7 @@
                 </DockPanel>
             </Border>
 
-            <!-- Bottom Card 1: Action Toolbar -->
+            <!-- Row 3: Action Toolbar -->
             <Border Grid.Row="3" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,6">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -89,8 +90,8 @@
                 </Grid>
             </Border>
 
-            <!-- Bottom Card 2: Prominently Displayed Mineral Requirements Pill Bar -->
-            <Border Grid.Row="4" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+            <!-- Row 4: Mineral Demand Pill Bar -->
+            <Border Grid.Row="4" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,6">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -119,6 +120,43 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </Grid>
+            </Border>
+
+            <!-- Row 5: Building Encyclopedia Guide (Moved to Bottom Left Area in 3 Horizontal Columns!) -->
+            <Border Grid.Row="5" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+                <StackPanel>
+                    <TextBlock Text="📖 GUÍA DE INSTALACIONES Y EDIFICIOS IMPERIALES" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Column 1 -->
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="🏭 Fábrica Construcción (120 BP): Produce instalaciones y convierte industria convencional." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,2"/>
+                            <TextBlock Text="⛏️ Mina Convencional (120 BP): Extrae minerales en planetas requiriendo población." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,2"/>
+                            <TextBlock Text="🤖 Mina Automatizada (240 BP): Extrae minerales sin población (asteroides/cometas)." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,2"/>
+                            <TextBlock Text="⛽ Refinería Sorium (120 BP): Convierte el Sorium mineral en combustible espacial." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,2"/>
+                        </StackPanel>
+
+                        <!-- Column 2 -->
+                        <StackPanel Grid.Column="1" Margin="4,0,8,0">
+                            <TextBlock Text="💣 Fábrica Armamento (120 BP): Fabrica misiles, torpedos y munición táctica." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,2"/>
+                            <TextBlock Text="🛩️ Fábrica de Cazas (120 BP): Construye cazas y naves parásitas de &lt; 500t." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,2"/>
+                            <TextBlock Text="🏛️ Centro Financiero (120 BP): Genera riqueza y créditos imperiales continuos." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,2"/>
+                            <TextBlock Text="🌐 Catapulta de Masa (120 BP): Lanza minerales extraídos hacia otras colonias." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,2"/>
+                        </StackPanel>
+
+                        <!-- Column 3 -->
+                        <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                            <TextBlock Text="🌍 Estación Terraformación (300 BP): Modifica atmósferas para costo colonial 0.00." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,2"/>
+                            <TextBlock Text="📡 Rastreador DSTS (300 BP): Sensores de espacio profundo a millones de km." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,2"/>
+                            <TextBlock Text="🚀 Puerto Espacial (600 BP): Acelera la carga/descarga de mercancías y minería." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,2"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
             </Border>
         </Grid>
 
@@ -184,7 +222,7 @@
                 </Border>
 
                 <!-- Card 3: Industrial Build Time & Throughput Calculator -->
-                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
                     <StackPanel>
                         <TextBlock Text="🧮 CALCULADORA DE TIEMPOS DE FABRICACIÓN" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,10"/>
                         
@@ -206,30 +244,6 @@
                                 </Grid>
                             </StackPanel>
                         </Border>
-                    </StackPanel>
-                </Border>
-
-                <!-- Card 4: Building Encyclopedia & Guide -->
-                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
-                    <StackPanel>
-                        <TextBlock Text="📖 GUÍA DE INSTALACIONES Y EDIFICIOS IMPERIALES" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                        <TextBlock Text="Función y utilidad táctica de cada instalación planetaria:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,8"/>
-
-                        <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
-                            <StackPanel>
-                                <TextBlock Text="🏭 Fábrica de Construcción (120 BP): Produce otras instalaciones y convierte la industria convencional." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
-                                <TextBlock Text="⛏️ Mina Convencional (120 BP): Extrae minerales en planetas habitables requiriendo población." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
-                                <TextBlock Text="🤖 Mina Automatizada (240 BP): Extrae minerales sin necesidad de población humana." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
-                                <TextBlock Text="⛽ Refinería de Sorium (120 BP): Refina el Sorium mineral convirtiéndolo en combustible espacial." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
-                                <TextBlock Text="💣 Fábrica de Armamento (120 BP): Fabrica misiles, torpedos y cargas de combate para naves." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
-                                <TextBlock Text="🛩️ Fábrica de Cazas (120 BP): Construye cazas y pequeñas naves parásitas de menos de 500t." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
-                                <TextBlock Text="🏛️ Centro Financiero (120 BP): Genera riqueza y créditos imperiales sostenidos." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
-                                <TextBlock Text="🌐 Catapulta de Masa / Mass Driver (120 BP): Lanza minerales extraídos hacia otras colonias." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
-                                <TextBlock Text="🌍 Estación de Terraformación (300 BP): Modifica la atmósfera para reducir el costo colonial a 0.00." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
-                                <TextBlock Text="📡 Rastreador de Espacio Profundo / DSTS (300 BP): Detecta naves enemigas a millones de km." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
-                                <TextBlock Text="🚀 Puerto Espacial (600 BP): Acelera la carga/descarga de cargueros y el movimiento de minerales." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,2"/>
-                            </StackPanel>
-                        </ScrollViewer>
                     </StackPanel>
                 </Border>
             </StackPanel>

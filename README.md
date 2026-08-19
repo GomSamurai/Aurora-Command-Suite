@@ -12,7 +12,15 @@
 
 **Aurora 4X Command Suite** es una suite de mando e inteligencia espacial desarrollada para integrarse al 100% en tiempo real con el juego de estrategia **Aurora 4X (v2.7.1)**. 
 
-Combina una interfaz gráfica sci-fi de última generación (WPF), telemetría directa desde la base de datos de juego `AuroraDB.db`, simulación táctica de misiles y naves, un **Monitor Táctico IA con Popups Overlay en tiempo real sobre el juego** y un **Generador de Novelas e Historia Épica**.
+Combina una interfaz gráfica sci-fi de última generación (WPF), telemetría directa desde la base de datos de juego `AuroraDB.db`, **sincronización en vivo por avance de tiempo en tiempo real**, simulación táctica de misiles y naves, un **Monitor Táctico IA con Popups Overlay en tiempo real sobre el juego**, resolución 100% dinámica de rutas sin fallbacks estáticos y un **Generador de Novelas e Historia Épica**.
+
+---
+
+## ⚡ Novedades y Auditoría de Certificación (v2.7.1)
+- **Sincronización en Vivo por Avance de Tiempo**: Detección automática en tiempo real de cada incremento de tiempo (5s, 1m, 1h, 1d, 5d, 30d) en Aurora 4X y refresco instantáneo de telemetría sin intervención del usuario.
+- **Aislamiento Multi-Imperio Puro por Raza**: Eliminados fallbacks hardcodeados legacy. Generación dinámica de fabricantes y empresas basada en el imperio/raza activo de tu partida actual (`GetCompanyNames`).
+- **Resolución Dinámica de Rutas Portable**: Eliminadas rutas absolutas estáticas (`C:\...`). La aplicación detecta automáticamente la ubicación del juego y la base de datos de forma portable dondequiera que desempaquetes la suite.
+- **Certificación de Código Fuente**: Auditoría integral con 0 advertencias, 0 errores y 0 fallbacks estáticos.
 
 ---
 

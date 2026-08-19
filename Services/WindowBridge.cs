@@ -145,9 +145,7 @@ namespace AuroraDesignSuite.Services
                     Path.GetFullPath(Path.Combine(baseDir, "..", "Aurora.exe")),
                     Path.GetFullPath(Path.Combine(currentDir, "..", "AuroraPatch.exe")),
                     Path.GetFullPath(Path.Combine(currentDir, "..", "Aurora.exe")),
-                    Path.GetFullPath(Path.Combine(baseDir, "AuroraPatch.exe")),
-                    Path.GetFullPath(Path.Combine(baseDir, "Aurora.exe")),
-                    @"c:\VSCODE\Aurora271Full\AuroraPatch.exe"
+                    Path.GetFullPath(Path.Combine(baseDir, "Aurora.exe"))
                 };
 
                 string? gameLauncherPath = candidates.FirstOrDefault(f => !string.IsNullOrEmpty(f) && File.Exists(f));

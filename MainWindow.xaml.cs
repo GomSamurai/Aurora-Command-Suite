@@ -62,11 +62,10 @@ namespace AuroraDesignSuite
                 Path.GetFullPath(Path.Combine(currentDir, "..", "AuroraDB.db")),
                 Path.GetFullPath(Path.Combine(currentDir, "AuroraDB.db")),
                 // 2. Saved preference path
-                prefs.LastDbPath,
-                @"c:\VSCODE\Aurora271Full\AuroraDB.db"
+                prefs.LastDbPath
             };
 
-            string dbPath = candidatePaths.FirstOrDefault(f => !string.IsNullOrEmpty(f) && File.Exists(f)) ?? @"c:\VSCODE\Aurora271Full\AuroraDB.db";
+            string dbPath = candidatePaths.FirstOrDefault(f => !string.IsNullOrEmpty(f) && File.Exists(f)) ?? Path.Combine(baseDir, "AuroraDB.db");
             LoadDatabasePath(dbPath);
         }
 

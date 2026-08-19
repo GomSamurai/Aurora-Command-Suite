@@ -160,7 +160,7 @@ namespace AuroraDesignSuite.Services
                 }
 
                 // Resolve absolute image paths
-                string dbDir = System.IO.Path.GetDirectoryName(_dbPath) ?? @"C:\VSCODE\Aurora271Full";
+                string dbDir = System.IO.Path.GetDirectoryName(_dbPath) ?? AppDomain.CurrentDomain.BaseDirectory;
                 string flagFile = System.IO.Path.Combine(dbDir, "Flags", emp.FlagPic);
                 string raceFile = System.IO.Path.Combine(dbDir, "Races", emp.RacePic);
                 string shipFile = System.IO.Path.Combine(dbDir, "ShipIcons", "Ship001.png");
@@ -232,7 +232,7 @@ namespace AuroraDesignSuite.Services
             var list = new List<string>();
             try
             {
-                string dbDir = System.IO.Path.GetDirectoryName(_dbPath) ?? @"C:\VSCODE\Aurora271Full";
+                string dbDir = System.IO.Path.GetDirectoryName(_dbPath) ?? AppDomain.CurrentDomain.BaseDirectory;
                 string flagsFolder = System.IO.Path.Combine(dbDir, "Flags");
                 if (System.IO.Directory.Exists(flagsFolder))
                 {
@@ -252,7 +252,7 @@ namespace AuroraDesignSuite.Services
             var list = new List<string>();
             try
             {
-                string dbDir = System.IO.Path.GetDirectoryName(_dbPath) ?? @"C:\VSCODE\Aurora271Full";
+                string dbDir = System.IO.Path.GetDirectoryName(_dbPath) ?? AppDomain.CurrentDomain.BaseDirectory;
                 string racesFolder = System.IO.Path.Combine(dbDir, "Races");
                 if (System.IO.Directory.Exists(racesFolder))
                 {

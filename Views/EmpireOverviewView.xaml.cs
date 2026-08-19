@@ -168,7 +168,7 @@ namespace AuroraDesignSuite.Views
         private void CmbFlagPic_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_dbService == null || CmbFlagPic?.SelectedItem is not string flagFile) return;
-            string dbDir = System.IO.Path.GetDirectoryName(_dbService.DbPath) ?? @"C:\VSCODE\Aurora271Full";
+            string dbDir = System.IO.Path.GetDirectoryName(_dbService.DbPath) ?? AppDomain.CurrentDomain.BaseDirectory;
             string flagPath = System.IO.Path.Combine(dbDir, "Flags", flagFile);
             UpdatePreviewImages(flagPath, null!);
         }
@@ -176,7 +176,7 @@ namespace AuroraDesignSuite.Views
         private void CmbRacePic_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_dbService == null || CmbRacePic?.SelectedItem is not string raceFile) return;
-            string dbDir = System.IO.Path.GetDirectoryName(_dbService.DbPath) ?? @"C:\VSCODE\Aurora271Full";
+            string dbDir = System.IO.Path.GetDirectoryName(_dbService.DbPath) ?? AppDomain.CurrentDomain.BaseDirectory;
             string racePath = System.IO.Path.Combine(dbDir, "Races", raceFile);
             UpdatePreviewImages(null!, racePath);
         }

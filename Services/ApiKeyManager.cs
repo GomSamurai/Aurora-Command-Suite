@@ -27,8 +27,7 @@ namespace AuroraDesignSuite.Services
                     GetConfigFilePath(),
                     Path.Combine(Directory.GetCurrentDirectory(), "config", "gemini_api.config"),
                     Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "config", "gemini_api.config"),
-                    Path.Combine(Directory.GetCurrentDirectory(), "..", "config", "gemini_api.config"),
-                    @"c:\VSCODE\AuroraDesignSuite\config\gemini_api.config"
+                    Path.Combine(Directory.GetCurrentDirectory(), "..", "config", "gemini_api.config")
                 };
 
                 foreach (var path in candidates)

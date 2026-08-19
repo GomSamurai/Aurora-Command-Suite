@@ -245,7 +245,7 @@ namespace AuroraDesignSuite.Views
             {
                 1 => "Laboratorio de Investigación Láser N° 1",
                 3 => "Gobernación de la Colonia Sol-3 (Tierra)",
-                2 => "Flota Principal - S.M.S. Numancia",
+                2 => "Flota Principal - Nave Insignia",
                 _ => "1ª División de Infantería Mecanizada"
             };
 

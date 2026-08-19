@@ -3045,25 +3045,17 @@ namespace AuroraDesignSuite.Services
 
         public List<string> GetCompanyNames(int raceId)
         {
-            var companies = new List<string>
-            {
-                "Carrasco-Nazario Turbines",
-                "Ybarra Engines Limited",
-                "Velazquez Aerospace",
-                "Navantia Imperial Defense",
-                "Adeptus Mechanicus Forge",
-                "Hispano-Suiza Naval Armaments",
-                "Sevilla Orbital Industries"
-            };
+            var companies = new List<string>();
 
             try
             {
                 using var conn = GetConnection();
                 string query = @"
                     SELECT DISTINCT Name FROM FCT_TechSystem 
-                    WHERE Name LIKE '%Limited%' OR Name LIKE '%Turbines%' OR Name LIKE '%Industries%' OR Name LIKE '%Corp%' OR Name LIKE '%Aerospace%'
+                    WHERE RaceID = @raceId AND (Name LIKE '%Limited%' OR Name LIKE '%Turbines%' OR Name LIKE '%Industries%' OR Name LIKE '%Corp%' OR Name LIKE '%Aerospace%' OR Name LIKE '%Naval%' OR Name LIKE '%Forge%' OR Name LIKE '%Systems%')
                     LIMIT 20";
                 using var cmd = new SqliteCommand(query, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -3077,6 +3069,19 @@ namespace AuroraDesignSuite.Services
                             companies.Add(companyName);
                         }
                     }
+                }
+
+                if (companies.Count == 0)
+                {
+                    string raceSql = "SELECT RaceName FROM FCT_Race WHERE RaceID = @raceId";
+                    using var rCmd = new SqliteCommand(raceSql, conn);
+                    rCmd.Parameters.AddWithValue("@raceId", raceId);
+                    string raceName = Convert.ToString(rCmd.ExecuteScalar()) ?? "Imperio";
+                    if (string.IsNullOrWhiteSpace(raceName)) raceName = "Imperio";
+
+                    companies.Add($"{raceName} Naval Ordnance");
+                    companies.Add($"{raceName} Aerospace Corp");
+                    companies.Add($"{raceName} Heavy Industries");
                 }
             }
             catch (Exception ex)

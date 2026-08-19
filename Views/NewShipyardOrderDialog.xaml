@@ -24,7 +24,7 @@
                 <ComboBox x:Name="CmbShipClasses" SelectionChanged="CmbShipClasses_SelectionChanged" Margin="0,0,0,10" ToolTip="Clases de naves disponibles e investigadas en tu imperio."/>
 
                 <TextBlock Text="Nombre de la Unidad / Casco:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                <TextBox x:Name="TxtUnitName" Text="S.M.S. Numancia-01" Margin="0,0,0,10" ToolTip="Nombre único con el que se bautizará esta nave al salir de las gradas."/>
+                <TextBox x:Name="TxtUnitName" Text="Nave-01" Margin="0,0,0,10" ToolTip="Nombre único con el que se bautizará esta nave al salir de las gradas."/>
 
                 <Grid Margin="0,4,0,8">
                     <Grid.ColumnDefinitions>

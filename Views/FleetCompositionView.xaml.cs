@@ -51,6 +51,14 @@ namespace AuroraDesignSuite.Views
                 {
                     CmbEmpireClasses.SelectedIndex = 0;
                 }
+                else
+                {
+                    CmbEmpireClasses.ItemsSource = null;
+                }
+            }
+            else
+            {
+                CmbEmpireClasses.ItemsSource = null;
             }
 
             RecalculateFleet();

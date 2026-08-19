@@ -220,21 +220,36 @@ namespace AuroraDesignSuite.Views
             }
         }
 
-        public void SetSelectedEmpire(Empire emp)
+        public void LoadEmpireData(DatabaseService? dbService, int raceId)
         {
-            if (CmbEmpire == null || _dbService == null) return;
-            foreach (Empire item in CmbEmpire.Items)
+            _dbService = dbService;
+            if (_dbService == null) return;
+
+            if (TxtDbPath != null) TxtDbPath.Text = _dbService.DbPath;
+            var empires = _dbService.GetEmpires();
+            if (CmbEmpire != null)
             {
-                if (item.RaceID == emp.RaceID)
+                CmbEmpire.ItemsSource = empires;
+                var matchEmp = empires.FirstOrDefault(e => e.RaceID == raceId) ?? empires.FirstOrDefault();
+                if (matchEmp != null)
                 {
-                    CmbEmpire.SelectedItem = item;
-                    break;
+                    CmbEmpire.SelectedItem = matchEmp;
                 }
             }
+
+            bool onlyResearched = (CmbPaletteMode?.SelectedIndex ?? 0) == 0;
+            LoadComponents(onlyResearched);
+        }
+
+        public void SetSelectedEmpire(Empire emp)
+        {
+            if (emp == null) return;
+            LoadEmpireData(_dbService, emp.RaceID);
         }
 
         private void InitializeDatabase(string path)
         {
+            if (string.IsNullOrEmpty(path) || !System.IO.File.Exists(path)) return;
             _dbService = new DatabaseService(path);
             if (_dbService.TestConnection(out _))
             {
@@ -753,7 +768,11 @@ namespace AuroraDesignSuite.Views
 
             Recalculate();
             int raceId = SelectedRaceID;
-            if (raceId <= 0) raceId = 784;
+            if (raceId <= 0 && _dbService != null)
+            {
+                var empires = _dbService.GetEmpires();
+                raceId = empires.FirstOrDefault()?.RaceID ?? 0;
+            }
 
             if (BlueprintExportService.ExportClassToAuroraDb(TxtDbPath.Text, CurrentDesign, raceId, out string msg))
             {
@@ -775,7 +794,11 @@ namespace AuroraDesignSuite.Views
 
             Recalculate();
             int raceId = SelectedRaceID;
-            if (raceId <= 0) raceId = 784;
+            if (raceId <= 0 && _dbService != null)
+            {
+                var empires = _dbService.GetEmpires();
+                raceId = empires.FirstOrDefault()?.RaceID ?? 0;
+            }
 
             if (BlueprintExportService.ExportClassAsResearchProject(TxtDbPath.Text, CurrentDesign, raceId, out string msg))
             {

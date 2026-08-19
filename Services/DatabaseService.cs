@@ -103,13 +103,13 @@ namespace AuroraDesignSuite.Services
                 }
                 if (result.Count == 0)
                 {
-                    result.Add(new Empire { RaceID = 1, GameID = 140, RaceName = "Imperio Epistocrático" });
+                    result.Add(new Empire { RaceID = 1, GameID = 1, RaceName = "Imperio Principal" });
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error fetching empires: {ex.Message}");
-                result.Add(new Empire { RaceID = 1, GameID = 140, RaceName = "Imperio Epistocrático" });
+                result.Add(new Empire { RaceID = 1, GameID = 1, RaceName = "Imperio Principal" });
             }
             return result;
         }
@@ -535,7 +535,7 @@ namespace AuroraDesignSuite.Services
                 using var conn = GetWriteConnection();
 
                 // 1. Get Capital PopulationID, SpeciesID, GameID for this RaceID
-                int gameId = 140;
+                int gameId = 0;
                 int popId = 0;
                 int speciesId = 0;
 
@@ -1277,7 +1277,7 @@ namespace AuroraDesignSuite.Services
 
                     using var gameCmd = new SqliteCommand("SELECT GameID FROM FCT_Race WHERE RaceID=@raceId", conn);
                     gameCmd.Parameters.AddWithValue("@raceId", raceId);
-                    int gameId = Convert.ToInt32(gameCmd.ExecuteScalar() ?? 140);
+                    int gameId = Convert.ToInt32(gameCmd.ExecuteScalar() ?? 0);
 
                     using var pIdCmd = new SqliteCommand("SELECT COALESCE(MAX(ProjectID), 0) + 1 FROM FCT_ResearchProject", conn);
                     int nextProjectId = Convert.ToInt32(pIdCmd.ExecuteScalar());
@@ -2545,42 +2545,6 @@ namespace AuroraDesignSuite.Services
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error fetching race classes: {ex.Message}");
-            }
-
-            if (list.Count == 0 && raceId > 0)
-            {
-                // Fallback: Try race 784 if specified raceId returned no classes
-                try
-                {
-                    using var conn = GetConnection();
-                    string sql = @"
-                        SELECT ShipClassID, ClassName, Size, Cost, Commercial,
-                               MaxSpeed, FuelCapacity, Crew, MaintSupplies, ClassThermal, EMSensorStrength
-                        FROM FCT_ShipClass
-                        WHERE RaceID = 784 AND (Obsolete IS NULL OR Obsolete = 0)
-                        ORDER BY ClassName";
-                    using var cmd = new SqliteCommand(sql, conn);
-                    using var reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        int isComm = reader["Commercial"] != DBNull.Value ? Convert.ToInt32(reader["Commercial"]) : 0;
-                        list.Add(new ShipClassSimpleInfo
-                        {
-                            ClassID = Convert.ToInt32(reader["ShipClassID"]),
-                            ClassName = reader["ClassName"].ToString() ?? "Clase",
-                            SizeHS = reader["Size"] != DBNull.Value ? Convert.ToDouble(reader["Size"]) : 10.0,
-                            CostBP = reader["Cost"] != DBNull.Value ? Convert.ToDouble(reader["Cost"]) : 100.0,
-                            IsMilitary = isComm == 0,
-                            MaxSpeedKmS = reader["MaxSpeed"] != DBNull.Value ? Convert.ToDouble(reader["MaxSpeed"]) : 1000.0,
-                            TotalFuelLiters = reader["FuelCapacity"] != DBNull.Value ? Convert.ToDouble(reader["FuelCapacity"]) : 50000.0,
-                            TotalCrewRequired = reader["Crew"] != DBNull.Value ? Convert.ToInt32(reader["Crew"]) : 50,
-                            TotalMSP = reader["MaintSupplies"] != DBNull.Value ? Convert.ToDouble(reader["MaintSupplies"]) : 100.0,
-                            ThermalSignature = reader["ClassThermal"] != DBNull.Value ? Convert.ToDouble(reader["ClassThermal"]) : 0.0,
-                            EMSignature = reader["EMSensorStrength"] != DBNull.Value ? Convert.ToDouble(reader["EMSensorStrength"]) : 0.0
-                        });
-                    }
-                }
-                catch { }
             }
 
             return list;

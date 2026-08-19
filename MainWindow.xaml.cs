@@ -15,6 +15,7 @@ namespace AuroraDesignSuite
         private FileSystemWatcher? _dbWatcher;
         private System.Windows.Threading.DispatcherTimer? _liveSyncTimer;
         private DateTime _lastDbWriteTime = DateTime.MinValue;
+        private double _lastGameTime = -1;
 
         public MainWindow()
         {
@@ -185,14 +186,23 @@ namespace AuroraDesignSuite
         {
             try
             {
-                if (!File.Exists(dbPath)) return;
+                if (!File.Exists(dbPath) || _dbService == null) return;
 
                 var writeTime = File.GetLastWriteTimeUtc(dbPath);
-                if (writeTime != _lastDbWriteTime)
+                int raceId = (CmbGlobalEmpire?.SelectedItem as Empire)?.RaceID ?? 0;
+                var timeInfo = _dbService.GetGameTimeInfo(raceId);
+                double currentGameTime = timeInfo.GameTimeSeconds;
+
+                if (writeTime != _lastDbWriteTime || (_lastGameTime >= 0 && Math.Abs(currentGameTime - _lastGameTime) > 0.001))
                 {
                     _lastDbWriteTime = writeTime;
+                    _lastGameTime = currentGameTime;
                     Microsoft.Data.Sqlite.SqliteConnection.ClearAllPools();
                     RefreshActiveTab();
+                }
+                else if (_lastGameTime < 0)
+                {
+                    _lastGameTime = currentGameTime;
                 }
             }
             catch { }

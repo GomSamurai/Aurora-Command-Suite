@@ -34,12 +34,25 @@ namespace AuroraDesignSuite.Views
         {
             if (_dbService == null) return;
 
+            // Clear previous empire state cleanly
+            _selectedSystem = null;
+            _selectedBody = null;
+            if (DgBodies != null) DgBodies.ItemsSource = null;
+            if (DgJumpPoints != null) DgJumpPoints.ItemsSource = null;
+            if (DgMinerals != null) DgMinerals.ItemsSource = null;
+
             var systems = _dbService.GetDiscoveredSystems(_currentRaceId);
             DgSystems.ItemsSource = systems;
 
             if (systems.Count > 0)
             {
                 DgSystems.SelectedIndex = 0;
+            }
+            else
+            {
+                if (LblBodiesHeader != null) LblBodiesHeader.Text = "🪐 SITEMAS Y CUERPOS CELESTES (0 Descubiertos)";
+                if (LblSysBodiesCount != null) LblSysBodiesCount.Text = "0 Cuerpos";
+                if (LblSysJumpCount != null) LblSysJumpCount.Text = "0 Puntos";
             }
 
             // Survey Fleets

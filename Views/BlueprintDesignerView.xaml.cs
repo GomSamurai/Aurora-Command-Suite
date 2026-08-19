@@ -51,7 +51,6 @@ namespace AuroraDesignSuite.Views
 
             InitializeCategories();
             InitializePresets();
-            InitializeDatabase(TxtDbPath.Text);
         }
 
         private void InitializeCategories()
@@ -244,7 +243,17 @@ namespace AuroraDesignSuite.Views
         public void SetSelectedEmpire(Empire emp)
         {
             if (emp == null) return;
-            LoadEmpireData(_dbService, emp.RaceID);
+            if (CmbEmpire != null && CmbEmpire.ItemsSource != null)
+            {
+                foreach (Empire item in CmbEmpire.Items)
+                {
+                    if (item.RaceID == emp.RaceID)
+                    {
+                        CmbEmpire.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
         }
 
         private void InitializeDatabase(string path)

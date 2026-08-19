@@ -30,7 +30,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="TxtDbPath" Text="c:\VSCODE\Aurora271Full\AuroraDB.db" IsReadOnly="True" VerticalAlignment="Center" ToolTip="Ruta a la base de datos SQLite de tu partida guardada de Aurora 4X."/>
+                        <TextBox x:Name="TxtDbPath" Text="" IsReadOnly="True" VerticalAlignment="Center" ToolTip="Ruta a la base de datos SQLite de tu partida guardada de Aurora 4X."/>
                         <Button Grid.Column="1" Content="📁" Click="BtnBrowseDb_Click" Width="30" Margin="4,0,0,0" ToolTip="Buscar manualmente otro archivo AuroraDB.db en tu sistema."/>
                     </Grid>
 

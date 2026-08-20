@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,6 +14,29 @@ namespace AuroraDesignSuite.Services
     {
         private static Dictionary<string, string> _dictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private static bool _isLoaded = false;
+
+        // Bilingual and Synonym Mappings for 100% Accurate Lookups
+        private static readonly Dictionary<string, string> Synonyms = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "Academia Militar", "Military Academy" },
+            { "Fábrica de Construcción", "Construction Factory" },
+            { "Refinería de Combustible", "Fuel Refinery" },
+            { "Centro Financiero", "Financial Centre" },
+            { "Laboratorio de Investigación", "Research Facility" },
+            { "Mina Convencional", "Conventional Mine" },
+            { "Mina Automatizada", "Automated Mine" },
+            { "Fábrica de Misiles/Munición", "Ordnance Factory" },
+            { "Fábrica de Cazas", "Fighter Factory" },
+            { "Instalación de Mantenimiento", "Maintenance Facility" },
+            { "Cuartel General Naval", "Naval HQ" },
+            { "Puerto Espacial", "Spaceport" },
+            { "Estación de Espacio Profundo", "Deep Space Tracking Station" },
+            { "Complejo de Tropas Terrestres", "Ground Force Training Complex" },
+            { "Catapulta de Masa", "Mass Driver" },
+            { "Instalación de Terraformación", "Terraforming Station" },
+            { "Infraestructura Poblacional", "Infrastructure" },
+            { "Infraestructura de Hábitat Urbano", "Infrastructure" }
+        };
 
         // --------------------------------------------------------------------
         // ATTACHED PROPERTY FOR AUTOMATIC WPF TOOLTIPS
@@ -74,10 +98,20 @@ namespace AuroraDesignSuite.Services
                 {
                     textToLookup = cbi.Content?.ToString();
                 }
+                else if (string.IsNullOrEmpty(textToLookup) && fe is ComboBox cb)
+                {
+                    if (cb.SelectedItem != null)
+                    {
+                        textToLookup = cb.SelectedItem.ToString();
+                    }
+                    else if (cb.Text != null)
+                    {
+                        textToLookup = cb.Text;
+                    }
+                }
 
                 if (!string.IsNullOrEmpty(textToLookup))
                 {
-                    // Filter out generic placeholders
                     if (textToLookup.Length > 2 && !textToLookup.StartsWith("System."))
                     {
                         AttachToolTip(fe, textToLookup);
@@ -98,6 +132,7 @@ namespace AuroraDesignSuite.Services
                     Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config", "AuroraTooltipDictionary.json"),
                     Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AuroraTooltipDictionary.json"),
                     "c:/VSCODE/AuroraDesignSuite/config/AuroraTooltipDictionary.json",
+                    "c:/VSCODE/Aurora_Command_Suite_v2.7.1_Portable/App/config/AuroraTooltipDictionary.json",
                     "c:/VSCODE/Aurora271Full/Patches/AuroraSpanish/AuroraTooltipDictionary.json"
                 };
 
@@ -121,43 +156,135 @@ namespace AuroraDesignSuite.Services
             catch { }
         }
 
+        private static string CleanKey(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return "";
+            
+            // Remove Emojis and Special Characters
+            string cleaned = Regex.Replace(input, @"[^\w\s\-\(\)\/\.]", "").Trim();
+            
+            // Remove common UI status prefixes
+            cleaned = Regex.Replace(cleaned, @"^(ACTIVO|JUEGO|ESTÁNDAR|BÁSICO|MK\-I|MK\-II|MK\-III)\s+", "", RegexOptions.IgnoreCase);
+            
+            return cleaned.Trim();
+        }
+
         public static string? GetTutorText(string? keyOrTerm)
         {
             EnsureLoaded();
             if (string.IsNullOrWhiteSpace(keyOrTerm)) return null;
 
-            string trimmed = keyOrTerm.Trim();
+            string raw = keyOrTerm.Trim();
+            string cleaned = CleanKey(raw);
 
-            // 1. Direct match
-            if (_dictionary.TryGetValue(trimmed, out string? val) && !string.IsNullOrEmpty(val))
+            // 1. Direct match on Raw
+            if (_dictionary.TryGetValue(raw, out string? val) && IsRichContent(val)) return val;
+
+            // 2. Direct match on Cleaned
+            if (_dictionary.TryGetValue(cleaned, out val) && IsRichContent(val)) return val;
+
+            // 3. Synonym / Bilingual match
+            if (Synonyms.TryGetValue(cleaned, out string? synonymKey) || Synonyms.TryGetValue(raw, out synonymKey))
             {
-                return val;
+                if (_dictionary.TryGetValue(synonymKey, out val) && IsRichContent(val)) return val;
             }
 
-            // 2. Case insensitive match
+            // 4. Case-insensitive dictionary search
             foreach (var kvp in _dictionary)
             {
-                if (string.Equals(kvp.Key, trimmed, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(kvp.Key, cleaned, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(kvp.Key, raw, StringComparison.OrdinalIgnoreCase))
                 {
-                    return kvp.Value;
+                    if (IsRichContent(kvp.Value)) return kvp.Value;
                 }
             }
 
-            // 3. Substring match for compound names
+            // 5. Keyword & Component Category Fallback Matching
+            if (ContainsWord(raw, "Fighter") || ContainsWord(raw, "Vástago") || ContainsWord(raw, "Pod Bay"))
+            {
+                if (_dictionary.TryGetValue("Fighter Pod Bay", out val)) return val;
+            }
+            if (ContainsWord(raw, "Academia") || ContainsWord(raw, "Academy"))
+            {
+                if (_dictionary.TryGetValue("Academia Militar", out val)) return val;
+            }
+            if (ContainsWord(raw, "Refinería") || ContainsWord(raw, "Refinery"))
+            {
+                if (_dictionary.TryGetValue("Refinería de Combustible", out val)) return val;
+            }
+            if (ContainsWord(raw, "Construcción") || ContainsWord(raw, "Construction"))
+            {
+                if (_dictionary.TryGetValue("Fábrica de Construcción", out val)) return val;
+            }
+            if (ContainsWord(raw, "Financiero") || ContainsWord(raw, "Financial"))
+            {
+                if (_dictionary.TryGetValue("Centro Financiero", out val)) return val;
+            }
+            if (ContainsWord(raw, "Laboratorio") || ContainsWord(raw, "Research Facility"))
+            {
+                if (_dictionary.TryGetValue("Laboratorio de Investigación", out val)) return val;
+            }
+            if (ContainsWord(raw, "Infraestructura") || ContainsWord(raw, "Infrastructure"))
+            {
+                if (_dictionary.TryGetValue("Infraestructura Poblacional", out val)) return val;
+            }
+            if (ContainsWord(raw, "Hardening") || ContainsWord(raw, "Endurecimiento"))
+            {
+                if (_dictionary.TryGetValue("Electronic Hardening", out val)) return val;
+            }
+            if (ContainsWord(raw, "ECCM") || ContainsWord(raw, "Contra-contramedidas"))
+            {
+                if (_dictionary.TryGetValue("Electronic Counter-countermeasures", out val)) return val;
+            }
+            if (ContainsWord(raw, "Laser") || ContainsWord(raw, "Láser"))
+            {
+                if (_dictionary.TryGetValue("Laser", out val)) return val;
+            }
+            if (ContainsWord(raw, "Shield") || ContainsWord(raw, "Escudo"))
+            {
+                if (_dictionary.TryGetValue("Shield Generator", out val)) return val;
+            }
+            if (ContainsWord(raw, "Active") && (ContainsWord(raw, "Sensor") || ContainsWord(raw, "Radar")))
+            {
+                if (_dictionary.TryGetValue("Active Search Sensor", out val)) return val;
+            }
+            if (ContainsWord(raw, "Thermal") || ContainsWord(raw, "Térmico"))
+            {
+                if (_dictionary.TryGetValue("Thermal Sensor", out val)) return val;
+            }
+            if (ContainsWord(raw, "EM Sensor") || ContainsWord(raw, "Electromagnético"))
+            {
+                if (_dictionary.TryGetValue("EM Sensor", out val)) return val;
+            }
+
+            // 6. Substring match for compound DB technology names
             foreach (var kvp in _dictionary)
             {
-                if (kvp.Key.Length > 3)
+                if (kvp.Key.Length > 4)
                 {
-                    if (trimmed.StartsWith(kvp.Key, StringComparison.OrdinalIgnoreCase) ||
-                        trimmed.Contains(kvp.Key, StringComparison.OrdinalIgnoreCase))
+                    if (cleaned.StartsWith(kvp.Key, StringComparison.OrdinalIgnoreCase) ||
+                        cleaned.Contains(kvp.Key, StringComparison.OrdinalIgnoreCase))
                     {
-                        return kvp.Value;
+                        if (IsRichContent(kvp.Value)) return kvp.Value;
                     }
                 }
             }
 
-            // 4. Fallback to TechDescriptionResolver
-            return TechDescriptionResolver.ResolveDescription(trimmed, "Tecnología");
+            // 7. Fallback to TechDescriptionResolver
+            return TechDescriptionResolver.ResolveDescription(cleaned, "Tecnología / Elemento Imperial");
+        }
+
+        private static bool IsRichContent(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return false;
+            // Rich content contains multi-line sections with headers like 📌 CONCEPTO
+            return text.Contains("CONCEPTO") || text.Length > 120;
+        }
+
+        private static bool ContainsWord(string source, string target)
+        {
+            if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(target)) return false;
+            return source.IndexOf(target, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         public static ToolTip? CreateTutorToolTip(string? keyOrTerm, string? customTitle = null)
@@ -165,7 +292,9 @@ namespace AuroraDesignSuite.Services
             string? bodyText = GetTutorText(keyOrTerm);
             if (string.IsNullOrEmpty(bodyText)) return null;
 
-            string cleanKey = (keyOrTerm ?? "").Trim();
+            string cleanKey = CleanKey(keyOrTerm ?? "");
+            if (string.IsNullOrEmpty(cleanKey)) cleanKey = keyOrTerm ?? "";
+
             string title = !string.IsNullOrEmpty(customTitle) ? customTitle : ("💡 TUTOR IMPERIAL: " + cleanKey);
 
             ToolTip toolTip = new ToolTip

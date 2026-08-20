@@ -36,7 +36,7 @@
             <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Margin="0,0,0,4" Padding="10">
                 <DockPanel>
                     <TextBlock DockPanel.Dock="Top" Text="🏗️ INSTALACIONES INDUSTRIALES Y FÁBRICAS ACTIVAS EN TU IMPERIO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                    <DataGrid x:Name="DgInstallations" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Instalaciones planetarias reales vs objetivos recomendados para tu población imperial.">
+                    <DataGrid x:Name="DgInstallations" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Instalación Industrial" Binding="{Binding InstallationName}" Width="200"/>
                             <DataGridTextColumn Header="Cantidad Actual" Binding="{Binding AmountDisplay}" Width="130"/>
@@ -61,7 +61,7 @@
             <Border Grid.Row="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Margin="0,4,0,6" Padding="10">
                 <DockPanel>
                     <TextBlock DockPanel.Dock="Top" Text="⚡ PROYECTOS Y ÓRDENES INDUSTRIALES EN CURSO (CON FECHA ESTIMADA DE FINALIZACIÓN)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                    <DataGrid x:Name="DgIndustrialProjects" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Proyectos de construcción industrial en curso con fecha estimada de finalización calculada.">
+                    <DataGrid x:Name="DgIndustrialProjects" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Proyecto / Construcción" Binding="{Binding Description}" Width="220"/>
                             <DataGridTextColumn Header="Cantidad" Binding="{Binding AmountDisplay}" Width="110"/>

@@ -43,7 +43,7 @@
                         </StackPanel>
                     </DockPanel>
 
-                    <DataGrid x:Name="DgResearchProjects" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgResearchProjects_SelectionChanged" ToolTip="Proyectos científicos en curso en tus instalaciones imperiales. Utiliza los botones de la derecha para sumar o restar laboratorios en tiempo real.">
+                    <DataGrid x:Name="DgResearchProjects" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgResearchProjects_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Tecnología en Desarrollo" Binding="{Binding TechName}" Width="190"/>
                             <DataGridTextColumn Header="Labs" Binding="{Binding FacilitiesCount}" Width="50"/>
@@ -111,7 +111,7 @@
                     </DockPanel>
 
                     <!-- DataGrid fills 100% remaining vertical space -->
-                    <DataGrid x:Name="DgTechTree" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgTechTree_SelectionChanged" VerticalAlignment="Stretch" ToolTip="Catálogo completo de tecnologías disponibles para investigar en tu imperio. Haz clic en una para asignarla.">
+                    <DataGrid x:Name="DgTechTree" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgTechTree_SelectionChanged" VerticalAlignment="Stretch">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Nombre Tecnología" Binding="{Binding TechName}" Width="*"/>
                             <DataGridTextColumn Header="Categoría Científica" Binding="{Binding CategoryName}" Width="190"/>

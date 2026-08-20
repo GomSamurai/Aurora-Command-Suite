@@ -99,19 +99,19 @@
                             <StackPanel x:Name="PnlSubTechControls">
                                 <!-- Sub Tech 1 -->
                                 <TextBlock x:Name="LblSubTech1" Text="Tecnología Base Investigada:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <ComboBox x:Name="CmbSubTech1" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4" ToolTip="Tecnologías base investigadas por tu imperio en esta categoría (extraídas en vivo de FCT_RaceTech)."/>
+                                <ComboBox x:Name="CmbSubTech1" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4"/>
 
                                 <!-- Sub Tech 2 -->
                                 <TextBlock x:Name="LblSubTech2" Text="Eficiencia / Consumo de Combustible:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <ComboBox x:Name="CmbSubTech2" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4" ToolTip="Nivel tecnológico de eficiencia operativa investigado."/>
+                                <ComboBox x:Name="CmbSubTech2" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4"/>
 
                                 <!-- Sub Tech 3 -->
                                 <TextBlock x:Name="LblSubTech3" Text="Reducción de Firma Térmica / Blindaje:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <ComboBox x:Name="CmbSubTech3" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4" ToolTip="Aislamiento térmico y capas protectoras disponibles."/>
+                                <ComboBox x:Name="CmbSubTech3" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4"/>
 
                                 <!-- Sub Tech 4 -->
                                 <TextBlock x:Name="LblSubTech4" Text="Montaje Específico / Tipo de Cañón:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2" Visibility="Collapsed"/>
-                                <ComboBox x:Name="CmbSubTech4" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4" Visibility="Collapsed" ToolTip="Montajes especiales (Montaje Espinal, Reducido para Cazas, Torreta)."/>
+                                <ComboBox x:Name="CmbSubTech4" SelectionChanged="OnParamChanged" Margin="0,0,0,10" Padding="6,4" Visibility="Collapsed"/>
                             </StackPanel>
 
                             <!-- PARAMETER SLIDERS -->
@@ -327,7 +327,7 @@
 
                 <!-- Catalog DataGrid -->
                 <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
-                    <DataGrid x:Name="DgProjectCatalog" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Proyectos de investigación y componentes personalizados registrados en AuroraDB.db y guardados en la app.">
+                    <DataGrid x:Name="DgProjectCatalog" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Origen" Binding="{Binding SourceBadge}" Width="150"/>
                             <DataGridTextColumn Header="Nombre del Proyecto / Componente" Binding="{Binding Name}" Width="280"/>

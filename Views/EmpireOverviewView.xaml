@@ -158,7 +158,7 @@
                         <TextBlock x:Name="LblTotalFactories" Text="Fábricas: 200" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </DockPanel>
 
-                    <DataGrid x:Name="DgInfrastructure" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Resumen detallado de todas las instalaciones industriales, mineras, científicas y defensivas en tus colonias.">
+                    <DataGrid x:Name="DgInfrastructure" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Instalación Industrial" Binding="{Binding Name}" Width="*"/>
                             <DataGridTextColumn Header="Cantidad" Binding="{Binding AmountDisplay}" Width="110"/>
@@ -176,7 +176,7 @@
                         <TextBlock x:Name="LblTotalFleetsCount" Text="Flotas: 5" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </DockPanel>
 
-                    <DataGrid x:Name="DgFleetsSummary" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Lista en tiempo real de todas las agrupaciones de combate navales y su preparación operativa.">
+                    <DataGrid x:Name="DgFleetsSummary" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Nombre de Flota" Binding="{Binding FleetName}" Width="*"/>
                             <DataGridTextColumn Header="Naves" Binding="{Binding ShipsDisplay}" Width="70"/>

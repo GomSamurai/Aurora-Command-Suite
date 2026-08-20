@@ -915,6 +915,13 @@ namespace AuroraDesignSuite.Views
             LblFailureRate.Text = $"{CurrentDesign.AnnualFailureRate * 100.0:F1} %";
             LblMaintLife.Text = $"{CurrentDesign.MaintenanceLifeYears:F1} Años (MTBF: {CurrentDesign.MTBFMonths:F1} m)";
 
+            TutorTooltipService.AttachToolTip(LblTonnage, "HS - Hull Size (Tamaño de Casco)", "🚀 TUTOR NAVAL: Desplazamiento y HS");
+            TutorTooltipService.AttachToolTip(LblSpeed, "Speed", "⚡ TUTOR NAVAL: Velocidad de Navegación");
+            TutorTooltipService.AttachToolTip(LblSignatures, "TCS - Thermal & Cross Section (Firma Térmica)", "🛰️ TUTOR NAVAL: Firma Térmica y EM");
+            TutorTooltipService.AttachToolTip(LblMSP, "DCR - Damage Control Rating (Control de Daños)", "🛠️ TUTOR NAVAL: Repuestos MSP y Control de Daños");
+            TutorTooltipService.AttachToolTip(LblFuelCap, "Sorium", "⛽ TUTOR NAVAL: Tanques de Combustible LPH");
+            TutorTooltipService.AttachToolTip(LblCrew, "Population", "🏠 TUTOR NAVAL: Habitabilidad y Tripulación");
+
             var minList = new List<KeyValuePair<string, double>>
             {
                 new KeyValuePair<string, double>("Duranium", CurrentDesign.Minerals.Duranium),

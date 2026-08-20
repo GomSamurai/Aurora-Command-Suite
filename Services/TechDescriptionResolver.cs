@@ -6,6 +6,8 @@ namespace AuroraDesignSuite.Services
     {
         public static string ResolveDescription(string techName, string categoryName)
         {
+            if (string.IsNullOrWhiteSpace(techName)) return categoryName;
+
             string t = techName.ToLower();
 
             if (t.Contains("carronade"))

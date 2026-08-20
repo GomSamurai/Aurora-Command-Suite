@@ -235,15 +235,20 @@ namespace AuroraDesignSuite.Views
             {
                 LblTacticalTechName.Text = _selectedTech.TechName;
                 LblTacticalCategory.Text = $"Categoría: {_selectedTech.CategoryName}";
-                TxtTacticalDescription.Text = _selectedTech.Description;
+                TxtTacticalDescription.Text = TutorTooltipService.GetTutorText(_selectedTech.TechName);
                 LblTacticalCost.Text = $"{_selectedTech.DevelopCost:N0} RP";
+
+                // Attach rich WPF ToolTip dynamically to the tactical dossier text box!
+                TutorTooltipService.AttachToolTip(TxtTacticalDescription, _selectedTech.TechName, "🔬 TUTOR I+D: " + _selectedTech.TechName);
             }
             else if (_selectedActiveProject != null)
             {
                 LblTacticalTechName.Text = $"[ACTIVO] {_selectedActiveProject.TechName}";
                 LblTacticalCategory.Text = $"Especialidad: {_selectedActiveProject.ScientistFieldDisplay}";
-                TxtTacticalDescription.Text = TechDescriptionResolver.ResolveDescription(_selectedActiveProject.TechName, _selectedActiveProject.ScientistFieldDisplay);
+                TxtTacticalDescription.Text = TutorTooltipService.GetTutorText(_selectedActiveProject.TechName);
                 LblTacticalCost.Text = $"{_selectedActiveProject.RPRequired:N0} RP ({_selectedActiveProject.ProgressDisplay})";
+
+                TutorTooltipService.AttachToolTip(TxtTacticalDescription, _selectedActiveProject.TechName, "🔬 TUTOR I+D: " + _selectedActiveProject.TechName);
             }
             else
             {
@@ -265,6 +270,8 @@ namespace AuroraDesignSuite.Views
                 LblDossierField.Text = string.IsNullOrWhiteSpace(scientist.FieldName) ? "General" : scientist.FieldName;
                 LblDossierBonus.Text = $"+{scientist.BonusPercent:F1}%";
                 LblDossierMaxLabs.Text = $"{scientist.MaxLabs} Labs Max (Admin Rating)";
+
+                TutorTooltipService.AttachToolTip(LblDossierScientistName, "Commanders", "🎖️ TUTOR CIENTÍFICO: " + scientist.Name);
 
                 // Adjust Slider Maximum to match scientist's real max labs capacity
                 if (SldLabs != null)

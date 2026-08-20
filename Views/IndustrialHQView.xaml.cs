@@ -34,6 +34,16 @@ namespace AuroraDesignSuite.Views
 
             RecalculateIndustrialTelemetry();
             RecalculateCalculator();
+            AttachTutorTooltips();
+        }
+
+        private void AttachTutorTooltips()
+        {
+            if (LblConstructionFactories != null) TutorTooltipService.AttachToolTip(LblConstructionFactories, "Construction Factory", "📊 TUTOR: Fábricas de Construcción");
+            if (LblOrdnanceFactories != null) TutorTooltipService.AttachToolTip(LblOrdnanceFactories, "Ordnance Factory", "📊 TUTOR: Fábricas de Misiles y Armas");
+            if (LblFuelRefineries != null) TutorTooltipService.AttachToolTip(LblFuelRefineries, "Fuel Refinery", "⛽ TUTOR: Refinerías de Sorium");
+            if (LblMiningCapacity != null) TutorTooltipService.AttachToolTip(LblMiningCapacity, "Mine", "⛏️ TUTOR: Minas e Instalaciones Extractivas");
+            if (LblAdviceConversion != null) TutorTooltipService.AttachToolTip(LblAdviceConversion, "Retooling", "💡 TUTOR: Plan de Conversión Industrial");
         }
 
         private void BtnNewIndustrialOrder_Click(object sender, RoutedEventArgs e)

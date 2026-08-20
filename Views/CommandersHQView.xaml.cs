@@ -155,6 +155,9 @@ namespace AuroraDesignSuite.Views
 
             IcDetailedBonuses.ItemsSource = cmdr.DetailedBonuses;
 
+            TutorTooltipService.AttachToolTip(LblDossierName, "Commanders", "🎖️ TUTOR DE COMANDANTE: " + cmdr.Name);
+            TutorTooltipService.AttachToolTip(LblDossierSeniority, "Commanders", "🎖️ TUTOR DE RANGO: Seniority Rating");
+
             // Custom calculator labels depending on role
             if (LblImpactInputLabel != null)
             {

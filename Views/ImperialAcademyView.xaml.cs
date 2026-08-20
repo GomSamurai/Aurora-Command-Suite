@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Controls;
+using Newtonsoft.Json;
 
 namespace AuroraDesignSuite.Views
 {
@@ -9,7 +11,8 @@ namespace AuroraDesignSuite.Views
     {
         public class CodexItem
         {
-            public string Title { get; set; } = string.Empty;
+            public string Key { get; set; } = string.Empty;
+            public string DisplayTitle { get; set; } = string.Empty;
             public string Category { get; set; } = string.Empty;
             public string Body { get; set; } = string.Empty;
         }
@@ -19,140 +22,546 @@ namespace AuroraDesignSuite.Views
         public ImperialAcademyView()
         {
             InitializeComponent();
-            LoadCodexDatabase();
-            FilterList("");
+            try
+            {
+                LoadCodexDatabase();
+                FilterList("", "🌟 Todas las Categorías");
+            }
+            catch (Exception ex)
+            {
+                if (LblArticleTitle != null) LblArticleTitle.Text = "Academia Imperial Aurora 4X";
+                if (LblArticleCategory != null) LblArticleCategory.Text = "🎓 Enciclopedia Imperial";
+                if (TxtArticleBody != null) TxtArticleBody.Text = "Error al cargar la base de datos de lecciones: " + ex.Message;
+            }
         }
 
         private void LoadCodexDatabase()
         {
-            _allItems = new List<CodexItem>
+            _allItems = new List<CodexItem>();
+
+            // --------------------------------------------------------------------
+            // 🎓 MASTER TUTORIAL CURRICULUM: 15 DETAILED COMPREHENSIVE LESSONS
+            // --------------------------------------------------------------------
+
+            _allItems.Add(new CodexItem
             {
-                new CodexItem
+                Key = "Lección 1: Primeros Pasos en Sol & Conversión TN",
+                DisplayTitle = "🎓 Lección 1: Primeros Pasos en Sol & Conversión TN",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "🎓 LECCIÓN 1: INICIO EN EL SISTEMA SOLAR, INTERFAZ Y CONVERSIÓN TRANS-NEWTONIANA\n" +
+                       "========================================================================================\n\n" +
+                       "Al iniciar una partida en el planeta Tierra (Sistema Sol), tu imperio comienza en la era convencional o en la aurora de la tecnología Trans-Newtoniana (TN). La Tierra cuenta con una población masiva, industrias convencionales y laboratorios de investigación iniciales.\n\n" +
+                       "1. COMPRENSIÓN DEL TIEMPO E INCREMENTOS TÁCTICOS:\n" +
+                       "   • El tiempo en Aurora 4X avanza mediante incrementos manuales (5 Segundos a 1 Año).\n" +
+                       "   • Para tiempo de paz y desarrollo industrial, utiliza incrementos de 5 Días o 30 Días.\n" +
+                       "   • En situaciones de combate espacial o aproximación de misiles, reduce el incremento a 5 Segundos o Sub-Pulso para no perder el control táctico.\n\n" +
+                       "2. PLAN DE CONVERSIÓN INDUSTRIAL (VENTANA DE ECONOMÍA):\n" +
+                       "   • Las Fábricas Convencionales producen a un rendimiento muy bajo. Tu prioridad absoluta es convertirlas a Fábricas de Construcción (Construction Factories).\n" +
+                       "   • Ve a la pestaña 'Industria' en FormEconomics, selecciona 'Convert Conventional Factory' y asigna el 100% de la capacidad de construcción inicial.\n" +
+                       "   • Costo de conversión: 120 Puntos de Construcción (BP) por fábrica. Una vez convertidas, la eficiencia industrial de tu planeta se multiplicará por 10.\n\n" +
+                       "3. ASIGNACIÓN INICIAL DE INVESTIGACIÓN (I+D):\n" +
+                       "   • Dirígete a la pestaña 'Investigación'. Dispones de Laboratorios de Investigación (Research Facilities) y científicos especializados.\n" +
+                       "   • Asigna laboratorios a los siguientes proyectos clave inmediatos:\n" +
+                       "     a) Trans-Newtonian Technology (Desbloquea minerales TN y construcciones avanzadas).\n" +
+                       "     b) Conventional Engine / Nuclear Thermal Engine (Desbloquea motores espaciales).\n" +
+                       "     c) Geological Survey Sensors (Permite explorar minerales en otros planetas y asteroides).\n" +
+                       "     d) Mass Driver Efficiency (Mejora la logística de transferencia mineral).\n\n" +
+                       "💡 CONSEJO TÁCTICO IMPERIAL:\n" +
+                       "No construyas naves militares de inmediato. Dedica los primeros 2 a 3 años del juego exclusivamente a estabilizar la economía, acumular minerales y convertir tus industrias convencionales."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 2: Minería Trans-Newtoniana & Catapultas de Masa",
+                DisplayTitle = "⛏️ Lección 2: Minería Trans-Newtoniana & Catapultas de Masa",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "⛏️ LECCIÓN 2: LOS 11 MINERALES TRANS-NEWTONIANOS Y LOGÍSTICA DE CATAPULTAS DE MASA\n" +
+                       "========================================================================================\n\n" +
+                       "Los 11 minerales exóticos trans-newtonianos son el pilar de toda la civilización espacial en Aurora 4X. Sin un flujo constante de minerales, las fábricas se detendrán y los astilleros no podrán construir naves.\n\n" +
+                       "DESGLOSE DETALLADO DE LOS 11 MINERALES Y SUS USOS ESTRATÉGICOS:\n" +
+                       "1. Duranium: El mineral estructural primario. Se consume en CADA edificio, nave, misil y fortificación.\n" +
+                       "2. Sorium: Refinado exclusivo para producir combustible de hidrocarburo LPH para motores espaciales.\n" +
+                       "3. Neutronium: Material ultradenso para blindaje pesado de naves, fortificaciones y placas protectoras.\n" +
+                       "4. Gallicite: Utilizado en motores navales de alta velocidad, propulsores de misiles y componentes mecánicos.\n" +
+                       "5. Uridium: Utilizado en sensores pasivos térmicos/EM, radares activos, ópticas y sistemas de puntería.\n" +
+                       "6. Corundium: Componente crítico de armas láser, cañones de partículas y lentes energéticas.\n" +
+                       "7. Boronide: Utilizado en escudos de fuerza energéticos y sistemas de habitabilidad colonial.\n" +
+                       "8. Mercassium: Se consume en laboratorios de I+D, reactores de potencia y sistemas de investigación.\n" +
+                       "9. Vendarite: Elemento esencial para la construcción de refinerías, astilleros e industria pesada.\n" +
+                       "10. Tritium: Componente primordial de cabezas de guerra de misiles y cargas explosivas.\n" +
+                       "11. Tritanium: Aleación para estructuras avanzadas de misiles, tubos lanzadores y torretas.\n\n" +
+                       "PROPIEDADES DE UN YACIMIENTO MINERAL:\n" +
+                       "• Cantidad (Toneladas): Reserva total de mineral presente en el cuerpo celeste.\n" +
+                       "• Accesibilidad (0.1 a 1.0): Mide la facilidad de extracción. Una accesibilidad de 1.0 produce el 100% por mina/año. Una accesibilidad de 0.2 produce solo el 20%.\n\n" +
+                       "LOGÍSTICA DE CATAPULTAS DE MASA (MASS DRIVERS):\n" +
+                       "• Las Catapultas de Masa permiten enviar minerales extraídos en asteroides o lunas directamente hacia la Tierra sin gastar naves de carga.\n" +
+                       "• CÓMO CONFIGURARLAS:\n" +
+                       "  1. Construye una Catapulta de Masa en la Tierra y despliega otra en el asteroide minero (ej. Luna o Ceres).\n" +
+                       "  2. En la ventana de Economía del asteroide, selecciona 'Mass Driver Destination' y marca 'Tierra'.\n" +
+                       "  3. Asegúrate de que el planeta receptor (Tierra) tenga AL MENOS 1 Catapulta de Masa para capturar los paquetes de mineral.\n" +
+                       "⚠️ ADVERTENCIA DE SEGURIDAD:\n" +
+                       "Si lanzas minerales con una Catapulta de Masa hacia un planeta que NO tiene una Catapulta receptora, los paquetes bombardearán la superficie provocando destrucción industrial y muertes civiles."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 3: Ingeniería y Diseño de Naves Espaciales",
+                DisplayTitle = "🛠️ Lección 3: Ingeniería y Diseño de Naves Espaciales",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "🛠️ LECCIÓN 3: REGLAS FUNDAMENTALES DEL DISEÑADOR DE NAVES (FormClassDesign)\n" +
+                       "========================================================================================\n\n" +
+                       "El diseñador de naves (Class Design) es el corazón táctico de Aurora 4X. Aquí configuras cada sistema, motor, blindaje y sensor de tus buques espaciales.\n\n" +
+                       "CONCEPTOS Y UNIDADES DE MEDIDA CLAVE:\n" +
+                       "• Tamaño de Casco (HS - Hull Size): 1 HS equivale exactamente a 50 toneladas métricas de desplazamiento.\n" +
+                       "• Velocidad Naval: Calculada como (Potencia Total de Motores / Desplazamiento Total en HS) * 1,000 km/s.\n" +
+                       "• Firma Térmica (TCS - Thermal Cross Section): Visibilidad de la nave ante radares enemigos. A mayor tamaño y potencia de motor, mayor es la firma TCS.\n\n" +
+                       "DISTINCIÓN FUNDAMENTAL: MOTORES COMERCIALES VS MILITARES:\n" +
+                       "1. MOTORES COMERCIALES:\n" +
+                       "   • Requisitos: Tamaño de motor >= 25 HS y multiplicador de potencia <= 50%.\n" +
+                       "   • Ventajas: NUNCA sufren averías mecánicas por mantenimiento. No requieren pañoles MSP.\n" +
+                       "   • Uso: Cargueros, Colonizadores, Naves Tanque, Mineros Orbitales, Estaciones.\n\n" +
+                       "2. MOTORES MILITARES:\n" +
+                       "   • Permiten multiplicadores de potencia del 100% al 300% para lograr velocidades extremas.\n" +
+                       "   • Sufren desgaste mecánico y fallos en travesías largas. Requieren Pañoles de Mantenimiento (MSP) y Equipos de Control de Daños (DCR).\n\n" +
+                       "PASOS PARA CREAR UNA CLASE DE NAVE:\n" +
+                       "1. Abre FormClassDesign y haz clic en 'New Class'. Asigna un nombre y rol (ej. 'Clase Escolta Sol - Frigata').\n" +
+                       "2. Añade Motores en la pestaña de componentes.\n" +
+                       "3. Añade Sensores de puente, Puente de Mando (Bridge) y Pañoles de Mantenimiento.\n" +
+                       "4. Asigna el grosor del blindaje (Armor Layers). El blindaje se dispone en filas y columnas protegiendo los sistemas internos.\n" +
+                       "5. Revisa que el indicador de 'Commercial' o 'Military' coincida con el propósito proyectado de la nave."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 4: Autonomía, Logística de Combustible y Cadena de Suministro",
+                DisplayTitle = "⛽ Lección 4: Autonomía, Logística de Combustible y Cadena de Suministro",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "⛽ LECCIÓN 4: RESERVAS DE COMBUSTIBLE, AUTONOMÍA Y RED DE SUMINISTRO\n" +
+                       "========================================================================================\n\n" +
+                       "Sin combustible, tus flotas quedan a la deriva e indefensas en el vacío del espacio. La gestión del combustible determina el radio operativo de tus escuadrones.\n\n" +
+                       "1. REFINADO DE SORIUM:\n" +
+                       "   • El mineral Sorium extraído en las colonias debe ser procesado en Refinerías de Fuel (Fuel Refineries).\n" +
+                       "   • Rendimiento Base: Cada refinería produce 200,000 litros de combustible hidrocarburo LPH por año.\n" +
+                       "   • Mantén refinerías activas en tu colonia principal y en yacimientos de Sorium ricos.\n\n" +
+                       "2. CÁLCULO DE AUTONOMÍA Y CONSUMO:\n" +
+                       "   • La autonomía en kilómetros se calcula dividiendo la capacidad total de tanques por el consumo de litros por hora a máxima velocidad.\n" +
+                       "   • Diseña naves militares con una autonomía de al menos 20,000 a 50,000 millones de kilómetros para operar entre sistemas vecinos.\n\n" +
+                       "3. LOGÍSTICA DE NAVES TANQUE (TANKERS):\n" +
+                       "   • Añade el componente 'Refuelling System' o 'Refuelling Hub' a buques comerciales grandes para convertirlos en Naves Tanque (Tankers).\n" +
+                       "   • Las Naves Tanque pueden acompañar a la flota de combate o permanecer desplegadas en Puntos de Salto clave.\n" +
+                       "   • En la Ventana de Flotas, usa la orden 'Refuel From Target' o 'Refuel Selected Fleet' para transferir combustible en espacio profundo."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 5: Doctrina de Combate I - Misiles de Largo Alcance",
+                DisplayTitle = "🚀 Lección 5: Doctrina de Combate I - Misiles de Largo Alcance",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "🚀 LECCIÓN 5: DOCTRINA ESPACIAL DE MISILES Y DISPARO A LARGA DISTANCIA\n" +
+                       "========================================================================================\n\n" +
+                       "Los misiles permiten atacar al enemigo a distancias de decenas de millones de kilómetros, destruyendo blancos antes de que puedan responder.\n\n" +
+                       "COMPONENTES DE UN SISTEMA DE MISILES:\n" +
+                       "1. El Misil (Diseñado en la ventana de Missile Design):\n" +
+                       "   • Cabeza de Guerra (Warhead): Determina la profundidad de penetración en el blindaje enemigo (Penetración = Raíz de Potencia).\n" +
+                       "   • Motor del Misil: Determina la velocidad en km/s y el alcance máximo.\n" +
+                       "   • Sensores integrados (Opcional): Permiten que el misil busque un objetivo secundario si el blanco principal es destruido.\n\n" +
+                       "2. El Control de Tiro de Misiles (MFC - Missile Fire Control):\n" +
+                       "   • Sistema de puntería en la nave lanzadora. Determina el alcance máximo de guiado y el número de salvas simultáneas.\n\n" +
+                       "3. Los Lanzadores (Launchers) y Pañoles (Magazines):\n" +
+                       "   • Tubos Lanzadores (Standard Launchers) vs Lanzadores en Caja (Box Launchers - de 1 solo uso, ultraligeros para cazas).\n" +
+                       "   • Los Pañoles (Magazines) almacenan la reserva de misiles a bordo y deben estar protegidos con blindaje contra explosiones secundarias.\n\n" +
+                       "FÓRMULA DE PROBABILIDAD DE IMPACTO DE MISIL:\n" +
+                       "   Hit% = Min(100%, Velocidad Misil / Velocidad Blanco)\n" +
+                       "Si tu misil viaja a 30,000 km/s y el crucero enemigo a 10,000 km/s, la probabilidad de impacto es del 100%."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 6: Doctrina de Combate II - Armas de Energía y Defensa de Punto",
+                DisplayTitle = "⚡ Lección 6: Doctrina de Combate II - Armas de Energía y Defensa de Punto",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "⚡ LECCIÓN 6: ARMAS DE ENERGÍA DIRECTA, REACTORES Y DEFENSA ANTIMISIL (POINT DEFENSE)\n" +
+                       "========================================================================================\n\n" +
+                       "Las armas de energía directa (Láseres, Cañones Gauss, Cañones de Partículas) no consumen munición, lo que permite travesías de combate prolongadas sin depender de líneas de reabastecimiento.\n\n" +
+                       "1. TIPOS DE ARMAS DE ENERGÍA Y SUS ROLES:\n" +
+                       "   • Láseres (Lasers): Gran penetración de blindaje a corta y media distancia. Disminuyen su daño con la distancia.\n" +
+                       "   • Cañones Gauss (Gauss Cannons): Disparan múltiples proyectiles por turno. Son la mejor arma para Defensa de Punto (Point Defense) contra misiles entrantes.\n" +
+                       "   • Cañones de Partículas (Particle Beams): Daño constante e ignoran la atenuación por distancia. Ideales para francotiradores navales.\n" +
+                       "   • Carronadas de Plasma (Plasma Carronades): Daño masivo a bocajarro pero se disipan rápidamente.\n" +
+                       "   • Cañones de Microondas (HPM): Destruyen componentes electrónicos y sensores enemigos sin dañar el casco.\n\n" +
+                       "2. REQUERIMIENTOS ENERGÉTICOS:\n" +
+                       "   • Las armas de energía requieren Reactores de Potencia (Reactors) y Recarga de Capacitores (Capacitor Recharge rate).\n" +
+                       "   • Asegúrate de que la producción total de EU (Energy Units) de tus reactores sea igual o mayor que el consumo de disparo por turno de tus armas.\n\n" +
+                       "3. SISTEMA DE DEFENSA DE PUNTO (POINT DEFENSE / PD):\n" +
+                       "   • Configura tus cañones Gauss o torretas láser en modo 'Point Defense (Area)' o 'Point Defense (Self)' en el control de tiro (BFC).\n" +
+                       "   • Cuando una salva de misiles enemigos se aproxime, tus torretas dispararán automáticamente durante la fase de intercepción destruyendo los misiles antes del impacto."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 7: Terraformación Colonial y Modificación Atmosférica",
+                DisplayTitle = "🌍 Lección 7: Terraformación Colonial y Modificación Atmosférica",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "🌍 LECCIÓN 7: TERRAFORMACIÓN, MODIFICACIÓN ATMOSFÉRICA Y HÁBITAT HABITABLE\n" +
+                       "========================================================================================\n\n" +
+                       "La terraformación transforma planetas estériles y helados en mundos verdes autosostenibles. Al reducir el Costo Colonial (Colony Cost) a 0.00, eliminas la necesidad de enviar Infraestructura Poblacional.\n\n" +
+                       "FACTORES DEL COSTO COLONIAL (COLONY COST):\n" +
+                       "1. Presión de Oxígeno (O2): Debe estar entre 0.10 atm y 0.30 atm. Menos de 0.10 provoca asfixia; más de 0.30 es tóxico.\n" +
+                       "2. Temperatura Planetaria: Debe estar dentro del rango de tolerancia biológica de la especie (ej. -10°C a 35°C para humanos).\n" +
+                       "3. Presión Atmosférica Total: La presión combinada no debe superar los límites respirables de la especie (ej. max 4.0 atm).\n" +
+                       "4. Gases Tóxicos: Gases como el Cloro, Amoníaco, Metano o Dióxido de Azufre deben ser completamente eliminados de la atmósfera.\n\n" +
+                       "ESTRATEGIA PASO A PASO PARA TERRAFORMAR UN PLANETA:\n" +
+                       "1. Despliega Instalaciones de Terraformación (Terraforming Stations) o Barcos Terraformadores en la órbita del planeta objetivo (ej. Marte).\n" +
+                       "2. En la pestaña 'Environment' de FormEconomics, selecciona el gas a inyectar:\n" +
+                       "   • Para subir la temperatura: Inyecta Gas de Invernadero Seguro (A-GHG - Safe Greenhouse Gas).\n" +
+                       "   • Para bajar la temperatura: Inyecta Gas Anti-Invernadero (Anti-GHG).\n" +
+                       "   • Para habilitar respiración: Inyecta Oxígeno (O2) hasta alcanzar 0.15 atm.\n" +
+                       "3. Monitoriza anualmente el avance en la barra de presión parcial."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 8: Astilleros Navales y Re-equipamiento Industrial",
+                DisplayTitle = "🏗️ Lección 8: Astilleros Navales y Re-equipamiento Industrial",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "🏗️ LECCIÓN 8: ASTILLEROS NAVALES, GRADAS Y RE-EQUIPAMIENTO INDUSTRIAL (RETOOLING)\n" +
+                       "========================================================================================\n\n" +
+                       "Los astilleros son las únicas instalaciones industriales capaces de construir naves espaciales. Gestionar su expansión y re-equipamiento es vital para mantener la supremacía naval.\n\n" +
+                       "TIPOS DE ASTILLEROS:\n" +
+                       "1. Astilleros Militares (Naval Shipyards): Construyen buques de guerra militares de cualquier tamaño. Su expansión requiere trabajadores y minerales pesados.\n" +
+                       "2. Astilleros Comerciales (Commercial Shipyards): Construyen únicamente naves comerciales. Tienen un costo de expansión mucho menor y crecen en bloques de 10,000 toneladas.\n\n" +
+                       "OPERACIONES INDUSTRIALES DE ASTILLERO:\n" +
+                       "• Expand Shipyard Capacity: Aumenta el tonelaje máximo que puede construir el astillero (ej. de 5,000 a 10,000 toneladas).\n" +
+                       "• Add Slipway: Añade una nueva grada de construcción al astillero, permitiendo fabricar múltiples naves simultáneamente.\n" +
+                       "• Retool Shipyard: Reconfigura el astillero para fabricar una clase de nave diferente.\n\n" +
+                       "💡 ESTRATEGIA DE RETOOLING DE CLASES DERIVADAS:\n" +
+                       "Si reequipas un astillero para fabricar una clase variante de una nave previa (ej. 'Frigata Mk2' derivada de 'Frigata Mk1'), el tiempo y costo de retooling se reduce hasta un 80%. Mantén diseños estandarizados."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 9: Mando y Control: Comandantes, Oficiales y Asignación",
+                DisplayTitle = "🎖️ Lección 9: Mando y Control: Comandantes, Oficiales y Asignación",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "🎖️ LECCIÓN 9: OFICIALES IMPERIALES, GOBERNADORES, CIENTÍFICOS Y BONIFICACIONES DE MANDO\n" +
+                       "========================================================================================\n\n" +
+                       "Los oficiales y comandantes aportan bonificaciones críticas que potencian la velocidad industrial, la efectividad en combate y el rendimiento de la investigación.\n\n" +
+                       "CATEGORÍAS DE OFICIALES Y SUS ATRIBUTOS CLAVE:\n" +
+                       "1. Gobernadores Planetarios (Planetary Governors):\n" +
+                       "   • Aportan bonificaciones en Producción Industrial, Minería, Riqueza, Terraformación y Reducción de Malestar.\n" +
+                       "   • Asigna tus mejores gobernadores industriales a la Tierra y mundos mineros clave.\n\n" +
+                       "2. Comandantes de Nave y Flota (Ship Captains & Fleet Commanders):\n" +
+                       "   • Bonificaciones en Velocidad de Maniobra, Puntería de Armas, Eficiencia de Combustible y Moral de Tripulación.\n" +
+                       "   • Los Comandantes de Flota aplican un porcentaje de su bonificación a TODAS las naves del grupo táctico.\n\n" +
+                       "3. Científicos (Scientists):\n" +
+                       "   • Cada científico pertenece a una rama del conocimiento (Propulsión, Energía, Sensores, Biología, etc.).\n" +
+                       "   • Si la especialidad del científico coincide con el proyecto investigado, su bonificación (10% a 50%) acelera drásticamente el descubrimiento."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 10: Sensores, Detección Pasiva, Radares y Sigilo",
+                DisplayTitle = "🛰️ Lección 10: Sensores, Detección Pasiva, Radares y Sigilo",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "🛰️ LECCIÓN 10: SENSORES ESPACIALES, DETECCIÓN TÁCTICA Y TÉCNICAS DE SIGILO (STEALTH)\n" +
+                       "========================================================================================\n\n" +
+                       "En el espacio, la información es la mayor arma. Quien detecta primero al enemigo dicta las condiciones de la batalla.\n\n" +
+                       "1. SENSORES PASIVOS (TÉRMICOS Y ELECTROMAGNÉTICOS):\n" +
+                       "   • Sensores Térmicos (TH): Detectan la radiación infrarroja de motores e industrias sin revelar tu propia posición.\n" +
+                       "   • Sensores Electromagnéticos (EM): Detectan escudos de fuerza activos, reactores y emisiones de radar enemigas.\n\n" +
+                       "2. SENSORES ACTIVOS (RADARES):\n" +
+                       "   • Emiten pulsos de radar para localizar naves y medir sus coordenadas exactas.\n" +
+                       "   • Resolución de Radar: Define el tamaño de blanco optimizado.\n" +
+                       "     - Resolución 1: Detecta cazas y misiles pequeños.\n" +
+                       "     - Resolución 100: Detecta naves capitales y cruceros a distancias gigantescas.\n" +
+                       "   ⚠️ REGLA DE ORO DE RADAR: Al encender tu radar activo, tu posición queda delatada a todos los sensores pasivos enemigos en el sistema.\n\n" +
+                       "3. TECNOLOGÍA DE SIGILO (STEALTH):\n" +
+                       "   • Recubrimientos Térmicos (Thermal Reduction): Reducen las emisiones de motor.\n" +
+                       "   • Recubrimientos Anti-Radar (Stealth Coatings): Reducen el perfil TCS de la nave facilitando emboscadas."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 11: Fuerzas Terrestres, Formaciones y Combate Planetario",
+                DisplayTitle = "🪖 Lección 11: Fuerzas Terrestres, Formaciones y Combate Planetario",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "🪖 LECCIÓN 11: INVASIONES PLANETARIAS, FORMACIONES TERRESTRES Y BOMBARDEO ORBITAL\n" +
+                       "========================================================================================\n\n" +
+                       "Conquistar o defender un planeta requiere el despliegue de Fuerzas Terrestres organizadas en formaciones tácticas.\n\n" +
+                       "1. DISEÑO DE FORMACIONES TERRESTRES (FormGroundForce):\n" +
+                       "   • Combina Infantería de Marina, Blindados Pesados (TANKS), Artillería de Apoyo y Cañones Antiaéreos (AA).\n" +
+                       "   • Añade Elementos de Cuartel General (HQ) para otorgar bonificaciones de mando a la formación.\n\n" +
+                       "2. LOGÍSTICA DE TRANSPORTE Y DESEMBARCO:\n" +
+                       "   • Transportes de Tropas (Troop Transports): Llevan tropas entre sistemas.\n" +
+                       "   • Módulos de Desembarco Orbital (Drop Modules): Permiten lanzar unidades blindadas directamente sobre mundos enemigos bajo fuego hostil.\n\n" +
+                       "3. FASES DEL COMBATE TERRESTRE:\n" +
+                       "   • Las tropas defienden fortificaciones o avanzan en asalto frontal.\n" +
+                       "   • Apoyo Orbital: Las naves espaciales equipadas con láseres o carronadas en órbita pueden realizar Bombardeo Orbital sobre las posiciones enemigas."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 12: Gestión Financiera, Riqueza y Sector Civil",
+                DisplayTitle = "💵 Lección 12: Gestión Financiera, Riqueza y Sector Civil",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "💵 LECCIÓN 12: ECONOMÍA IMPERIAL, RIQUEZA, IMPUESTOS Y SECTOR CIVIL AUTÓNOMO\n" +
+                       "========================================================================================\n\n" +
+                       "La riqueza (Wealth) financia el pago de salarios, el mantenimiento naval y la investigación. Mantener un superávit financiero evita la bancarrota industrial.\n\n" +
+                       "FUENTES DE INGRESOS Y RIQUEZA:\n" +
+                       "1. Impuestos a Trabajadores Civiles: Proporcional a la población residente en mundos habitables.\n" +
+                       "2. Centros Financieros (Financial Centres): Edificios industriales dedicados exclusivamente a generar riqueza comercial.\n" +
+                       "3. Licencias y Tarifas Comerciales del Sector Civil.\n\n" +
+                       "EL SECTOR CIVIL AUTÓNOMO:\n" +
+                       "• Las Empresas Navieras Civiles (Civilian Shipping Lines) se crean de forma autónoma con el capital privado de tu imperio.\n" +
+                       "• Construyen sus propios cargueros civiles y barcos colonizadores, transportando colonos e infraestructura a tus nuevas colonias sin costo industrial para el estado."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 13: Exploración Galáctica, Motores de Salto y Puntos de Salto",
+                DisplayTitle = "🪐 Lección 13: Exploración Galáctica, Motores de Salto y Puntos de Salto",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "🪐 LECCIÓN 13: EXPLORACIÓN ESTELAR, PUNTOS DE SALTO Y PUERTAS GRAVITACIONALES\n" +
+                       "========================================================================================\n\n" +
+                       "El universo de Aurora 4X está interconectado mediante Puntos de Salto (Jump Points) gravitacionales que conducen a nuevos sistemas estelares.\n\n" +
+                       "1. EXPLORACIÓN GRAVITACIONAL Y GEOLÓGICA:\n" +
+                       "   • Equipa naves de exploración con Sensores Gravitacionales (Gravitational Survey Sensors) para cartografiar los Puntos de Salto de un sistema.\n" +
+                       "   • Equipa naves con Sensores Geológicos (Geological Survey Sensors) para analizar depósitos minerales en planetas desconocidos.\n\n" +
+                       "2. TRANSICIÓN DE SALTO ENTRE SISTEMAS:\n" +
+                       "   • Motores de Salto (Jump Drives): Permiten transitar Puntos de Salto. Un 'Jump Ship' puede guiar a una escuadra entera a través del salto.\n" +
+                       "   • Puertas de Salto (Jump Gates): Las naves 'Jump Gate Constructor' pueden construir una estructura permanente en el punto de salto, permitiendo que CUALQUIER nave transite sin necesidad de llevar motor de salto."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 14: Tácticas Avanzadas de Flota y Órdenes de Combate",
+                DisplayTitle = "⚔️ Lección 14: Tácticas Avanzadas de Flota y Órdenes de Combate",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "⚔️ LECCIÓN 14: ORGANIZACIÓN TÁCTICA DE FLOTAS, ORDENES Y CADENA DE COMANDO\n" +
+                       "========================================================================================\n\n" +
+                       "Una victoria naval depende de la coordinación precisa de múltiples naves especializadas operando en formación conjunta.\n\n" +
+                       "ORGANIZACIÓN EN LA VENTANA DE FLOTAS (FormNavalAdmin):\n" +
+                       "• Crea Fuerzas Tácticas (Task Forces) separando escuadrones de asalto, piquetes de radar y cargueros logísticos.\n" +
+                       "• Asigna la orden 'Follow Fleet' o 'Shadow' para mantener naves de apoyo detrás de la línea de frente.\n\n" +
+                       "TÁCTICA DE ATAQUE ALPHA STRIKE:\n" +
+                       "• Coordina la velocidad de movimiento y el alcance de disparo de tus destructores de misiles.\n" +
+                       "• Lanza salvas masivas concentradas sobre la nave capital enemiga para saturar su defensa de punto (Point Defense)."
+            });
+
+            _allItems.Add(new CodexItem
+            {
+                Key = "Lección 15: Razas No Jugadoras, Ruinas Antiguas y Modo Maestro",
+                DisplayTitle = "🌌 Lección 15: Razas No Jugadoras, Ruinas Antiguas y Modo Maestro",
+                Category = "🎓 Tutoriales & Lecciones",
+                Body = "========================================================================================\n" +
+                       "🌌 LECCIÓN 15: ENCUENTROS ALIENÍGENAS (NPR), RUINAS ANTI GUAS Y MODO SPACE MASTER\n" +
+                       "========================================================================================\n\n" +
+                       "En la frontera galáctica te encontrarás con civilizaciones alienígenas no jugadoras (NPR), vestigios de imperios extintos y amenazas celestes.\n\n" +
+                       "1. PRIMER CONTACTO Y PROTOCOLOS DIPLOMÁTICOS:\n" +
+                       "   • Al detectar naves desconocidas, se inicia el protocolo de Primer Contacto.\n" +
+                       "   • Puedes enviar barcos diplomáticos para establecer relaciones pacíficas o iniciar hostilidades.\n\n" +
+                       "2. RUINAS ANTI GUAS Y ARTEFACTOS PRECURSORES:\n" +
+                       "   • Al explorar planetas puedes descubrir Ruinas Antiguas.\n" +
+                       "   • Despliega Xenólogos y Tropas de Asalto Terrestre para investigar las ruinas y recuperar tecnologías avanzadas e instalaciones intactas.\n\n" +
+                       "3. MODO MAESTRO DEL ESPACIO (SPACE MASTER MODE / SM):\n" +
+                       "   • El modo SM permite modificar parámetros de la partida, crear imperios de prueba y depurar situaciones tácticas complejas."
+            });
+
+            // --------------------------------------------------------------------
+            // 2. LOAD JSON MASTER DICTIONARY FILE DYNAMICALLY (1,935+ GLOSSARY TERMS)
+            // --------------------------------------------------------------------
+            try
+            {
+                string[] searchPaths = new string[]
                 {
-                    Title = "🌌 Lección 1: Primeros Pasos en Sol",
-                    Category = "🎓 Tutorial Interactivo para Principiantes",
-                    Body = "Al comenzar en la Tierra (Sistema Sol), dispones de población civil, industrias convencionales y laboratorios.\n\n" +
-                           "PASOS RECOMENDADOS:\n" +
-                           "1. Convierte industrias convencionales a Fábricas de Construcción para multiplicar la producción x10.\n" +
-                           "2. Asigna científicos a proyectos de I+D (Trans-Newtonian Technology, Sensors, Engines).\n" +
-                           "3. Construye tu primera Catapulta de Masa (Mass Driver) para recibir minerales de otros cuerpos celestes."
-                },
-                new CodexItem
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config", "AuroraTooltipDictionary.json"),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AuroraTooltipDictionary.json"),
+                    "c:/VSCODE/AuroraDesignSuite/config/AuroraTooltipDictionary.json",
+                    "c:/VSCODE/Aurora271Full/Patches/AuroraSpanish/AuroraTooltipDictionary.json"
+                };
+
+                string jsonContent = null;
+                foreach (string p in searchPaths)
                 {
-                    Title = "⛏️ Lección 2: Minería Trans-Newtoniana",
-                    Category = "🎓 Tutorial Interactivo para Principiantes",
-                    Body = "Los 11 minerales exóticos son la sangre de tu imperio:\n" +
-                           "• Duranium: Estructura de edificios y cascos navales.\n" +
-                           "• Sorium: Refinado exclusivo para combustible espacial.\n" +
-                           "• Neutronium: Blindaje pesado de naves de combate.\n" +
-                           "• Gallicite: Motores y propulsión espacial.\n" +
-                           "• Uridium: Sensores, radares y sistemas ópticos.\n\n" +
-                           "CONSEJO TÁCTICO: Despliega Minas Automatizadas en asteroides y usa Mass Drivers orientados hacia la Tierra."
-                },
-                new CodexItem
-                {
-                    Title = "🛠️ Lección 3: Ingeniería Naval Básica",
-                    Category = "🎓 Tutorial Interactivo para Principiantes",
-                    Body = "Reglas fundamentales del Diseñador de Naves:\n" +
-                           "1. Tamaño de Casco (HS): 1 HS = 50 toneladas.\n" +
-                           "2. Motores Comerciales vs Militares: Motores comerciales (< 50% potencia por HS, tamaño > 25 HS) no sufren averías mecánicas.\n" +
-                           "3. Mantenimiento (MSP): Las naves militares sufren averías en travesías largas si no llevan pañoles MSP y suficientes DCR."
-                },
-                new CodexItem
-                {
-                    Title = "⛽ Lección 4: Autonomía y Logística de Combustible",
-                    Category = "🎓 Tutorial Interactivo para Principiantes",
-                    Body = "El combustible determina el radio de acción de tus flotas.\n" +
-                           "• El consumo depende directamente de la potencia del motor y la velocidad alcanzada.\n" +
-                           "• Construye Refinerías de Sorium en colonias con yacimientos de Sorium para garantizar reservas continuas."
-                },
-                new CodexItem
-                {
-                    Title = "🚀 Lección 5: Doctrina de Misiles vs Armas de Energía",
-                    Category = "🎓 Tutorial Interactivo para Principiantes",
-                    Body = "DOCTRINA DE MISILES:\n" +
-                           "• Alcance extremo (decenas de millones de km).\n" +
-                           "• Requiere pañoles de munición (Magazines) y fábricas de armamento.\n\n" +
-                           "DOCTRINA DE ENERGÍA (Láseres, Cañones Gauss, Plasma):\n" +
-                           "• Sin consumo de munición en combate.\n" +
-                           "• Requiere plantas de energía (Reactores) y recarga de capacitores."
-                },
-                new CodexItem
-                {
-                    Title = "🌍 Lección 6: Terraformación Colonial",
-                    Category = "🎓 Tutorial Interactivo para Principiantes",
-                    Body = "Reducir el Costo Colonial a 0.00 permite eliminar la necesidad de Infraestructura Poblacional.\n" +
-                           "1. Añade Oxígeno entre 0.10 y 0.30 atm.\n" +
-                           "2. Ajusta la temperatura inyectando gases de invernadero (GHG) o refrigerantes.\n" +
-                           "3. Mantén la presión total por debajo del límite respirable."
-                },
-                new CodexItem
-                {
-                    Title = "HS - Hull Size (Tamaño de Casco)",
-                    Category = "📖 Diccionario Códex Táctico",
-                    Body = "💡 TAMAÑO DE CASCO (HS):\nUnidad fundamental de desplazamiento en Aurora 4X. 1 HS equivale exactamente a 50 toneladas métricas.\n\n" +
-                           "• Cazas: < 10 HS (500 toneladas).\n" +
-                           "• Corbetas / Fragatas: 20 - 100 HS (1,000 - 5,000 toneladas).\n" +
-                           "• Destructores / Cruceros: 100 - 400 HS (5,000 - 20,000 toneladas).\n" +
-                           "• Acorazados / Cargueros Pesados: > 500 HS (25,000+ toneladas)."
-                },
-                new CodexItem
-                {
-                    Title = "TCS - Thermal & Cross Section (Firma Térmica)",
-                    Category = "📖 Diccionario Códex Táctico",
-                    Body = "💡 FIRMA TÉRMICA Y SECCIÓN EFICAZ (TCS):\nDetermina la visibilidad de tu nave ante los radares y sensores pasivos térmicos enemigos.\n\n" +
-                           "• A mayor tamaño y potencia de motores, mayor es la firma TCS.\n" +
-                           "• Componentes de sigilo (Stealth) reducen la firma TCS facilitando emboscadas."
-                },
-                new CodexItem
-                {
-                    Title = "DCR - Damage Control Rating (Control de Daños)",
-                    Category = "📖 Diccionario Códex Táctico",
-                    Body = "💡 PUNTUACIÓN DE CONTROL DE DAÑOS (DCR):\nCapacidad operativa de los equipos de control de averías a bordo.\n\n" +
-                           "• Un DCR elevado permite reparar múltiples sistemas destruidos simultáneamente durante el combate utilizando repuestos MSP."
-                },
-                new CodexItem
-                {
-                    Title = "Retooling (Re-equipamiento de Astillero)",
-                    Category = "📖 Diccionario Códex Táctico",
-                    Body = "💡 RE-EQUIPAMIENTO DE ASTILLERO (RETOOLING):\nProceso industrial mediante el cual un astillero reconfigura sus gradas para fabricar una nueva clase de nave.\n\n" +
-                           "• Si la nueva clase es un derivado o variante de la clase anterior, el costo y tiempo de retooling se reduce drásticamente."
+                    try
+                    {
+                        if (File.Exists(p))
+                        {
+                            jsonContent = File.ReadAllText(p);
+                            break;
+                        }
+                    }
+                    catch { }
                 }
-            };
+
+                if (!string.IsNullOrEmpty(jsonContent))
+                {
+                    var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonContent);
+                    if (dict != null)
+                    {
+                        foreach (var kvp in dict)
+                        {
+                            string key = kvp.Key.Trim();
+                            string val = kvp.Value.Trim();
+
+                            string cat = ClassifyCategory(key, val);
+                            string icon = ClassifyIcon(key, cat);
+
+                            _allItems.Add(new CodexItem
+                            {
+                                Key = key,
+                                DisplayTitle = icon + " " + key,
+                                Category = cat,
+                                Body = val
+                            });
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            if (LblTotalCount != null)
+            {
+                LblTotalCount.Text = string.Format("({0} Artículos)", _allItems.Count);
+            }
         }
 
-        private void FilterList(string query)
+        private string ClassifyCategory(string key, string body)
         {
-            query = (query ?? "").Trim().ToLower();
-            var filtered = string.IsNullOrEmpty(query)
-                ? _allItems
-                : _allItems.Where(x => x.Title.ToLower().Contains(query) || x.Category.ToLower().Contains(query) || x.Body.ToLower().Contains(query)).ToList();
+            string k = key.ToLower();
+            string b = body.ToLower();
 
-            LstCodexItems.ItemsSource = filtered;
-            if (filtered.Count > 0)
+            if (k.Contains("duranium") || k.Contains("sorium") || k.Contains("neutronium") || k.Contains("gallicite") ||
+                k.Contains("corundium") || k.Contains("uridium") || k.Contains("boronide") || k.Contains("mercassium") ||
+                k.Contains("vendarite") || k.Contains("tritium") || k.Contains("tritanium") || k.Contains("mineral"))
+            {
+                return "⛏️ Minerales & Recursos";
+            }
+
+            if (k.Contains("admin command") || k.Contains("commander") || k.Contains("rank") || k.Contains("governor") ||
+                k.Contains("bonus") || k.Contains("academy") || k.Contains("officer"))
+            {
+                return "🎖️ Comandantes & Oficiales";
+            }
+
+            if (k.Contains("fleet") || k.Contains("salvo") || k.Contains("missile") || k.Contains("combat") ||
+                k.Contains("target") || k.Contains("fire") || k.Contains("ordnance") || k.Contains("ammunition") ||
+                k.Contains("oob") || k.Contains("ship kills") || k.Contains("missile kills"))
+            {
+                return "⚓ Flotas, Combate & Misiles";
+            }
+
+            if (k.Contains("population") || k.Contains("colony") || k.Contains("worker") || k.Contains("industry") ||
+                k.Contains("factory") || k.Contains("mine") || k.Contains("refinery") || k.Contains("infrastructure") ||
+                k.Contains("wealth") || k.Contains("tax") || k.Contains("spaceport") || k.Contains("construction"))
+            {
+                return "📊 Economía, Industria & Colonias";
+            }
+
+            if (k.Contains("engine") || k.Contains("laser") || k.Contains("sensor") || k.Contains("reactor") ||
+                k.Contains("armor") || k.Contains("shield") || k.Contains("warhead") || k.Contains("turret") ||
+                k.Contains("speed") || k.Contains("thermal") || k.Contains("eccm") || b.Contains("fct_techsystem"))
+            {
+                return "🔬 Tecnologías e Investigaciones";
+            }
+
+            if (k.Contains("ship") || k.Contains("class") || k.Contains("hs") || k.Contains("tcs") ||
+                k.Contains("dcr") || k.Contains("msp") || k.Contains("retool") || k.Contains("overhaul") ||
+                k.Contains("hull") || k.Contains("shipyard"))
+            {
+                return "🚀 Naves, Cascos & Componentes";
+            }
+
+            return "📖 Glosario Táctico Imperial";
+        }
+
+        private string ClassifyIcon(string key, string category)
+        {
+            if (category.Contains("Tutoriales")) return "🎓";
+            if (category.Contains("Minerales")) return "⛏️";
+            if (category.Contains("Comandantes")) return "🎖️";
+            if (category.Contains("Flotas")) return "⚓";
+            if (category.Contains("Economía")) return "📊";
+            if (category.Contains("Tecnologías")) return "🔬";
+            if (category.Contains("Naves")) return "🚀";
+
+            return "💡";
+        }
+
+        private void FilterList(string query, string category)
+        {
+            if (_allItems == null || LstCodexItems == null || LblTotalCount == null) return;
+
+            query = (query ?? "").Trim().ToLower();
+            category = (category ?? "").Trim();
+
+            var filtered = _allItems.AsEnumerable();
+
+            if (!string.IsNullOrEmpty(category) && !category.Contains("Todas"))
+            {
+                filtered = filtered.Where(x => x.Category.Equals(category, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(query))
+            {
+                filtered = filtered.Where(x => x.Key.ToLower().Contains(query) ||
+                                               x.DisplayTitle.ToLower().Contains(query) ||
+                                               x.Category.ToLower().Contains(query) ||
+                                               x.Body.ToLower().Contains(query));
+            }
+
+            var list = filtered.ToList();
+            LstCodexItems.ItemsSource = list;
+            LblTotalCount.Text = string.Format("({0} Artículos)", list.Count);
+
+            if (list.Count > 0)
             {
                 LstCodexItems.SelectedIndex = 0;
             }
             else
             {
-                LblArticleTitle.Text = "Sin Resultados";
-                LblArticleCategory.Text = "🔍 Búsqueda";
-                LblArticleBody.Text = "No se encontraron lecciones o términos que coincidan con la búsqueda.";
+                if (LblArticleTitle != null) LblArticleTitle.Text = "Sin Resultados";
+                if (LblArticleCategory != null) LblArticleCategory.Text = "🔍 Búsqueda";
+                if (TxtArticleBody != null) TxtArticleBody.Text = "No se encontraron lecciones o conceptos que coincidan con los criterios de búsqueda seleccionados.";
             }
         }
 
         private void TxtSearchCodex_TextChanged(object sender, TextChangedEventArgs e)
         {
-            FilterList(TxtSearchCodex.Text);
+            if (TxtSearchCodex == null || CboCategoryFilter == null || _allItems == null) return;
+            string category = (CboCategoryFilter.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "🌟 Todas las Categorías";
+            FilterList(TxtSearchCodex.Text, category);
+        }
+
+        private void CboCategoryFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TxtSearchCodex == null || CboCategoryFilter == null || _allItems == null) return;
+            string category = (CboCategoryFilter.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "🌟 Todas las Categorías";
+            FilterList(TxtSearchCodex.Text, category);
         }
 
         private void LstCodexItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (LstCodexItems == null || LblArticleTitle == null || LblArticleCategory == null || TxtArticleBody == null) return;
             if (LstCodexItems.SelectedItem is CodexItem selected)
             {
-                LblArticleTitle.Text = selected.Title;
+                LblArticleTitle.Text = selected.DisplayTitle;
                 LblArticleCategory.Text = selected.Category;
-                LblArticleBody.Text = selected.Body;
+                TxtArticleBody.Text = selected.Body;
             }
         }
     }

@@ -62,6 +62,18 @@ namespace AuroraDesignSuite.Services
             {
                 return "Barrera de energía deflectora. Absorbe impactos de energía y proyectiles cinéticos antes de dañar la armadura metálica exterior. Se recarga automáticamente con energía del reactor.";
             }
+            if (t.Contains("fleet") || t.Contains("flota") || t.Contains("task force") || t.Contains("escuadra"))
+            {
+                return "⚓ Flota y Escuadra Naval. Formación militar o comercial de buques espaciales coordinados bajo la cadena de mando para misiones de combate, logística o exploración.";
+            }
+            if (t.Contains("ship") || t.Contains("nave") || t.Contains("buque") || t.Contains("caza"))
+            {
+                return "🚀 Buque Espacial Trans-Newtoniano. Unidad móvil dotada de casco, motores, sistemas de mantenimiento y armamento para operar en espacio profundo.";
+            }
+            if (t.Contains("system") || t.Contains("sistema"))
+            {
+                return "🌌 Sistema Estelar. Sector compuesto por cuerpos celestes, asteroides, yacimientos minerales y nodos de salto interestelares.";
+            }
 
             return categoryName switch
             {

@@ -18,6 +18,23 @@ namespace AuroraDesignSuite.Services
         // Global Tutor Mode Toggle (ON / OFF)
         public static bool IsTutorEnabled { get; set; } = true;
 
+        static TutorTooltipService()
+        {
+            // Register global WPF class handler to suppress ALL tooltips when TUTOR is OFF
+            EventManager.RegisterClassHandler(
+                typeof(FrameworkElement),
+                ToolTipService.ToolTipOpeningEvent,
+                new ToolTipEventHandler(OnGlobalToolTipOpening));
+        }
+
+        private static void OnGlobalToolTipOpening(object sender, ToolTipEventArgs e)
+        {
+            if (!IsTutorEnabled)
+            {
+                e.Handled = true; // Completely cancels and suppresses tooltips when TUTOR: OFF is active
+            }
+        }
+
         // Bilingual and Synonym Mappings for 100% Accurate Lookups
         private static readonly Dictionary<string, string> Synonyms = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -54,7 +71,12 @@ namespace AuroraDesignSuite.Services
             { "Instalación de Terraformación", "Estación de Terraformación Atmosférica" },
             { "Terraforming Station", "Estación de Terraformación Atmosférica" },
             { "Infraestructura Poblacional", "Infraestructura de Hábitat Urbano" },
-            { "Infrastructure", "Infraestructura de Hábitat Urbano" }
+            { "Infrastructure", "Infraestructura de Hábitat Urbano" },
+            { "Battle Fleet", "Battle Fleet" },
+            { "Cargo Fleet", "Cargo Fleet" },
+            { "Colony Fleet", "Colony Fleet" },
+            { "Shipyard Fleet", "Shipyard Fleet" },
+            { "Survey Fleet", "Survey Fleet" }
         };
 
         // --------------------------------------------------------------------

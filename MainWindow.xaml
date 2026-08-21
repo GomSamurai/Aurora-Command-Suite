@@ -75,6 +75,8 @@
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <TextBlock Text="● ONLINE" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5" VerticalAlignment="Center"/>
 
+                    <Button x:Name="BtnToggleTutorTooltips" Content="💡 TUTOR: ON" Click="BtnToggleTutorTooltips_Click" Padding="8,4" Margin="10,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5" ToolTip="Activa o desactiva la guía de ayuda flotante con Tooltips Tutores en toda la aplicación."/>
+
                     <TextBlock Text="🎨 ESTILO:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5" VerticalAlignment="Center" Margin="10,0,4,0"/>
                     <ComboBox x:Name="CmbThemeSelector" SelectionChanged="CmbThemeSelector_SelectionChanged" Width="160" VerticalAlignment="Center" ToolTip="Cambia drásticamente la paleta de colores y el esquema visual de toda la aplicación en tiempo real.">
                         <ComboBox.ItemContainerStyle>

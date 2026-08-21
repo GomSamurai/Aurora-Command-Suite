@@ -15,6 +15,9 @@ namespace AuroraDesignSuite.Services
         private static Dictionary<string, string> _dictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private static bool _isLoaded = false;
 
+        // Global Tutor Mode Toggle (ON / OFF)
+        public static bool IsTutorEnabled { get; set; } = true;
+
         // Bilingual and Synonym Mappings for 100% Accurate Lookups
         private static readonly Dictionary<string, string> Synonyms = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -57,65 +60,102 @@ namespace AuroraDesignSuite.Services
             {
                 element.MouseEnter -= Element_MouseEnter;
                 element.MouseEnter += Element_MouseEnter;
+
+                if (element is ComboBox cb)
+                {
+                    cb.SelectionChanged -= ComboBox_SelectionChanged;
+                    cb.SelectionChanged += ComboBox_SelectionChanged;
+                }
+            }
+        }
+
+        private static void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!IsTutorEnabled) return;
+            if (sender is ComboBox cb)
+            {
+                UpdateControlToolTip(cb);
             }
         }
 
         private static void Element_MouseEnter(object sender, MouseEventArgs e)
         {
+            if (!IsTutorEnabled) return;
+
             if (sender is FrameworkElement fe)
             {
-                string? textToLookup = null;
+                UpdateControlToolTip(fe);
+            }
+        }
 
-                if (fe.DataContext != null)
+        public static void UpdateControlToolTip(FrameworkElement fe)
+        {
+            if (!IsTutorEnabled || fe == null) return;
+
+            string? textToLookup = null;
+
+            if (fe is ComboBox cb)
+            {
+                if (cb.SelectedItem is ComboBoxItem cbi && cbi.Content != null)
                 {
-                    var dc = fe.DataContext;
-                    var type = dc.GetType();
-
-                    // Reflection lookup for common property names across models
-                    var prop = type.GetProperty("TechName") ?? 
-                               type.GetProperty("InstallationName") ?? 
-                               type.GetProperty("ComponentName") ?? 
-                               type.GetProperty("Name") ?? 
-                               type.GetProperty("Description") ??
-                               type.GetProperty("FleetName") ??
-                               type.GetProperty("Key");
-
+                    textToLookup = cbi.Content.ToString();
+                }
+                else if (cb.SelectedItem != null)
+                {
+                    var prop = cb.SelectedItem.GetType().GetProperty("Name") ?? 
+                               cb.SelectedItem.GetType().GetProperty("TechName") ?? 
+                               cb.SelectedItem.GetType().GetProperty("Description");
                     if (prop != null)
                     {
-                        textToLookup = prop.GetValue(dc)?.ToString();
-                    }
-                    else if (dc is string str)
-                    {
-                        textToLookup = str;
+                        textToLookup = prop.GetValue(cb.SelectedItem)?.ToString();
                     }
                     else
                     {
-                        textToLookup = dc.ToString();
-                    }
-                }
-
-                if (string.IsNullOrEmpty(textToLookup) && fe is ComboBoxItem cbi)
-                {
-                    textToLookup = cbi.Content?.ToString();
-                }
-                else if (string.IsNullOrEmpty(textToLookup) && fe is ComboBox cb)
-                {
-                    if (cb.SelectedItem != null)
-                    {
                         textToLookup = cb.SelectedItem.ToString();
                     }
-                    else if (cb.Text != null)
-                    {
-                        textToLookup = cb.Text;
-                    }
                 }
-
-                if (!string.IsNullOrEmpty(textToLookup))
+                else if (!string.IsNullOrEmpty(cb.Text))
                 {
-                    if (textToLookup.Length > 2 && !textToLookup.StartsWith("System."))
-                    {
-                        AttachToolTip(fe, textToLookup);
-                    }
+                    textToLookup = cb.Text;
+                }
+            }
+            else if (fe.DataContext != null)
+            {
+                var dc = fe.DataContext;
+                var type = dc.GetType();
+
+                var prop = type.GetProperty("TechName") ?? 
+                           type.GetProperty("InstallationName") ?? 
+                           type.GetProperty("ComponentName") ?? 
+                           type.GetProperty("Name") ?? 
+                           type.GetProperty("Description") ??
+                           type.GetProperty("FleetName") ??
+                           type.GetProperty("Key");
+
+                if (prop != null)
+                {
+                    textToLookup = prop.GetValue(dc)?.ToString();
+                }
+                else if (dc is string str)
+                {
+                    textToLookup = str;
+                }
+                else
+                {
+                    textToLookup = dc.ToString();
+                }
+            }
+
+            if (string.IsNullOrEmpty(textToLookup) && fe is ComboBoxItem item)
+            {
+                textToLookup = item.Content?.ToString();
+            }
+
+            if (!string.IsNullOrEmpty(textToLookup))
+            {
+                if (textToLookup.Length > 1 && !textToLookup.StartsWith("System."))
+                {
+                    AttachToolTip(fe, textToLookup);
                 }
             }
         }
@@ -200,6 +240,10 @@ namespace AuroraDesignSuite.Services
             }
 
             // 5. Keyword & Component Category Fallback Matching
+            if (ContainsWord(raw, "CIWS"))
+            {
+                if (_dictionary.TryGetValue("CIWS", out val)) return val;
+            }
             if (ContainsWord(raw, "Fighter") || ContainsWord(raw, "Vástago") || ContainsWord(raw, "Pod Bay"))
             {
                 if (_dictionary.TryGetValue("Fighter Pod Bay", out val)) return val;
@@ -277,7 +321,6 @@ namespace AuroraDesignSuite.Services
         private static bool IsRichContent(string text)
         {
             if (string.IsNullOrEmpty(text)) return false;
-            // Rich content contains multi-line sections with headers like 📌 CONCEPTO
             return text.Contains("CONCEPTO") || text.Length > 120;
         }
 
@@ -289,6 +332,8 @@ namespace AuroraDesignSuite.Services
 
         public static ToolTip? CreateTutorToolTip(string? keyOrTerm, string? customTitle = null)
         {
+            if (!IsTutorEnabled) return null;
+
             string? bodyText = GetTutorText(keyOrTerm);
             if (string.IsNullOrEmpty(bodyText)) return null;
 
@@ -310,7 +355,7 @@ namespace AuroraDesignSuite.Services
             Border cardBorder = new Border
             {
                 CornerRadius = new CornerRadius(6),
-                MaxWidth = 480
+                MaxWidth = 520
             };
 
             StackPanel panel = new StackPanel();
@@ -355,7 +400,14 @@ namespace AuroraDesignSuite.Services
 
         public static void AttachToolTip(FrameworkElement? element, string? keyOrTerm, string? customTitle = null)
         {
-            if (element == null || string.IsNullOrWhiteSpace(keyOrTerm)) return;
+            if (element == null) return;
+
+            if (!IsTutorEnabled || string.IsNullOrWhiteSpace(keyOrTerm))
+            {
+                element.ToolTip = null;
+                return;
+            }
+
             try
             {
                 ToolTip? tip = CreateTutorToolTip(keyOrTerm, customTitle);

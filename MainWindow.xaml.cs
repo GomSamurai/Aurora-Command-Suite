@@ -243,6 +243,23 @@ namespace AuroraDesignSuite
             }
         }
 
+        private void BtnToggleTutorTooltips_Click(object sender, RoutedEventArgs e)
+        {
+            TutorTooltipService.IsTutorEnabled = !TutorTooltipService.IsTutorEnabled;
+            if (TutorTooltipService.IsTutorEnabled)
+            {
+                BtnToggleTutorTooltips.Content = "💡 TUTOR: ON";
+                BtnToggleTutorTooltips.Foreground = (System.Windows.Media.Brush)FindResource("AccentAmberBrush");
+                BtnToggleTutorTooltips.BorderBrush = (System.Windows.Media.Brush)FindResource("AccentAmberBrush");
+            }
+            else
+            {
+                BtnToggleTutorTooltips.Content = "💡 TUTOR: OFF";
+                BtnToggleTutorTooltips.Foreground = (System.Windows.Media.Brush)FindResource("TextSecondaryBrush");
+                BtnToggleTutorTooltips.BorderBrush = (System.Windows.Media.Brush)FindResource("TextSecondaryBrush");
+            }
+        }
+
         private void CmbThemeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CmbThemeSelector.SelectedItem is ThemeOption theme)

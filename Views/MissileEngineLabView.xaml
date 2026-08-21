@@ -51,8 +51,7 @@
                             <TextBlock Text="🛠️ SELECCIONAR CATEGORÍA DE PROYECTO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
                             <TextBlock Text="Categorías oficiales de componentes de Aurora 4X:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" Margin="0,0,0,6"/>
 
-                            <!-- MASTER CATEGORY DROPDOWN (Matches Screenshot #2 of Aurora 4X) -->
-                            <ComboBox x:Name="CmbMasterCategory" SelectionChanged="CmbMasterCategory_SelectionChanged" Margin="0,0,0,12" Padding="8,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Selecciona la categoría del componente a diseñar. Carga automáticamente las tecnologías investigadas de tu imperio desde AuroraDB.db.">
+                            <ComboBox x:Name="CmbMasterCategory" SelectionChanged="CmbMasterCategory_SelectionChanged" Margin="0,0,0,12" Padding="8,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold">
                                 <ComboBoxItem Content="📡 Active Sensors" IsSelected="True"/>
                                 <ComboBoxItem Content="🛡️ CIWS"/>
                                 <ComboBoxItem Content="👻 Cloaking Device"/>

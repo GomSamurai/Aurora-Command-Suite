@@ -21,24 +21,40 @@ namespace AuroraDesignSuite.Services
         // Bilingual and Synonym Mappings for 100% Accurate Lookups
         private static readonly Dictionary<string, string> Synonyms = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            { "Academia Militar", "Military Academy" },
-            { "Fábrica de Construcción", "Construction Factory" },
-            { "Refinería de Combustible", "Fuel Refinery" },
-            { "Centro Financiero", "Financial Centre" },
-            { "Laboratorio de Investigación", "Research Facility" },
-            { "Mina Convencional", "Conventional Mine" },
-            { "Mina Automatizada", "Automated Mine" },
-            { "Fábrica de Misiles/Munición", "Ordnance Factory" },
-            { "Fábrica de Cazas", "Fighter Factory" },
-            { "Instalación de Mantenimiento", "Maintenance Facility" },
-            { "Cuartel General Naval", "Naval HQ" },
-            { "Puerto Espacial", "Spaceport" },
-            { "Estación de Espacio Profundo", "Deep Space Tracking Station" },
-            { "Complejo de Tropas Terrestres", "Ground Force Training Complex" },
-            { "Catapulta de Masa", "Mass Driver" },
-            { "Instalación de Terraformación", "Terraforming Station" },
-            { "Infraestructura Poblacional", "Infrastructure" },
-            { "Infraestructura de Hábitat Urbano", "Infrastructure" }
+            { "Academia Militar", "Academias Militares de Oficiales" },
+            { "Military Academy", "Academias Militares de Oficiales" },
+            { "Fábrica de Construcción", "Fábricas de Construcción Industrial" },
+            { "Construction Factory", "Fábricas de Construcción Industrial" },
+            { "Refinería de Combustible", "Refinerías de Sorium (Combustible)" },
+            { "Fuel Refinery", "Refinerías de Sorium (Combustible)" },
+            { "Centro Financiero", "Centros Financieros y Comerciales" },
+            { "Financial Centre", "Centros Financieros y Comerciales" },
+            { "Laboratorio de Investigación", "Laboratorios de I+D e Investigación" },
+            { "Research Facility", "Laboratorios de I+D e Investigación" },
+            { "Mina Convencional", "Minas Convencionales" },
+            { "Conventional Mine", "Minas Convencionales" },
+            { "Mina Automatizada", "Minas Automatizadas" },
+            { "Automated Mine", "Minas Automatizadas" },
+            { "Fábrica de Misiles/Munición", "Fábricas de Ordenanza y Municiones" },
+            { "Ordnance Factory", "Fábricas de Ordenanza y Municiones" },
+            { "Fábrica de Cazas", "Fábricas de Cazas Navales" },
+            { "Fighter Factory", "Fábricas de Cazas Navales" },
+            { "Instalación de Mantenimiento", "Instalaciones de Mantenimiento Naval" },
+            { "Maintenance Facility", "Instalaciones de Mantenimiento Naval" },
+            { "Cuartel General Naval", "Cuartel General Naval de Sector" },
+            { "Naval HQ", "Cuartel General Naval de Sector" },
+            { "Puerto Espacial", "Puertos Espaciales de Carga" },
+            { "Spaceport", "Puertos Espaciales de Carga" },
+            { "Estación de Espacio Profundo", "Estaciones de Tracking Espacial Profundo" },
+            { "Deep Space Tracking Station", "Estaciones de Tracking Espacial Profundo" },
+            { "Complejo de Tropas Terrestres", "Complejo de Entrenamiento Terrestre" },
+            { "Ground Force Training Complex", "Complejo de Entrenamiento Terrestre" },
+            { "Catapulta de Masa", "Catapulta de Masa Orbital" },
+            { "Mass Driver", "Catapulta de Masa Orbital" },
+            { "Instalación de Terraformación", "Estación de Terraformación Atmosférica" },
+            { "Terraforming Station", "Estación de Terraformación Atmosférica" },
+            { "Infraestructura Poblacional", "Infraestructura de Hábitat Urbano" },
+            { "Infrastructure", "Infraestructura de Hábitat Urbano" }
         };
 
         // --------------------------------------------------------------------
@@ -239,7 +255,71 @@ namespace AuroraDesignSuite.Services
                 }
             }
 
-            // 5. Keyword & Component Category Fallback Matching
+            // 5. Keyword & Component Category Fallback Matching (SPANISH + ENGLISH)
+            if (ContainsWord(raw, "Puerto") || ContainsWord(raw, "Spaceport"))
+            {
+                if (_dictionary.TryGetValue("Puertos Espaciales de Carga", out val)) return val;
+            }
+            if (ContainsWord(raw, "Cuartel") || ContainsWord(raw, "Naval HQ") || ContainsWord(raw, "Sector HQ"))
+            {
+                if (_dictionary.TryGetValue("Cuartel General Naval de Sector", out val)) return val;
+            }
+            if (ContainsWord(raw, "Terrestre") || ContainsWord(raw, "Entrenamiento") || ContainsWord(raw, "Ground Force"))
+            {
+                if (_dictionary.TryGetValue("Complejo de Entrenamiento Terrestre", out val)) return val;
+            }
+            if (ContainsWord(raw, "Tracking") || ContainsWord(raw, "Espacio Profundo") || ContainsWord(raw, "Deep Space"))
+            {
+                if (_dictionary.TryGetValue("Estaciones de Tracking Espacial Profundo", out val)) return val;
+            }
+            if (ContainsWord(raw, "Catapulta") || ContainsWord(raw, "Mass Driver"))
+            {
+                if (_dictionary.TryGetValue("Catapulta de Masa Orbital", out val)) return val;
+            }
+            if (ContainsWord(raw, "Terraformación") || ContainsWord(raw, "Terraforming"))
+            {
+                if (_dictionary.TryGetValue("Estación de Terraformación Atmosférica", out val)) return val;
+            }
+            if (ContainsWord(raw, "Hábitat") || ContainsWord(raw, "Infraestructura") || ContainsWord(raw, "Infrastructure"))
+            {
+                if (_dictionary.TryGetValue("Infraestructura de Hábitat Urbano", out val)) return val;
+            }
+            if (ContainsWord(raw, "Construcción") || ContainsWord(raw, "Construction"))
+            {
+                if (_dictionary.TryGetValue("Fábricas de Construcción Industrial", out val)) return val;
+            }
+            if (ContainsWord(raw, "Mina") || ContainsWord(raw, "Minas") || ContainsWord(raw, "Mine"))
+            {
+                if (_dictionary.TryGetValue("Minas Convencionales", out val)) return val;
+            }
+            if (ContainsWord(raw, "Financiero") || ContainsWord(raw, "Financieros") || ContainsWord(raw, "Financial"))
+            {
+                if (_dictionary.TryGetValue("Centros Financieros y Comerciales", out val)) return val;
+            }
+            if (ContainsWord(raw, "Refinería") || ContainsWord(raw, "Refinerías") || ContainsWord(raw, "Refinery"))
+            {
+                if (_dictionary.TryGetValue("Refinerías de Sorium (Combustible)", out val)) return val;
+            }
+            if (ContainsWord(raw, "Ordenanza") || ContainsWord(raw, "Municiones") || ContainsWord(raw, "Ordnance"))
+            {
+                if (_dictionary.TryGetValue("Fábricas de Ordenanza y Municiones", out val)) return val;
+            }
+            if (ContainsWord(raw, "Cazas") || ContainsWord(raw, "Fighter Factory"))
+            {
+                if (_dictionary.TryGetValue("Fábricas de Cazas Navales", out val)) return val;
+            }
+            if (ContainsWord(raw, "Laboratorio") || ContainsWord(raw, "Laboratorios") || ContainsWord(raw, "Research Facility"))
+            {
+                if (_dictionary.TryGetValue("Laboratorios de I+D e Investigación", out val)) return val;
+            }
+            if (ContainsWord(raw, "Mantenimiento") || ContainsWord(raw, "Maintenance Facility"))
+            {
+                if (_dictionary.TryGetValue("Instalaciones de Mantenimiento Naval", out val)) return val;
+            }
+            if (ContainsWord(raw, "Academia") || ContainsWord(raw, "Academias") || ContainsWord(raw, "Military Academy"))
+            {
+                if (_dictionary.TryGetValue("Academias Militares de Oficiales", out val)) return val;
+            }
             if (ContainsWord(raw, "CIWS"))
             {
                 if (_dictionary.TryGetValue("CIWS", out val)) return val;
@@ -247,30 +327,6 @@ namespace AuroraDesignSuite.Services
             if (ContainsWord(raw, "Fighter") || ContainsWord(raw, "Vástago") || ContainsWord(raw, "Pod Bay"))
             {
                 if (_dictionary.TryGetValue("Fighter Pod Bay", out val)) return val;
-            }
-            if (ContainsWord(raw, "Academia") || ContainsWord(raw, "Academy"))
-            {
-                if (_dictionary.TryGetValue("Academia Militar", out val)) return val;
-            }
-            if (ContainsWord(raw, "Refinería") || ContainsWord(raw, "Refinery"))
-            {
-                if (_dictionary.TryGetValue("Refinería de Combustible", out val)) return val;
-            }
-            if (ContainsWord(raw, "Construcción") || ContainsWord(raw, "Construction"))
-            {
-                if (_dictionary.TryGetValue("Fábrica de Construcción", out val)) return val;
-            }
-            if (ContainsWord(raw, "Financiero") || ContainsWord(raw, "Financial"))
-            {
-                if (_dictionary.TryGetValue("Centro Financiero", out val)) return val;
-            }
-            if (ContainsWord(raw, "Laboratorio") || ContainsWord(raw, "Research Facility"))
-            {
-                if (_dictionary.TryGetValue("Laboratorio de Investigación", out val)) return val;
-            }
-            if (ContainsWord(raw, "Infraestructura") || ContainsWord(raw, "Infrastructure"))
-            {
-                if (_dictionary.TryGetValue("Infraestructura Poblacional", out val)) return val;
             }
             if (ContainsWord(raw, "Hardening") || ContainsWord(raw, "Endurecimiento"))
             {

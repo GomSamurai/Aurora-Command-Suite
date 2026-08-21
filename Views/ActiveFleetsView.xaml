@@ -36,7 +36,7 @@
                         <TextBlock x:Name="LblFleetsCountHeader" Text="5 Flotas Activas" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </DockPanel>
 
-                    <DataGrid x:Name="DgActiveFleets" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgActiveFleets_SelectionChanged" ToolTip="Lista de agrupaciones de combate navales y flotas comerciales en servicio activo en AuroraDB.db.">
+                    <DataGrid x:Name="DgActiveFleets" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgActiveFleets_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Nombre de la Flota" Binding="{Binding FleetName}" Width="170"/>
                             <DataGridTextColumn Header="Actividad Actual / Misión" Binding="{Binding CurrentActivity}" Width="*"/>
@@ -58,7 +58,7 @@
                         <TextBlock x:Name="LblShipsCountHeader" Text="0 Naves" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </DockPanel>
 
-                    <DataGrid x:Name="DgActiveShips" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgActiveShips_SelectionChanged" ToolTip="Navíos y unidades de combate asignados a esta flota con su estado de casco, combustible y mantenimiento.">
+                    <DataGrid x:Name="DgActiveShips" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgActiveShips_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Nombre de Nave" Binding="{Binding ShipName}" Width="*"/>
                             <DataGridTextColumn Header="Casco #" Binding="{Binding HullNumber}" Width="65"/>

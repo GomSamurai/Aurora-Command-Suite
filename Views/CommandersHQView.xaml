@@ -48,12 +48,12 @@
 
                         <StackPanel Grid.Column="1" Margin="0,0,6,0">
                             <TextBlock Text="Filtrar por Rol / Especialidad:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                            <ComboBox x:Name="CmbRoleFilter" SelectionChanged="CmbRoleFilter_SelectionChanged" ToolTip="Filtra por tipo de líder (Científicos, Oficiales Navales, Gobernadores o Comandantes Terrestres)."/>
+                            <ComboBox x:Name="CmbRoleFilter" SelectionChanged="CmbRoleFilter_SelectionChanged"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Disponibilidad:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                            <ComboBox x:Name="CmbStatusFilter" SelectionChanged="CmbStatusFilter_SelectionChanged" ToolTip="Filtra por estado de servicio (Asignados a misiones vs Disponibles)."/>
+                            <ComboBox x:Name="CmbStatusFilter" SelectionChanged="CmbStatusFilter_SelectionChanged"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
@@ -61,7 +61,7 @@
 
             <!-- Roster DataGrid -->
             <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="4">
-                <DataGrid x:Name="DgCommanders" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgCommanders_SelectionChanged" ToolTip="Líderes de tu imperio. Haz clic en cualquiera para inspeccionar su expediente oficial (Dossier) a la derecha.">
+                <DataGrid x:Name="DgCommanders" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgCommanders_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Estado" Binding="{Binding StatusDisplay}" Width="100"/>
                         <DataGridTextColumn Header="Nombre del Comandante" Binding="{Binding Name}" Width="*"/>

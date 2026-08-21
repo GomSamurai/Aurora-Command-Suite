@@ -36,7 +36,7 @@
                         <Button Content="➕ Ampliar Grada / Capacidad" Click="BtnExpandShipyard_Click" HorizontalAlignment="Right" Padding="8,3" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Registra una expansión industrial de tonelaje o gradas de construcción."/>
                     </Grid>
 
-                    <DataGrid x:Name="DgShipyards" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgShipyards_SelectionChanged" ToolTip="Selecciona un astillero para administrar sus gradas de construcción y tareas activas.">
+                    <DataGrid x:Name="DgShipyards" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgShipyards_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Nombre del Astillero" Binding="{Binding ShipyardName}" Width="*"/>
                             <DataGridTextColumn Header="Tipo" Binding="{Binding TypeDisplay}" Width="160"/>
@@ -59,7 +59,7 @@
 
                     <TextBlock x:Name="LblTasksHeader" Grid.Row="0" Text="🔨 TAREAS DE CONSTRUCCIÓN NAVAL Y RETOOLING ACTIVAS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
 
-                    <DataGrid Grid.Row="1" x:Name="DgShipyardTasks" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Proyectos de construcción o retooling en curso en el astillero seleccionado.">
+                    <DataGrid Grid.Row="1" x:Name="DgShipyardTasks" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Unidad / Clase en Construcción" Binding="{Binding UnitName}" Width="*"/>
                             <DataGridTextColumn Header="Progreso BP" Binding="{Binding ProgressDisplay}" Width="200"/>

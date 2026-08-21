@@ -53,7 +53,7 @@
                     <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
                         <DockPanel>
                             <TextBlock DockPanel.Dock="Top" Text="🌌 SISTEMAS ESTELARES DESCUBIERTOS" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                            <DataGrid x:Name="DgSystems" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgSystems_SelectionChanged" ToolTip="Sistemas solares mapeados por tus naves exploradoras.">
+                            <DataGrid x:Name="DgSystems" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgSystems_SelectionChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Sistema Estelar" Binding="{Binding SystemName}" Width="*"/>
                                     <DataGridTextColumn Header="Estrellas" Binding="{Binding StarCount}" Width="65"/>
@@ -93,7 +93,7 @@
                                     </StackPanel>
                                 </DockPanel>
 
-                                <DataGrid x:Name="DgBodies" AutoGenerateColumns="False" IsReadOnly="True" MaxHeight="240" SelectionChanged="DgBodies_SelectionChanged" ToolTip="Cuerpos celestes analizados en este sistema estelar con telemetría astrofísica completa.">
+                                <DataGrid x:Name="DgBodies" AutoGenerateColumns="False" IsReadOnly="True" MaxHeight="240" SelectionChanged="DgBodies_SelectionChanged">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Nombre del Cuerpo" Binding="{Binding Name}" Width="130"/>
                                         <DataGridTextColumn Header="Clase" Binding="{Binding BodyTypeName}" Width="130"/>
@@ -120,7 +120,7 @@
                         <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                             <StackPanel>
                                 <TextBlock x:Name="LblMineralsHeader" Text="💎 YACIMIENTOS MINERALES EN CUERPO CELESTE" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                                <DataGrid x:Name="DgMinerals" AutoGenerateColumns="False" IsReadOnly="True" MaxHeight="180" ToolTip="Depósitos de minerales exóticos trans-newtonianos detectados en este planeta.">
+                                <DataGrid x:Name="DgMinerals" AutoGenerateColumns="False" IsReadOnly="True" MaxHeight="180">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Mineral Exótico" Binding="{Binding MineralName}" Width="*"/>
                                         <DataGridTextColumn Header="Reservas Estimadas" Binding="{Binding AmountDisplay}" Width="180"/>
@@ -228,7 +228,7 @@
                 <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Top" Text="🌀 RED DE PUNTOS DE SALTO INTERESTELARES (JUMP POINTS)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                        <DataGrid x:Name="DgJumpPoints" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Nodos de salto warp detectados por sensores de prospección gravitatoria en los sistemas explorados.">
+                        <DataGrid x:Name="DgJumpPoints" AutoGenerateColumns="False" IsReadOnly="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Punto de Salto ID" Binding="{Binding JumpPointID}" Width="140"/>
                                 <DataGridTextColumn Header="Sistema Destino" Binding="{Binding DestinationSystemName}" Width="*"/>
@@ -245,7 +245,7 @@
                 <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Top" Text="🛸 BUQUES Y ESCUADRAS DE PROSPECCIÓN EN SERVICIO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                        <DataGrid x:Name="DgSurveyFleets" AutoGenerateColumns="False" IsReadOnly="True" ToolTip="Escuadras exploradoras equipadas con sensores geológicos y gravitatorios activos.">
+                        <DataGrid x:Name="DgSurveyFleets" AutoGenerateColumns="False" IsReadOnly="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Nombre de Flota / Nave" Binding="{Binding FleetName}" Width="*"/>
                                 <DataGridTextColumn Header="Cantidad de Naves" Binding="{Binding ShipsDisplay}" Width="150"/>

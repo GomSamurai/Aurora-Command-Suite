@@ -145,7 +145,7 @@
                         <Button Content="✕ Eliminar Clase" Click="BtnRemoveFleetItem_Click" HorizontalAlignment="Right" Padding="8,2" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" ToolTip="Quita la clase de nave seleccionada de la flota."/>
                     </Grid>
 
-                    <DataGrid Grid.Row="1" x:Name="DgFleetItems" AutoGenerateColumns="False" CanUserAddRows="False" CellEditEnding="DgFleetItems_CellEditEnding" ToolTip="Lista de clases de naves incluidas en esta flota. Puedes editar la cantidad directamente.">
+                    <DataGrid Grid.Row="1" x:Name="DgFleetItems" AutoGenerateColumns="False" CanUserAddRows="False" CellEditEnding="DgFleetItems_CellEditEnding">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Clase de Nave" Binding="{Binding Design.ClassName}" IsReadOnly="True" Width="*"/>
                             <DataGridTextColumn Header="Cant." Binding="{Binding Count}" Width="55"/>

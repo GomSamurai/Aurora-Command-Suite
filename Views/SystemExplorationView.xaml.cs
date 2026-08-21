@@ -63,25 +63,151 @@ namespace AuroraDesignSuite.Views
 
         private void OnModeChanged(object sender, RoutedEventArgs e)
         {
-            if (PnlProspection == null || PnlJumpPoints == null || PnlSurveyFleets == null) return;
+            if (PnlProspection == null || PnlJumpPoints == null || PnlSurveyFleets == null || Pnl2DStarMap == null) return;
 
             if (BtnModeProspection?.IsChecked == true)
             {
                 PnlProspection.Visibility = Visibility.Visible;
+                Pnl2DStarMap.Visibility = Visibility.Collapsed;
                 PnlJumpPoints.Visibility = Visibility.Collapsed;
                 PnlSurveyFleets.Visibility = Visibility.Collapsed;
+            }
+            else if (BtnMode2DStarMap?.IsChecked == true)
+            {
+                PnlProspection.Visibility = Visibility.Collapsed;
+                Pnl2DStarMap.Visibility = Visibility.Visible;
+                PnlJumpPoints.Visibility = Visibility.Collapsed;
+                PnlSurveyFleets.Visibility = Visibility.Collapsed;
+                Render2DStarMap();
             }
             else if (BtnModeJumpPoints?.IsChecked == true)
             {
                 PnlProspection.Visibility = Visibility.Collapsed;
+                Pnl2DStarMap.Visibility = Visibility.Collapsed;
                 PnlJumpPoints.Visibility = Visibility.Visible;
                 PnlSurveyFleets.Visibility = Visibility.Collapsed;
             }
             else if (BtnModeSurveyFleets?.IsChecked == true)
             {
                 PnlProspection.Visibility = Visibility.Collapsed;
+                Pnl2DStarMap.Visibility = Visibility.Collapsed;
                 PnlJumpPoints.Visibility = Visibility.Collapsed;
                 PnlSurveyFleets.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void BtnRefreshStarMap_Click(object sender, RoutedEventArgs e)
+        {
+            Render2DStarMap();
+        }
+
+        private void BtnResetStarMapZoom_Click(object sender, RoutedEventArgs e)
+        {
+            Render2DStarMap();
+        }
+
+        private void Render2DStarMap()
+        {
+            if (StarMapCanvas == null || _dbService == null) return;
+            StarMapCanvas.Children.Clear();
+
+            var systems = _dbService.GetDiscoveredSystems(_currentRaceId);
+            if (systems.Count == 0) return;
+
+            int count = systems.Count;
+            double centerX = 700;
+            double centerY = 450;
+            double radius = Math.Min(320, 100 + count * 35);
+
+            Dictionary<int, Point> systemCoords = new Dictionary<int, Point>();
+
+            for (int i = 0; i < count; i++)
+            {
+                var sys = systems[i];
+                double angle = (2.0 * Math.PI * i) / count;
+                if (i == 0)
+                {
+                    // Sol / Home System at center
+                    systemCoords[sys.SystemID] = new Point(centerX, centerY);
+                }
+                else
+                {
+                    double x = centerX + radius * Math.Cos(angle);
+                    double y = centerY + radius * Math.Sin(angle);
+                    systemCoords[sys.SystemID] = new Point(x, y);
+                }
+            }
+
+            // 1. Draw Jump Point Connection Lines
+            HashSet<string> drawnLines = new HashSet<string>();
+            foreach (var sys in systems)
+            {
+                if (!systemCoords.ContainsKey(sys.SystemID)) continue;
+                Point p1 = systemCoords[sys.SystemID];
+
+                foreach (var jp in sys.JumpPoints)
+                {
+                    if (jp.DestinationSystemID > 0 && systemCoords.ContainsKey(jp.DestinationSystemID))
+                    {
+                        string lineKey = Math.Min(sys.SystemID, jp.DestinationSystemID) + "-" + Math.Max(sys.SystemID, jp.DestinationSystemID);
+                        if (!drawnLines.Contains(lineKey))
+                        {
+                            drawnLines.Add(lineKey);
+                            Point p2 = systemCoords[jp.DestinationSystemID];
+
+                            var line = new System.Windows.Shapes.Line
+                            {
+                                X1 = p1.X,
+                                Y1 = p1.Y,
+                                X2 = p2.X,
+                                Y2 = p2.Y,
+                                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(180, 0, 240, 255)),
+                                StrokeThickness = 2,
+                                StrokeDashArray = jp.GateID > 0 ? null : new System.Windows.Media.DoubleCollection { 4, 4 }
+                            };
+                            StarMapCanvas.Children.Add(line);
+                        }
+                    }
+                }
+            }
+
+            // 2. Draw System Nodes & Labels
+            foreach (var sys in systems)
+            {
+                if (!systemCoords.ContainsKey(sys.SystemID)) continue;
+                Point p = systemCoords[sys.SystemID];
+
+                bool isHome = sys.SystemID == 1 || sys.SystemName.Equals("Sol", StringComparison.OrdinalIgnoreCase);
+
+                double nodeSize = isHome ? 36 : 26;
+                var ellipse = new System.Windows.Shapes.Ellipse
+                {
+                    Width = nodeSize,
+                    Height = nodeSize,
+                    Fill = new System.Windows.Media.SolidColorBrush(isHome ? System.Windows.Media.Color.FromArgb(255, 255, 176, 0) : System.Windows.Media.Color.FromArgb(255, 0, 240, 255)),
+                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White),
+                    StrokeThickness = 2,
+                    ToolTip = $"🌌 Sistema: {sys.SystemName}\n🪐 Cuerpos Celestes: {sys.Bodies.Count}\n🌀 Puntos de Salto: {sys.JumpPoints.Count}"
+                };
+
+                Canvas.SetLeft(ellipse, p.X - nodeSize / 2);
+                Canvas.SetTop(ellipse, p.Y - nodeSize / 2);
+                StarMapCanvas.Children.Add(ellipse);
+
+                // Label
+                TextBlock lbl = new TextBlock
+                {
+                    Text = (isHome ? "👑 " : "⭐ ") + sys.SystemName + $" ({sys.Bodies.Count} Cuerpos)",
+                    Foreground = new System.Windows.Media.SolidColorBrush(isHome ? System.Windows.Media.Color.FromArgb(255, 255, 176, 0) : System.Windows.Media.Colors.White),
+                    FontWeight = FontWeights.Bold,
+                    FontSize = 11,
+                    Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(200, 11, 16, 26)),
+                    Padding = new Thickness(4, 2, 4, 2)
+                };
+
+                Canvas.SetLeft(lbl, p.X - 50);
+                Canvas.SetTop(lbl, p.Y + nodeSize / 2 + 4);
+                StarMapCanvas.Children.Add(lbl);
             }
         }
 

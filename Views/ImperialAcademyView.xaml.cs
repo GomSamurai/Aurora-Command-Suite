@@ -564,5 +564,40 @@ namespace AuroraDesignSuite.Views
                 TxtArticleBody.Text = selected.Body;
             }
         }
+
+        private void OnFormulaInputChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                // 1. Warhead Yield Formula
+                if (TxtFormulaWarheadYield != null && LblFormulaWarheadResult != null && double.TryParse(TxtFormulaWarheadYield.Text, out double yieldVal) && yieldVal > 0)
+                {
+                    int penetration = (int)Math.Sqrt(yieldVal);
+                    if (penetration < 1) penetration = 1;
+                    LblFormulaWarheadResult.Text = $"{penetration} Capas de Blindaje (Crater Depth: {penetration} x Width: {penetration})";
+                }
+
+                // 2. Active Radar Formula
+                if (TxtFormulaRadarStrength != null && TxtFormulaRadarRes != null && LblFormulaRadarResult != null &&
+                    double.TryParse(TxtFormulaRadarStrength.Text, out double strength) &&
+                    double.TryParse(TxtFormulaRadarRes.Text, out double res) && strength > 0 && res > 0)
+                {
+                    double rangeKm = strength * Math.Sqrt(res) * 40000.0 * 10.0; // Standard Aurora 4X Active Sensor Math
+                    double rangeMkm = rangeKm / 1000000.0;
+                    LblFormulaRadarResult.Text = $"{rangeMkm:N2} Mkm ({rangeKm:N0} km)";
+                }
+
+                // 3. Engine Burn Formula
+                if (TxtFormulaEngineEP != null && TxtFormulaEngineFuelRate != null && LblFormulaEngineResult != null &&
+                    double.TryParse(TxtFormulaEngineEP.Text, out double ep) &&
+                    double.TryParse(TxtFormulaEngineFuelRate.Text, out double rate) && ep > 0 && rate > 0)
+                {
+                    double fuelPerHour = ep * rate;
+                    double fuelPerDay = fuelPerHour * 24.0;
+                    LblFormulaEngineResult.Text = $"{fuelPerDay:N0} Litros / Día ({fuelPerHour:N1} L/hora)";
+                }
+            }
+            catch { }
+        }
     }
 }

@@ -150,6 +150,8 @@ namespace AuroraDesignSuite.Models
     {
         public int JumpPointID { get; set; }
         public int SystemID { get; set; }
+        public int DestinationSystemID { get; set; }
+        public int GateID { get; set; }
         public string DestinationSystemName { get; set; } = "Desconocido";
         public bool HasJumpGate { get; set; }
         public bool SurveyDone { get; set; }

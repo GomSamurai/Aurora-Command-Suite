@@ -18,6 +18,7 @@
                 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <RadioButton x:Name="BtnModeProspection" Content="🌌 Prospección y Cuerpos Celestes" IsChecked="True" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" ToolTip="Exploración geológica y física de planetas, lunas y yacimientos minerales."/>
+                    <RadioButton x:Name="BtnMode2DStarMap" Content="🌌 Mapa Estelar 2D &amp; Red Warp" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Visualizador interactivo 2D del mapa estelar, sistemas conectados y nodos de salto warp."/>
                     <RadioButton x:Name="BtnModeJumpPoints" Content="🌀 Red de Puntos de Salto" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Margin="0,0,6,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" FontWeight="Bold" ToolTip="Red de nodos de salto interestelar y estado de construcción de Puertas de Salto (Jump Gates)."/>
                     <RadioButton x:Name="BtnModeSurveyFleets" Content="🛸 Flotas de Prospección Activas" Checked="OnModeChanged" Style="{StaticResource {x:Type ToggleButton}}" Padding="14,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Buques y escuadras de reconocimiento geológico y gravitatorio en servicio."/>
                 </StackPanel>
@@ -255,6 +256,32 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>
+                </Border>
+            </Grid>
+
+            <!-- MODE 4: INTERACTIVE 2D STAR MAP CANVAS -->
+            <Grid x:Name="Pnl2DStarMap" Visibility="Collapsed">
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <DockPanel Grid.Row="0" Margin="0,0,0,8">
+                            <TextBlock Text="🌌 NAVEGACIÓN Y RED INTERESTELAR (MAPA ESTELAR 2D)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="🔄 Recargar Nodos de Salto" Click="BtnRefreshStarMap_Click" Padding="8,4" Margin="0,0,6,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                <Button Content="🎯 Centrar Mapa" Click="BtnResetStarMapZoom_Click" Padding="8,4" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <Border Grid.Row="1" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" ClipToBounds="True">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                <Canvas x:Name="StarMapCanvas" Width="1400" Height="900" Background="#0A0E17"/>
+                            </ScrollViewer>
+                        </Border>
+                    </Grid>
                 </Border>
             </Grid>
         </Grid>

@@ -395,6 +395,18 @@
                 <views:ImperialAcademyView x:Name="ViewAcademy"/>
             </TabItem>
 
+            <TabItem x:Name="TabJournal">
+                <TabItem.Header>
+                    <DockPanel LastChildFill="True">
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="📜" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Diario &amp; Bitácora" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </TabItem.Header>
+                <views:ImperialJournalView x:Name="ViewJournal"/>
+            </TabItem>
+
             <!-- ========================================== -->
             <!-- CATEGORÍA 5: ASESOR IMPERIAL SUPREMO (IA) -->
             <!-- PESTAÑA FINAL DIVERSIFICADA Y VIP         -->

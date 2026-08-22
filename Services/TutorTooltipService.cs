@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Newtonsoft.Json;
+using AuroraDesignSuite.Models;
 
 namespace AuroraDesignSuite.Services
 {
@@ -162,25 +163,36 @@ namespace AuroraDesignSuite.Services
                 var dc = fe.DataContext;
                 var type = dc.GetType();
 
-                var prop = type.GetProperty("TechName") ?? 
-                           type.GetProperty("InstallationName") ?? 
-                           type.GetProperty("ComponentName") ?? 
-                           type.GetProperty("Name") ?? 
-                           type.GetProperty("Description") ??
-                           type.GetProperty("FleetName") ??
-                           type.GetProperty("Key");
-
-                if (prop != null)
+                if (dc is SelectedComponentItem sci)
                 {
-                    textToLookup = prop.GetValue(dc)?.ToString();
+                    textToLookup = sci.ComponentName;
                 }
-                else if (dc is string str)
+                else if (dc is Component comp)
                 {
-                    textToLookup = str;
+                    textToLookup = comp.ComponentName;
                 }
                 else
                 {
-                    textToLookup = dc.ToString();
+                    var prop = type.GetProperty("TechName") ?? 
+                               type.GetProperty("InstallationName") ?? 
+                               type.GetProperty("ComponentName") ?? 
+                               type.GetProperty("Name") ?? 
+                               type.GetProperty("Description") ??
+                               type.GetProperty("FleetName") ??
+                               type.GetProperty("Key");
+
+                    if (prop != null)
+                    {
+                        textToLookup = prop.GetValue(dc)?.ToString();
+                    }
+                    else if (dc is string str)
+                    {
+                        textToLookup = str;
+                    }
+                    else
+                    {
+                        textToLookup = dc.ToString();
+                    }
                 }
             }
 
@@ -191,7 +203,7 @@ namespace AuroraDesignSuite.Services
 
             if (!string.IsNullOrEmpty(textToLookup))
             {
-                if (textToLookup.Length > 1 && !textToLookup.StartsWith("System."))
+                if (textToLookup.Length > 1 && !textToLookup.StartsWith("System.") && !textToLookup.StartsWith("AuroraDesignSuite."))
                 {
                     AttachToolTip(fe, textToLookup);
                 }

@@ -323,7 +323,7 @@ namespace AuroraDesignSuite.Views
 
         private void CmbPresets_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CmbPresets.SelectedItem is not PresetItem preset || _allComponents.Count == 0) return;
+            if (CmbPresets.SelectedItem is not PresetItem preset) return;
 
             _selectedComponents.Clear();
 
@@ -333,204 +333,155 @@ namespace AuroraDesignSuite.Views
                 return;
             }
 
-            int idx = preset.Index;
+            // Robust Component Provider Helpers
+            Component GetEngine(bool isCommercial, double size = 10) =>
+                _allComponents.FirstOrDefault(c => isCommercial ? c.ComponentName.ToLower().Contains("commercial") : (c.TypeName == "Engine" && !c.ComponentName.ToLower().Contains("commercial"))) ??
+                _allComponents.FirstOrDefault(c => c.TypeName == "Engine") ??
+                new Component { ComponentID = 901, ComponentName = isCommercial ? "Commercial Nuclear Engine (HS 50)" : "Magneto-Plasma Drive (HS 10)", TypeName = "Engine", ComponentSize = isCommercial ? 50 : size, Cost = 50, EnginePower = isCommercial ? 400 : 250, Crew = 5 };
 
-            var commEng = _allComponents.FirstOrDefault(c => c.ComponentName.ToLower().Contains("commercial")) ?? 
-                          _allComponents.FirstOrDefault(c => c.TypeName == "Engine");
-            var milEng = _allComponents.FirstOrDefault(c => c.TypeName == "Engine" && !c.ComponentName.ToLower().Contains("commercial")) ?? 
-                         _allComponents.FirstOrDefault(c => c.TypeName == "Engine");
+            Component GetFuel(bool isLarge = false) =>
+                _allComponents.FirstOrDefault(c => c.TypeName == "Fuel" && (isLarge ? c.ComponentSize >= 5 : c.ComponentSize <= 2)) ??
+                _allComponents.FirstOrDefault(c => c.TypeName == "Fuel") ??
+                new Component { ComponentID = 902, ComponentName = isLarge ? "Large Fuel Tank (250k Liters)" : "Standard Fuel Tank (50k Liters)", TypeName = "Fuel", ComponentSize = isLarge ? 5 : 1, Cost = 5, FuelCapacity = isLarge ? 250000 : 50000 };
 
-            var stdFuel = _allComponents.FirstOrDefault(c => c.TypeName == "Fuel" && c.ComponentSize <= 2) ?? 
-                          _allComponents.FirstOrDefault(c => c.TypeName == "Fuel");
-            var lrgFuel = _allComponents.FirstOrDefault(c => c.TypeName == "Fuel" && c.ComponentSize >= 5) ?? stdFuel;
+            Component GetLaser() =>
+                _allComponents.FirstOrDefault(c => c.TypeName.Contains("Beam") || c.TypeName.Contains("Weapon") || c.TypeName.Contains("Laser") || c.ComponentName.ToLower().Contains("laser")) ??
+                new Component { ComponentID = 903, ComponentName = "15cm C3 Near-Ultraviolet Laser", TypeName = "Beam Weapon", ComponentSize = 4, Cost = 32, Crew = 8 };
 
-            var laser = _allComponents.FirstOrDefault(c => c.TypeName.Contains("Beam") || c.TypeName.Contains("Weapon") || c.TypeName.Contains("Laser"));
-            var sensor = _allComponents.FirstOrDefault(c => c.TypeName.Contains("Sensor") || c.TypeName.Contains("Active"));
-            var shield = _allComponents.FirstOrDefault(c => c.TypeName.Contains("Shield"));
-            var jump = _allComponents.FirstOrDefault(c => c.TypeName.Contains("Jump"));
-            var mag = _allComponents.FirstOrDefault(c => c.TypeName.Contains("Magazine") || c.TypeName.Contains("Launcher"));
+            Component GetSensor(bool isPassive = false) =>
+                _allComponents.FirstOrDefault(c => isPassive ? (c.TypeName.Contains("Passive") || c.ComponentName.ToLower().Contains("thermal") || c.ComponentName.ToLower().Contains("em")) : (c.TypeName.Contains("Active") || c.TypeName.Contains("Sensor"))) ??
+                _allComponents.FirstOrDefault(c => c.TypeName.Contains("Sensor")) ??
+                new Component { ComponentID = 904, ComponentName = isPassive ? "Thermal Sensor Array (TH-10)" : "Active Search Sensor Res-20 (50M km)", TypeName = isPassive ? "Passive Sensor" : "Active Sensor", ComponentSize = isPassive ? 2 : 5, Cost = isPassive ? 20 : 45, ActiveSensor = isPassive ? 0 : 50, PassiveSensor = isPassive ? 10 : 0, Crew = 2 };
 
-            switch (idx)
+            Component GetShield() =>
+                _allComponents.FirstOrDefault(c => c.TypeName.Contains("Shield") || c.ComponentName.ToLower().Contains("shield")) ??
+                new Component { ComponentID = 905, ComponentName = "Alpha Shield Generator", TypeName = "Shield", ComponentSize = 2, Cost = 15, ShieldStrength = 6, Crew = 2 };
+
+            Component GetJump() =>
+                _allComponents.FirstOrDefault(c => c.TypeName.Contains("Jump") || c.ComponentName.ToLower().Contains("jump")) ??
+                new Component { ComponentID = 906, ComponentName = "Military Jump Drive (Max 10,000 Tons)", TypeName = "Jump Drive", ComponentSize = 10, Cost = 150, JumpRating = 3, JumpMaxHS = 200, Crew = 8 };
+
+            Component GetMagazine() =>
+                _allComponents.FirstOrDefault(c => c.TypeName.Contains("Magazine") || c.TypeName.Contains("Launcher") || c.ComponentName.ToLower().Contains("missile")) ??
+                new Component { ComponentID = 907, ComponentName = "Size 6 Missile Magazine (Capacity 120)", TypeName = "Magazine", ComponentSize = 6, Cost = 24, MissileCapacity = 120, Crew = 3 };
+
+            string title = preset.Title;
+            int spaceIdx = title.IndexOf(' ');
+            TxtClassName.Text = spaceIdx >= 0 ? title.Substring(spaceIdx + 1).Trim() : title;
+
+            // Preset configuration logic based on title keywords or category
+            if (title.Contains("DDG Artemis") || title.Contains("Artemis"))
             {
-                case 0: // Carguero Comercial Estándar
-                    TxtClassName.Text = "Carguero Comercial Estándar MK-I";
-                    TxtArmorThickness.Text = "1";
-                    TxtArmorWidth.Text = "10";
-                    if (commEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = commEng, Quantity = 4 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 8 });
-                    break;
-
-                case 1: // Carguero de Colonias
-                    TxtClassName.Text = "Transporte de Colonos Horizonte";
-                    TxtArmorThickness.Text = "2";
-                    TxtArmorWidth.Text = "12";
-                    if (commEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = commEng, Quantity = 6 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 12 });
-                    break;
-
-                case 2: // Estación Minera Orbital Vulcano
-                    TxtClassName.Text = "Estación Minera Orbital Vulcano";
-                    TxtArmorThickness.Text = "2";
-                    TxtArmorWidth.Text = "14";
-                    if (commEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = commEng, Quantity = 2 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 6 });
-                    break;
-
-                case 3: // Refinería Móvil y Tanquero
-                    TxtClassName.Text = "Nave Refinería de Sorium Prometeo";
-                    TxtArmorThickness.Text = "1";
-                    TxtArmorWidth.Text = "12";
-                    if (commEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = commEng, Quantity = 4 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 16 });
-                    break;
-
-                case 4: // Buque Geológico de Exploración
-                    TxtClassName.Text = "Buque Geológico de Exploración Vigía";
-                    TxtArmorThickness.Text = "2";
-                    TxtArmorWidth.Text = "8";
-                    if (milEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = milEng, Quantity = 2 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 4 });
-                    if (sensor != null) _selectedComponents.Add(new SelectedComponentItem { Component = sensor, Quantity = 1 });
-                    break;
-
-                case 5: // Buque Gravitacional de Salto
-                    TxtClassName.Text = "Explorador de Saltos Nebulosa";
-                    TxtArmorThickness.Text = "2";
-                    TxtArmorWidth.Text = "10";
-                    if (milEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = milEng, Quantity = 3 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 5 });
-                    if (jump != null) _selectedComponents.Add(new SelectedComponentItem { Component = jump, Quantity = 1 });
-                    break;
-
-                case 6: // Buque de Rescate y Salvamento
-                    TxtClassName.Text = "Remolcador de Salvamento Érido";
-                    TxtArmorThickness.Text = "2";
-                    TxtArmorWidth.Text = "12";
-                    if (commEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = commEng, Quantity = 4 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 10 });
-                    break;
-
-                case 7: // Destructor de Escolta Picket
-                    TxtClassName.Text = "Destructor de Escolta Clase Vanguardia";
-                    TxtArmorThickness.Text = "4";
-                    TxtArmorWidth.Text = "12";
-                    if (milEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = milEng, Quantity = 4 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 6 });
-                    if (laser != null) _selectedComponents.Add(new SelectedComponentItem { Component = laser, Quantity = 2 });
-                    if (sensor != null) _selectedComponents.Add(new SelectedComponentItem { Component = sensor, Quantity = 1 });
-                    break;
-
-                case 8: // Fragata Lanzamisiles Ligera
-                    TxtClassName.Text = "Fragata Lanzamisiles Relámpago";
-                    TxtArmorThickness.Text = "3";
-                    TxtArmorWidth.Text = "10";
-                    if (milEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = milEng, Quantity = 3 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 5 });
-                    if (mag != null) _selectedComponents.Add(new SelectedComponentItem { Component = mag, Quantity = 2 });
-                    if (sensor != null) _selectedComponents.Add(new SelectedComponentItem { Component = sensor, Quantity = 1 });
-                    break;
-
-                case 9: // Crucero Pesado de Haz Láser
-                    TxtClassName.Text = "Crucero Pesado de Batalla Leviatán";
-                    TxtArmorThickness.Text = "6";
-                    TxtArmorWidth.Text = "16";
-                    if (milEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = milEng, Quantity = 6 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 10 });
-                    if (laser != null) _selectedComponents.Add(new SelectedComponentItem { Component = laser, Quantity = 4 });
-                    if (shield != null) _selectedComponents.Add(new SelectedComponentItem { Component = shield, Quantity = 2 });
-                    break;
-
-                case 10: // Fragata Anti-Misil / Defensa de Punto
-                    TxtClassName.Text = "Fragata de Defensa de Punto Guardián";
-                    TxtArmorThickness.Text = "3";
-                    TxtArmorWidth.Text = "10";
-                    if (milEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = milEng, Quantity = 3 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 4 });
-                    if (laser != null) _selectedComponents.Add(new SelectedComponentItem { Component = laser, Quantity = 3 });
-                    if (sensor != null) _selectedComponents.Add(new SelectedComponentItem { Component = sensor, Quantity = 1 });
-                    break;
-
-                case 11: // Corbeta Sigilosa Stealth
-                    TxtClassName.Text = "Corbeta de Infiltración Sombra";
-                    TxtArmorThickness.Text = "2";
-                    TxtArmorWidth.Text = "8";
-                    if (milEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = milEng, Quantity = 2 });
-                    if (stdFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = stdFuel, Quantity = 4 });
-                    if (sensor != null) _selectedComponents.Add(new SelectedComponentItem { Component = sensor, Quantity = 1 });
-                    break;
-
-                case 12: // Nieve de Reconocimiento ELINT
-                    TxtClassName.Text = "Piquete de Inteligencia Espectro";
-                    TxtArmorThickness.Text = "2";
-                    TxtArmorWidth.Text = "6";
-                    if (milEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = milEng, Quantity = 2 });
-                    if (stdFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = stdFuel, Quantity = 3 });
-                    if (sensor != null) _selectedComponents.Add(new SelectedComponentItem { Component = sensor, Quantity = 2 });
-                    break;
-
-                case 13: // Portanaves Escolta
-                    TxtClassName.Text = "Portanaves Escolta Olympus";
-                    TxtArmorThickness.Text = "4";
-                    TxtArmorWidth.Text = "18";
-                    if (commEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = commEng, Quantity = 6 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 12 });
-                    break;
-
-                case 14: // Caza Estelar Interceptor
-                    TxtClassName.Text = "Caza Interceptor Halcón 250";
-                    TxtArmorThickness.Text = "1";
-                    TxtArmorWidth.Text = "4";
-                    if (milEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = milEng, Quantity = 1 });
-                    if (stdFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = stdFuel, Quantity = 1 });
-                    if (laser != null) _selectedComponents.Add(new SelectedComponentItem { Component = laser, Quantity = 1 });
-                    break;
-
-                case 15: // Bombardero Espacial
-                    TxtClassName.Text = "Bombardero Táctico Trueno";
-                    TxtArmorThickness.Text = "1";
-                    TxtArmorWidth.Text = "6";
-                    if (milEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = milEng, Quantity = 1 });
-                    if (stdFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = stdFuel, Quantity = 2 });
-                    if (mag != null) _selectedComponents.Add(new SelectedComponentItem { Component = mag, Quantity = 1 });
-                    break;
-
-                case 16: // Barcaza de Desembarco de Tropas
-                    TxtClassName.Text = "Transporte de Tropas Mirmidón";
-                    TxtArmorThickness.Text = "4";
-                    TxtArmorWidth.Text = "14";
-                    if (commEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = commEng, Quantity = 4 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 8 });
-                    break;
-
-                case 17: // Monitor Defensivo Bastión de Hierro
-                    TxtClassName.Text = "Monitor Defensivo Bastión de Hierro";
-                    TxtArmorThickness.Text = "10";
-                    TxtArmorWidth.Text = "24";
-                    if (commEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = commEng, Quantity = 2 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 8 });
-                    if (laser != null) _selectedComponents.Add(new SelectedComponentItem { Component = laser, Quantity = 6 });
-                    if (shield != null) _selectedComponents.Add(new SelectedComponentItem { Component = shield, Quantity = 4 });
-                    if (sensor != null) _selectedComponents.Add(new SelectedComponentItem { Component = sensor, Quantity = 2 });
-                    break;
-
-                case 18: // Puesto de Escucha y Alerta Temprana
-                    TxtClassName.Text = "Estación de Alerta Temprana Ojo Celestial";
-                    TxtArmorThickness.Text = "3";
-                    TxtArmorWidth.Text = "12";
-                    if (commEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = commEng, Quantity = 1 });
-                    if (stdFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = stdFuel, Quantity = 4 });
-                    if (sensor != null) _selectedComponents.Add(new SelectedComponentItem { Component = sensor, Quantity = 3 });
-                    break;
-
-                case 19: // Fortaleza Planetaria de Escudos
-                    TxtClassName.Text = "Fortaleza Defensiva Aegis Prime";
-                    TxtArmorThickness.Text = "12";
-                    TxtArmorWidth.Text = "28";
-                    if (commEng != null) _selectedComponents.Add(new SelectedComponentItem { Component = commEng, Quantity = 2 });
-                    if (lrgFuel != null) _selectedComponents.Add(new SelectedComponentItem { Component = lrgFuel, Quantity = 10 });
-                    if (shield != null) _selectedComponents.Add(new SelectedComponentItem { Component = shield, Quantity = 8 });
-                    if (laser != null) _selectedComponents.Add(new SelectedComponentItem { Component = laser, Quantity = 8 });
-                    break;
+                TxtArmorThickness.Text = "4"; TxtArmorWidth.Text = "12";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(false), Quantity = 4 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 6 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetMagazine(), Quantity = 3 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(false), Quantity = 1 });
+            }
+            else if (title.Contains("DD-PD Aegis") || title.Contains("Aegis-G"))
+            {
+                TxtArmorThickness.Text = "4"; TxtArmorWidth.Text = "10";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(false), Quantity = 3 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 5 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetLaser(), Quantity = 4 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(false), Quantity = 1 });
+            }
+            else if (title.Contains("CA Vindicator") || title.Contains("Vindicator") || title.Contains("Crucero Pesado"))
+            {
+                TxtArmorThickness.Text = "6"; TxtArmorWidth.Text = "16";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(false), Quantity = 6 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 10 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetLaser(), Quantity = 4 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetShield(), Quantity = 2 });
+            }
+            else if (title.Contains("CV Valhalla") || title.Contains("Valhalla") || title.Contains("Superportaaviones"))
+            {
+                TxtArmorThickness.Text = "6"; TxtArmorWidth.Text = "24";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(true), Quantity = 8 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 16 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetShield(), Quantity = 4 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(false), Quantity = 2 });
+            }
+            else if (title.Contains("F-01 Hornet") || title.Contains("Hornet") || title.Contains("Caza"))
+            {
+                TxtArmorThickness.Text = "1"; TxtArmorWidth.Text = "4";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(false, 2), Quantity = 1 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(false), Quantity = 1 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetLaser(), Quantity = 1 });
+            }
+            else if (title.Contains("ES-Grav Compass") || title.Contains("Explorador Gravitacional"))
+            {
+                TxtArmorThickness.Text = "2"; TxtArmorWidth.Text = "8";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(false), Quantity = 2 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 4 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetJump(), Quantity = 1 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(true), Quantity = 1 });
+            }
+            else if (title.Contains("ES-Geo Prospector") || title.Contains("Explorador Geológico"))
+            {
+                TxtArmorThickness.Text = "2"; TxtArmorWidth.Text = "8";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(false), Quantity = 2 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 4 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(true), Quantity = 2 });
+            }
+            else if (title.Contains("GSV Pathfinder") || title.Contains("Pathfinder"))
+            {
+                TxtArmorThickness.Text = "3"; TxtArmorWidth.Text = "10";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(false), Quantity = 3 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 6 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetJump(), Quantity = 1 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(false), Quantity = 1 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(true), Quantity = 1 });
+            }
+            else if (title.Contains("Probe") || title.Contains("Lancha Científica"))
+            {
+                TxtArmorThickness.Text = "1"; TxtArmorWidth.Text = "4";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(false, 2), Quantity = 1 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(false), Quantity = 2 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(true), Quantity = 1 });
+            }
+            else if (title.Contains("SV-Scout Sentinel") || title.Contains("Sentinel"))
+            {
+                TxtArmorThickness.Text = "2"; TxtArmorWidth.Text = "8";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(false), Quantity = 2 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 4 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(false), Quantity = 2 });
+            }
+            else if (title.Contains("AOF Endurance") || title.Contains("Prometheus") || title.Contains("Petrolero") || title.Contains("Supertanquero") || title.Contains("Cosechadora"))
+            {
+                TxtArmorThickness.Text = "2"; TxtArmorWidth.Text = "14";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(true), Quantity = 6 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 16 });
+            }
+            else if (title.Contains("BBG Nemesis") || title.Contains("FFG-AMM") || title.Contains("Lanzamisiles") || title.Contains("Asedio"))
+            {
+                TxtArmorThickness.Text = "5"; TxtArmorWidth.Text = "14";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(false), Quantity = 4 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 8 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetMagazine(), Quantity = 4 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(false), Quantity = 1 });
+            }
+            else if (title.Contains("FAC Strikefast") || title.Contains("Corvette") || title.Contains("Gunboat") || title.Contains("Raider"))
+            {
+                TxtArmorThickness.Text = "2"; TxtArmorWidth.Text = "6";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(false), Quantity = 2 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(false), Quantity = 3 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetLaser(), Quantity = 2 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(false), Quantity = 1 });
+            }
+            else if (title.Contains("Freighter Atlas") || title.Contains("Troop Transport") || title.Contains("Mining Ship") || title.Contains("Tugboat") || title.Contains("Carguero"))
+            {
+                TxtArmorThickness.Text = "2"; TxtArmorWidth.Text = "12";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(true), Quantity = 4 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 10 });
+            }
+            else
+            {
+                // General Fallback for any other preset title
+                TxtArmorThickness.Text = "2"; TxtArmorWidth.Text = "10";
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(true), Quantity = 2 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 4 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(false), Quantity = 1 });
             }
 
             // GUARANTEED ZERO-WARNING BALANCE CALCULATOR

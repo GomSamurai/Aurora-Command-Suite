@@ -50,9 +50,21 @@ namespace AuroraDesignSuite.Services
             {
                 return "Blindaje defensivo de casco. Añade capas estructurales de absorción de impactos que protegen la maquinaria, laboratorios y motores frente a penetración perforante.";
             }
-            if (t.Contains("sensor") || t.Contains("control"))
+            if (t.Contains("sensor") || t.Contains("control") || t.Contains("augur") || t.Contains("array") || t.Contains("active") || t.Contains("passive"))
             {
-                return "Sistemas de detección térmica (TH), electromagnética (EM) y radar activo (Res 1 para misiles, Res 20 para cazas, Res 100 para naves capitales). Clave para adquirir objetivos.";
+                return "📡 Sensor y Matriz de Escaneo Espacial: Dispositivo pasivo o activo de prospección electromagnética/térmica para adquirir blancos o cartografiar el sector.";
+            }
+            if (t.Contains("engine") || t.Contains("drive") || t.Contains("motor") || t.Contains("commercial"))
+            {
+                return "🚀 Propulsor Espacial Naval: Impulsor de reacción que dota a la nave de empuje y velocidad táctica (km/s), consumiendo combustible hidrocarburo Sorium LPH.";
+            }
+            if (t.Contains("fuel") || t.Contains("tank") || t.Contains("tanque") || t.Contains("combustible"))
+            {
+                return "⛽ Depósito de Combustible LPH: Almacén de hidrocarburo procesado. Determina la autonomía operativa máxima en kilómetros y años-luz de la nave espacial.";
+            }
+            if (t.Contains("magazine") || t.Contains("launcher") || t.Contains("pañol"))
+            {
+                return "🚀 Pañol y Tubos Lanzamisiles: Sistema de almacenamiento y lanzamiento de ordenanza balística militar para ataques de asedio o intercepción.";
             }
             if (t.Contains("troop") || t.Contains("drop") || t.Contains("transport"))
             {

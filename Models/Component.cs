@@ -34,8 +34,14 @@ namespace AuroraDesignSuite.Models
         public Component Component { get; set; } = new Component();
         public int Quantity { get; set; } = 1;
 
-        public double TotalHS => Component.ComponentSize * Quantity;
-        public double TotalCost => Component.Cost * Quantity;
-        public int TotalCrew => Component.Crew * Quantity;
+        public string ComponentName => Component?.ComponentName ?? "Componente Naval";
+        public string TypeName => Component?.TypeName ?? "Sistema";
+        public string Name => Component?.ComponentName ?? "Componente Naval";
+
+        public double TotalHS => (Component?.ComponentSize ?? 0) * Quantity;
+        public double TotalCost => (Component?.Cost ?? 0) * Quantity;
+        public int TotalCrew => (Component?.Crew ?? 0) * Quantity;
+
+        public override string ToString() => Component?.ComponentName ?? "Componente Naval";
     }
 }

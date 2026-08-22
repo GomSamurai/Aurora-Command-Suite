@@ -591,7 +591,9 @@ namespace AuroraDesignSuite.Views
         private void OnCalcVisibilityChanged(object sender, System.Windows.RoutedEventArgs e)
         {
             if (CardCalc1 == null || CardCalc2 == null || CardCalc3 == null || CardCalc4 == null || CardCalc5 == null ||
-                CardCalc6 == null || CardCalc7 == null || CardCalc8 == null || CardCalc9 == null || CardCalc10 == null) return;
+                CardCalc6 == null || CardCalc7 == null || CardCalc8 == null || CardCalc9 == null || CardCalc10 == null ||
+                CardCalc11 == null || CardCalc12 == null || CardCalc13 == null || CardCalc14 == null || CardCalc15 == null ||
+                CardCalc16 == null || CardCalc17 == null || CardCalc18 == null || CardCalc19 == null || CardCalc20 == null) return;
 
             int activeCount = 0;
 
@@ -605,10 +607,20 @@ namespace AuroraDesignSuite.Views
             if (ChkCalc8 != null) { CardCalc8.Visibility = ChkCalc8.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc8.IsChecked == true) activeCount++; }
             if (ChkCalc9 != null) { CardCalc9.Visibility = ChkCalc9.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc9.IsChecked == true) activeCount++; }
             if (ChkCalc10 != null) { CardCalc10.Visibility = ChkCalc10.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc10.IsChecked == true) activeCount++; }
+            if (ChkCalc11 != null) { CardCalc11.Visibility = ChkCalc11.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc11.IsChecked == true) activeCount++; }
+            if (ChkCalc12 != null) { CardCalc12.Visibility = ChkCalc12.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc12.IsChecked == true) activeCount++; }
+            if (ChkCalc13 != null) { CardCalc13.Visibility = ChkCalc13.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc13.IsChecked == true) activeCount++; }
+            if (ChkCalc14 != null) { CardCalc14.Visibility = ChkCalc14.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc14.IsChecked == true) activeCount++; }
+            if (ChkCalc15 != null) { CardCalc15.Visibility = ChkCalc15.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc15.IsChecked == true) activeCount++; }
+            if (ChkCalc16 != null) { CardCalc16.Visibility = ChkCalc16.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc16.IsChecked == true) activeCount++; }
+            if (ChkCalc17 != null) { CardCalc17.Visibility = ChkCalc17.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc17.IsChecked == true) activeCount++; }
+            if (ChkCalc18 != null) { CardCalc18.Visibility = ChkCalc18.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc18.IsChecked == true) activeCount++; }
+            if (ChkCalc19 != null) { CardCalc19.Visibility = ChkCalc19.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc19.IsChecked == true) activeCount++; }
+            if (ChkCalc20 != null) { CardCalc20.Visibility = ChkCalc20.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc20.IsChecked == true) activeCount++; }
 
             if (BtnSelectCalculators != null)
             {
-                BtnSelectCalculators.Content = $"🎛️ Selector de Calculadoras ({activeCount}/10) 🔻";
+                BtnSelectCalculators.Content = $"🎛️ Selector de Calculadoras ({activeCount}/20) 🔻";
             }
         }
 
@@ -639,6 +651,16 @@ namespace AuroraDesignSuite.Views
             if (ChkCalc8 != null) ChkCalc8.IsChecked = isChecked;
             if (ChkCalc9 != null) ChkCalc9.IsChecked = isChecked;
             if (ChkCalc10 != null) ChkCalc10.IsChecked = isChecked;
+            if (ChkCalc11 != null) ChkCalc11.IsChecked = isChecked;
+            if (ChkCalc12 != null) ChkCalc12.IsChecked = isChecked;
+            if (ChkCalc13 != null) ChkCalc13.IsChecked = isChecked;
+            if (ChkCalc14 != null) ChkCalc14.IsChecked = isChecked;
+            if (ChkCalc15 != null) ChkCalc15.IsChecked = isChecked;
+            if (ChkCalc16 != null) ChkCalc16.IsChecked = isChecked;
+            if (ChkCalc17 != null) ChkCalc17.IsChecked = isChecked;
+            if (ChkCalc18 != null) ChkCalc18.IsChecked = isChecked;
+            if (ChkCalc19 != null) ChkCalc19.IsChecked = isChecked;
+            if (ChkCalc20 != null) ChkCalc20.IsChecked = isChecked;
 
             OnCalcVisibilityChanged(this, new System.Windows.RoutedEventArgs());
         }
@@ -738,7 +760,7 @@ namespace AuroraDesignSuite.Views
                     double.TryParse(TxtFormulaMiningCount.Text, out double mineCount) &&
                     double.TryParse(TxtFormulaMiningAcc.Text, out double mineAcc) && mineCount > 0 && mineAcc > 0)
                 {
-                    double ratePerMine = 12.0; // Standard 12 tons/year base rate at 1.0 acc
+                    double ratePerMine = 12.0;
                     double outputPerMin = mineCount * ratePerMine * Math.Min(1.0, mineAcc);
                     double totalAllMins = outputPerMin * 11.0;
                     LblFormulaMiningResult.Text = $"{outputPerMin:N0} Tons / Año por mineral ({totalAllMins:N0} Tons combinadas de los 11 minerales)";
@@ -752,6 +774,107 @@ namespace AuroraDesignSuite.Views
                     double detRangeKm = thermalSig * sensPower * 10000.0;
                     double detRangeMkm = detRangeKm / 1000000.0;
                     LblFormulaStealthResult.Text = $"{detRangeMkm:N2} Mkm ({detRangeKm:N0} km de delación por radiación térmica)";
+                }
+
+                // 11. Shield Recharge Formula
+                if (TxtFormulaShieldCount != null && TxtFormulaShieldTech != null && LblFormulaShieldResult != null &&
+                    double.TryParse(TxtFormulaShieldCount.Text, out double shCount) &&
+                    double.TryParse(TxtFormulaShieldTech.Text, out double shPower) && shCount > 0 && shPower > 0)
+                {
+                    double totalShields = shCount * shPower;
+                    double rechargeSecs = totalShields * 10.0;
+                    double rechargeMins = rechargeSecs / 60.0;
+                    LblFormulaShieldResult.Text = $"{totalShields:N0} Puntos de Escudo | Tiempo de Recarga 100%: {rechargeSecs:N0} Segundos ({rechargeMins:F1} min)";
+                }
+
+                // 12. Beam Capacitor Recharge Formula
+                if (TxtFormulaBeamPower != null && TxtFormulaCapacitorRate != null && LblFormulaBeamResult != null &&
+                    double.TryParse(TxtFormulaBeamPower.Text, out double beamEU) &&
+                    double.TryParse(TxtFormulaCapacitorRate.Text, out double capEU) && beamEU > 0 && capEU > 0)
+                {
+                    double turnsNeeded = Math.Ceiling(beamEU / capEU);
+                    double secsNeeded = turnsNeeded * 5.0;
+                    LblFormulaBeamResult.Text = $"1 Disparo cada {secsNeeded:N0} Segundos ({turnsNeeded:N0} Turnos de 5s)";
+                }
+
+                // 13. Missile Hit Probability Formula
+                if (TxtFormulaMissileSpeed != null && TxtFormulaTargetSpeed != null && LblFormulaMissileHitResult != null &&
+                    double.TryParse(TxtFormulaMissileSpeed.Text, out double mSpeed) &&
+                    double.TryParse(TxtFormulaTargetSpeed.Text, out double tSpeed) && mSpeed > 0 && tSpeed > 0)
+                {
+                    double speedRatio = mSpeed / tSpeed;
+                    double hitPct = Math.Min(100.0, Math.Max(1.0, speedRatio * 37.5));
+                    LblFormulaMissileHitResult.Text = $"{hitPct:F1}% de Impacto (Relación de Velocidad {speedRatio:F2}x)";
+                }
+
+                // 14. Construction Capacity Formula
+                if (TxtFormulaFactoriesCount != null && TxtFormulaGovMod != null && LblFormulaConstResult != null &&
+                    double.TryParse(TxtFormulaFactoriesCount.Text, out double facCount) &&
+                    double.TryParse(TxtFormulaGovMod.Text, out double govMod) && facCount > 0)
+                {
+                    double totalBP = facCount * 10.0 * (1.0 + (govMod / 100.0));
+                    double daysFor1Fac = Math.Round(120.0 / (totalBP / 365.0), 0);
+                    LblFormulaConstResult.Text = $"{totalBP:N0} BP / Año (Tiempo para edificar 1 fábrica de 120 BP: ~{daysFor1Fac:N0} Días)";
+                }
+
+                // 15. Passive EM Sensor Detection Formula
+                if (TxtFormulaEMSensingSig != null && TxtFormulaEMSensRating != null && LblFormulaEMResult != null &&
+                    double.TryParse(TxtFormulaEMSensingSig.Text, out double emSig) &&
+                    double.TryParse(TxtFormulaEMSensRating.Text, out double emSens) && emSig > 0 && emSens > 0)
+                {
+                    double emRangeKm = emSig * emSens * 10000.0;
+                    double emRangeMkm = emRangeKm / 1000000.0;
+                    LblFormulaEMResult.Text = $"{emRangeMkm:N2} Mkm ({emRangeKm:N0} km de delación pasiva de escudos/radares)";
+                }
+
+                // 16. Mass Driver Transport Logistics Formula
+                if (TxtFormulaMassDriverCount != null && TxtFormulaDriverDist != null && LblFormulaMassDriverResult != null &&
+                    double.TryParse(TxtFormulaMassDriverCount.Text, out double driverCount) &&
+                    double.TryParse(TxtFormulaDriverDist.Text, out double driverDistMkm) && driverCount > 0)
+                {
+                    double tonsPerYear = driverCount * 5000.0;
+                    double flightDays = Math.Round(driverDistMkm / 43.2, 1);
+                    LblFormulaMassDriverResult.Text = $"{tonsPerYear:N0} Tons / Año catapultadas (Tránsito: ~{flightDays:F1} Días por paquete)";
+                }
+
+                // 17. Research RP Output Formula
+                if (TxtFormulaLabsCount != null && TxtFormulaSciBonus != null && LblFormulaResearchResult != null &&
+                    double.TryParse(TxtFormulaLabsCount.Text, out double labCount) &&
+                    double.TryParse(TxtFormulaSciBonus.Text, out double sciBonus) && labCount > 0)
+                {
+                    double totalRP = labCount * 200.0 * (1.0 + (sciBonus / 100.0));
+                    double yearsFor5k = Math.Round(5000.0 / totalRP, 1);
+                    LblFormulaResearchResult.Text = $"{totalRP:N0} RP / Año (Tiempo para investigar tecnología de 5,000 RP: ~{yearsFor5k:F1} Años)";
+                }
+
+                // 18. Point Defense & CIWS Interception Formula
+                if (TxtFormulaGaussCount != null && TxtFormulaTrackingSpeed != null && LblFormulaPointDefResult != null &&
+                    double.TryParse(TxtFormulaGaussCount.Text, out double gaussShots) &&
+                    double.TryParse(TxtFormulaTrackingSpeed.Text, out double trackSpeed) && gaussShots > 0 && trackSpeed > 0)
+                {
+                    double trackRatio = Math.Min(1.0, trackSpeed / 10000.0);
+                    double intercepted = Math.Round(gaussShots * 0.5 * trackRatio, 1);
+                    LblFormulaPointDefResult.Text = $"~{intercepted:F1} Misiles enemigos interceptados por turno de 5 segundos";
+                }
+
+                // 19. Naval Maintenance Drydock Capacity Formula
+                if (TxtFormulaMaintFacCount != null && TxtFormulaColonyPop != null && LblFormulaNavalMaintResult != null &&
+                    double.TryParse(TxtFormulaMaintFacCount.Text, out double maintFacs) &&
+                    double.TryParse(TxtFormulaColonyPop.Text, out double colPop) && maintFacs > 0)
+                {
+                    double maxTonnage = maintFacs * 2000.0;
+                    LblFormulaNavalMaintResult.Text = $"{maxTonnage:N0} Toneladas Navales soportadas sin desgaste en dique seco";
+                }
+
+                // 20. Empire Wealth Generation Formula
+                if (TxtFormulaPopMillions != null && TxtFormulaFinancialCount != null && LblFormulaWealthResult != null &&
+                    double.TryParse(TxtFormulaPopMillions.Text, out double popM) &&
+                    double.TryParse(TxtFormulaFinancialCount.Text, out double finCount))
+                {
+                    double popIncome = popM * 1000.0;
+                    double finIncome = finCount * 25000.0;
+                    double totalWealth = popIncome + finIncome;
+                    LblFormulaWealthResult.Text = $"{totalWealth:N0} Riqueza / Año (Población: {popIncome:N0} + Centros Financieros: {finIncome:N0})";
                 }
             }
             catch { }

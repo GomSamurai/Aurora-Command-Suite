@@ -565,6 +565,84 @@ namespace AuroraDesignSuite.Views
             }
         }
 
+        private void BtnToggleCalculators_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (PnlCalculatorsContainer == null || BtnToggleCalculators == null) return;
+            if (PnlCalculatorsContainer.Visibility == System.Windows.Visibility.Visible)
+            {
+                PnlCalculatorsContainer.Visibility = System.Windows.Visibility.Collapsed;
+                BtnToggleCalculators.Content = "👁️ Mostrar Calculadoras";
+            }
+            else
+            {
+                PnlCalculatorsContainer.Visibility = System.Windows.Visibility.Visible;
+                BtnToggleCalculators.Content = "👁️ Ocultar Calculadoras";
+            }
+        }
+
+        private void BtnSelectCalculators_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (PnlCalculatorSelector == null) return;
+            PnlCalculatorSelector.Visibility = PnlCalculatorSelector.Visibility == System.Windows.Visibility.Visible
+                ? System.Windows.Visibility.Collapsed
+                : System.Windows.Visibility.Visible;
+        }
+
+        private void OnCalcVisibilityChanged(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (CardCalc1 == null || CardCalc2 == null || CardCalc3 == null || CardCalc4 == null || CardCalc5 == null ||
+                CardCalc6 == null || CardCalc7 == null || CardCalc8 == null || CardCalc9 == null || CardCalc10 == null) return;
+
+            int activeCount = 0;
+
+            if (ChkCalc1 != null) { CardCalc1.Visibility = ChkCalc1.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc1.IsChecked == true) activeCount++; }
+            if (ChkCalc2 != null) { CardCalc2.Visibility = ChkCalc2.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc2.IsChecked == true) activeCount++; }
+            if (ChkCalc3 != null) { CardCalc3.Visibility = ChkCalc3.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc3.IsChecked == true) activeCount++; }
+            if (ChkCalc4 != null) { CardCalc4.Visibility = ChkCalc4.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc4.IsChecked == true) activeCount++; }
+            if (ChkCalc5 != null) { CardCalc5.Visibility = ChkCalc5.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc5.IsChecked == true) activeCount++; }
+            if (ChkCalc6 != null) { CardCalc6.Visibility = ChkCalc6.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc6.IsChecked == true) activeCount++; }
+            if (ChkCalc7 != null) { CardCalc7.Visibility = ChkCalc7.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc7.IsChecked == true) activeCount++; }
+            if (ChkCalc8 != null) { CardCalc8.Visibility = ChkCalc8.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc8.IsChecked == true) activeCount++; }
+            if (ChkCalc9 != null) { CardCalc9.Visibility = ChkCalc9.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc9.IsChecked == true) activeCount++; }
+            if (ChkCalc10 != null) { CardCalc10.Visibility = ChkCalc10.IsChecked == true ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed; if (ChkCalc10.IsChecked == true) activeCount++; }
+
+            if (BtnSelectCalculators != null)
+            {
+                BtnSelectCalculators.Content = $"🎛️ Selector de Calculadoras ({activeCount}/10) 🔻";
+            }
+        }
+
+        private void BtnCheckAll_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SetAllCheckState(true);
+        }
+
+        private void BtnUncheckAll_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SetAllCheckState(false);
+        }
+
+        private void BtnResetDefault_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SetAllCheckState(true);
+        }
+
+        private void SetAllCheckState(bool isChecked)
+        {
+            if (ChkCalc1 != null) ChkCalc1.IsChecked = isChecked;
+            if (ChkCalc2 != null) ChkCalc2.IsChecked = isChecked;
+            if (ChkCalc3 != null) ChkCalc3.IsChecked = isChecked;
+            if (ChkCalc4 != null) ChkCalc4.IsChecked = isChecked;
+            if (ChkCalc5 != null) ChkCalc5.IsChecked = isChecked;
+            if (ChkCalc6 != null) ChkCalc6.IsChecked = isChecked;
+            if (ChkCalc7 != null) ChkCalc7.IsChecked = isChecked;
+            if (ChkCalc8 != null) ChkCalc8.IsChecked = isChecked;
+            if (ChkCalc9 != null) ChkCalc9.IsChecked = isChecked;
+            if (ChkCalc10 != null) ChkCalc10.IsChecked = isChecked;
+
+            OnCalcVisibilityChanged(this, new System.Windows.RoutedEventArgs());
+        }
+
         private void OnFormulaInputChanged(object sender, TextChangedEventArgs e)
         {
             try
@@ -582,7 +660,7 @@ namespace AuroraDesignSuite.Views
                     double.TryParse(TxtFormulaRadarStrength.Text, out double strength) &&
                     double.TryParse(TxtFormulaRadarRes.Text, out double res) && strength > 0 && res > 0)
                 {
-                    double rangeKm = strength * Math.Sqrt(res) * 40000.0 * 10.0; // Standard Aurora 4X Active Sensor Math
+                    double rangeKm = strength * Math.Sqrt(res) * 40000.0 * 10.0;
                     double rangeMkm = rangeKm / 1000000.0;
                     LblFormulaRadarResult.Text = $"{rangeMkm:N2} Mkm ({rangeKm:N0} km)";
                 }
@@ -595,6 +673,85 @@ namespace AuroraDesignSuite.Views
                     double fuelPerHour = ep * rate;
                     double fuelPerDay = fuelPerHour * 24.0;
                     LblFormulaEngineResult.Text = $"{fuelPerDay:N0} Litros / Día ({fuelPerHour:N1} L/hora)";
+                }
+
+                // 4. Retooling Cost Formula
+                if (TxtFormulaRetoolCapacity != null && TxtFormulaRetoolDiff != null && LblFormulaRetoolResult != null &&
+                    double.TryParse(TxtFormulaRetoolCapacity.Text, out double capTons) &&
+                    double.TryParse(TxtFormulaRetoolDiff.Text, out double diffPct))
+                {
+                    double normDiff = Math.Min(100.0, Math.Max(0.0, diffPct)) / 100.0;
+                    double retoolCostBP = capTons * 0.05 * (0.20 + 0.80 * normDiff);
+                    double retoolDays = Math.Round(retoolCostBP / (500.0 / 365.0), 0);
+                    LblFormulaRetoolResult.Text = $"{retoolCostBP:N0} BP ({retoolDays:N0} Días de re-equipamiento a 500 BP/año)";
+                }
+
+                // 5. Naval Speed Formula
+                if (TxtFormulaSpeedEP != null && TxtFormulaSpeedHS != null && LblFormulaSpeedResult != null &&
+                    double.TryParse(TxtFormulaSpeedEP.Text, out double speedEP) &&
+                    double.TryParse(TxtFormulaSpeedHS.Text, out double speedHS) && speedHS > 0)
+                {
+                    double speedKmS = (speedEP / speedHS) * 1000.0;
+                    double speedKmH = speedKmS * 3600.0;
+                    LblFormulaSpeedResult.Text = $"{speedKmS:N0} km/s ({speedKmH:N0} km/h)";
+                }
+
+                // 6. Max Range & Endurance Formula
+                if (TxtFormulaRangeFuel != null && TxtFormulaRangeSpeed != null && LblFormulaRangeResult != null &&
+                    double.TryParse(TxtFormulaRangeFuel.Text, out double totalFuel) &&
+                    double.TryParse(TxtFormulaRangeSpeed.Text, out double cruiseSpeedKmS) && totalFuel > 0 && cruiseSpeedKmS > 0)
+                {
+                    double burnLPH = 500.0 * 0.8;
+                    double flightHours = totalFuel / burnLPH;
+                    double flightDays = flightHours / 24.0;
+                    double totalDistBkm = (flightHours * cruiseSpeedKmS * 3600.0) / 1_000_000_000.0;
+                    double totalDistAU = totalDistBkm / 0.14959787;
+                    LblFormulaRangeResult.Text = $"{totalDistBkm:N2} Mil Millones km ({totalDistAU:N2} AU) | {flightDays:F1} Días de vuelo continuo";
+                }
+
+                // 7. Maintenance AFR & MSP Formula
+                if (TxtFormulaMaintBP != null && TxtFormulaMaintDCR != null && LblFormulaMaintResult != null &&
+                    double.TryParse(TxtFormulaMaintBP.Text, out double shipCostBP) &&
+                    double.TryParse(TxtFormulaMaintDCR.Text, out double dcrRating) && shipCostBP > 0)
+                {
+                    double effDCR = Math.Max(1.0, dcrRating);
+                    double afrPercent = Math.Min(100.0, Math.Max(1.0, (shipCostBP / (effDCR * 5.0))));
+                    double mtbfDays = Math.Round(365.0 / (afrPercent / 100.0), 0);
+                    LblFormulaMaintResult.Text = $"AFR: {afrPercent:F1}% | Tiempo Promedio entre Fallos Mecánicos: ~{mtbfDays:N0} Días";
+                }
+
+                // 8. Planet Colony Cost Formula
+                if (TxtFormulaColonyTemp != null && TxtFormulaColonyO2 != null && LblFormulaColonyResult != null &&
+                    double.TryParse(TxtFormulaColonyTemp.Text, out double colTemp) &&
+                    double.TryParse(TxtFormulaColonyO2.Text, out double colO2))
+                {
+                    double tempDiff = Math.Abs(colTemp - 15.0);
+                    double tempCost = tempDiff > 30.0 ? (tempDiff - 30.0) / 20.0 : 0.0;
+                    double o2Cost = colO2 < 0.10 ? 2.0 : (colO2 > 0.30 ? 3.0 : 0.0);
+                    double netColonyCost = Math.Round(tempCost + o2Cost, 2);
+                    double infraReq = netColonyCost * 100.0;
+                    LblFormulaColonyResult.Text = $"Colony Cost: {netColonyCost:F2} (Requiere {infraReq:N0} Infraestructuras por millón de habs)";
+                }
+
+                // 9. Mining Yield Formula
+                if (TxtFormulaMiningCount != null && TxtFormulaMiningAcc != null && LblFormulaMiningResult != null &&
+                    double.TryParse(TxtFormulaMiningCount.Text, out double mineCount) &&
+                    double.TryParse(TxtFormulaMiningAcc.Text, out double mineAcc) && mineCount > 0 && mineAcc > 0)
+                {
+                    double ratePerMine = 12.0; // Standard 12 tons/year base rate at 1.0 acc
+                    double outputPerMin = mineCount * ratePerMine * Math.Min(1.0, mineAcc);
+                    double totalAllMins = outputPerMin * 11.0;
+                    LblFormulaMiningResult.Text = $"{outputPerMin:N0} Tons / Año por mineral ({totalAllMins:N0} Tons combinadas de los 11 minerales)";
+                }
+
+                // 10. Passive Thermal Signature & Stealth Detection Formula
+                if (TxtFormulaStealthTH != null && TxtFormulaStealthSens != null && LblFormulaStealthResult != null &&
+                    double.TryParse(TxtFormulaStealthTH.Text, out double thermalSig) &&
+                    double.TryParse(TxtFormulaStealthSens.Text, out double sensPower) && thermalSig > 0 && sensPower > 0)
+                {
+                    double detRangeKm = thermalSig * sensPower * 10000.0;
+                    double detRangeMkm = detRangeKm / 1000000.0;
+                    LblFormulaStealthResult.Text = $"{detRangeMkm:N2} Mkm ({detRangeKm:N0} km de delación por radiación térmica)";
                 }
             }
             catch { }

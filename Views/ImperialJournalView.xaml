@@ -4,10 +4,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1200">
+             d:DesignHeight="850" d:DesignWidth="1280">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="420" MinWidth="300"/>
+            <ColumnDefinition Width="420" MinWidth="320"/>
             <ColumnDefinition Width="6"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -33,8 +33,8 @@
             <!-- Card 1: Header -->
             <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                 <DockPanel>
-                    <TextBlock Text="📜 DIARIO DE MANDO Y BITÁCORA IMPERIAL" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
-                    <Button Content="➕ Nueva Nota" Click="BtnNewEntry_Click" Padding="8,4" HorizontalAlignment="Right" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
+                    <TextBlock Text="📜 DIARIO DE MANDO Y BITÁCORA IMPERIAL" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
+                    <Button Content="➕ Nueva Directiva" Click="BtnNewEntry_Click" Padding="8,4" HorizontalAlignment="Right" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
                 </DockPanel>
             </Border>
 
@@ -42,14 +42,28 @@
             <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,10">
                 <StackPanel>
                     <TextBox x:Name="TxtSearchJournal" TextChanged="TxtSearchJournal_TextChanged" Padding="6,4" Margin="0,0,0,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource BorderBrush}" FontSize="11" ToolTip="Filtra tus notas imperiales por título, categoría o texto."/>
-                    <ComboBox x:Name="CboCategoryFilter" SelectionChanged="CboCategoryFilter_SelectionChanged" Padding="6,4">
-                        <ComboBoxItem Content="🌟 Todas las Categorías" IsSelected="True"/>
-                        <ComboBoxItem Content="⚔️ Misión Militar"/>
-                        <ComboBoxItem Content="🏭 Plan Industrial"/>
-                        <ComboBoxItem Content="🔬 Investigación I+D"/>
-                        <ComboBoxItem Content="🌌 Exploración"/>
-                        <ComboBoxItem Content="📜 Novela de Rol"/>
-                    </ComboBox>
+                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox x:Name="CboCategoryFilter" Grid.Column="0" SelectionChanged="CboCategoryFilter_SelectionChanged" Padding="6,4" Margin="0,0,4,0">
+                            <ComboBoxItem Content="🌟 Todas las Categorías" IsSelected="True"/>
+                            <ComboBoxItem Content="⚔️ Misión Militar"/>
+                            <ComboBoxItem Content="🏭 Plan Industrial"/>
+                            <ComboBoxItem Content="🔬 Investigación I+D"/>
+                            <ComboBoxItem Content="🌌 Exploración"/>
+                            <ComboBoxItem Content="📜 Novela de Rol"/>
+                        </ComboBox>
+
+                        <ComboBox x:Name="CboStatusFilter" Grid.Column="1" SelectionChanged="CboStatusFilter_SelectionChanged" Padding="6,4" Margin="4,0,0,0">
+                            <ComboBoxItem Content="🌟 Todos los Estados" IsSelected="True"/>
+                            <ComboBoxItem Content="⏳ Pendientes (En Curso)"/>
+                            <ComboBoxItem Content="✅ Completadas (Verde)"/>
+                        </ComboBox>
+                    </Grid>
                 </StackPanel>
             </Border>
 
@@ -58,7 +72,7 @@
                 <ListBox x:Name="LstJournalEntries" SelectionChanged="LstJournalEntries_SelectionChanged" Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Border Padding="10,8" Margin="0,3" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4">
+                            <Border Padding="10,8" Margin="0,3" Background="{Binding CardBackgroundHex}" BorderBrush="{Binding CardBorderHex}" BorderThickness="1.5" CornerRadius="5">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -66,13 +80,16 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <DockPanel Grid.Row="0">
-                                        <TextBlock Text="{Binding Title}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding Title}" Foreground="{Binding TitleForegroundHex}" FontWeight="Bold" FontSize="11.5" TextTrimming="CharacterEllipsis"/>
                                     </DockPanel>
                                     <DockPanel Grid.Row="1" Margin="0,4,0,0">
                                         <TextBlock Text="{Binding Category}" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                                         <TextBlock Text="{Binding PriorityBadge}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/>
                                     </DockPanel>
-                                    <TextBlock Grid.Row="2" Text="{Binding FormattedDate}" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5" Margin="0,2,0,0"/>
+                                    <DockPanel Grid.Row="2" Margin="0,4,0,0">
+                                        <TextBlock Text="{Binding FormattedStatus}" Foreground="{Binding StatusBadgeColorHex}" FontWeight="Bold" FontSize="9.5"/>
+                                        <TextBlock Text="{Binding SubTaskSummary}" Foreground="{DynamicResource AccentCyanBrush}" FontSize="9.5" HorizontalAlignment="Right"/>
+                                    </DockPanel>
                                 </Grid>
                             </Border>
                         </DataTemplate>
@@ -86,64 +103,154 @@
             </StackPanel>
         </Grid>
 
-        <!-- Right Column: Note Editor / Reader -->
-        <Border Grid.Column="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="16" Margin="4,0,0,0">
-            <Grid x:Name="PnlEditor">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+        <!-- Right Column: Note Editor & Project Planner -->
+        <Border Grid.Column="2" x:Name="PnlEditorBorder" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="14" Margin="4,0,0,0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid x:Name="PnlEditor">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                <!-- Note Header Inputs -->
-                <Grid Grid.Row="0" Margin="0,0,0,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="160"/>
-                        <ColumnDefinition Width="130"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- Row 0: Directive Header & Properties -->
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
-                        <TextBlock Text="Título de la Nota / Directiva Imperial:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                        <TextBox x:Name="TxtEditTitle" Padding="6,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12"/>
+                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                            <TextBlock Text="Título de la Nota / Directiva Imperial:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                            <TextBox x:Name="TxtEditTitle" Padding="6,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Margin="0,0,8,0">
+                            <TextBlock Text="Carpeta / Código Proyecto:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                            <TextBox x:Name="TxtEditFolder" Padding="6,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontSize="11"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Margin="0,0,8,0">
+                            <TextBlock Text="Categoría:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                            <ComboBox x:Name="CboEditCategory" Padding="6,4">
+                                <ComboBoxItem Content="⚔️ Misión Militar" IsSelected="True"/>
+                                <ComboBoxItem Content="🏭 Plan Industrial"/>
+                                <ComboBoxItem Content="🔬 Investigación I+D"/>
+                                <ComboBoxItem Content="🌌 Exploración"/>
+                                <ComboBoxItem Content="📜 Novela de Rol"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="3">
+                            <TextBlock Text="Prioridad:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                            <ComboBox x:Name="CboEditPriority" Padding="6,4">
+                                <ComboBoxItem Content="Alta"/>
+                                <ComboBoxItem Content="Media" IsSelected="True"/>
+                                <ComboBoxItem Content="Baja"/>
+                                <ComboBoxItem Content="Crítica"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Row 1: Completion Banner, Progress Bar & Target Date -->
+                    <Border Grid.Row="1" x:Name="BdrStatusBanner" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <CheckBox x:Name="ChkEditCompleted" Grid.Column="0" Content="✅ Marcar como Directiva COMPLETADA" Checked="ChkEditCompleted_Changed" Unchecked="ChkEditCompleted_Changed" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,14,0"/>
+
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,14,0">
+                                <DockPanel Margin="0,0,0,3">
+                                    <TextBlock Text="PROGRESO GLOBAL DEL PROYECTO" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock x:Name="TxtProgressPercentLabel" Text="0% COMPLETADO" Foreground="{DynamicResource AccentGreenBrush}" FontSize="10.5" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                </DockPanel>
+                                <ProgressBar x:Name="PbarProgress" Height="10" Minimum="0" Maximum="100" Value="0" Foreground="{DynamicResource AccentGreenBrush}" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                <StackPanel Margin="0,0,8,0">
+                                    <TextBlock Text="Fecha Límite:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
+                                    <DatePicker x:Name="DpTargetDate" Width="110" FontSize="10"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Días Est.:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
+                                    <TextBox x:Name="TxtEstimatedDays" Width="50" Padding="4,2" Background="{DynamicResource CardBgBrush}" Foreground="White" FontSize="10"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Row 2: Resource Budget & Formula Planner -->
+                    <Border Grid.Row="2" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                <TextBlock Text="Presupuesto Puntos Const. (BP):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,2"/>
+                                <TextBox x:Name="TxtRequiredBP" Padding="4,3" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Minerales y Recursos Requeridos (Ej: Duranium: 5,000t | Sorium: 2,500t):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" Margin="0,0,0,2"/>
+                                <TextBox x:Name="TxtRequiredMinerals" Padding="4,3" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontSize="11"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Row 3: Content Text Area -->
+                    <StackPanel Grid.Row="3" Margin="0,0,0,10">
+                        <TextBlock Text="Instrucciones Tácticas y Detalles de la Directiva:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,3"/>
+                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6">
+                            <TextBox x:Name="TxtEditContent" MinHeight="100" MaxHeight="250" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Background="Transparent" Foreground="White" BorderThickness="0" FontSize="11.5"/>
+                        </Border>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1" Margin="0,0,8,0">
-                        <TextBlock Text="Categoría:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                        <ComboBox x:Name="CboEditCategory" Padding="6,4">
-                            <ComboBoxItem Content="⚔️ Misión Militar" IsSelected="True"/>
-                            <ComboBoxItem Content="🏭 Plan Industrial"/>
-                            <ComboBoxItem Content="🔬 Investigación I+D"/>
-                            <ComboBoxItem Content="🌌 Exploración"/>
-                            <ComboBoxItem Content="📜 Novela de Rol"/>
-                        </ComboBox>
-                    </StackPanel>
+                    <!-- Row 4: Interactive Sub-Notes & Sub-Tasks Grid -->
+                    <Border Grid.Row="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,0,0,10">
+                        <StackPanel>
+                            <DockPanel Margin="0,0,0,8">
+                                <TextBlock Text="📋 SUB-NOTAS Y SUB-TAREAS (DESGLOSE DE PROYECTO)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5" VerticalAlignment="Center"/>
+                                <Button Content="➕ Añadir Sub-tarea" Click="BtnAddSubTask_Click" Padding="8,3" HorizontalAlignment="Right" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5"/>
+                            </DockPanel>
 
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Prioridad:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                        <ComboBox x:Name="CboEditPriority" Padding="6,4">
-                            <ComboBoxItem Content="Alta"/>
-                            <ComboBoxItem Content="Media" IsSelected="True"/>
-                            <ComboBoxItem Content="Baja"/>
-                            <ComboBoxItem Content="Crítica"/>
-                        </ComboBox>
-                    </StackPanel>
+                            <DataGrid x:Name="DgSubTasks" AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent" BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" RowBackground="{DynamicResource CardBgBrush}" AlternatingRowBackground="{DynamicResource CardHeaderBrush}" HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="{DynamicResource BorderBrush}">
+                                <DataGrid.Columns>
+                                    <DataGridCheckBoxColumn Header="✓ Hecho" Binding="{Binding IsDone, UpdateSourceTrigger=PropertyChanged}" Width="60"/>
+                                    <DataGridTextColumn Header="Título de Sub-tarea / Sub-nota" Binding="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                                    <DataGridTextColumn Header="Avance (%)" Binding="{Binding ProgressPercent, UpdateSourceTrigger=PropertyChanged}" Width="80"/>
+                                    <DataGridTextColumn Header="Recurso Asignado" Binding="{Binding ResourceAssignment, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+                                    <DataGridTextColumn Header="Notas / Observaciones" Binding="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Width="180"/>
+                                    <DataGridTemplateColumn Header="Acciones" Width="70">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="❌ Del" Click="BtnDeleteSubTask_Click" Padding="4,2" Background="Transparent" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" FontSize="9.5"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Row 5: Save & Delete Buttons -->
+                    <DockPanel Grid.Row="5" Margin="0,4,0,0">
+                        <Button Content="🗑️ Eliminar Directiva" Click="BtnDeleteEntry_Click" Padding="12,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="11"/>
+                        <Button Content="💾 Guardar Cambios" Click="BtnSaveEntry_Click" Padding="16,6" HorizontalAlignment="Right" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5"/>
+                    </DockPanel>
                 </Grid>
-
-                <CheckBox x:Name="ChkEditCompleted" Grid.Row="1" Content="✅ Marcar como Directiva Completada" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" Margin="0,0,0,10"/>
-
-                <!-- Content Text Area -->
-                <Border Grid.Row="2" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="0,0,0,10">
-                    <TextBox x:Name="TxtEditContent" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Background="Transparent" Foreground="White" BorderThickness="0" FontSize="12"/>
-                </Border>
-
-                <!-- Save & Delete Buttons -->
-                <DockPanel Grid.Row="3">
-                    <Button Content="🗑️ Eliminar Nota" Click="BtnDeleteEntry_Click" Padding="10,6" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" FontWeight="Bold" FontSize="11"/>
-                    <Button Content="💾 Guardar Cambios" Click="BtnSaveEntry_Click" Padding="14,6" HorizontalAlignment="Right" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
-                </DockPanel>
-            </Grid>
+            </ScrollViewer>
         </Border>
     </Grid>
 </UserControl>

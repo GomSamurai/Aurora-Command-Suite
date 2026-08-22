@@ -50,53 +50,32 @@ namespace AuroraDesignSuite.Services
             {
                 return "Blindaje defensivo de casco. Añade capas estructurales de absorción de impactos que protegen la maquinaria, laboratorios y motores frente a penetración perforante.";
             }
-            if (t.Contains("sensor") || t.Contains("control") || t.Contains("augur") || t.Contains("array") || t.Contains("active") || t.Contains("passive"))
+            if (t.Contains("maintenance") || t.Contains("maint") || t.Contains("engineering") || t.Contains("repuestos"))
             {
-                return "📡 Sensor y Matriz de Escaneo Espacial: Dispositivo pasivo o activo de prospección electromagnética/térmica para adquirir blancos o cartografiar el sector.";
+                return $"📌 CONCEPTO & DEFINICIÓN:\n{techName} es un módulo de repuestos de mantenimiento (MSP) y espacios de ingeniería de la nave.\n\n⚙️ FUNCIÓN Y MECÁNICA EN JUEGO:\n• Repuestos MSP: Acumula materiales para reparar averías en combate y prevenir colapsos por fatiga mecánica.\n• Control de Daños: Permite a las cuadrillas arreglar motores, cañones o sensores destruidos por fuego enemigo.\n\n💡 EJEMPLO PRÁCTICO EN PARTIDA:\nSi un rayo láser destruye el motor principal, el equipo de ingeniería usará los repuestos de este almacén para restaurar la operatividad en combate.\n\n🛡️ CONSEJO TÁCTICO IMPERIAL:\nInstala suficientes espacios para que la Vida de Mantenimiento supere el tiempo de despliegue militar proyectado.";
             }
-            if (t.Contains("engine") || t.Contains("drive") || t.Contains("motor") || t.Contains("commercial"))
+            if (t.Contains("engine") || t.Contains("drive") || t.Contains("motor") || t.Contains("propulsor"))
             {
-                return "🚀 Propulsor Espacial Naval: Impulsor de reacción que dota a la nave de empuje y velocidad táctica (km/s), consumiendo combustible hidrocarburo Sorium LPH.";
+                return $"📌 CONCEPTO & DEFINICIÓN:\n{techName} es un impulsor de reacción espacial encargado de convertir combustible hidrocarburo Sorium LPH en empuje (EP).\n\n⚙️ FUNCIÓN Y MECÂNICA EN JUEGO:\n• Empuje y Velocidad: Determina la velocidad máxima en km/s de la nave (Velocidad = Total Empuje / Total HS * 1000).\n• Eficiencia de Combustible: Los motores comerciales reducen el consumo; los militares maximizan la velocidad táctica.\n\n💡 EJEMPLO PRÁCTICO EN PARTIDA:\nInstalar 4 de estos motores en un destructor proporcionará la aceleración requerida para esquivar salvas de torpedos.\n\n🛡️ CONSEJO TÁCTICO IMPERIAL:\nEquilibra los multiplicadores de potencia en el Diseñador para optimizar la velocidad sin agotar las reservas de Sorium.";
             }
-            if (t.Contains("fuel") || t.Contains("tank") || t.Contains("tanque") || t.Contains("combustible"))
+            if (t.Contains("fuel") || t.Contains("tank") || t.Contains("combustible") || t.Contains("tanque"))
             {
-                return "⛽ Depósito de Combustible LPH: Almacén de hidrocarburo procesado. Determina la autonomía operativa máxima en kilómetros y años-luz de la nave espacial.";
+                return $"📌 CONCEPTO & DEFINICIÓN:\n{techName} es un depósito de almacenamiento de combustible hidrocarburo Sorium LPH para la autonomía naval.\n\n⚙️ FUNCIÓN Y MECÁNICA EN JUEGO:\n• Almacenamiento de Litros: Acumula miles de litros de Sorium refinado para alimentar los propulsores espaciales.\n• Rango Operativo: La capacidad dividida por el consumo del motor determina el alcance máximo en kilómetros y años-luz.\n\n💡 EJEMPLO PRÁCTICO EN PARTIDA:\nEquipar tanques de combustible de gran capacidad en un crucero le permitirá operar durante más de 3 años en el frente.\n\n🛡️ CONSEJO TÁCTICO IMPERIAL:\nProtege los tanques tras varias capas de blindaje para evitar detonaciones secundarias tras un impacto penetrante.";
             }
-            if (t.Contains("magazine") || t.Contains("launcher") || t.Contains("pañol"))
+            if (t.Contains("habitation") || t.Contains("crew") || t.Contains("quarters") || t.Contains("dormitorio"))
             {
-                return "🚀 Pañol y Tubos Lanzamisiles: Sistema de almacenamiento y lanzamiento de ordenanza balística militar para ataques de asedio o intercepción.";
+                return $"📌 CONCEPTO & DEFINICIÓN:\n{techName} es el módulo de habitabilidad y alojamiento militar para oficiales y marineros a bordo.\n\n⚙️ FUNCIÓN Y MECÁNICA EN JUEGO:\n• Capacidad de Tripulación: Proporciona dormitorios y soporte vital para la tripulación requerida por sistemas y armas.\n• Moral y Eficiencia: Mantener los alojamientos al 100% de la tripulación requerida evita la degradación de la moral.\n\n💡 EJEMPLO PRÁCTICO EN PARTIDA:\nUn acorazado con 200 tripulantes requerirá 4 módulos para garantizar la salud y operatividad en travesías largas.\n\n🛡️ CONSEJO TÁCTICO IMPERIAL:\nUtiliza el balanceador automático de habitabilidad en el Diseñador para asegurar el soporte vital de toda la dotación.";
             }
-            if (t.Contains("troop") || t.Contains("drop") || t.Contains("transport"))
+            if (t.Contains("sensor") || t.Contains("augur") || t.Contains("radar") || t.Contains("active") || t.Contains("passive"))
             {
-                return "Módulos y bahías de transporte de tropas terrestres. Permite el desembarco táctico de batallones y brigadas mecanizadas en asaltos planetarios u abordajes.";
+                return $"📌 CONCEPTO & DEFINICIÓN:\n{techName} es una matriz de escaneo pasivo o activo electromagnético/térmico de exploración espacial.\n\n⚙️ FUNCIÓN Y MECÁNICA EN JUEGO:\n• Detección y Cobertura: Los sensores activos detectan naves a millones de km; los pasivos detectan firmas térmicas/EM en sigilo.\n• Resolución Táctica: La resolución determina la masa mínima del objetivo detectable (Res 1 para misiles, Res 20 para cazas).\n\n💡 EJEMPLO PRÁCTICO EN PARTIDA:\nActivar este sensor en tu nave de vanguardia revelará la aproximación de la flota enemiga a más de 50 millones de km.\n\n🛡️ CONSEJO TÁCTICO IMPERIAL:\nMantén los radares activos apagados durante la aproximación para evitar delatar tu posición a los sensores pasivos enemigos.";
             }
-            if (t.Contains("shield"))
+            if (t.Contains("laser") || t.Contains("beam") || t.Contains("gauss") || t.Contains("railgun") || t.Contains("meson"))
             {
-                return "Barrera de energía deflectora. Absorbe impactos de energía y proyectiles cinéticos antes de dañar la armadura metálica exterior. Se recarga automáticamente con energía del reactor.";
-            }
-            if (t.Contains("fleet") || t.Contains("flota") || t.Contains("task force") || t.Contains("escuadra"))
-            {
-                return "⚓ Flota y Escuadra Naval. Formación militar o comercial de buques espaciales coordinados bajo la cadena de mando para misiones de combate, logística o exploración.";
-            }
-            if (t.Contains("ship") || t.Contains("nave") || t.Contains("buque") || t.Contains("caza"))
-            {
-                return "🚀 Buque Espacial Trans-Newtoniano. Unidad móvil dotada de casco, motores, sistemas de mantenimiento y armamento para operar en espacio profundo.";
-            }
-            if (t.Contains("system") || t.Contains("sistema"))
-            {
-                return "🌌 Sistema Estelar. Sector compuesto por cuerpos celestes, asteroides, yacimientos minerales y nodos de salto interestelares.";
+                return $"📌 CONCEPTO & DEFINICIÓN:\n{techName} es un sistema de armamento naval de energía directa o proyectiles cinéticos de alta cadencia.\n\n⚙️ FUNCIÓN Y MECÁNICA EN JUEGO:\n• Perforación de Blindaje: Inflige daño calórico o cinético directo sobre el casco. Cañones Gauss interceptan misiles; lásers destruyen naves.\n• Tasa de Recarga: Requiere potencia continua producida por reactores energéticos en cada turno de combate.\n\n💡 EJEMPLO PRÁCTICO EN PARTIDA:\nUna salva de 4 de estos cañones atravesará el blindaje de un crucero enemigo y destruirá sus sistemas internos.\n\n🛡️ CONSEJO TÁCTICO IMPERIAL:\nMonta armas energéticas en torretas orientables para maximizar la velocidad de seguimiento contra misiles hiper-veloces.";
             }
 
-            return categoryName switch
-            {
-                "⚡ Potencia y Propulsión" => "Tecnología de ingeniería de propulsión espacial y reactores. Aumenta la velocidad máxima en km/s, la eficiencia de consumo LPH y el alcance operativo.",
-                "💥 Energía y Láseres" => "Armamento energético de fuego directo. Incrementa la penetración de blindaje, la focalización de lentes y la tasa de recarga de condensadores.",
-                "🚀 Misiles y Cinéticas" => "Sistemas de proyectiles balísticos y cinéticos. Mejora el rendimiento de motores de misiles, cabezas de guerra y cadencia de fuego cinético.",
-                "📡 Sensores y Control" => "Sistemas de vigilancia de sector y telemetría de tiro. Aumenta el alcance de fijación de blancos y la resolución de firmas térmicas.",
-                "🧬 Biología y Ciencias" => "Biotecnología y ciencias aplicadas. Permite mejorar el soporte vital, la tolerancia ambiental de colonos y la eficiencia médica.",
-                "🏗️ Construcción y Logística" => "Infraestructura industrial y logística espacial. Incrementa el rendimiento de fábricas, astilleros y capacidades extractivas.",
-                _ => "Tecnología avanzada para el desarrollo y expansión de las capacidades industriales, militares y científicas del Imperio."
-            };
+            return $"📌 CONCEPTO & DEFINICIÓN:\n{techName} es una especificación y componente técnico fundamental de la arquitectura naval e industrial de Aurora 4X.\n\n⚙️ FUNCIÓN Y MECÁNICA EN JUEGO:\n• Rendimiento Operativo: Potencia las capacidades tácticas de tus buques, la eficiencia de tus colonias o la velocidad de prospección galáctica.\n• Especificación Técnica: Diseñado para integrarse en el Diseñador de Naves (Class Design) o en la gestión de infraestructura colonial del Imperio.\n\n💡 EJEMPLO PRÁCTICO EN PARTIDA:\nIncorporar {techName} en tu doctrina de flota o en la gestión de mundos exteriores optimizará el uso de recursos y aumentará la supervivencia en combate.\n\n🛡️ CONSEJO TÁCTICO IMPERIAL:\nMantén equilibrados tus suministros minerales y energéticos en la telemetría para sacar el máximo partido a {techName}.";
         }
     }
 }

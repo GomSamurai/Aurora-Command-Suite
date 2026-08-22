@@ -89,6 +89,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
@@ -170,8 +171,24 @@
                     </StackPanel>
                 </Border>
 
+                <!-- Tactical Doctrine & Design Purpose Card -->
+                <Border Grid.Row="3" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,8" ToolTip="Ficha técnica de doctrina táctica, propósito de diseño y expectativas operativas de la nave. Si estás creando un preset propio, puedes editar este texto y guardarlo.">
+                    <StackPanel>
+                        <DockPanel Margin="0,0,0,4">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="📖 DOCTRINA TÁCTICA &amp; PROPÓSITO DE DISEÑO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                <Border x:Name="BdrPresetTypeTag" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="3" Padding="6,2" Margin="8,0,0,0">
+                                    <TextBlock x:Name="TxtPresetTypeTag" Text="📌 Preset Oficial de la Marina Imperial" Foreground="{DynamicResource AccentCyanBrush}" FontSize="9.5" FontWeight="Bold"/>
+                                </Border>
+                            </StackPanel>
+                            <TextBlock Text="✏️ Editable para Diseños del Usuario" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </DockPanel>
+                        <TextBox x:Name="TxtTacticalDescription" Text="Selecciona una plantilla o escribe aquí la doctrina táctica y propósito de diseño de tu nave..." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" TextWrapping="Wrap" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="6" MinHeight="55" MaxHeight="90" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" ToolTip="Describe el rol de la nave, sus capacidades tácticas, armamento, doctrina operativa y expectativas de combate."/>
+                    </StackPanel>
+                </Border>
+
                 <!-- Selected Components Grid -->
-                <Grid Grid.Row="3">
+                <Grid Grid.Row="4">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
@@ -193,7 +210,7 @@
                 </Grid>
 
                 <!-- Export Actions Bar -->
-                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,0,0">
+                <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,0,0">
                     <Button Content="💾 Guardar como Mi Preset" Click="BtnSaveUserPreset_Click" Padding="12,6" Margin="0,0,6,0" VerticalAlignment="Center" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="Guarda este diseño personalizado en tu biblioteca local de 'Diseños del Usuario' para reutilizarlo en cualquier momento."/>
                     <Button Content="📋 Copiar Texto" Click="BtnCopyReport_Click" Padding="10,6" Margin="0,0,6,0" VerticalAlignment="Center" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" ToolTip="Genera y copia la ficha técnica oficial de la nave al portapapeles."/>
                     <Button Content="🔬 Enviar a I+D" Click="BtnExportResearch_Click" Padding="12,6" Margin="0,0,6,0" VerticalAlignment="Center" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" ToolTip="⚖️ MODO FAIR PLAY: Registra este diseño como un proyecto de investigación en tu partida."/>

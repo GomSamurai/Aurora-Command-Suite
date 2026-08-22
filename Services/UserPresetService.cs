@@ -14,6 +14,7 @@ namespace AuroraDesignSuite.Services
         public int ArmorThickness { get; set; } = 3;
         public int ArmorWidth { get; set; } = 10;
         public bool IsMilitary { get; set; } = true;
+        public string TacticalDescription { get; set; } = string.Empty;
         public List<UserPresetComponentItem> Components { get; set; } = new List<UserPresetComponentItem>();
     }
 

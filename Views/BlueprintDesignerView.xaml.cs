@@ -18,6 +18,7 @@ namespace AuroraDesignSuite.Views
         public string Category { get; set; } = string.Empty;
         public int Index { get; set; }
         public bool IsUserPreset { get; set; } = false;
+        public string TacticalDescription { get; set; } = string.Empty;
         public UserPresetData? UserData { get; set; }
 
         public override string ToString() => Title;
@@ -96,74 +97,164 @@ namespace AuroraDesignSuite.Views
             int idx = 0;
 
             // 1. Destructores
-            AddPreset(ref idx, "🚀 DDG Artemis - Destructor Lanzamisiles de Flota (9,000 t)", "1. Destructores (DD / DDG / PD)");
-            AddPreset(ref idx, "🛡️ DD-PD Aegis-G - Destructor Escolta Defensa de Punto (8,500 t)", "1. Destructores (DD / DDG / PD)");
-            AddPreset(ref idx, "💥 DD-Beam Lancer - Destructor Láser Espinal (9,500 t)", "1. Destructores (DD / DDG / PD)");
-            AddPreset(ref idx, "🌌 DDJ Pathbreaker - Destructor Líder de Salto (10,000 t)", "1. Destructores (DD / DDG / PD)");
-            AddPreset(ref idx, "📦 DDB Barrage - Destructor Emboscada Box Launchers (8,000 t)", "1. Destructores (DD / DDG / PD)");
+            AddPreset(ref idx, "🚀 DDG Artemis - Destructor Lanzamisiles de Flota (9,000 t)", "1. Destructores (DD / DDG / PD)", 
+                "🎯 PROPÓSITO: Destructor de escolta y combate de misiles antibuque de medio y largo alcance.\n⚓ DOCTRINA: Opera en la vanguardia de la flota lanzando salvas concentradas de misiles pesados mientras mantiene distancia de seguridad del fuego beam enemigo.\n📊 EXPECTATIVAS: Alta cadencia VLS, radar activo de búsqueda de 96Mkm y 4 capas de blindaje composite.");
+
+            AddPreset(ref idx, "🛡️ DD-PD Aegis-G - Destructor Escolta Defensa de Punto (8,500 t)", "1. Destructores (DD / DDG / PD)",
+                "🎯 PROPÓSITO: Destructor especializado en defensa de punto (AMM/PD) para protección de portaaviones y cruceros.\n⚓ DOCTRINA: Se posiciona en el centro del grupo de batalla entrelazando barreras Gauss y cañones de energía para interceptar salvas masivas de misiles enemigos.\n📊 EXPECTATIVAS: Intercepción de hasta 12 misiles por turno de 5s, recarga rápida de capacitores y escudos Alpha.");
+
+            AddPreset(ref idx, "💥 DD-Beam Lancer - Destructor Láser Espinal (9,500 t)", "1. Destructores (DD / DDG / PD)",
+                "🎯 PROPÓSITO: Destructor cazador con cañón láser espinal de alto calibre.\n⚓ DOCTRINA: Diseñado para emboscadas a corta distancia a través de puntos de salto y combate en cerrado contra cruceros blindados.\n📊 EXPECTATIVAS: Gran potencia de perforación de blindaje, velocidad militar de 4,200 km/s y recarga de capacitores en 15s.");
+
+            AddPreset(ref idx, "🌌 DDJ Pathbreaker - Destructor Líder de Salto (10,000 t)", "1. Destructores (DD / DDG / PD)",
+                "🎯 PROPÓSITO: Destructor nave insignia de salto equipado con motor de salto táctico.\n⚓ DOCTRINA: Guía a flotillas de destructores a través de puntos de salto no estabilizados sin depender de puertas estelares.\n📊 EXPECTATIVAS: Motor de salto militar para 10,000t, sensores de corto alcance y defensa antiaérea.");
+
+            AddPreset(ref idx, "📦 DDB Barrage - Destructor Emboscada Box Launchers (8,000 t)", "1. Destructores (DD / DDG / PD)",
+                "🎯 PROPÓSITO: Destructor de ataque relámpago con lanzadores desechables Box Launchers.\n⚓ DOCTRINA: Descarga toda su munición en un único turno masivo de saturación y se retira a reabastecer a la base orbital.\n📊 EXPECTATIVAS: Salva devastadora de 24 misiles simultáneos a un costo de construcción mínimo.");
 
             // 2. Cruceros
-            AddPreset(ref idx, "💥 CA Vindicator - Crucero Pesado Beam de Línea (20,000 t)", "2. Cruceros (CA / CC / CG / BC)");
-            AddPreset(ref idx, "📡 CC Oracle - Crucero de Mando y Sensores AWACS (18,000 t)", "2. Cruceros (CA / CC / CG / BC)");
-            AddPreset(ref idx, "🚀 CG Titan - Crucero Lanzamisiles Pesado (22,000 t)", "2. Cruceros (CA / CC / CG / BC)");
-            AddPreset(ref idx, "⚡ BC Stalker - Crucero de Batalla Rápido (25,000 t)", "2. Cruceros (CA / CC / CG / BC)");
-            AddPreset(ref idx, "🌌 CJ Aether Gate - Crucero de Salto de Flota (25,000 t)", "2. Cruceros (CA / CC / CG / BC)");
+            AddPreset(ref idx, "💥 CA Vindicator - Crucero Pesado Beam de Línea (20,000 t)", "2. Cruceros (CA / CC / CG / BC)",
+                "🎯 PROPÓSITO: Crucero pesado de línea con batería principal de armas de energía y blindaje reforzado.\n⚓ DOCTRINA: Buque insignia de línea de batalla. Sostiene el combate directo contra naves de guerra alienígenas.\n📊 EXPECTATIVAS: 6 capas de blindaje, generadores de escudo Alpha, 4 baterías láser pesadas y autonomía de 24 meses.");
+
+            AddPreset(ref idx, "📡 CC Oracle - Crucero de Mando y Sensores AWACS (18,000 t)", "2. Cruceros (CA / CC / CG / BC)",
+                "🎯 PROPÓSITO: Crucero de mando, guerra electrónica y alerta temprana AWACS.\n⚓ DOCTRINA: Permanece en el centro del comando imperial escaneando el sistema con sensores pasivos/activos de ultra alcance.\n📊 EXPECTATIVAS: Detección activa a más de 200Mkm, coordinación de flota y centro de oficiales superiores.");
+
+            AddPreset(ref idx, "🚀 CG Titan - Crucero Lanzamisiles Pesado (22,000 t)", "2. Cruceros (CA / CC / CG / BC)",
+                "🎯 PROPÓSITO: Crucero pesado de bombardeo y combate de misiles de largo alcance.\n⚓ DOCTRINA: Lanza ataques de saturación contra flotas de combate enemigas y bases estelares.\n📊 EXPECTATIVAS: Pañoles masivos de misiles tamaño 6, sensores de control de tiro de 120Mkm y 6 capas de blindaje.");
+
+            AddPreset(ref idx, "⚡ BC Stalker - Crucero de Batalla Rápido (25,000 t)", "2. Cruceros (CA / CC / CG / BC)",
+                "🎯 PROPÓSITO: Crucero de batalla rápido diseñado para cazar y exterminar cruceros enemigos.\n⚓ DOCTRINA: Combina la velocidad de un destructor (5,500 km/s) con la potencia de fuego de un acorazado.\n📊 EXPECTATIVAS: Alta movilidad estratégica, baterías de plasma/láser y escudos de energía integrados.");
+
+            AddPreset(ref idx, "🌌 CJ Aether Gate - Crucero de Salto de Flota (25,000 t)", "2. Cruceros (CA / CC / CG / BC)",
+                "🎯 PROPÓSITO: Crucero de salto de flota principal.\n⚓ DOCTRINA: Abre brechas gravitacionales para permitir el paso de cruceros pesados y portaaviones en sistemas inexplorados.\n📊 EXPECTATIVAS: Motor de salto trans-newtoniano de 25,000t con eficiencia de escuadrón.");
 
             // 3. Portaaviones
-            AddPreset(ref idx, "🚢 CV Valhalla - Superportaaviones de Flota (40,000 t)", "3. Portaaviones (CV / CVL / CVE)");
-            AddPreset(ref idx, "🛡️ CVL Dauntless - Portaaviones Ligero de Escolta (15,000 t)", "3. Portaaviones (CV / CVL / CVE)");
-            AddPreset(ref idx, "🐝 CVE Hive - Nodriza de Lanchas de Asalto / FAC Tender (25,000 t)", "3. Portaaviones (CV / CVL / CVE)");
-            AddPreset(ref idx, "🏰 CVB Iron Haven - Portaaviones Blindado de Asalto (30,000 t)", "3. Portaaviones (CV / CVL / CVE)");
-            AddPreset(ref idx, "🤖 CVD Nexus - Portadrones Automatizado (10,000 t)", "3. Portaaviones (CV / CVL / CVE)");
+            AddPreset(ref idx, "🚢 CV Valhalla - Superportaaviones de Flota (40,000 t)", "3. Portaaviones (CV / CVL / CVE)",
+                "🎯 PROPÓSITO: Superportaaviones de flota con capacidad para más de 30 cazas y corbetas.\n⚓ DOCTRINA: Centro neurálgico del poder espacial imperial. Proyecta fuerza a sistemas enteros mediante alas embarcadas.\n📊 EXPECTATIVAS: Hangares masivos, talleres de reparación embarcados, 6 capas de blindaje y escudos pesados.");
+
+            AddPreset(ref idx, "🛡️ CVL Dauntless - Portaaviones Ligero de Escolta (15,000 t)", "3. Portaaviones (CV / CVL / CVE)",
+                "🎯 PROPÓSITO: Portaaviones ligero de escolta para protección de convoyes y exploraciones.\n⚓ DOCTRINA: Alberga 6-8 cazas interceptores para repeler agresiones sorpresa a convoyes civiles.\n📊 EXPECTATIVAS: Tamaño reducido (15,000t), bajo consumo de combustible y mantenimiento económico.");
+
+            AddPreset(ref idx, "🐝 CVE Hive - Nodriza de Lanchas de Asalto / FAC Tender (25,000 t)", "3. Portaaviones (CV / CVL / CVE)",
+                "🎯 PROPÓSITO: Nodriza militar de lanchas de ataque rápido (FAC Tender).\n⚓ DOCTRINA: Reabastece, repara y transporta 4 corbetas/FAC a través de saltos de sistema.\n📊 EXPECTATIVAS: Instalaciones de repostaje rápido, depósitos de Sorium y hangares modulares.");
+
+            AddPreset(ref idx, "🏰 CVB Iron Haven - Portaaviones Blindado de Asalto (30,000 t)", "3. Portaaviones (CV / CVL / CVE)",
+                "🎯 PROPÓSITO: Portaaviones blindado de asalto frontal.\n⚓ DOCTRINA: Despliega fuerzas en sectores de intenso fuego enemigo sin arriesgar la integridad del buque.\n📊 EXPECTATIVAS: 8 capas de blindaje de neutronium, doble matriz de escudos y hangares reforzados.");
+
+            AddPreset(ref idx, "🤖 CVD Nexus - Portadrones Automatizado (10,000 t)", "3. Portaaviones (CV / CVL / CVE)",
+                "🎯 PROPÓSITO: Portadrones automatizado de vanguardia.\n⚓ DOCTRINA: Despliega enjambres de drones kamikaze y sondas de reconocimiento en territorio hostil.\n📊 EXPECTATIVAS: Operación con tripulación reducida, enlace de telemetría remota y alta velocidad de despliegue.");
 
             // 4. Cazas y Parásitas
-            AddPreset(ref idx, "🐝 F-01 Hornet - Caza Interceptor Gauss (250 t)", "4. Cazas y Naves Parásitas");
-            AddPreset(ref idx, "🚀 B-01 Viper - Caza Torpedeo Misiles (500 t)", "4. Cazas y Naves Parásitas");
-            AddPreset(ref idx, "💥 FB-02 Sabre - Caza Cañonero Beam (500 t)", "4. Cazas y Naves Parásitas");
-            AddPreset(ref idx, "🔍 R-01 Eye - Caza de Reconocimiento Pasivo (200 t)", "4. Cazas y Naves Parásitas");
-            AddPreset(ref idx, "💣 D-01 Wasp - Drone Kamikaze / Señuelo (150 t)", "4. Cazas y Naves Parásitas");
+            AddPreset(ref idx, "🐝 F-01 Hornet - Caza Interceptor Gauss (250 t)", "4. Cazas y Naves Parásitas",
+                "🎯 PROPÓSITO: Caza interceptor Gauss ultra-rápido (250t).\n⚓ DOCTRINA: Despliegue enjambre desde portaaviones para interceptar salvas de misiles o ametrallar cazas enemigos.\n📊 EXPECTATIVAS: Velocidad extrema de 8,000 km/s, sin requerir tanques de combustible de largo alcance.");
+
+            AddPreset(ref idx, "🚀 B-01 Viper - Caza Torpedeo Misiles (500 t)", "4. Cazas y Naves Parásitas",
+                "🎯 PROPÓSITO: Caza bombardero de torpedos y misiles pesados (500t).\n⚓ DOCTRINA: Ataques relámpago contra naves capitales enemigas lanzando torpedos a bocajarro y regresando al nodriza.\n📊 EXPECTATIVAS: Elevado impacto por nave, costo mínimo de producción y maniobrabilidad en combate.");
+
+            AddPreset(ref idx, "💥 FB-02 Sabre - Caza Cañonero Beam (500 t)", "4. Cazas y Naves Parásitas",
+                "🎯 PROPÓSITO: Caza cañonero de energía láser/plasma (500t).\n⚓ DOCTRINA: Combate cerrado a corta distancia desgastando escudos y capas de blindaje superficial enemigas.\n📊 EXPECTATIVAS: Alta precisión angular, capacitores ligeros integrados.");
+
+            AddPreset(ref idx, "🔍 R-01 Eye - Caza de Reconocimiento Pasivo (200 t)", "4. Cazas y Naves Parásitas",
+                "🎯 PROPÓSITO: Sonda de reconocimiento pasivo furtivo (200t).\n⚓ DOCTRINA: Explora sectores desconocidos del sistema sin activar radares para mantener el sigilo absoluto.\n📊 EXPECTATIVAS: Sensores térmicos y electromagnéticos de alta sensibilidad en un casco diminuto.");
+
+            AddPreset(ref idx, "💣 D-01 Wasp - Drone Kamikaze / Señuelo (150 t)", "4. Cazas y Naves Parásitas",
+                "🎯 PROPÓSITO: Drone kamikaze señuelo (150t).\n⚓ DOCTRINA: Atrae el fuego de las defensas de punto enemigas simulando ser un buque capital de mayor tamaño.\n📊 EXPECTATIVAS: Emisor de firma térmica amplificada y costo de producción insignificante.");
 
             // 5. Exploración y Ciencia
-            AddPreset(ref idx, "🌌 ES-Grav Compass - Explorador Gravitacional Rápido (3,000 t)", "5. Exploración y Ciencia");
-            AddPreset(ref idx, "🔍 ES-Geo Prospector - Explorador Geológico Celular (3,000 t)", "5. Exploración y Ciencia");
-            AddPreset(ref idx, "🧭 GSV Pathfinder - Explorador Combinado de Largo Alcance (7,000 t)", "5. Exploración y Ciencia");
-            AddPreset(ref idx, "🛰️ Probe - Lancha Científica Parásita (300 t)", "5. Exploración y Ciencia");
-            AddPreset(ref idx, "📡 SV-Scout Sentinel - Piquete Científico Alerta Temprana (4,000 t)", "5. Exploración y Ciencia");
+            AddPreset(ref idx, "🌌 ES-Grav Compass - Explorador Gravitacional Rápido (3,000 t)", "5. Exploración y Ciencia",
+                "🎯 PROPÓSITO: Nave de exploración gravitacional de vanguardia (3,000t).\n⚓ DOCTRINA: Mapea puntos de salto en sistemas no cartografiados para la expansión imperial.\n📊 EXPECTATIVAS: Sensores gravimétricos de alta sensibilidad, motor de salto propio y autonomía de 36 meses.");
+
+            AddPreset(ref idx, "🔍 ES-Geo Prospector - Explorador Geológico Celular (3,000 t)", "5. Exploración y Ciencia",
+                "🎯 PROPÓSITO: Nave de prospectiva geológica planetaria (3,000t).\n⚓ DOCTRINA: Escanea asteroides, lunas y planetas identificando yacimientos de minerales trans-newtonianos.\n📊 EXPECTATIVAS: Sensores geológicos celulares, alta autonomía y bajo costo operativo.");
+
+            AddPreset(ref idx, "🧭 GSV Pathfinder - Explorador Combinado de Largo Alcance (7,000 t)", "5. Exploración y Ciencia",
+                "🎯 PROPÓSITO: Explorador espacial combinado de largo alcance (7,000t).\n⚓ DOCTRINA: Nave científica autónoma equipada con sensores gravimétricos y geológicos integrados.\n📊 EXPECTATIVAS: Cobertura total de exploración, motor de salto y capacidad de supervivencia en fronteras lejanas.");
+
+            AddPreset(ref idx, "🛰️ Probe - Lancha Científica Parásita (300 t)", "5. Exploración y Ciencia",
+                "🎯 PROPÓSITO: Lancha científica embarcable para reconocimiento exploratorio cercano (300t).\n⚓ DOCTRINA: Lanzada desde exploradores nodriza para investigar planetas de alto peligro ambiental.\n📊 EXPECTATIVAS: Sensores pasivos integrados y perfil de masa reducido.");
+
+            AddPreset(ref idx, "📡 SV-Scout Sentinel - Piquete Científico Alerta Temprana (4,000 t)", "5. Exploración y Ciencia",
+                "🎯 PROPÓSITO: Piquete de vigilancia científica y alerta temprana (4,000t).\n⚓ DOCTRINA: Estacionado cerca de puntos de salto estratégicos para detectar intrusiones enemigas al instante.\n📊 EXPECTATIVAS: Sensores pasivos de largo alcance, emisores de baliza y motores de escape rápido.");
 
             // 6. Petroleros y Reabastecimiento
-            AddPreset(ref idx, "⚡ AOF Endurance - Petrolero de Flota Rápido (25,000 t)", "6. Petroleros y Reabastecimiento");
-            AddPreset(ref idx, "⛽ AO Prometheus - Supertanquero Comercial Estratégico (60,000 t)", "6. Petroleros y Reabastecimiento");
-            AddPreset(ref idx, "🪐 AOH Harvester Primus - Cosechadora de Sorium Orbital (50,000 t)", "6. Petroleros y Reabastecimiento");
-            AddPreset(ref idx, "📦 AOR Atlas Fleet - Aprovisionamiento Logístico Combinado (35,000 t)", "6. Petroleros y Reabastecimiento");
-            AddPreset(ref idx, "🏰 Safehaven - Estación Tanque de Almacenamiento (80,000 t)", "6. Petroleros y Reabastecimiento");
+            AddPreset(ref idx, "⚡ AOF Endurance - Petrolero de Flota Rápido (25,000 t)", "6. Petroleros y Reabastecimiento",
+                "🎯 PROPÓSITO: Petrolero de flota rápido para soporte de grupos de batalla en avance.\n⚓ DOCTRINA: Acompaña a las escuadras militares reabasteciendo combustible Sorium en pleno vuelo.\n📊 EXPECTATIVAS: Tanques de 5,000,000L, sistemas de transferencia ultra-rápida y velocidad militar.");
+
+            AddPreset(ref idx, "⛽ AO Prometheus - Supertanquero Comercial Estratégico (60,000 t)", "6. Petroleros y Reabastecimiento",
+                "🎯 PROPÓSITO: Supertanquero comercial estratégico (60,000t).\n⚓ DOCTRINA: Transporta reservas masivas de combustible entre la Metrópoli y las colonias exteriores.\n📊 EXPECTATIVAS: Capacidad para 25,000,000 Litros de Sorium y motores comerciales de alta eficiencia.");
+
+            AddPreset(ref idx, "🪐 AOH Harvester Primus - Cosechadora de Sorium Orbital (50,000 t)", "6. Petroleros y Reabastecimiento",
+                "🎯 PROPÓSITO: Cosechadora orbital de Sorium en gigantes gaseosos (50,000t).\n⚓ DOCTRINA: Permanece en órbita de gigantes de gas refinando combustible Sorium de forma continua.\n📊 EXPECTATIVAS: Módulos de extracción de combustible, almacenamiento masivo y operación comercial.");
+
+            AddPreset(ref idx, "📦 AOR Atlas Fleet - Aprovisionamiento Logístico Combinado (35,000 t)", "6. Petroleros y Reabastecimiento",
+                "🎯 PROPÓSITO: Nave de aprovisionamiento logístico combinado (combustible + MSP + municiones).\n⚓ DOCTRINA: Sostiene campañas prolongadas de flotas de guerra en sectores alienígenas distantes.\n📊 EXPECTATIVAS: Tanques de Sorium, pañoles de munición VLS y repuestos MSP.");
+
+            AddPreset(ref idx, "🏰 Safehaven - Estación Tanque de Almacenamiento (80,000 t)", "6. Petroleros y Reabastecimiento",
+                "🎯 PROPÓSITO: Estación orbital de almacenamiento de combustible sin propulsión (80,000t).\n⚓ DOCTRINA: Sirve como depósito nodriza en sistemas fronterizos para reabastecimiento rápido de flotas.\n📊 EXPECTATIVAS: Capacidad para 50,000,000L de Sorium a costo mínimo.");
 
             // 7. Naves de Misiles y Asedio
-            AddPreset(ref idx, "💣 BBG Nemesis - Monitor de Misiles Asedio Planetario (20,000 t)", "7. Naves de Misiles y Asedio");
-            AddPreset(ref idx, "🛡️ FFG-AMM Shield - Fragata Antimisil Cobertura Área (6,000 t)", "7. Naves de Misiles y Asedio");
-            AddPreset(ref idx, "🚢 ML Trapdoor - Crucero Lanzaminas Espacial (12,000 t)", "7. Naves de Misiles y Asedio");
-            AddPreset(ref idx, "🚀 CG Universal - Crucero VLS Multipropósito (15,000 t)", "7. Naves de Misiles y Asedio");
-            AddPreset(ref idx, "👻 SSG Shadow - Submarino Espacial Sigiloso de Misiles (8,000 t)", "7. Naves de Misiles y Asedio");
+            AddPreset(ref idx, "💣 BBG Nemesis - Monitor de Misiles Asedio Planetario (20,000 t)", "7. Naves de Misiles y Asedio",
+                "🎯 PROPÓSITO: Monitor de misiles de asedio planetario e instalaciones fijas.\n⚓ DOCTRINA: Destruye complejas defensas planetarias enemigas lanzando misiles pesados de ojiva masiva desde fuera del alcance enemigo.\n📊 EXPECTATIVAS: Lanzadores de gran tamaño, pañoles blindados y control de tiro corregido por telemetría.");
+
+            AddPreset(ref idx, "🛡️ FFG-AMM Shield - Fragata Antimisil Cobertura Área (6,000 t)", "7. Naves de Misiles y Asedio",
+                "🎯 PROPÓSITO: Fragata ligera defensiva antimisil (AMM).\n⚓ DOCTRINA: Lanza pequeñas salvas de interceptores AMM para neutralizar misiles atacantes a 10Mkm.\n📊 EXPECTATIVAS: Lanzadores tamaño 1 de alta cadencia, radares de resolución 1 y costo reducido.");
+
+            AddPreset(ref idx, "🚢 ML Trapdoor - Crucero Lanzaminas Espacial (12,000 t)", "7. Naves de Misiles y Asedio",
+                "🎯 PROPÓSITO: Crucero sembrador de campos de minas espaciales (12,000t).\n⚓ DOCTRINA: Bloquea puntos de salto defensivos desplegando campos de minas autónomas invisibles.\n📊 EXPECTATIVAS: Pañol de minas espaciales de alta capacidad y sistemas de sembrado sigiloso.");
+
+            AddPreset(ref idx, "🚀 CG Universal - Crucero VLS Multipropósito (15,000 t)", "7. Naves de Misiles y Asedio",
+                "🎯 PROPÓSITO: Crucero de lanzamiento vertical VLS multipropósito.\n⚓ DOCTRINA: Capaz de alternar en sus pañoles misiles ASM antibuque, AMM defensivos y sondas de reconocimiento.\n📊 EXPECTATIVAS: Versatilidad táctica total, velocidad crucero de 4,500 km/s.");
+
+            AddPreset(ref idx, "👻 SSG Shadow - Submarino Espacial Sigiloso de Misiles (8,000 t)", "7. Naves de Misiles y Asedio",
+                "🎯 PROPÓSITO: Submarino espacial sigiloso de ataque relámpago (8,000t).\n⚓ DOCTRINA: Se infiltra tras las líneas enemigas con firmas térmicas/EM reducidas para emboscar transportes.\n📊 EXPECTATIVAS: 80% de reducción de firma por recubrimientos anti-ir y lanzadores Box Launchers.");
 
             // 8. Combate Compacto y Corbetas
-            AddPreset(ref idx, "⚡ FAC Strikefast - Lancha Torpedera Rápida (1,000 t)", "8. Combate Compacto y Corbetas");
-            AddPreset(ref idx, "💥 Gunboat Warp Hammer - Cañonera Mesón de Salto (1,200 t)", "8. Combate Compacto y Corbetas");
-            AddPreset(ref idx, "🛡️ Corvette Gargoyle - Corbeta Escolta Gauss (2,500 t)", "8. Combate Compacto y Corbetas");
-            AddPreset(ref idx, "👮 Corvette Watchman - Corbeta Patrullera de Frontera (3,000 t)", "8. Combate Compacto y Corbetas");
-            AddPreset(ref idx, "👻 Raider Specter - Cazador Sigiloso de Emboscada (2,000 t)", "8. Combate Compacto y Corbetas");
+            AddPreset(ref idx, "⚡ FAC Strikefast - Lancha Torpedera Rápida (1,000 t)", "8. Combate Compacto y Corbetas",
+                "🎯 PROPÓSITO: Lancha de ataque rápido de torpedos (FAC - 1,000t).\n⚓ DOCTRINA: Ataque en wolfpack de corta distancia contra buques de carga o naves descolgadas de la flota enemiga.\n📊 EXPECTATIVAS: Velocidad extrema (7,000 km/s), tamaño compacto para hangares de nodrizas.");
+
+            AddPreset(ref idx, "💥 Gunboat Warp Hammer - Cañonera Mesón de Salto (1,200 t)", "8. Combate Compacto y Corbetas",
+                "🎯 PROPÓSITO: Cañonera rápida con cañón Mesón ignorador de blindaje (1,200t).\n⚓ DOCTRINA: Ignora escudos y armaduras atacando directamente los componentes internos de naves pesadas.\n📊 EXPECTATIVAS: Daño directo a sistemas internos a corta distancia.");
+
+            AddPreset(ref idx, "🛡️ Corvette Gargoyle - Corbeta Escolta Gauss (2,500 t)", "8. Combate Compacto y Corbetas",
+                "🎯 PROPÓSITO: Corbeta de escolta armada con torreta Gauss (2,500t).\n⚓ DOCTRINA: Escolta ligera de convoyes mercantes contra cazas piratas o misiles solitarios.\n📊 EXPECTATIVAS: Cobertura de punto cercana, costo económico de construcción.");
+
+            AddPreset(ref idx, "👮 Corvette Watchman - Corbeta Patrullera de Frontera (3,000 t)", "8. Combate Compacto y Corbetas",
+                "🎯 PROPÓSITO: Corbeta patrullera de soberanía y policía colonial (3,000t).\n⚓ DOCTRINA: Mantiene la presencia militar y el orden público en colonias lejanas reduciendo el malestar civil.\n📊 EXPECTATIVAS: Autonomía de 24 meses, mantenimiento reducido y costo de producción bajo.");
+
+            AddPreset(ref idx, "👻 Raider Specter - Cazador Sigiloso de Emboscada (2,000 t)", "8. Combate Compacto y Corbetas",
+                "🎯 PROPÓSITO: Cazador sigiloso de interdicción y emboscada (2,000t).\n⚓ DOCTRINA: Operaciones encubiertas en sectores neutrales o disputados interrumpiendo rutas comerciales.\n📊 EXPECTATIVAS: Motores de bajo calor, sensores pasivos y cañón de energía liviano.");
 
             // 9. Formaciones Terrestres
-            AddPreset(ref idx, "🪖 Marine Strike Battalion - Asalto Planetario Helitransportado", "9. Formaciones Terrestres");
-            AddPreset(ref idx, "🏛️ Garrison Battalion - Infantería de Guarnición y Policía", "9. Formaciones Terrestres");
-            AddPreset(ref idx, "🚜 Heavy Armor Regiment - Regimiento Blindado de Ruptura", "9. Formaciones Terrestres");
-            AddPreset(ref idx, "💣 Bombardment Artillery Element - Batería Artillería Pesada", "9. Formaciones Terrestres");
-            AddPreset(ref idx, "🛡️ Air & Orbital Defense Battery - Batería Antiaérea / Antidroga", "9. Formaciones Terrestres");
+            AddPreset(ref idx, "🪖 Marine Strike Battalion - Asalto Planetario Helitransportado", "9. Formaciones Terrestres",
+                "🎯 PROPÓSITO: Batallón de infantería marina de asalto orbital.\n⚓ DOCTRINA: Fuerza de choque helitransportada para asegurar cabezas de playa en mundos enemigos hostiles.\n📊 EXPECTATIVAS: Alta movilidad táctica, armamento ligero de perforación y moral elevada.");
+
+            AddPreset(ref idx, "🏛️ Garrison Battalion - Infantería de Guarnición y Policía", "9. Formaciones Terrestres",
+                "🎯 PROPÓSITO: Batallón de guarnición, pacificación y policía militar.\n⚓ DOCTRINA: Mantiene la seguridad interna de colonias recién tomadas o en riesgo de rebelión civil.\n📊 EXPECTATIVAS: Bajo costo de mantenimiento y alta efectividad de pacificación.");
+
+            AddPreset(ref idx, "🚜 Heavy Armor Regiment - Regimiento Blindado de Ruptura", "9. Formaciones Terrestres",
+                "🎯 PROPÓSITO: Regimiento de tanques pesados y vehículos blindados de ruptura.\n⚓ DOCTRINA: Destruye fortificaciones defensivas enemigas en combate terrestre de alta intensidad.\n📊 EXPECTATIVAS: Blindaje pesado terrestre, potencia de fuego de fuego directo.");
+
+            AddPreset(ref idx, "💣 Bombardment Artillery Element - Batería Artillería Pesada", "9. Formaciones Terrestres",
+                "🎯 PROPÓSITO: Elemento de artillería pesada de apoyo de fuego de campamento.\n⚓ DOCTRINA: Proporciona cobertura artillera de largo alcance a unidades de infantería en combate.\n📊 EXPECTATIVAS: Daño de área y destrucción de fortificaciones sin contacto directo.");
+
+            AddPreset(ref idx, "🛡️ Air & Orbital Defense Battery - Batería Antiaérea / Antidroga", "9. Formaciones Terrestres",
+                "🎯 PROPÓSITO: Batería terrestre de defensa contra aeronaves y bombardeos orbitales.\n⚓ DOCTRINA: Protege centros industriales y tropas terrestres contra ataques aéreos enemigos.\n📊 EXPECTATIVAS: Sensores de seguimiento aéreo y cañones automáticos integrados.");
 
             // 10. Logística Modular
-            AddPreset(ref idx, "📦 Freighter Atlas Heavy - Carguero Modular Pesado (50,000 t)", "10. Logística Modular");
-            AddPreset(ref idx, "🪖 Troop Transport Colossus - Transporte Tropas Invasión (30,000 t)", "10. Logística Modular");
-            AddPreset(ref idx, "⛏️ Mining Ship Titan Core - Minero Espacial de Asteroides (60,000 t)", "10. Logística Modular");
-            AddPreset(ref idx, "🚜 Tugboat Hercules - Remolcador Espacial Despliegue Rápido (20,000 t)", "10. Logística Modular");
-            AddPreset(ref idx, "🛠️ Maint Vessel Hephaestus - Taller Orbital y Dique Móvil (50,000 t)", "10. Logística Modular");
+            AddPreset(ref idx, "📦 Freighter Atlas Heavy - Carguero Modular Pesado (50,000 t)", "10. Logística Modular",
+                "🎯 PROPÓSITO: Carguero comercial pesado modular (50,000t).\n⚓ DOCTRINA: Traslado de instalaciones industriales, minas y fábricas entre planetas imperiales.\n📊 EXPECTATIVAS: Capacidad para 25,000t de carga por viaje, diseño comercial robusto y económico.");
+
+            AddPreset(ref idx, "🪖 Troop Transport Colossus - Transporte Tropas Invasión (30,000 t)", "10. Logística Modular",
+                "🎯 PROPÓSITO: Transporte masivo de tropas de desembarco (30,000t).\n⚓ DOCTRINA: Transporta regimientos blindados y divisiones de infantería para invasiones planetarias.\n📊 EXPECTATIVAS: Capacidad para 10,000t de fuerzas terrestres y cápsulas de desembarco atmosférico.");
+
+            AddPreset(ref idx, "⛏️ Mining Ship Titan Core - Minero Espacial de Asteroides (60,000 t)", "10. Logística Modular",
+                "🎯 PROPÓSITO: Minero espacial autónomo de asteroides (60,000t).\n⚓ DOCTRINA: Extracción de mineral en cuerpos celestes sin atmósfera ni infraestructura colonial.\n📊 EXPECTATIVAS: Minas automatizadas integradas y bodegas de almacenamiento de minerales.");
+
+            AddPreset(ref idx, "🚜 Tugboat Hercules - Remolcador Espacial Despliegue Rápido (20,000 t)", "10. Logística Modular",
+                "🎯 PROPÓSITO: Remolcador espacial militar/comercial (20,000t).\n⚓ DOCTRINA: Remolca estaciones orbitales, astilleros portátiles o naves averiadas sin motor.\n📊 EXPECTATIVAS: Rayos de remolque de alta potencia y propulsores de gran empuje.");
+
+            AddPreset(ref idx, "🛠️ Maint Vessel Hephaestus - Taller Orbital y Dique Móvil (50,000 t)", "10. Logística Modular",
+                "🎯 PROPÓSITO: Taller orbital y dique seco móvil de mantenimiento (50,000t).\n⚓ DOCTRINA: Estacionado en bases de avanzada para reparar y mantener buques militares sin astillero.\n📊 EXPECTATIVAS: Módulos de mantenimiento naval masivos y pañoles MSP de gran capacidad.");
 
             // User-saved custom presets
             LoadUserSavedPresetsIntoList(ref idx);
@@ -182,14 +273,16 @@ namespace AuroraDesignSuite.Views
                     Title = $"💾 {up.PresetName}",
                     Category = "💾 Diseños del Usuario",
                     IsUserPreset = true,
+                    TacticalDescription = string.IsNullOrWhiteSpace(up.TacticalDescription) ?
+                        $"🎯 PROPÓSITO: Preset personalizado creado por el usuario ({up.ClassName}).\n⚓ DOCTRINA: Diseñado y configurado según doctrina personalizada del Comando Imperial.\n📊 EXPECTATIVAS: Configuración a medida con componentes locales." : up.TacticalDescription,
                     UserData = up
                 });
             }
         }
 
-        private void AddPreset(ref int index, string title, string category)
+        private void AddPreset(ref int index, string title, string category, string tacticalDescription = "")
         {
-            _allPresetsList.Add(new PresetItem { Index = index++, Title = title, Category = category });
+            _allPresetsList.Add(new PresetItem { Index = index++, Title = title, Category = category, TacticalDescription = tacticalDescription });
         }
 
         private void CmbPresetCategoryFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -326,6 +419,28 @@ namespace AuroraDesignSuite.Views
             if (CmbPresets.SelectedItem is not PresetItem preset) return;
 
             _selectedComponents.Clear();
+
+            // Populate Tactical Description Text & Status Tags
+            if (TxtTacticalDescription != null)
+            {
+                TxtTacticalDescription.Text = preset.TacticalDescription;
+            }
+
+            if (TxtPresetTypeTag != null && BdrPresetTypeTag != null)
+            {
+                if (preset.IsUserPreset)
+                {
+                    TxtPresetTypeTag.Text = "💾 Preset Personalizado del Usuario";
+                    TxtPresetTypeTag.Foreground = (Brush)Application.Current.Resources["AccentGreenBrush"];
+                    BdrPresetTypeTag.BorderBrush = (Brush)Application.Current.Resources["AccentGreenBrush"];
+                }
+                else
+                {
+                    TxtPresetTypeTag.Text = "📌 Preset Oficial de la Marina Imperial";
+                    TxtPresetTypeTag.Foreground = (Brush)Application.Current.Resources["AccentCyanBrush"];
+                    BdrPresetTypeTag.BorderBrush = (Brush)Application.Current.Resources["AccentCyanBrush"];
+                }
+            }
 
             if (preset.IsUserPreset && preset.UserData != null)
             {
@@ -500,6 +615,11 @@ namespace AuroraDesignSuite.Views
             TxtDeploymentMonths.Text = ud.PlannedDeploymentMonths.ToString();
             TxtArmorThickness.Text = ud.ArmorThickness.ToString();
             TxtArmorWidth.Text = ud.ArmorWidth.ToString();
+            if (TxtTacticalDescription != null)
+            {
+                TxtTacticalDescription.Text = string.IsNullOrWhiteSpace(ud.TacticalDescription) ?
+                    $"🎯 PROPÓSITO: Preset personalizado ({ud.ClassName}).\n⚓ DOCTRINA: Configuración táctica diseñada por el Comando Imperial.\n📊 EXPECTATIVAS: Ensamblado a medida con componentes locales." : ud.TacticalDescription;
+            }
 
             _selectedComponents.Clear();
             foreach (var item in ud.Components)
@@ -540,6 +660,7 @@ namespace AuroraDesignSuite.Views
                 ArmorThickness = Math.Max(1, armorT),
                 ArmorWidth = Math.Max(1, armorW),
                 IsMilitary = CurrentDesign.IsMilitary,
+                TacticalDescription = TxtTacticalDescription != null ? TxtTacticalDescription.Text.Trim() : string.Empty,
                 Components = _selectedComponents.Select(x => new UserPresetComponentItem
                 {
                     ComponentID = x.Component.ComponentID,
@@ -553,7 +674,7 @@ namespace AuroraDesignSuite.Views
             {
                 MessageBox.Show(msg, "Preset del Usuario Guardado", MessageBoxButton.OK, MessageBoxImage.Information);
                 InitializePresets();
-                CmbPresetCategoryFilter.SelectedIndex = 5; // Select "💾 Diseños del Usuario"
+                CmbPresetCategoryFilter.SelectedIndex = 11; // Select "💾 Diseños del Usuario"
             }
             else
             {

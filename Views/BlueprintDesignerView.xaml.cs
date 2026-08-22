@@ -335,7 +335,7 @@ namespace AuroraDesignSuite.Views
 
             // Robust Component Provider Helpers
             Component GetEngine(bool isCommercial, double size = 10) =>
-                _allComponents.FirstOrDefault(c => isCommercial ? c.ComponentName.ToLower().Contains("commercial") : (c.TypeName == "Engine" && !c.ComponentName.ToLower().Contains("commercial"))) ??
+                _allComponents.FirstOrDefault(c => c.TypeName == "Engine" && (isCommercial ? c.ComponentName.ToLower().Contains("commercial") : !c.ComponentName.ToLower().Contains("commercial"))) ??
                 _allComponents.FirstOrDefault(c => c.TypeName == "Engine") ??
                 new Component { ComponentID = 901, ComponentName = isCommercial ? "Commercial Nuclear Engine (HS 50)" : "Magneto-Plasma Drive (HS 10)", TypeName = "Engine", ComponentSize = isCommercial ? 50 : size, Cost = 50, EnginePower = isCommercial ? 400 : 250, Crew = 5 };
 
@@ -357,9 +357,13 @@ namespace AuroraDesignSuite.Views
                 _allComponents.FirstOrDefault(c => c.TypeName.Contains("Shield") || c.ComponentName.ToLower().Contains("shield")) ??
                 new Component { ComponentID = 905, ComponentName = "Alpha Shield Generator", TypeName = "Shield", ComponentSize = 2, Cost = 15, ShieldStrength = 6, Crew = 2 };
 
-            Component GetJump() =>
-                _allComponents.FirstOrDefault(c => c.TypeName.Contains("Jump") || c.ComponentName.ToLower().Contains("jump")) ??
-                new Component { ComponentID = 906, ComponentName = "Military Jump Drive (Max 10,000 Tons)", TypeName = "Jump Drive", ComponentSize = 10, Cost = 150, JumpRating = 3, JumpMaxHS = 200, Crew = 8 };
+            Component GetJump()
+            {
+                var j = _allComponents.FirstOrDefault(c => c.TypeName == "Jump Drive" || c.ComponentName.ToLower().Contains("jump")) ??
+                        new Component { ComponentID = 906, ComponentName = "Military Jump Drive (Max 10,000 Tons)", TypeName = "Jump Drive", ComponentSize = 10, Cost = 150, JumpRating = 3, JumpMaxHS = 500, Crew = 8 };
+                if (j.JumpMaxHS <= 0) j.JumpMaxHS = Math.Max((int)(j.ComponentSize * 150), 2000);
+                return j;
+            }
 
             Component GetMagazine() =>
                 _allComponents.FirstOrDefault(c => c.TypeName.Contains("Magazine") || c.TypeName.Contains("Launcher") || c.ComponentName.ToLower().Contains("missile")) ??
@@ -447,7 +451,7 @@ namespace AuroraDesignSuite.Views
                 _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 4 });
                 _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(false), Quantity = 2 });
             }
-            else if (title.Contains("AOF Endurance") || title.Contains("Prometheus") || title.Contains("Petrolero") || title.Contains("Supertanquero") || title.Contains("Cosechadora"))
+            else if (title.Contains("AOF Endurance") || title.Contains("Prometheus") || title.Contains("Petrolero") || title.Contains("Supertanquero") || title.Contains("Cosechadora") || title.Contains("Harvester"))
             {
                 TxtArmorThickness.Text = "2"; TxtArmorWidth.Text = "14";
                 _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(true), Quantity = 6 });
@@ -469,11 +473,12 @@ namespace AuroraDesignSuite.Views
                 _selectedComponents.Add(new SelectedComponentItem { Component = GetLaser(), Quantity = 2 });
                 _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(false), Quantity = 1 });
             }
-            else if (title.Contains("Freighter Atlas") || title.Contains("Troop Transport") || title.Contains("Mining Ship") || title.Contains("Tugboat") || title.Contains("Carguero"))
+            else if (title.Contains("Freighter Atlas") || title.Contains("Troop Transport") || title.Contains("Mining Ship") || title.Contains("Tugboat") || title.Contains("Maint Vessel") || title.Contains("Hephaestus") || title.Contains("Carguero"))
             {
                 TxtArmorThickness.Text = "2"; TxtArmorWidth.Text = "12";
                 _selectedComponents.Add(new SelectedComponentItem { Component = GetEngine(true), Quantity = 4 });
                 _selectedComponents.Add(new SelectedComponentItem { Component = GetFuel(true), Quantity = 10 });
+                _selectedComponents.Add(new SelectedComponentItem { Component = GetSensor(false), Quantity = 1 });
             }
             else
             {

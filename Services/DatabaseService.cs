@@ -1195,13 +1195,15 @@ namespace AuroraDesignSuite.Services
         private string InferTypeNameFromName(string name)
         {
             var lower = name.ToLower();
-            if (lower.Contains("engine") || lower.Contains("drive")) return "Engine";
-            if (lower.Contains("fuel") || lower.Contains("tank")) return "Fuel";
-            if (lower.Contains("sensor") || lower.Contains("augur")) return "Active Sensor";
-            if (lower.Contains("shield")) return "Shield";
-            if (lower.Contains("laser") || lower.Contains("beam")) return "Beam Weapon";
             if (lower.Contains("jump")) return "Jump Drive";
-            if (lower.Contains("habitat") || lower.Contains("quarters")) return "Habitation";
+            if (lower.Contains("engine") || lower.Contains("motor") || lower.Contains("propulsion") || (lower.Contains("drive") && !lower.Contains("jump"))) return "Engine";
+            if (lower.Contains("fuel") || lower.Contains("tank") || lower.Contains("combustible")) return "Fuel";
+            if (lower.Contains("sensor") || lower.Contains("augur") || lower.Contains("active") || lower.Contains("passive")) return "Active Sensor";
+            if (lower.Contains("shield") || lower.Contains("escudo")) return "Shield";
+            if (lower.Contains("laser") || lower.Contains("beam") || lower.Contains("cannon") || lower.Contains("gauss") || lower.Contains("railgun") || lower.Contains("meson")) return "Beam Weapon";
+            if (lower.Contains("habitat") || lower.Contains("quarters") || lower.Contains("crew")) return "Habitation";
+            if (lower.Contains("maintenance") || lower.Contains("engineering")) return "Maintenance";
+            if (lower.Contains("magazine") || lower.Contains("launcher")) return "Magazine";
             return "Component";
         }
 
@@ -2774,41 +2776,48 @@ namespace AuroraDesignSuite.Services
             var name = comp.ComponentName.ToLower();
             var type = comp.TypeName.ToLower();
 
-            if (name.Contains("fuel tank") || type.Contains("fuel"))
+            if (name.Contains("jump") || type.Contains("jump"))
             {
+                comp.TypeName = "Jump Drive";
+                comp.JumpRating = 3;
+                comp.JumpMaxHS = Math.Max((int)(comp.ComponentSize * 150), 1000);
+                comp.EnginePower = 0;
+                comp.MineralCosts["Tritium"] = comp.Cost * 0.7;
+                comp.MineralCosts["Duranium"] = comp.Cost * 0.3;
+            }
+            else if (name.Contains("fuel tank") || type.Contains("fuel") || name.Contains("fuel storage"))
+            {
+                comp.TypeName = "Fuel";
                 if (name.Contains("ultra-large") || comp.ComponentSize >= 10) comp.FuelCapacity = comp.ComponentSize * 50000;
                 else if (name.Contains("large") || comp.ComponentSize >= 5) comp.FuelCapacity = comp.ComponentSize * 40000;
                 else comp.FuelCapacity = comp.ComponentSize * 25000;
                 comp.MineralCosts["Sorium"] = comp.Cost;
             }
-            else if (name.Contains("drive") || name.Contains("engine") || type.Contains("engine"))
+            else if (name.Contains("engine") || type.Contains("engine") || (name.Contains("drive") && !name.Contains("jump")))
             {
+                comp.TypeName = "Engine";
                 if (comp.EnginePower <= 0) comp.EnginePower = comp.ComponentSize * 20.0;
                 comp.FuelEfficiency = 1.0;
                 comp.MineralCosts["Gallicite"] = comp.Cost * 0.8;
                 comp.MineralCosts["Duranium"] = comp.Cost * 0.2;
             }
-            else if (name.Contains("crew quarters") || name.Contains("habitat"))
+            else if (name.Contains("crew quarters") || name.Contains("habitat") || type.Contains("habitation"))
             {
+                comp.TypeName = "Habitation";
                 comp.Crew = 0;
                 comp.MineralCosts["Duranium"] = comp.Cost;
             }
-            else if (name.Contains("engineering space"))
+            else if (name.Contains("engineering space") || name.Contains("maintenance") || type.Contains("maintenance"))
             {
+                comp.TypeName = "Maintenance";
                 comp.MaintSupplies = (int)(comp.ComponentSize * 10);
                 comp.MineralCosts["Duranium"] = comp.Cost * 0.5;
             }
             else if (name.Contains("shield") || type.Contains("shield"))
             {
+                comp.TypeName = "Shield";
                 comp.ShieldStrength = comp.ComponentSize * 3.0;
                 comp.MineralCosts["Corundium"] = comp.Cost;
-            }
-            else if (name.Contains("jump drive") || type.Contains("jump"))
-            {
-                comp.JumpRating = 3;
-                comp.JumpMaxHS = (int)(comp.ComponentSize * 100);
-                comp.MineralCosts["Tritium"] = comp.Cost * 0.7;
-                comp.MineralCosts["Duranium"] = comp.Cost * 0.3;
             }
             else
             {
@@ -2816,7 +2825,7 @@ namespace AuroraDesignSuite.Services
                 comp.MineralCosts["Gallicite"] = comp.Cost * 0.4;
             }
 
-            if (comp.Crew == 0 && !name.Contains("crew quarters") && comp.ComponentSize > 1)
+            if (comp.Crew == 0 && !name.Contains("crew quarters") && !type.Contains("habitation") && comp.ComponentSize > 1)
             {
                 comp.Crew = Math.Max(1, (int)(comp.ComponentSize * 0.8));
             }

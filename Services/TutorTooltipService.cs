@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Linq;
 using Newtonsoft.Json;
 using AuroraDesignSuite.Models;
 
@@ -162,6 +163,12 @@ namespace AuroraDesignSuite.Services
             {
                 var dc = fe.DataContext;
                 var type = dc.GetType();
+
+                if (IsCommanderOrLeader(dc))
+                {
+                    fe.ToolTip = CreateCommanderToolTip(dc);
+                    return;
+                }
 
                 if (dc is SelectedComponentItem sci)
                 {
@@ -488,6 +495,168 @@ namespace AuroraDesignSuite.Services
             return toolTip;
         }
 
+        public static bool IsCommanderOrLeader(object? dc)
+        {
+            if (dc == null) return false;
+            if (dc is CommanderInfo || dc is ScientistInfo || dc is FleetCommanderInfo) return true;
+            string typeName = dc.GetType().Name;
+            if (typeName.Equals("EmpireOfficerSummary", StringComparison.OrdinalIgnoreCase)) return false;
+            return typeName.Contains("Commander") || typeName.Contains("Scientist") || typeName.Contains("Officer") || typeName.Contains("Leader");
+        }
+
+        public static ToolTip? CreateCommanderToolTip(object leaderObj, string? customTitle = null)
+        {
+            if (!IsTutorEnabled || leaderObj == null) return null;
+
+            string name = "";
+            string title = "Oficial Imperial";
+            string roleType = "Alto Mando";
+            string icon = "🎖️";
+            string location = "Sin Asignar";
+            string seniorityStr = "Rating 0";
+            string loyaltyStr = "100%";
+            string promotionStr = "50/100";
+            string bonusesStr = "Sin bonificaciones destacadas";
+            string impactStr = "Proporciona bonificaciones tácticas y estratégicas al ser asignado.";
+
+            if (leaderObj is CommanderInfo c)
+            {
+                name = c.Name;
+                title = c.Title;
+                roleType = c.TypeDisplay;
+                icon = c.RoleIcon;
+                location = c.AssignmentLocation;
+                seniorityStr = $"{c.Seniority:N0} Rating";
+                loyaltyStr = $"{c.LoyaltyRating:F0}%";
+                promotionStr = $"{c.PromotionScore:F0} / 100";
+                if (c.DetailedBonuses != null && c.DetailedBonuses.Count > 0)
+                {
+                    bonusesStr = string.Join("\n• ", c.DetailedBonuses.Select(b => $"{b.Description}: {b.ValueDisplay}"));
+                }
+                else
+                {
+                    bonusesStr = c.PrimaryBonusDisplay;
+                }
+
+                impactStr = c.CommanderType switch
+                {
+                    1 => $"Científico especializado en I+D. Al asignarlo a un proyecto de laboratorio, incrementa los RP/año generados en su área.",
+                    2 => $"Comandante naval de flota. Mejora la maniobrabilidad, precisión de disparo y coordinación defensiva de su escuadra.",
+                    3 => $"Gobernador colonial. Incrementa la producción de minas, rendimiento industrial y crecimiento poblacional de la colonia.",
+                    _ => $"Comandante militar terrestre. Potencia el poder de combate, moral y capacidad de penetración de las unidades del ejército."
+                };
+            }
+            else if (leaderObj is ScientistInfo s)
+            {
+                name = s.Name;
+                title = "Investigador / Científico I+D";
+                roleType = $"Científico ({s.FieldName})";
+                icon = "👨‍🔬";
+                location = $"{s.MaxLabs} Labs Máximos";
+                seniorityStr = $"{s.Seniority:N0} Rating";
+                loyaltyStr = $"{s.Loyalty:F0}%";
+                promotionStr = "N/A";
+                bonusesStr = $"+{s.BonusPercent:F0}% Eficiencia en {s.FieldName}";
+                impactStr = $"Acelera los proyectos de investigación en el área de {s.FieldName} en un +{s.BonusPercent:F0}%.";
+            }
+            else if (leaderObj is FleetCommanderInfo fc)
+            {
+                if (!fc.HasCommander) return null;
+                name = fc.Name;
+                title = fc.RankName;
+                roleType = "Comandante de Flota";
+                icon = "⚓";
+                location = "Flota Activa";
+                seniorityStr = $"{fc.Seniority:N0} Rating";
+                loyaltyStr = $"{fc.Loyalty:F0}%";
+                promotionStr = "Activo";
+                bonusesStr = fc.AllBonusesDisplay;
+                impactStr = "Manda la escuadra naval proporcionando bonificaciones tácticas a todos los buques asignados.";
+            }
+            else
+            {
+                var t = leaderObj.GetType();
+                name = t.GetProperty("Name")?.GetValue(leaderObj)?.ToString() ?? 
+                       t.GetProperty("OfficerName")?.GetValue(leaderObj)?.ToString() ?? "Comandante";
+                title = t.GetProperty("Title")?.GetValue(leaderObj)?.ToString() ?? 
+                        t.GetProperty("RankTitle")?.GetValue(leaderObj)?.ToString() ?? "Oficial";
+                roleType = t.GetProperty("TypeDisplay")?.GetValue(leaderObj)?.ToString() ?? 
+                           t.GetProperty("RoleType")?.GetValue(leaderObj)?.ToString() ?? "Alto Mando";
+                location = t.GetProperty("AssignmentLocation")?.GetValue(leaderObj)?.ToString() ?? 
+                           t.GetProperty("Assignment")?.GetValue(leaderObj)?.ToString() ?? "Asignado";
+                bonusesStr = t.GetProperty("PrimaryBonusDisplay")?.GetValue(leaderObj)?.ToString() ?? 
+                             t.GetProperty("PrimaryBonus")?.GetValue(leaderObj)?.ToString() ?? "+15% Eficiencia General";
+            }
+
+            string headerTitle = !string.IsNullOrEmpty(customTitle) ? customTitle : $"{icon} EXPEDIENTE DE MANDO: {name}";
+
+            string bodyText =
+                $"👤 FICHA PERSONAL & EXPEDIENTE DE MANDO:\n" +
+                $"{name} es un {roleType} del Imperio.\n" +
+                $"• Rango / Título: {title}\n" +
+                $"• Estado / Destino: {location}\n" +
+                $"• Antigüedad & Lealtad: {seniorityStr} | Lealtad: {loyaltyStr}\n" +
+                $"• Mérito de Ascenso: {promotionStr}\n\n" +
+                $"⚙️ HABILIDADES & BONIFICACIONES:\n" +
+                $"• {bonusesStr}\n\n" +
+                $"💡 IMPACTO EN EL IMPERIO:\n" +
+                $"{impactStr}\n\n" +
+                $"🛡️ CONSEJO TÁCTICO IMPERIAL:\n" +
+                $"Inspecciona los méritos de {name} desde el Cuartel General de Líderes para asignarle misiones estratégicas o promover su rango.";
+
+            ToolTip toolTip = new ToolTip
+            {
+                Background = new SolidColorBrush(Color.FromArgb(245, 11, 16, 26)),
+                BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 176, 0)), // Amber Gold for Leader Dossiers
+                BorderThickness = new Thickness(1.5),
+                Padding = new Thickness(12),
+                Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint,
+                HasDropShadow = true
+            };
+
+            Border cardBorder = new Border
+            {
+                CornerRadius = new CornerRadius(6),
+                MaxWidth = 520
+            };
+
+            StackPanel panel = new StackPanel();
+
+            TextBlock lblTitle = new TextBlock
+            {
+                Text = headerTitle,
+                Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 176, 0)),
+                FontWeight = FontWeights.Bold,
+                FontSize = 13,
+                Margin = new Thickness(0, 0, 0, 8),
+                TextWrapping = TextWrapping.Wrap
+            };
+            panel.Children.Add(lblTitle);
+
+            Border line = new Border
+            {
+                Height = 1,
+                Background = new SolidColorBrush(Color.FromArgb(120, 255, 176, 0)),
+                Margin = new Thickness(0, 0, 0, 8)
+            };
+            panel.Children.Add(line);
+
+            TextBlock lblBody = new TextBlock
+            {
+                Text = bodyText,
+                Foreground = new SolidColorBrush(Color.FromArgb(255, 230, 237, 243)),
+                FontSize = 11.5,
+                LineHeight = 18,
+                TextWrapping = TextWrapping.Wrap
+            };
+            panel.Children.Add(lblBody);
+
+            cardBorder.Child = panel;
+            toolTip.Content = cardBorder;
+
+            return toolTip;
+        }
+
         public static void AttachToolTip(FrameworkElement? element, string? keyOrTerm, string? customTitle = null)
         {
             if (element == null) return;
@@ -500,6 +669,12 @@ namespace AuroraDesignSuite.Services
 
             try
             {
+                if (element.DataContext != null && IsCommanderOrLeader(element.DataContext))
+                {
+                    element.ToolTip = CreateCommanderToolTip(element.DataContext, customTitle);
+                    return;
+                }
+
                 ToolTip? tip = CreateTutorToolTip(keyOrTerm, customTitle);
                 if (tip != null)
                 {

@@ -4,279 +4,726 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" 
-             d:DesignHeight="850" d:DesignWidth="1250">
+             d:DesignHeight="950" d:DesignWidth="1300">
     <Grid Margin="10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        <!-- COLUMN 1: DISTANCES, KINEMATICS, TERRAFORMING -->
-        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,5,0">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <!-- Card 0: Guidance & Instructions Header Banner -->
-                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" BorderThickness="1.5" CornerRadius="6" Padding="14" Margin="0,0,0,12">
                     <StackPanel>
-                        <TextBlock Text="🛠️ AUDITORÍA Y MATRIZ DE HERRAMIENTAS DE NAVEGACIÓN INTERESTELAR" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,4"/>
-                        <TextBlock Text="Módulo científico de utilidades tácticas y cinemáticas para optimizar tus decisiones en Aurora 4X:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5" TextWrapping="Wrap" Margin="0,0,0,6"/>
-                        <TextBlock Text="• Convierte distancias entre UA, Segundos-Luz y Años-Luz en tiempo real.&#10;• Calcula los tiempos exactos de viaje espacial según la velocidad de tus flotas.&#10;• Estima el tiempo de terraformación para lograr Colony Cost 0.00.&#10;• Analiza la capacidad de penetración de blindaje y alcance de detección de tus radares." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10" TextWrapping="Wrap"/>
+                        <DockPanel Margin="0,0,0,8">
+                            <TextBlock Text="🛠️ AUDITORÍA Y SUITE MASTER DE HERRAMIENTAS DE CÁLCULO AURORA 4X (20 HERRAMIENTAS)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button x:Name="BtnToggleCalculators" Click="BtnToggleCalculators_Click" Content="👁️ Ocultar Calculadoras" Padding="8,4" Margin="0,0,8,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" FontSize="11" FontWeight="Bold" Cursor="Hand"/>
+                                <Button x:Name="BtnSelectCalculators" Click="BtnSelectCalculators_Click" Content="🎛️ Selector de Calculadoras (20/20) 🔻" Padding="8,4" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" FontSize="11" FontWeight="Bold" Cursor="Hand"/>
+                            </StackPanel>
+                        </DockPanel>
+                        <TextBlock Text="Matriz de simulación balística, cinemática, biomasa, astilleros e ingeniería financiera. Ajusta múltiples parámetros para obtener diagnósticos tácticos y recomendaciones imperiales en tiempo real:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" TextWrapping="Wrap"/>
                     </StackPanel>
                 </Border>
 
-                <!-- Card 1: Astronomical Distance Converter -->
-                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                <!-- POPUP / DRAWER SELECTOR PANEL -->
+                <Border x:Name="PnlCalculatorSelector" Visibility="Collapsed" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,12">
                     <StackPanel>
-                        <TextBlock Text="🌌 CONVERSOR Y MEDIDOR DE DISTANCIAS ASTRONÓMICAS" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                        
-                        <!-- Quick Presets Toolbar -->
-                        <WrapPanel Margin="0,0,0,8">
-                            <Button Content="🌙 Tierra-Luna" Click="BtnPresetMoon_Click" Padding="6,3" Margin="0,0,4,4" Background="{DynamicResource CardBgBrush}" Foreground="White" FontSize="10" ToolTip="Preset: 384,400 km (Distancia media Tierra a la Luna)."/>
-                            <Button Content="☀️ Tierra-Sol (1 AU)" Click="BtnPresetSun_Click" Padding="6,3" Margin="0,0,4,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" FontSize="10" ToolTip="Preset: 1.0 UA / 149,597,870 km (Unidad Astronómica estándar)."/>
-                            <Button Content="🪐 Sol-Neptuno" Click="BtnPresetNeptune_Click" Padding="6,3" Margin="0,0,4,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontSize="10" ToolTip="Preset: 30.1 UA / 4.5 Billones km (Frontera del sistema solar)."/>
-                            <Button Content="⭐ Proxima Centauri" Click="BtnPresetProxima_Click" Padding="6,3" Margin="0,0,0,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontSize="10" ToolTip="Preset: 4.24 Años Luz (Sistema estelar más cercano)."/>
-                        </WrapPanel>
-
-                        <TextBlock Text="Distancia en Kilómetros (km):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                        <TextBox x:Name="TxtDistanceKm" Text="149597870" TextChanged="TxtDistanceKm_TextChanged" Padding="6" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,8" ToolTip="Ingresa cualquier distancia en kilómetros para convertirla automáticamente a todas las unidades astrofísicas."/>
-
-                        <UniformGrid Columns="2">
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Unidades Astronómicas (1 AU = 149,597,870 km).">
-                                <StackPanel>
-                                    <TextBlock Text="Unidades Astronómicas (AU):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                    <TextBlock x:Name="LblValAU" Text="1.00 AU" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Tiempo en segundos que tarda un pulso de luz en viajar esta distancia.">
-                                <StackPanel>
-                                    <TextBlock Text="Segundos-Luz:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                    <TextBlock x:Name="LblValLightSec" Text="499.0 Seg" Foreground="White" FontWeight="Bold" FontSize="12"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Días que tarda un haz de luz en recorrer el trayecto.">
-                                <StackPanel>
-                                    <TextBlock Text="Días-Luz (Light-Days):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                    <TextBlock x:Name="LblValLightDays" Text="0.01 Días" Foreground="White" FontWeight="Bold" FontSize="12"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Años-Luz (1 LY = 9.46 Trillones de km).">
-                                <StackPanel>
-                                    <TextBlock Text="Años-Luz (Light-Years):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                    <TextBlock x:Name="LblValLightYears" Text="0.000016 AL" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12"/>
-                                </StackPanel>
-                            </Border>
-                        </UniformGrid>
-                    </StackPanel>
-                </Border>
-
-                <!-- Card 2: Space Transit Kinematics -->
-                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                    <StackPanel>
-                        <TextBlock Text="🚀 CALCULADOR DE TIEMPO Y CINEMÁTICA DE VIAJE ESPACIAL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                        
-                        <Grid Margin="0,0,0,8">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,4,0">
-                                <TextBlock Text="Distancia de Transito (AU):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <TextBox x:Name="TxtTransitDistAU" Text="10.0" TextChanged="OnKinematicsInputChanged" Padding="6" Background="{DynamicResource BgDarkBrush}" Foreground="White" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="12" ToolTip="Distancia del viaje en Unidades Astronómicas (AU)."/>
+                        <DockPanel Margin="0,0,0,8">
+                            <TextBlock Text="⚙️ SELECCIONA QUÉ HERRAMIENTAS DE CÁLCULO MANTENER VISIBLES EN PANTALLA:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Click="BtnCheckAll_Click" Content="✅ Seleccionar Todas" Padding="6,2" Margin="0,0,6,0" Background="Transparent" Foreground="{DynamicResource AccentGreenBrush}" BorderThickness="0" FontSize="10.5" Cursor="Hand"/>
+                                <Button Click="BtnUncheckAll_Click" Content="❌ Desmarcar Todas" Padding="6,2" Margin="0,0,6,0" Background="Transparent" Foreground="{DynamicResource TextSecondaryBrush}" BorderThickness="0" FontSize="10.5" Cursor="Hand"/>
+                                <Button Click="BtnResetDefault_Click" Content="🔄 Predeterminado" Padding="6,2" Background="Transparent" Foreground="{DynamicResource AccentCyanBrush}" BorderThickness="0" FontSize="10.5" Cursor="Hand"/>
                             </StackPanel>
-                            <StackPanel Grid.Column="1" Margin="4,0,0,0">
-                                <TextBlock Text="Velocidad Nave (km/s):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <TextBox x:Name="TxtTransitSpeedKmS" Text="4500" TextChanged="OnKinematicsInputChanged" Padding="6" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="12" ToolTip="Velocidad sostenida de la nave o escuadra en km/s."/>
-                            </StackPanel>
-                        </Grid>
+                        </DockPanel>
 
-                        <UniformGrid Columns="3">
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Duración estimada del tránsito en horas.">
-                                <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="Horas de Viaje:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="LblTransitHours" Text="92.4 Horas" Foreground="White" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Duración estimada del tránsito en días continuos.">
-                                <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="Días de Viaje:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="LblTransitDays" Text="3.85 Días" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Fracción de la velocidad de la luz (% c).">
-                                <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="Velocidad Relativa:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="LblTransitPercentC" Text="1.50% c" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
-                                </StackPanel>
-                            </Border>
-                        </UniformGrid>
-                    </StackPanel>
-                </Border>
-
-                <!-- Card 3: Planetary Terraforming Calculator -->
-                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
-                    <StackPanel>
-                        <TextBlock Text="🌱 CALCULADOR AVANZADO DE TERRAFORMACIÓN Y HÁBITAT" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                        
-                        <Grid Margin="0,0,0,8">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,4,0">
-                                <TextBlock Text="Presión Actual (atm):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <TextBox x:Name="TxtCurAtmos" Text="0.20" TextChanged="OnTerraformInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="11" ToolTip="Presión atmosférica actual del planeta en atm."/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" Margin="2,0,2,0">
-                                <TextBlock Text="Presión Objetivo (atm):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <TextBox x:Name="TxtTgtAtmos" Text="1.00" TextChanged="OnTerraformInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="11" ToolTip="Presión atmosférica deseada para hábitat respirable."/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2" Margin="4,0,0,0">
-                                <TextBlock Text="Módulos Instalados:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <TextBox x:Name="TxtTerraformersCount" Text="10" TextChanged="OnTerraformInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="11" ToolTip="Cantidad de instalaciones o módulos de terraformación instalados en el planeta."/>
-                            </StackPanel>
-                        </Grid>
-
-                        <UniformGrid Columns="2">
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Tasa anual de inyección/extracción atmosférica combinada.">
-                                <StackPanel>
-                                    <TextBlock Text="Capacidad Anual de Cambio:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                    <TextBlock x:Name="LblTerraformRate" Text="0.10 atm / Año" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Tiempo estimado para alcanzar la atmósfera objetivo y reducir el Colony Cost a 0.0.">
-                                <StackPanel>
-                                    <TextBlock Text="Tiempo Estimado Total:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                    <TextBlock x:Name="LblTerraformYears" Text="8.00 Años (96 Meses)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12"/>
-                                </StackPanel>
-                            </Border>
-                        </UniformGrid>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </ScrollViewer>
-
-        <!-- COLUMN 2: ORDNANCE PENETRATION, SENSOR RANGE, CARGO LOGISTICS -->
-        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="5,0,0,0">
-            <StackPanel>
-                <!-- Card 4: Armor Penetration & Crater Profile -->
-                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                    <StackPanel>
-                        <TextBlock Text="💥 CALCULADOR DE PENETRACIÓN DE BLINDAJE Y CRÁTER (ORDNANCE)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                        
-                        <Grid Margin="0,0,0,8">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,4,0">
-                                <TextBlock Text="Cabeza de Guerra / Daño (Pts):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <TextBox x:Name="TxtDamagePts" Text="16" TextChanged="OnArmorInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="12" ToolTip="Puntos de daño de la cabeza de guerra del misil o impacto de arma de energía."/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" Margin="4,0,0,0">
-                                <TextBlock Text="Capas de Blindaje Enemigo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <TextBox x:Name="TxtArmorLayersCount" Text="3" TextChanged="OnArmorInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="12" ToolTip="Grosor en capas del blindaje del buque objetivo."/>
-                            </StackPanel>
-                        </Grid>
-
+                        <!-- 20 Modular CheckBoxes in 2 Columns -->
                         <UniformGrid Columns="2" Margin="0,0,0,6">
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Profundidad del cráter de impacto calculada por la regla de raíz cuadrada de Aurora 4X.">
-                                <StackPanel>
-                                    <TextBlock Text="Profundidad del Cráter:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                    <TextBlock x:Name="LblCraterDepth" Text="4 Capas de Profundidad" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Ancho en la superficie del perfil de impacto en forma de V.">
-                                <StackPanel>
-                                    <TextBlock Text="Ancho de Superficie:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
-                                    <TextBlock x:Name="LblCraterWidth" Text="4 Bloques de Ancho" Foreground="White" FontWeight="Bold" FontSize="12"/>
-                                </StackPanel>
-                            </Border>
-                        </UniformGrid>
-
-                        <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" ToolTip="Evaluación de penetración y riesgo de daño crítico a los componentes internos.">
-                            <TextBlock x:Name="LblArmorPenStatus" Text="💥 BRECHA DE BLINDAJE: Daño directo a componentes internos" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center"/>
-                        </Border>
-                    </StackPanel>
-                </Border>
-
-                <!-- Card 5: Sensor Coverage & Detection Range -->
-                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                    <StackPanel>
-                        <TextBlock Text="📡 CALCULADOR DE ALCANCE DE SENSORES ACTIVOS Y PASIVOS" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                        
-                        <Grid Margin="0,0,0,8">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,2,0">
-                                <TextBlock Text="Tamaño Sensor (HS):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <TextBox x:Name="TxtSensorHS" Text="10" TextChanged="OnSensorInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="11" ToolTip="Tamaño en Hull Size (HS) del sensor activo o pasivo."/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" Margin="2,0,2,0">
-                                <TextBlock Text="Resolución (Res):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <TextBox x:Name="TxtSensorRes" Text="20" TextChanged="OnSensorInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="11" ToolTip="Resolución del sensor (Res 1 para misiles, Res 20 para cazas/fragatas, Res 100 para buques capitales)."/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2" Margin="2,0,0,0">
-                                <TextBlock Text="Firma Enemigo (TH):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <TextBox x:Name="TxtTargetTH" Text="500" TextChanged="OnSensorInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="11" ToolTip="Firma térmica (TH) o firma de radar RCS del blanco objetivo."/>
-                            </StackPanel>
-                        </Grid>
-
-                        <UniformGrid Columns="2">
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Alcance máximo de detección en millones de kilómetros.">
-                                <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="Alcance en Kilómetros:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="LblSensorRangeKm" Text="50,000,000 km" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Alcance máximo de detección expresado en Unidades Astronómicas (AU).">
-                                <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="Alcance en AU:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="LblSensorRangeAU" Text="0.33 AU" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
-                                </StackPanel>
-                            </Border>
+                            <CheckBox x:Name="ChkCalc1" Content="💥 1. Penetración de Blindaje &amp; Ojiva" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc2" Content="📡 2. Alcance Máximo Radar Activo" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc3" Content="⛽ 3. Consumo Combustible &amp; Impulso" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc4" Content="🏗️ 4. Tiempo &amp; Costo Retooling Astilleros" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc5" Content="🚀 5. Velocidad Máxima Naval (EP/HS)" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc6" Content="🌌 6. Autonomía &amp; Consumo (AU/Bkm)" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc7" Content="🔧 7. Tasa de Fallos (AFR) &amp; Pañol MSP" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc8" Content="🌍 8. Costo Colonial Planetario" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc9" Content="⛏️ 9. Producción Minera &amp; Rendimiento" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc10" Content="🛰️ 10. Detección Pasiva Térmica &amp; Sigilo" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc11" Content="🛡️ 11. Potencia &amp; Recarga de Escudos" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc12" Content="⚡ 12. Recarga Capacitores &amp; Armas Láser" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc13" Content="🎯 13. Probabilidad de Impacto de Misil" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc14" Content="🏭 14. Capacidad Construcción Industrial" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc15" Content="🛰️ 15. Detección Pasiva Electromagnética" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc16" Content="🚀 16. Logística de Catapulta de Masa" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc17" Content="🎓 17. Puntos de Investigación RP/Año" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc18" Content="💣 18. Defensa Antimisil de Área &amp; CIWS" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc19" Content="⚓ 19. Capacidad Mantenimiento Naval" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
+                            <CheckBox x:Name="ChkCalc20" Content="💵 20. Generación de Riqueza Imperial" IsChecked="True" Checked="OnCalcVisibilityChanged" Unchecked="OnCalcVisibilityChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" Margin="0,3"/>
                         </UniformGrid>
                     </StackPanel>
                 </Border>
 
-                <!-- Card 6: Cargo & Colonization Logistics Calculator -->
-                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
-                    <StackPanel>
-                        <TextBlock Text="📦 CALCULADOR DE LOGÍSTICA DE CARGA, COLONIZACIÓN Y CONVOYES" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
-                        
-                        <Grid Margin="0,0,0,8">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" Margin="0,0,4,0">
-                                <TextBlock Text="Carga Total a Mover (Tons):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <TextBox x:Name="TxtTotalCargoTons" Text="50000" TextChanged="OnCargoInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="11" ToolTip="Toneladas totales de instalaciones (fábricas, minas) o volumen de colonos a transportar."/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" Margin="4,0,0,0">
-                                <TextBlock Text="Capacidad por Nave (Tons):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
-                                <TextBox x:Name="TxtShipCapTons" Text="10000" TextChanged="OnCargoInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource BorderBrush}" FontWeight="Bold" FontSize="11" ToolTip="Capacidad de carga útil de 1 carguero o nave de colonización."/>
-                            </StackPanel>
-                        </Grid>
+                <!-- MAIN CALCULATORS CONTAINER -->
+                <StackPanel x:Name="PnlCalculatorsContainer">
 
-                        <UniformGrid Columns="2">
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Número de viajes de ida y vuelta necesarios con 1 nave para trasladar toda la carga.">
-                                <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="Viajes Necesarios (1 Nave):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="LblCargoVoyages" Text="5 Viajes" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
-                                </StackPanel>
+                    <!-- Formula 1: Missile Penetration vs Enemy Armor -->
+                    <Border x:Name="CardCalc1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="💥 1. Penetración de Blindaje y Daño de Ojiva (Missile Penetration vs Enemy Armor)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Compara la potencia de tu ojiva (Yield) contra las capas de blindaje enemigas. En Aurora 4X, un misil perfora un cráter cuadrado de prof = sqrt(Yield). Ingresa ambos datos para verificar si atravesarás su casco y destruirás sus componentes internos." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
                             </Border>
-                            <Border Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2" ToolTip="Tiempo total estimado para completar la operación logística.">
-                                <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="Tiempo Total Operación:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="LblCargoTotalDays" Text="19.3 Días" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                                    <TextBlock Text="Potencia Ojiva Misil (Yield Points):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaWarheadYield" Text="16" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
                                 </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                                    <TextBlock Text="Capas de Blindaje Nave Enemiga:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaEnemyArmor" Text="6" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaWarheadResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
                             </Border>
-                        </UniformGrid>
-                    </StackPanel>
-                </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 2: Active Sensor Range vs Target -->
+                    <Border x:Name="CardCalc2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="📡 2. Alcance Máximo de Radar Activo (Active Sensor vs Target Tonnage)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula a qué distancia tu radar fijará un blanco según su tamaño en HS (1 HS = 50 tons) y la resolución del sensor. La Res 1 detecta misiles/cazas; Res 100 optimiza alcance contra cruceros pesados." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Fuerza del Radar (Strength):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaRadarStrength" Text="24" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Resolución (Res 1-100):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaRadarRes" Text="100" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Tamaño Blanco Enemigo (HS):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaTargetHS" Text="100" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaRadarResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 3: Fleet Engine Burn & Tanker Logistics -->
+                    <Border x:Name="CardCalc3" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="⛽ 3. Consumo de Combustible &amp; Logística de Flotas (Fleet Engine Burn &amp; Tankers)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula el consumo total de combustible para una flota completa durante días de misión continua. Indica cuántas naves cisterna (1 Cisterna = 1,000,000 L) se requieren para soportar el despliegue." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,2,0">
+                                    <TextBlock Text="Empuje Motor (EP):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaEngineEP" Text="500" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Consumo (L/EP/h):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaEngineFuelRate" Text="0.8" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="2,0,2,0">
+                                    <TextBlock Text="Naves en Flota:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaFleetShips" Text="12" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" Margin="2,0,0,0">
+                                    <TextBlock Text="Días de Misión:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMissionDays" Text="30" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaEngineResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 4: Shipyard Retooling & Refit -->
+                    <Border x:Name="CardCalc4" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🏗️ 4. Tiempo &amp; Costo de Retooling de Astilleros (Shipyard Retooling)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula los Puntos de Construcción (BP) y días para reequipar gradas navales. Si la nueva nave es variante de la anterior (0-20% diff), el tiempo se reduce drásticamente." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Capacidad Astillero (Tons):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaRetoolCapacity" Text="10000" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Dif. Diseño (0-100%):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaRetoolDiff" Text="20" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="BP/Año por Grada:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaRetoolBP" Text="500" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaRetoolResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 5: Naval Speed & Interception -->
+                    <Border x:Name="CardCalc5" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🚀 5. Velocidad Máxima Naval &amp; Intercepción (Naval Speed vs Target)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula la velocidad máxima propia en km/s (EP/HS * 1000) y la compara contra la velocidad de la flota enemiga para determinar si tienes ventaja táctica de intercepción o huida." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Empuje Motor (EP):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaSpeedEP" Text="1200" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Masa Casco (HS):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaSpeedHS" Text="300" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Velocidad Enemiga (km/s):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaEnemySpeed" Text="3500" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaSpeedResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 6: Flight Endurance & Safe Return Radius -->
+                    <Border x:Name="CardCalc6" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🌌 6. Autonomía &amp; Radio Operativo de Retorno Seguro (Flight Endurance &amp; Radius)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Mide el alcance máximo de navegación continua en Bkm/AU y calcula el Radio de Retorno Seguro (50% de reserva) para asegurar que tus patrullas regresen a su base." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Combustible Total (L):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaRangeFuel" Text="500000" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Consumo (L/hora):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaRangeRate" Text="400" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Velocidad Crucero (km/s):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaRangeSpeed" Text="4000" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaRangeResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 7: Maintenance AFR & Autonomous Months -->
+                    <Border x:Name="CardCalc7" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🔧 7. Tasa Anual de Fallos (AFR) &amp; Autonomía de Repuestos (AFR &amp; MSP)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula el riesgo de averías por desuso (AFR%), tiempo medio entre fallos (MTBF) y evalúa si tus repuestos en inventario (MSP) cubrirán la misión en espacio profundo." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Costo Nave (BP):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMaintBP" Text="1500" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Rating DCR Pañoles:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMaintDCR" Text="12" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Repuestos MSP a Bordo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMaintMSP" Text="250" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaMaintResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 8: Planet Colony Cost & Cargo Freighters -->
+                    <Border x:Name="CardCalc8" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🌍 8. Costo Colonial &amp; Requerimiento de Infraestructura (Colony Cost &amp; Freighters)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Evalúa la biomasa planetaria (Colony Cost 0.00 a 10.00). Calcula las unidades totales de Infraestructura necesarias para soportar la población objetivo y fletes de cargueros." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,2,0">
+                                    <TextBlock Text="Temperatura (°C):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaColonyTemp" Text="-45" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Presión O2 (atm):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaColonyO2" Text="0.02" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="2,0,2,0">
+                                    <TextBlock Text="Gas Tóxico (atm):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaColonyTox" Text="0.0" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" Margin="2,0,0,0">
+                                    <TextBlock Text="Población (Millones):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaColonyPop" Text="10" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaColonyResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 9: Mining Output & Ore Reserves -->
+                    <Border x:Name="CardCalc9" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="⛏️ 9. Rendimiento de Producción Minera &amp; Reservas (Mining Output &amp; Exhaustion)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula la producción anual combinada de los 11 minerales trans-newtonianos según la accesibilidad del yacimiento y proyecta el horizonte de años hasta el agotamiento de las reservas." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Minas Activas:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMiningCount" Text="50" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Accesibilidad (0.1 - 1.0):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMiningAcc" Text="0.8" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Reservas Yacimiento (Tons):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMiningReserves" Text="100000" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaMiningResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 10: Thermal Stealth & Infiltration -->
+                    <Border x:Name="CardCalc10" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🛰️ 10. Detección Pasiva Térmica &amp; Sigilo (Thermal Signature &amp; Stealth Coating)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula la firma térmica neta tras aplicar recubrimientos anti-infrarrojos de sigilo (0-90%) y determina la distancia en Mkm a la que serás delatado ante los sensores enemigos." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Firma Térmica Motores (TH):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaStealthTH" Text="800" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Sigilo / Cobertura (%):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaStealthCover" Text="50" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Sensibilidad Sensor Enemigo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaStealthSens" Text="30" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaStealthResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 11: Shield Absorptive Power & Recharge -->
+                    <Border x:Name="CardCalc11" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🛡️ 11. Potencia &amp; Recarga de Escudos (Shield Absorptive Power &amp; Recharge)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula los puntos de absorción de daño totales de los escudos y el tiempo necesario para regenerarlos al 100% tras un combate, evaluando también la regeneración por turno (5s)." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Generadores Escudo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaShieldCount" Text="6" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Potencia / Gen (Pts):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaShieldTech" Text="5" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Recarga Reactor (Pt/s):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaShieldRecharge" Text="1.0" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaShieldResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 12: Beam Capacitor Recharge & Power Balance -->
+                    <Border x:Name="CardCalc12" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="⚡ 12. Recarga de Capacitores &amp; Armas Láser (Beam Recharge Rate &amp; Power Balance)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Relaciona el gasto energético por cañón con la tasa de recarga de capacitores por turno (5s) y la producción total de energía de los reactores para verificar que no haya déficit energético en combate." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,2,0">
+                                    <TextBlock Text="EU por Cañón:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaBeamPower" Text="16" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Cant. Cañones:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaBeamCount" Text="4" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="2,0,2,0">
+                                    <TextBlock Text="Recarga Cap (EU/5s):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaCapacitorRate" Text="4" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" Margin="2,0,0,0">
+                                    <TextBlock Text="Reactores (EU/5s):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaReactorPower" Text="16" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaBeamResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 13: Missile Hit Probability vs ECM/ECCM -->
+                    <Border x:Name="CardCalc13" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🎯 13. Probabilidad de Impacto de Misil (Missile Hit Chance vs Speed &amp; ECM/ECCM)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula el % final de impacto de tus misiles relacionando la velocidad del misil vs blanco y aplicando la penalización del jammer ECM enemigo mitigado por tu buscador ECCM." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,2,0">
+                                    <TextBlock Text="Vel. Misil (km/s):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMissileSpeed" Text="32000" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Vel. Blanco (km/s):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaTargetSpeed" Text="12000" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="2,0,2,0">
+                                    <TextBlock Text="Nivel ECM Enemigo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaTargetECM" Text="2" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" Margin="2,0,0,0">
+                                    <TextBlock Text="Nivel ECCM Misil:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMissileECCM" Text="1" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaMissileHitResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 14: Industrial Construction Capacity & Project Days -->
+                    <Border x:Name="CardCalc14" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🏭 14. Capacidad de Construcción Industrial (Industrial BP Output &amp; Project Time)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula los Puntos de Construcción (BP/año y BP/día) generados por tus Fábricas de Construcción considerando las bonificaciones de tu sector y estima los días exactos para terminar cualquier proyecto." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Fábricas Construcción:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaFactoriesCount" Text="100" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Bono Gobernador (%):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaGovMod" Text="25" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Costo BP Proyecto:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaProjectBP" Text="120" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaConstResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 15: EM Passive Sensor Detection -->
+                    <Border x:Name="CardCalc15" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🛰️ 15. Detección Pasiva Electromagnética (EM Sensor Range vs Active Output)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula la distancia pasiva en Mkm a la que detectarás las transmisiones de escudos, reactores y radares enemigos sin encender tus propios radares activos." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Emisión EM Enemiga:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaEMSensingSig" Text="500" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Sensibilidad Sensor EM:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaEMSensRating" Text="40" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Sensores Instalados:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaEMSensCount" Text="2" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaEMResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 16: Mass Driver Transport & Collision Safety -->
+                    <Border x:Name="CardCalc16" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🚀 16. Logística de Catapulta de Masa &amp; Seguridad (Mass Driver Transport Safety)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula las toneladas de mineral transferidas anualmente entre asteroides. Compara catapultas emisoras vs receptoras para PREVENIR COLISIONES DE IMPACTO DEVASTADOR en el planeta destino." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Catapultas Emisoras:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMassDriverSender" Text="3" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Catapultas Receptoras:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMassDriverReceiver" Text="3" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Distancia (Mkm):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaDriverDist" Text="150" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaMassDriverResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 17: Research RP Output & Scientist Director -->
+                    <Border x:Name="CardCalc17" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="🎓 17. Puntos de Investigación I+D &amp; Tiempos (Research Output &amp; Scientist Bonus)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula los Puntos de Investigación (RP/año y RP/mes) generados por tus laboratorios aplicando el bono del científico asignado y calcula el tiempo exacto para desbloquear la tecnología." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Laboratorios I+D:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaLabsCount" Text="10" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Bono Científico (%):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaSciBonus" Text="30" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Costo RP Tecnología:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaTechRP" Text="5000" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaResearchResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 18: Point Defense Interception vs Salvo -->
+                    <Border x:Name="CardCalc18" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="💣 18. Defensa Antimisil &amp; Intercepción CIWS (Point Defense Interception Rate)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula el % de precisión del control de tiro antimisil según la velocidad de los misiles enemigos entrantes y muestra cuántos misiles serán interceptados por turno de 5s." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,2,0">
+                                    <TextBlock Text="Cañones Gauss/CIWS:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaGaussCount" Text="12" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Tracking Vel (km/s):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaTrackingSpeed" Text="16000" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="2,0,2,0">
+                                    <TextBlock Text="Vel Misil Enemigo:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaEnemyMissileSpeed" Text="24000" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" Margin="2,0,0,0">
+                                    <TextBlock Text="Salva Enemiga (Misiles):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaSalvoSize" Text="10" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaPointDefResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 19: Naval Maintenance Limit & Drydock Capacity -->
+                    <Border x:Name="CardCalc19" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="⚓ 19. Capacidad de Mantenimiento Naval (Naval Drydock Maintenance Limit)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Mide el tonelaje militar máximo soportado por tus instalaciones navales en órbita y alerta si la flota actual supera la capacidad provocando desgaste y averías mecánicas." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Instalaciones Muestreadas:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMaintFacCount" Text="20" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Población Colonia (M):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaColonyPopMaint" Text="500" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Tonelaje Flota Actual (Tons):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaActiveTonnage" Text="35000" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaNavalMaintResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formula 20: Empire Wealth Generation & Expenses -->
+                    <Border x:Name="CardCalc20" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                        <StackPanel>
+                            <TextBlock Text="💵 20. Generación de Riqueza Imperial &amp; Presupuesto (Empire Wealth &amp; Expenses)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,4"/>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="8,5" Margin="0,0,0,8">
+                                <TextBlock Text="📖 ¿PARA QUÉ SIRVE Y CÓMO USAR ESTA HERRAMIENTA?&#10;Calcula los ingresos por impuestos a la población civil y centros financieros. Descuenta los gastos militares anuales y determina si el imperio opera en Superávit o Déficit." Foreground="{DynamicResource AccentAmberBrush}" FontSize="10.5" TextWrapping="Wrap"/>
+                            </Border>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <TextBlock Text="Población Civil (M):" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaPopMillions" Text="1000" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,2,0">
+                                    <TextBlock Text="Centros Financieros:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaFinancialCount" Text="50" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <TextBlock Text="Gastos Militares Anuales:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtFormulaMilitaryExpenses" Text="500000" TextChanged="OnFormulaInputChanged" Padding="5" Background="{DynamicResource BgDarkBrush}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                </StackPanel>
+                            </Grid>
+                            <Border Background="{DynamicResource CardHeaderBrush}" CornerRadius="4" Padding="10,6">
+                                <TextBlock x:Name="LblFormulaWealthResult" Text="Calculando..." Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11.5" TextWrapping="Wrap"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </Grid>

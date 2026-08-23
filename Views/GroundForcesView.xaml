@@ -112,7 +112,16 @@
                             <TextBlock x:Name="LblCalcTroopHS" Text="0 HS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
                         </Grid>
                         <Grid Margin="0,2">
-                            <TextBlock Text="Naves de Transporte Necesarias (Cap. 5.000t c/u):" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            <TextBlock Text="Capacidad Hangar Nave Transporte:" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="CmbTransportCapacity" Width="180" Height="22" HorizontalAlignment="Right" SelectionChanged="CmbTransportCapacity_SelectionChanged" SelectedIndex="0">
+                                <ComboBoxItem Content="5.000 t (Hangar 100 HS)"/>
+                                <ComboBoxItem Content="10.000 t (Hangar 200 HS)"/>
+                                <ComboBoxItem Content="25.000 t (Hangar 500 HS)"/>
+                                <ComboBoxItem Content="50.000 t (Hangar 1.000 HS)"/>
+                            </ComboBox>
+                        </Grid>
+                        <Grid Margin="0,2">
+                            <TextBlock Text="Naves de Transporte Requeridas:" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             <TextBlock x:Name="LblCalcShipsNeeded" Text="0 Naves" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
                         </Grid>
 

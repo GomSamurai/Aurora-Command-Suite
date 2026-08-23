@@ -79,16 +79,18 @@ namespace AuroraDesignSuite.Views
             RecalculateSimulation();
         }
 
+        private void DgGases_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RecalculateSimulation();
+        }
+
         private void RecalculateSimulation()
         {
             if (DgWorlds?.SelectedItem is not TerraformWorldInfo selected) return;
 
             int installations = SliderInstallations != null ? (int)SliderInstallations.Value : 20;
-            // Base terraforming rate per installation in Aurora: ~0.001 atm/yr base (scaled by officer/tech)
+            // Base terraforming rate per installation in Aurora: ~0.001 atm/yr base
             double annualRate = installations * 0.0010;
-            
-            double targetAtmChange = Math.Max(0.10, selected.ColonyCost * 0.25);
-            double estimatedYears = annualRate > 0 ? (targetAtmChange / annualRate) : 999.0;
 
             if (TxtSimRate != null)
             {
@@ -97,13 +99,26 @@ namespace AuroraDesignSuite.Views
 
             if (TxtSimTime != null)
             {
-                if (selected.ColonyCost <= 0.001)
+                if (installations <= 0)
+                {
+                    TxtSimTime.Text = "⚠️ Sin instalaciones activas. Asigne complejos de terraformación a la colonia para iniciar el proceso.";
+                }
+                else if (DgGases?.SelectedItem is AtmosphericGasInfo selectedGas)
+                {
+                    double gasAtm = selectedGas.GasAtm;
+                    double gasYears = annualRate > 0 ? (gasAtm / annualRate) : 999.0;
+                    string actionStr = selectedGas.IsDangerous ? "Eliminar / Neutralizar" : "Ajustar / Inyectar";
+                    TxtSimTime.Text = $"🎯 OBJETIVO SELECCIONADO: {actionStr} '{selectedGas.GasName}' ({gasAtm:N3} atm) ➔ ~{gasYears:N1} Años Imperiales ({gasYears * 12:N0} Meses)";
+                }
+                else if (selected.ColonyCost <= 0.001)
                 {
                     TxtSimTime.Text = "🟢 ¡Planeta Idílico! No requiere modificaciones atmosféricas adicionales.";
                 }
                 else
                 {
-                    TxtSimTime.Text = $"⏳ Tiempo Estimado para Lograr Atmósfera Respirable (Reducción de CC): ~{estimatedYears:N1} Años Imperiales";
+                    double targetAtmChange = Math.Max(0.10, selected.ColonyCost * 0.25);
+                    double estimatedYears = annualRate > 0 ? (targetAtmChange / annualRate) : 999.0;
+                    TxtSimTime.Text = $"⏳ Tiempo Estimado para Atmósfera Respirable (Reducción Global de CC): ~{estimatedYears:N1} Años Imperiales ({estimatedYears * 12:N0} Meses)";
                 }
             }
         }

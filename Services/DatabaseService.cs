@@ -3648,13 +3648,25 @@ namespace AuroraDesignSuite.Services
             try
             {
                 using var conn = GetConnection();
+
+                int startYear = 2026;
+                string yearSql = "SELECT StartYear FROM FCT_Game LIMIT 1";
+                using (var yearCmd = new SqliteCommand(yearSql, conn))
+                {
+                    var yObj = yearCmd.ExecuteScalar();
+                    if (yObj != null && yObj != DBNull.Value)
+                    {
+                        startYear = Convert.ToInt32(yObj);
+                    }
+                }
+
                 string sql = @"
                     SELECT gl.Time, gl.EventType, et.Description, gl.MessageText
                     FROM FCT_GameLog gl
                     LEFT JOIN DIM_EventType et ON gl.EventType = et.EventTypeID
                     WHERE (gl.RaceID = @raceId OR gl.RaceID IS NULL)
                     ORDER BY gl.Time DESC
-                    LIMIT 200";
+                    LIMIT 250";
 
                 using var cmd = new SqliteCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@raceId", raceId);
@@ -3672,6 +3684,7 @@ namespace AuroraDesignSuite.Services
                     list.Add(new ImperialChronicleEvent
                     {
                         GameTimeSeconds = reader["Time"] != DBNull.Value ? Convert.ToDouble(reader["Time"]) : 0.0,
+                        StartYear = startYear,
                         EventTypeID = reader["EventType"] != DBNull.Value ? Convert.ToInt32(reader["EventType"]) : 0,
                         CategoryName = category,
                         MessageText = message

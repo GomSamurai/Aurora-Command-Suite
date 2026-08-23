@@ -106,7 +106,7 @@
 
                         <TextBlock Grid.Row="0" Text="☁️ COMPOSICIÓN QUÍMICA DE LA ATMÓSFERA" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
 
-                        <DataGrid Grid.Row="1" x:Name="DgGases" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid Grid.Row="1" x:Name="DgGases" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgGases_SelectionChanged">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Gas" Binding="{Binding GasName}" Width="*"/>
                                 <DataGridTextColumn Header="Símbolo" Binding="{Binding Symbol}" Width="70"/>

@@ -36,12 +36,24 @@ namespace AuroraDesignSuite.Views
         private void ApplyFilter()
         {
             string query = TxtSearchOfficer?.Text?.Trim().ToLower() ?? "";
+            int statusFilter = CmbFilterStatus != null ? CmbFilterStatus.SelectedIndex : 0;
+
             var filtered = _allOfficers.Where(o =>
-                string.IsNullOrEmpty(query) ||
-                o.Name.ToLower().Contains(query) ||
-                o.RankName.ToLower().Contains(query) ||
-                o.StatusDisplay.ToLower().Contains(query)
-            ).ToList();
+            {
+                bool matchesSearch = string.IsNullOrEmpty(query) ||
+                    o.Name.ToLower().Contains(query) ||
+                    o.RankName.ToLower().Contains(query) ||
+                    o.StatusDisplay.ToLower().Contains(query);
+
+                if (!matchesSearch) return false;
+
+                if (statusFilter == 1) // Only Fallen / Deceased
+                    return o.IsDeceased;
+                if (statusFilter == 2) // Only Retired
+                    return !o.IsDeceased;
+
+                return true;
+            }).ToList();
 
             DgOfficers.ItemsSource = filtered;
 
@@ -55,6 +67,11 @@ namespace AuroraDesignSuite.Views
             {
                 DgOfficers.SelectedIndex = 0;
             }
+        }
+
+        private void CmbFilterStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFilter();
         }
 
         private void DgOfficers_SelectionChanged(object sender, SelectionChangedEventArgs e)

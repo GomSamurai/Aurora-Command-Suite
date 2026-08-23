@@ -75,13 +75,26 @@ namespace AuroraDesignSuite.Views
                 if (LblCalcTotalTons != null) LblCalcTotalTons.Text = $"{selected.TotalSizeTons:N0} t";
                 if (LblCalcTroopHS != null) LblCalcTroopHS.Text = $"{selected.RequiredTroopTransportHS:N0} HS ({selected.RequiredTroopTransportHS * 50:N0} t)";
 
-                double shipsNeeded = Math.Ceiling(selected.TotalSizeTons / 5000.0);
-                if (LblCalcShipsNeeded != null) LblCalcShipsNeeded.Text = $"{shipsNeeded:N0} Naves (Cap. 5.000t c/u)";
+                double selectedCapacityTons = 5000.0;
+                if (CmbTransportCapacity?.SelectedIndex == 1) selectedCapacityTons = 10000.0;
+                else if (CmbTransportCapacity?.SelectedIndex == 2) selectedCapacityTons = 25000.0;
+                else if (CmbTransportCapacity?.SelectedIndex == 3) selectedCapacityTons = 50000.0;
+
+                double shipsNeeded = Math.Ceiling(selected.TotalSizeTons / selectedCapacityTons);
+                if (LblCalcShipsNeeded != null) LblCalcShipsNeeded.Text = $"{shipsNeeded:N0} Naves ({selectedCapacityTons:N0}t cap. c/u)";
 
                 if (TxtTacticalNote != null)
                 {
-                    TxtTacticalNote.Text = $"💡 La formación '{selected.Name}' desplegada en '{selected.LocationName}' consta de {selected.TotalUnits:N0} unidades de combate con un peso total de {selected.TotalSizeTons:N0} toneladas. Requiere un hangar de transporte de {selected.RequiredTroopTransportHS:N0} HS para movilización espacial.";
+                    TxtTacticalNote.Text = $"💡 La formación '{selected.Name}' desplegada en '{selected.LocationName}' consta de {selected.TotalUnits:N0} unidades de combate con un peso total de {selected.TotalSizeTons:N0} toneladas. Requiere {shipsNeeded:N0} naves de transporte (capacidad {selectedCapacityTons:N0} t / {selectedCapacityTons / 50:N0} HS por nave) para movilización espacial.";
                 }
+            }
+        }
+
+        private void CmbTransportCapacity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DgFormations?.SelectedItem is GroundFormation)
+            {
+                DgFormations_SelectionChanged(DgFormations, null!);
             }
         }
 

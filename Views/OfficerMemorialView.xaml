@@ -28,8 +28,14 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Buscar Oficial:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                    <TextBox x:Name="TxtSearchOfficer" Width="180" Height="24" TextChanged="TxtSearchOfficer_TextChanged" ToolTip="Filtra por nombre u honor militar."/>
+                    <TextBlock Text="Filtrar:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <ComboBox x:Name="CmbFilterStatus" Width="170" Height="24" SelectionChanged="CmbFilterStatus_SelectionChanged" SelectedIndex="0" ToolTip="Filtra por estado del oficial (Caídos en combate vs Retirados).">
+                        <ComboBoxItem Content="Todos los Oficiales"/>
+                        <ComboBoxItem Content="Caídos en Combate ✝️"/>
+                        <ComboBoxItem Content="Retirados / Deudos 🏅"/>
+                    </ComboBox>
+                    <TextBlock Text="Buscar:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="10,0,6,0"/>
+                    <TextBox x:Name="TxtSearchOfficer" Width="140" Height="24" TextChanged="TxtSearchOfficer_TextChanged" ToolTip="Filtra por nombre u honor militar."/>
                     <Button Content="🔄 Actualizar" Click="BtnRefresh_Click" Padding="10,2" Margin="8,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold"/>
                 </StackPanel>
             </Grid>

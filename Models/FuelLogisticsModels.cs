@@ -11,12 +11,13 @@ namespace AuroraDesignSuite.Models
         public double SoriumTons { get; set; }
 
         public string FuelDisplay => $"{FuelLiters:N0} L";
-        public string SoriumDisplay => $"{SoriumTons:N0} t (Mineral Sorium Crudo)";
+        public string SoriumDisplay => $"{SoriumTons:N0} t (Sorium Crudo)";
 
         public string ReserveStatus => FuelLiters switch
         {
-            > 10000000 => "🟢 RESERVAS EXCELENTES (Suficiente para operaciones de flota pesada)",
-            > 1000000 => "🟡 RESERVAS ADECUADAS (Suficiente para patrullaje regular)",
+            > 10000000 => "🟢 RESERVAS EXCELENTES (Suficiente para flota pesada)",
+            > 1000000 => "🟡 RESERVAS ADECUADAS (Operaciones regulares)",
+            > 100000 => "🟠 RESERVAS BAJAS (Atención requerida)",
             _ => "🔴 RESERVAS CRÍTICAS (Se recomienda refinería Sorium urgente)"
         };
 
@@ -32,15 +33,22 @@ namespace AuroraDesignSuite.Models
         public double CurrentFuelLiters { get; set; }
         public double MaxFuelLiters { get; set; }
 
-        public double FuelPercentage => MaxFuelLiters > 0 ? Math.Min(100.0, (CurrentFuelLiters / MaxFuelLiters) * 100.0) : 100.0;
-        public string FuelBarDisplay => $"{FuelPercentage:N1}% ({CurrentFuelLiters:N0} / {MaxFuelLiters:N0} L)";
+        public double FuelPercentage => MaxFuelLiters > 0.001 
+            ? Math.Max(0.0, Math.Min(100.0, (CurrentFuelLiters / MaxFuelLiters) * 100.0)) 
+            : 0.0;
 
-        public string StatusDisplay => FuelPercentage switch
-        {
-            > 75.0 => "🟢 Tanques Llenos",
-            > 30.0 => "🟡 Combustible Operativo",
-            > 10.0 => "🟠 Alerta Nivel Bajo (Reabastecimiento Necesario)",
-            _ => "🔴 CRÍTICO / SIN COMBUSTIBLE (Nave a la deriva)"
-        };
+        public string FuelBarDisplay => MaxFuelLiters > 0.001 
+            ? $"{FuelPercentage:N1}% ({CurrentFuelLiters:N0} / {MaxFuelLiters:N0} L)"
+            : "0 L (Sin Tanques Instalados)";
+
+        public string StatusDisplay => MaxFuelLiters <= 0.001 
+            ? "⚪ N/A (Sin Tanques de Combustible)"
+            : FuelPercentage switch
+            {
+                > 75.0 => "🟢 Tanques Llenos",
+                > 30.0 => "🟡 Combustible Operativo",
+                > 10.0 => "🟠 Alerta Nivel Bajo (Reabastecimiento)",
+                _ => "🔴 CRÍTICO / SIN COMBUSTIBLE (A la deriva)"
+            };
     }
 }

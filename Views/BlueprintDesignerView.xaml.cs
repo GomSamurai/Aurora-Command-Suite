@@ -1439,77 +1439,126 @@ namespace AuroraDesignSuite.Views
             _realWorldObjects = new List<RealWorldObjectItem>
             {
                 new RealWorldObjectItem { Name = "⭐ Auto-Seleccionar según Tamaño", LengthM = 0, WidthM = 0, Category = "Auto" },
-                // Micro & Cazas (4m - 25m)
+                // Micro & Vehículos (2m - 15m)
+                new RealWorldObjectItem { Name = "🏎️ Coche de Fórmula 1", LengthM = 5.5, WidthM = 2.0, Category = "Deportes de Motor" },
                 new RealWorldObjectItem { Name = "🚗 Un Coche Utilitario", LengthM = 4, WidthM = 1.8, Category = "Vehículo Urbano" },
                 new RealWorldObjectItem { Name = "🚙 Un Coche Familiar / SUV", LengthM = 5, WidthM = 2.0, Category = "Vehículo Urbano" },
+                new RealWorldObjectItem { Name = "🦣 Un Mamut Lanudo Prehistórico", LengthM = 6, WidthM = 3.5, Category = "Fauna Prehistórica" },
+                new RealWorldObjectItem { Name = "🦒 Una Jirafa de la Sabana", LengthM = 6, WidthM = 2.0, Category = "Fauna Terrestre" },
                 new RealWorldObjectItem { Name = "🚐 Una Furgoneta de Reparto", LengthM = 6, WidthM = 2.2, Category = "Vehículo Comercial" },
                 new RealWorldObjectItem { Name = "🚚 Un Camión Pequeño de Mudanzas", LengthM = 8, WidthM = 2.5, Category = "Vehículo Pesado" },
+                new RealWorldObjectItem { Name = "🛥️ Un Yate Deportivo a Motor", LengthM = 10, WidthM = 3.5, Category = "Embarcación Privada" },
                 new RealWorldObjectItem { Name = "🚌 Un Autobús Urbano Estándar", LengthM = 12, WidthM = 2.5, Category = "Transporte Urbano" },
+                new RealWorldObjectItem { Name = "🦕 Un Tiranosaurio Rex Completo", LengthM = 12.3, WidthM = 3.8, Category = "Fauna Prehistórica" },
+                new RealWorldObjectItem { Name = "🦈 Un Tiburón Ballena Gigante", LengthM = 12.6, WidthM = 4.0, Category = "Fauna Marina" },
+                new RealWorldObjectItem { Name = "🛥️ Una Lancha Rápida de Carreras", LengthM = 14, WidthM = 3.2, Category = "Embarcación Rápida" },
+                new RealWorldObjectItem { Name = "✈️ Caza F-16 Fighting Falcon", LengthM = 15, WidthM = 9.9, Category = "Caza Miliar" },
+                new RealWorldObjectItem { Name = "✈️ Caza F-35 Lightning II", LengthM = 15.7, WidthM = 10.7, Category = "Caza Militar" },
+
+                // Cazas & Embarcaciones Ligeras (16m - 35m)
                 new RealWorldObjectItem { Name = "🚛 Un Camión Tráiler con Remolque", LengthM = 16.5, WidthM = 2.5, Category = "Transporte Pesado" },
                 new RealWorldObjectItem { Name = "🚌 Un Autobús Articulado Doble", LengthM = 18, WidthM = 2.5, Category = "Transporte Urbano" },
+                new RealWorldObjectItem { Name = "🐋 Un Calamar Gigante de Fondo", LengthM = 18, WidthM = 3.0, Category = "Fauna Marina" },
+                new RealWorldObjectItem { Name = "✈️ Caza F-22 Raptor de Combate", LengthM = 18.9, WidthM = 13.6, Category = "Caza Militar" },
                 new RealWorldObjectItem { Name = "🐋 Un Cachalote Marino", LengthM = 19, WidthM = 4.0, Category = "Fauna Marina" },
                 new RealWorldObjectItem { Name = "✈️ Un Avión Privado / Business Jet", LengthM = 20, WidthM = 15, Category = "Aeronave Pequeña" },
+                new RealWorldObjectItem { Name = "✈️ Cazabombardero Su-57 Felon", LengthM = 20.1, WidthM = 14.1, Category = "Caza Militar" },
                 new RealWorldObjectItem { Name = "🎾 Una Pista de Tenis (Longitud)", LengthM = 23.7, WidthM = 11, Category = "Instalación Deportiva" },
+                new RealWorldObjectItem { Name = "⛪ Obelisco de la Plaza de San Pedro", LengthM = 25, WidthM = 4.0, Category = "Monumento Histórico" },
                 new RealWorldObjectItem { Name = "🏊 Una Piscina Semiolímpica", LengthM = 25, WidthM = 12.5, Category = "Instalación Deportiva" },
-
-                // Lanchas / Cañoneras / Corbetas (26m - 60m)
+                new RealWorldObjectItem { Name = "🦕 Un Dinosaurio Brachiosaurus", LengthM = 26, WidthM = 6.0, Category = "Fauna Prehistórica" },
                 new RealWorldObjectItem { Name = "🏀 Una Pista de Baloncesto (Longitud)", LengthM = 28, WidthM = 15, Category = "Instalación Deportiva" },
                 new RealWorldObjectItem { Name = "🦕 Un Dinosaurio Diplodocus Completo", LengthM = 30, WidthM = 4, Category = "Fauna Prehistórica" },
                 new RealWorldObjectItem { Name = "🐋 Una Ballena Azul Gigante", LengthM = 30, WidthM = 5, Category = "Fauna Marina" },
+                new RealWorldObjectItem { Name = "✈️ Caza Pesado Su-35 Flanker-E", LengthM = 31.9, WidthM = 15.3, Category = "Caza Pesado" },
+                new RealWorldObjectItem { Name = "✈️ Bombardero B-2 Spirit Sigiloso", LengthM = 32.8, WidthM = 52.4, Category = "Bombardero Táctico" },
+
+                // Lanchas / Cañoneras / Corbetas (36m - 90m)
+                new RealWorldObjectItem { Name = "🚀 Transbordador Espacial Space Shuttle", LengthM = 37.2, WidthM = 23.8, Category = "Transbordador Espacial" },
                 new RealWorldObjectItem { Name = "✈️ Un Avión de Pasajeros Airbus A320", LengthM = 37.5, WidthM = 34, Category = "Avión de Pasajeros" },
+                new RealWorldObjectItem { Name = "🗿 Estatua del Cristo Redentor de Río", LengthM = 38, WidthM = 28, Category = "Monumento Famoso" },
                 new RealWorldObjectItem { Name = "✈️ Un Avión Comercial Boeing 737", LengthM = 39.5, WidthM = 35.8, Category = "Avión de Pasajeros" },
                 new RealWorldObjectItem { Name = "🏊 Una Piscina Olímpica Oficial", LengthM = 50, WidthM = 25, Category = "Instalación Deportiva" },
                 new RealWorldObjectItem { Name = "🗼 El Arco de Triunfo de París (Acostado)", LengthM = 50, WidthM = 45, Category = "Monumento Famoso" },
+                new RealWorldObjectItem { Name = "🚀 Cohete Electrónico Rocket Lab (Acostado)", LengthM = 53, WidthM = 3.0, Category = "Lanzador Espacial" },
+                new RealWorldObjectItem { Name = "✈️ Bombardero Pesado B-52 Stratofortress", LengthM = 55.7, WidthM = 56.4, Category = "Bombardero Pesado" },
                 new RealWorldObjectItem { Name = "⛪ La Torre de Pisa (Acostada)", LengthM = 57, WidthM = 15, Category = "Monumento Famoso" },
-
-                // Fragatas / Exploradores / Destructores (61m - 150m)
                 new RealWorldObjectItem { Name = "✈️ Un Avión Concorde de Pasajeros", LengthM = 61.6, WidthM = 25.6, Category = "Avión Supersónico" },
                 new RealWorldObjectItem { Name = "🚩 El Ancho de un Campo de Fútbol", LengthM = 68, WidthM = 105, Category = "Estadio Deportivo" },
                 new RealWorldObjectItem { Name = "🚀 El Cohete Falcon 9 (Acostado)", LengthM = 70, WidthM = 3.7, Category = "Lanzador Espacial" },
                 new RealWorldObjectItem { Name = "🏛️ El Partenón de Atenas (Longitud)", LengthM = 70, WidthM = 31, Category = "Monumento Histórico" },
                 new RealWorldObjectItem { Name = "✈️ Un Avión Boeing 747 Jumbo", LengthM = 70.6, WidthM = 64.4, Category = "Avión Comercial" },
                 new RealWorldObjectItem { Name = "✈️ Un Avión Airbus A380 Gigante", LengthM = 72.7, WidthM = 79.8, Category = "Avión de Pasajeros" },
+                new RealWorldObjectItem { Name = "🚀 Cohete Falcon Heavy de SpaceX", LengthM = 73, WidthM = 12.2, Category = "Superlanzador Espacial" },
+
+                // Fragatas / Exploradores / Destructores (91m - 200m)
                 new RealWorldObjectItem { Name = "🗽 La Estatua de la Libertad (Acostada)", LengthM = 93, WidthM = 40, Category = "Monumento Famoso" },
-                new RealWorldObjectItem { Name = "🕰️ La Torre Big Ben (Acostada)", LengthM = 96, WidthM = 12, Category = "Monumento Histórico" },
+                new RealWorldObjectItem { Name = "🕰️ La Torre Big Ben de Londres (Acostada)", LengthM = 96, WidthM = 12, Category = "Monumento Histórico" },
                 new RealWorldObjectItem { Name = "⚽ Un Campo de Fútbol Reglamentario", LengthM = 105, WidthM = 68, Category = "Estadio Deportivo" },
                 new RealWorldObjectItem { Name = "🛸 Estación Espacial Internacional (ISS)", LengthM = 109, WidthM = 73, Category = "Estación Espacial" },
                 new RealWorldObjectItem { Name = "🏈 Un Campo de Fútbol Americano", LengthM = 110, WidthM = 49, Category = "Estadio Deportivo" },
+                new RealWorldObjectItem { Name = "🚀 Cohete Saturno V de la Misión Apolo", LengthM = 110.6, WidthM = 10.1, Category = "Superlanzador Espacial" },
+                new RealWorldObjectItem { Name = "🚢 Submarino Nuclear Clase Los Ángeles", LengthM = 110.3, WidthM = 10.0, Category = "Submarino Militar" },
+                new RealWorldObjectItem { Name = "🚀 Cohete Starship de SpaceX Completo", LengthM = 121, WidthM = 9.0, Category = "Megalanzador Espacial" },
+                new RealWorldObjectItem { Name = "🏛️ El Gran Palacio del Kremlin (Moscú)", LengthM = 125, WidthM = 50, Category = "Palacio Histórico" },
                 new RealWorldObjectItem { Name = "⛪ La Catedral de Notre Dame (Longitud)", LengthM = 128, WidthM = 48, Category = "Monumento Histórico" },
                 new RealWorldObjectItem { Name = "🎡 La Gran Noria London Eye (Acostada)", LengthM = 135, WidthM = 120, Category = "Atracción Famosa" },
                 new RealWorldObjectItem { Name = "🏛️ La Gran Pirámide de Guiza (Altura)", LengthM = 138.8, WidthM = 230, Category = "Maravilla del Mundo" },
-
-                // Cruceros / Batalla / Lanzamisiles (151m - 300m)
                 new RealWorldObjectItem { Name = "🌉 El Puente de Vizcaya (Sección Colgante)", LengthM = 160, WidthM = 12, Category = "Gran Puente" },
+                new RealWorldObjectItem { Name = "🚢 Submarino Nuclear Clase Ohio (SSBN)", LengthM = 170, WidthM = 13, Category = "Submarino Nuclear" },
                 new RealWorldObjectItem { Name = "🚢 Un Ferri Transmediterránea de Pasajeros", LengthM = 170, WidthM = 26, Category = "Barco Comercial" },
+                new RealWorldObjectItem { Name = "🚢 Submarino Nuclear Gigante Clase Tifón/Akula", LengthM = 175, WidthM = 23, Category = "Submarino Nuclear Gigante" },
                 new RealWorldObjectItem { Name = "🏛️ El Coliseo Romano (De Extremo a Extremo)", LengthM = 189, WidthM = 156, Category = "Monumento Histórico" },
                 new RealWorldObjectItem { Name = "🚢 Un Buque Mercante Portacontenedores Mediano", LengthM = 200, WidthM = 30, Category = "Barco de Carga" },
+
+                // Cruceros / Batalla / Lanzamisiles (201m - 400m)
                 new RealWorldObjectItem { Name = "🏈 Dos Campos de Fútbol Alineados", LengthM = 210, WidthM = 68, Category = "Medida Deportiva" },
                 new RealWorldObjectItem { Name = "⛪ La Basílica de San Pedro en el Vaticano", LengthM = 218, WidthM = 150, Category = "Monumento Religioso" },
                 new RealWorldObjectItem { Name = "🏛️ El Capitolio de los EE.UU. (Longitud)", LengthM = 229, WidthM = 106, Category = "Edificio Político" },
+                new RealWorldObjectItem { Name = "🏟️ El Estadio Santiago Bernabéu / Camp Nou", LengthM = 250, WidthM = 220, Category = "Gran Estadio" },
+                new RealWorldObjectItem { Name = "🚢 El Acorazado Bismarck de Combate", LengthM = 251, WidthM = 36, Category = "Acorazado Histórico" },
+                new RealWorldObjectItem { Name = "🚢 El Acorazado Japonés Yamato", LengthM = 263, WidthM = 38.9, Category = "Acorazado Gigante" },
                 new RealWorldObjectItem { Name = "🚢 El Transatlántico RMS Titanic (Eslora)", LengthM = 269, WidthM = 28, Category = "Barco Famoso" },
-
-                // Acorazados / Superportaaviones / Cargueros (301m - 600m)
+                new RealWorldObjectItem { Name = "🚢 El Acorazado USS Missouri BB-63", LengthM = 270.4, WidthM = 33, Category = "Acorazado de Batalla" },
+                new RealWorldObjectItem { Name = "🏢 El Edificio del Pentágono (Longitud de Fachada)", LengthM = 281, WidthM = 281, Category = "Complejo Militar" },
                 new RealWorldObjectItem { Name = "🏈 Tres Campos de Fútbol Alineados", LengthM = 315, WidthM = 68, Category = "Medida Deportiva" },
+                new RealWorldObjectItem { Name = "🏙️ El Rascacielos Chrysler Building (Acostado)", LengthM = 319, WidthM = 90, Category = "Rascacielos Clásico" },
                 new RealWorldObjectItem { Name = "🗼 La Torre Eiffel de París (Acostada)", LengthM = 330, WidthM = 125, Category = "Monumento Famoso" },
-                new RealWorldObjectItem { Name = "🚢 Un Portaaviones Gigante Supercarrier", LengthM = 333, WidthM = 77, Category = "Gran Buque Naval" },
+                new RealWorldObjectItem { Name = "🚢 Un Portaaviones Gigante Supercarrier Nimitz", LengthM = 333, WidthM = 77, Category = "Gran Buque Naval" },
+                new RealWorldObjectItem { Name = "🚢 Portaaviones Supercarrier USS Gerald R. Ford", LengthM = 337, WidthM = 78, Category = "Portaaviones Avanzado" },
                 new RealWorldObjectItem { Name = "🚢 El Transatlántico Queen Mary 2", LengthM = 345, WidthM = 41, Category = "Crucero de Lujo" },
+                new RealWorldObjectItem { Name = "🚢 Crucero de Lujo Icon of the Seas", LengthM = 365, WidthM = 65, Category = "Mega-Crucero" },
                 new RealWorldObjectItem { Name = "🏭 La Presa Hoover Dam (De Extremo a Extremo)", LengthM = 379, WidthM = 200, Category = "Infraestructura Hidroeléctrica" },
-                new RealWorldObjectItem { Name = "🚢 Un Petrolero Supertanquero ULCC", LengthM = 380, WidthM = 68, Category = "Super-Carguero" },
+                new RealWorldObjectItem { Name = "🚢 Un Petrolero Supertanquero ULCC Seawise Giant", LengthM = 380, WidthM = 68, Category = "Super-Carguero" },
                 new RealWorldObjectItem { Name = "🚢 El Portacontenedores Ever Given", LengthM = 400, WidthM = 59, Category = "Super-Carguero" },
+                new RealWorldObjectItem { Name = "🏛️ El Palacio de Versalles (Fachada Principal)", LengthM = 402, WidthM = 250, Category = "Palacio Imperial" },
+
+                // Supercargueros / Diques / Megalitos (401m - 1,000m)
+                new RealWorldObjectItem { Name = "⛰️ El Peñón de Gibraltar (Altura)", LengthM = 426, WidthM = 1200, Category = "Formación Rocosa" },
                 new RealWorldObjectItem { Name = "🏙️ El Rascacielos Empire State (Acostado)", LengthM = 443, WidthM = 130, Category = "Edificio Gigante" },
                 new RealWorldObjectItem { Name = "🏙️ Las Torres Gemelas Petronas (Acostadas)", LengthM = 452, WidthM = 100, Category = "Super-Rascacielos" },
                 new RealWorldObjectItem { Name = "🌉 La Sección Principal del Puente Golden Gate", LengthM = 500, WidthM = 30, Category = "Gran Puente" },
+                new RealWorldObjectItem { Name = "🌉 El Puente de la Bahía de Sídney", LengthM = 504, WidthM = 49, Category = "Gran Puente" },
                 new RealWorldObjectItem { Name = "🏙️ El Rascacielos Taipei 101 (Acostado)", LengthM = 508, WidthM = 100, Category = "Super-Rascacielos" },
                 new RealWorldObjectItem { Name = "🏈 Cinco Campos de Fútbol Alineados", LengthM = 525, WidthM = 68, Category = "Medida Deportiva" },
-
-                // Súper-Naves / Estaciones / Diques DREADNOUGHT (601m - 4,000m+)
+                new RealWorldObjectItem { Name = "🏙️ Rascacielos One World Trade Center (Acostado)", LengthM = 541, WidthM = 65, Category = "Super-Rascacielos" },
+                new RealWorldObjectItem { Name = "🏙️ Torre de Telecomunicaciones CN Tower (Acostada)", LengthM = 553, WidthM = 40, Category = "Torre de Comunicaciones" },
+                new RealWorldObjectItem { Name = "🏙️ Rascacielos Abraj Al Bait de La Meca (Acostado)", LengthM = 601, WidthM = 120, Category = "Super-Rascacielos" },
+                new RealWorldObjectItem { Name = "🏙️ Rascacielos Shanghai Tower (Acostado)", LengthM = 632, WidthM = 100, Category = "Super-Rascacielos" },
+                new RealWorldObjectItem { Name = "🏙️ Rascacielos Merdeka 118 (Acostado)", LengthM = 678, WidthM = 90, Category = "Super-Rascacielos" },
                 new RealWorldObjectItem { Name = "🏙️ El Rascacielos Burj Khalifa de Dubái (Acostado)", LengthM = 828, WidthM = 180, Category = "Torre Gigante" },
                 new RealWorldObjectItem { Name = "🏈 Ocho Campos de Fútbol Alineados", LengthM = 840, WidthM = 68, Category = "Medida Deportiva" },
                 new RealWorldObjectItem { Name = "📏 Un Kilómetro Completo de Eslora", LengthM = 1000, WidthM = 200, Category = "Medida Estándar" },
+
+                // Súper-Naves / Estaciones / Diques DREADNOUGHT (1,001m - 10,000m+)
                 new RealWorldObjectItem { Name = "🌉 El Puente de Brooklyn Completo", LengthM = 1825, WidthM = 26, Category = "Gran Puente" },
                 new RealWorldObjectItem { Name = "🏁 Dos Kilómetros de Pista / Circuito", LengthM = 2000, WidthM = 400, Category = "Medida Estándar" },
+                new RealWorldObjectItem { Name = "🏎️ El Circuito de Fórmula 1 de Mónaco", LengthM = 3337, WidthM = 15, Category = "Circuito Urbano" },
                 new RealWorldObjectItem { Name = "🏔️ El Monolito del Monte Uluru / Ayers Rock", LengthM = 3600, WidthM = 2400, Category = "Monolito Geológico Gigante" },
-                new RealWorldObjectItem { Name = "🌉 El Puente Akashi Kaikyō Completo", LengthM = 3911, WidthM = 35, Category = "Puente Colgante Gigante" }
+                new RealWorldObjectItem { Name = "🌉 El Puente Akashi Kaikyō Completo", LengthM = 3911, WidthM = 35, Category = "Puente Colgante Gigante" },
+                new RealWorldObjectItem { Name = "🏎️ El Circuito de Autódromo de Monza", LengthM = 5793, WidthM = 12, Category = "Circuito de Alta Velocidad" },
+                new RealWorldObjectItem { Name = "🏔️ La Cima del Monte Everest (Altura)", LengthM = 8848, WidthM = 4000, Category = "Montaña Gigante" },
+                new RealWorldObjectItem { Name = "🌁 El Gran Puente Vasco da Gama", LengthM = 12300, WidthM = 30, Category = "Mega-Puente" }
             };
 
             if (CmbRealWorldReference != null)

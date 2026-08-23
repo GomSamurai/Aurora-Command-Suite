@@ -11,6 +11,8 @@ namespace AuroraDesignSuite.Services
         public string Icon { get; set; } = "🎨";
         public string Category { get; set; } = "🌌 Oscuro";
         public bool IsHeader { get; set; } = false;
+        public bool IsCustom { get; set; } = false;
+        public bool IsEditorAction { get; set; } = false;
 
         public string BgDark { get; set; } = "#0B0E14";
         public string CardBg { get; set; } = "#131924";
@@ -404,9 +406,35 @@ namespace AuroraDesignSuite.Services
             }
         };
 
+        static ThemeManager()
+        {
+            // Add Editor action item initially
+            AvailableThemes.Add(new ThemeOption { Name = "─── ⚙️ EDITOR Y ESTUDIO ───", IsHeader = true, Category = "⚙️ Editor" });
+            AvailableThemes.Add(new ThemeOption { Name = "🎨 ⚙️ CREAR / EDITAR TEMA PERSONALIZADO...", Icon = "⚙️", Category = "⚙️ Editor", IsEditorAction = true });
+        }
+
+        public static void RegisterCustomThemes(List<ThemeOption> customThemes)
+        {
+            AvailableThemes.RemoveAll(t => t.IsCustom || t.Category == "💾 Mis Temas Personalizados" || t.Name.Contains("MIS TEMAS PERSONALIZADOS") || t.IsEditorAction || t.Name.Contains("EDITOR Y ESTUDIO"));
+
+            if (customThemes != null && customThemes.Count > 0)
+            {
+                AvailableThemes.Add(new ThemeOption { Name = "─── 💾 MIS TEMAS PERSONALIZADOS ───", IsHeader = true, Category = "💾 Mis Temas Personalizados" });
+                foreach (var theme in customThemes)
+                {
+                    theme.IsCustom = true;
+                    theme.Category = "💾 Mis Temas Personalizados";
+                    AvailableThemes.Add(theme);
+                }
+            }
+
+            AvailableThemes.Add(new ThemeOption { Name = "─── ⚙️ EDITOR Y ESTUDIO ───", IsHeader = true, Category = "⚙️ Editor" });
+            AvailableThemes.Add(new ThemeOption { Name = "🎨 ⚙️ CREAR / EDITAR TEMA PERSONALIZADO...", Icon = "⚙️", Category = "⚙️ Editor", IsEditorAction = true });
+        }
+
         public static void ApplyTheme(ThemeOption theme)
         {
-            if (theme == null || theme.IsHeader || Application.Current == null) return;
+            if (theme == null || theme.IsHeader || theme.IsEditorAction || Application.Current == null) return;
 
             var res = Application.Current.Resources;
 

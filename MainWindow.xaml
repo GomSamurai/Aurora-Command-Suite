@@ -94,6 +94,7 @@
                             </Style>
                         </ComboBox.ItemContainerStyle>
                     </ComboBox>
+                    <Button x:Name="BtnOpenThemeEditor" Content="🎨 EDITAR" Click="BtnOpenThemeEditor_Click" Padding="6,4" Margin="6,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10.5" ToolTip="Abre el Estudio de Diseño de Temas para personalizar y crear tus propias paletas de colores."/>
 
                     <Button Content="🎮 VOLVER A AURORA 4X" Click="BtnFocusGame_Click" Padding="10,4" Margin="14,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11" ToolTip="Enfoca al instante la ventana del juego Aurora 4X en primer plano."/>
                 </StackPanel>

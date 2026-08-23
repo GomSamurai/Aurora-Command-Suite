@@ -69,6 +69,7 @@ namespace AuroraDesignSuite
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            CustomThemeService.SyncWithThemeManager();
             CmbThemeSelector.ItemsSource = ThemeManager.AvailableThemes;
 
             // Restore User Preferences
@@ -308,7 +309,58 @@ namespace AuroraDesignSuite
         {
             if (CmbThemeSelector.SelectedItem is ThemeOption theme)
             {
-                ThemeManager.ApplyTheme(theme);
+                if (theme.IsEditorAction)
+                {
+                    // Open Theme Editor Studio
+                    OpenThemeEditorWindow();
+                }
+                else
+                {
+                    ThemeManager.ApplyTheme(theme);
+                    var prefs = UserPreferencesService.LoadPreferences();
+                    prefs.SelectedTheme = theme.Name;
+                    UserPreferencesService.SavePreferences(prefs);
+                }
+            }
+        }
+
+        private void BtnOpenThemeEditor_Click(object sender, RoutedEventArgs e)
+        {
+            OpenThemeEditorWindow();
+        }
+
+        public void OpenThemeEditorWindow()
+        {
+            var currentTheme = CmbThemeSelector.SelectedItem as ThemeOption;
+            if (currentTheme != null && currentTheme.IsEditorAction)
+            {
+                currentTheme = ThemeManager.AvailableThemes.FirstOrDefault(t => !t.IsHeader && !t.IsEditorAction);
+            }
+
+            var editor = new CustomThemeEditorWindow(currentTheme)
+            {
+                Owner = this
+            };
+            editor.ShowDialog();
+            RefreshThemeSelectorDropdown();
+        }
+
+        public void RefreshThemeSelectorDropdown(string? selectThemeName = null)
+        {
+            CustomThemeService.SyncWithThemeManager();
+            CmbThemeSelector.ItemsSource = null;
+            CmbThemeSelector.ItemsSource = ThemeManager.AvailableThemes;
+
+            if (!string.IsNullOrEmpty(selectThemeName))
+            {
+                var match = ThemeManager.AvailableThemes.FirstOrDefault(t => t.Name.Equals(selectThemeName, StringComparison.OrdinalIgnoreCase));
+                if (match != null) CmbThemeSelector.SelectedItem = match;
+            }
+            else
+            {
+                var prefs = UserPreferencesService.LoadPreferences();
+                var match = ThemeManager.AvailableThemes.FirstOrDefault(t => t.Name.Equals(prefs.SelectedTheme, StringComparison.OrdinalIgnoreCase));
+                if (match != null) CmbThemeSelector.SelectedItem = match;
             }
         }
 

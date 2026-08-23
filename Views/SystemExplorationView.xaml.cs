@@ -166,16 +166,18 @@ namespace AuroraDesignSuite.Views
 
             StarMapScaleTransform.ScaleX = newZoom;
             StarMapScaleTransform.ScaleY = newZoom;
+
+            Render2DStarMap();
         }
 
         private void BtnZoomIn_Click(object sender, RoutedEventArgs e)
         {
-            if (SldMapZoom != null) SldMapZoom.Value = Math.Min(6.0, SldMapZoom.Value + 0.25);
+            if (SldMapZoom != null) SldMapZoom.Value = Math.Min(10.0, SldMapZoom.Value * 1.3);
         }
 
         private void BtnZoomOut_Click(object sender, RoutedEventArgs e)
         {
-            if (SldMapZoom != null) SldMapZoom.Value = Math.Max(0.2, SldMapZoom.Value - 0.25);
+            if (SldMapZoom != null) SldMapZoom.Value = Math.Max(0.02, SldMapZoom.Value / 1.3);
         }
 
         private void BrdStarMapContainer_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
@@ -185,8 +187,8 @@ namespace AuroraDesignSuite.Views
             Point mousePos = e.GetPosition(BrdStarMapContainer);
 
             double oldZoom = _currentZoom;
-            double zoomFactor = e.Delta > 0 ? 1.18 : (1.0 / 1.18);
-            double newZoom = Math.Clamp(oldZoom * zoomFactor, 0.2, 6.0);
+            double zoomFactor = e.Delta > 0 ? 1.2 : (1.0 / 1.2);
+            double newZoom = Math.Clamp(oldZoom * zoomFactor, 0.02, 10.0);
 
             if (Math.Abs(newZoom - oldZoom) < 0.0001) return;
 
@@ -203,6 +205,8 @@ namespace AuroraDesignSuite.Views
             _isInitializingMap = true;
             SldMapZoom.Value = newZoom;
             _isInitializingMap = false;
+
+            Render2DStarMap();
         }
 
         private void BrdStarMapContainer_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -259,6 +263,16 @@ namespace AuroraDesignSuite.Views
             return brush;
         }
 
+        private void ApplyInverseScale(UIElement element)
+        {
+            double invScale = 1.0 / Math.Max(0.02, _currentZoom);
+            // Clamp inverse scale so text and badges stay crisp and comfortable (between 0.25x and 3.5x)
+            invScale = Math.Min(3.5, Math.Max(0.25, invScale));
+            var scaleTransform = new System.Windows.Media.ScaleTransform(invScale, invScale);
+            element.RenderTransform = scaleTransform;
+            element.RenderTransformOrigin = new Point(0.5, 0.5);
+        }
+
         private void Render2DStarMap()
         {
             if (StarMapCanvas == null || _dbService == null) return;
@@ -277,6 +291,8 @@ namespace AuroraDesignSuite.Views
 
             bool showStars = ChkLayerStars?.IsChecked == true;
             bool showPlanets = ChkLayerPlanets?.IsChecked == true;
+            bool showMoons = ChkLayerMoons?.IsChecked == true;
+            bool showAsteroids = ChkLayerAsteroids?.IsChecked == true;
             bool showColonies = ChkLayerColonies?.IsChecked == true;
             bool showJumpPoints = ChkLayerJumpPoints?.IsChecked == true;
             bool showFleets = ChkLayerFleets?.IsChecked == true;
@@ -331,6 +347,7 @@ namespace AuroraDesignSuite.Views
                         Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(180, 10, 15, 25)),
                         Padding = new Thickness(6, 2, 6, 2)
                     };
+                    ApplyInverseScale(sunLabel);
                     Canvas.SetLeft(sunLabel, centerX - 45);
                     Canvas.SetTop(sunLabel, centerY + coreSize / 2 + 6);
                     StarMapCanvas.Children.Add(sunLabel);
@@ -383,6 +400,7 @@ namespace AuroraDesignSuite.Views
                                 Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(190, 25, 10, 10)),
                                 Padding = new Thickness(5, 2, 5, 2)
                             };
+                            ApplyInverseScale(compLabel);
                             Canvas.SetLeft(compLabel, starX - 45);
                             Canvas.SetTop(compLabel, starY + compCore / 2 + 4);
                             StarMapCanvas.Children.Add(compLabel);
@@ -390,10 +408,11 @@ namespace AuroraDesignSuite.Views
                     }
                 }
 
-                // 2. Separate Primary Planets vs Natural Satellites / Moons
+                // 2. Separate Primary Planets vs Moons vs Asteroids/Comets
                 Dictionary<int, Point> planetPositions = new Dictionary<int, Point>();
-                var mainPlanets = sys.Bodies.Where(b => !b.IsMoon).ToList();
-                var moonBodies = sys.Bodies.Where(b => b.IsMoon).ToList();
+                var mainPlanets = sys.Bodies.Where(b => !b.IsMoon && !b.IsAsteroidOrComet).ToList();
+                var moonBodies = sys.Bodies.Where(b => b.IsMoon && !b.IsAsteroidOrComet).ToList();
+                var asteroidBodies = sys.Bodies.Where(b => b.IsAsteroidOrComet).ToList();
 
                 if (showPlanets && mainPlanets.Count > 0)
                 {
@@ -403,8 +422,8 @@ namespace AuroraDesignSuite.Views
                         var body = mainPlanets[i];
 
                         // Calculate dynamic orbital radius scale
-                        double orbitRadius = 120 + (i + 1) * 70;
-                        if (orbitRadius > 900) orbitRadius = 900;
+                        double orbitRadius = 140 + (i + 1) * 110;
+                        if (orbitRadius > 1400) orbitRadius = 1400;
 
                         // Concentric Orbit Ring around Central Sun
                         var orbitRing = new System.Windows.Shapes.Ellipse
@@ -468,7 +487,7 @@ namespace AuroraDesignSuite.Views
                         Canvas.SetTop(planetSphere, py - planetSize / 2);
                         StarMapCanvas.Children.Add(planetSphere);
 
-                        // Planet Name Label
+                        // Planet Name Label with Inverse Scale
                         TextBlock planetLabel = new TextBlock
                         {
                             Text = $"🪐 {body.Name}",
@@ -478,6 +497,7 @@ namespace AuroraDesignSuite.Views
                             Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(190, 8, 12, 20)),
                             Padding = new Thickness(4, 1, 4, 1)
                         };
+                        ApplyInverseScale(planetLabel);
                         Canvas.SetLeft(planetLabel, px - 35);
                         Canvas.SetTop(planetLabel, py + planetSize / 2 + 3);
                         StarMapCanvas.Children.Add(planetLabel);
@@ -494,6 +514,7 @@ namespace AuroraDesignSuite.Views
                                 Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(200, 5, 25, 10)),
                                 Padding = new Thickness(4, 1, 4, 1)
                             };
+                            ApplyInverseScale(colonyBadge);
                             Canvas.SetLeft(colonyBadge, px - 45);
                             Canvas.SetTop(colonyBadge, py - planetSize / 2 - 16);
                             StarMapCanvas.Children.Add(colonyBadge);
@@ -511,6 +532,7 @@ namespace AuroraDesignSuite.Views
                                 Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(180, 25, 20, 5)),
                                 Padding = new Thickness(3, 1, 3, 1)
                             };
+                            ApplyInverseScale(mineralBadge);
                             Canvas.SetLeft(mineralBadge, px - 35);
                             Canvas.SetTop(mineralBadge, py + planetSize / 2 + 18);
                             StarMapCanvas.Children.Add(mineralBadge);
@@ -518,65 +540,124 @@ namespace AuroraDesignSuite.Views
                     }
                 }
 
-                // 3. Render Natural Satellites / Moons orbiting their Parent Planets
-                if (showPlanets && moonBodies.Count > 0)
+                // 3. Render Natural Satellites / Moons (Grouped per Parent Planet to avoid clutter)
+                if (showMoons && moonBodies.Count > 0)
                 {
-                    for (int m = 0; m < moonBodies.Count; m++)
+                    var moonsByParent = moonBodies.GroupBy(m => m.ParentBodyID).ToDictionary(g => g.Key, g => g.ToList());
+
+                    foreach (var kvp in moonsByParent)
                     {
-                        var moon = moonBodies[m];
-                        Point parentPos = (moon.ParentBodyID > 0 && planetPositions.ContainsKey(moon.ParentBodyID))
-                            ? planetPositions[moon.ParentBodyID]
+                        int parentId = kvp.Key;
+                        var parentMoons = kvp.Value;
+
+                        Point parentPos = (parentId > 0 && planetPositions.ContainsKey(parentId))
+                            ? planetPositions[parentId]
                             : (planetPositions.Values.Count > 0 ? planetPositions.Values.First() : new Point(centerX + 200, centerY + 200));
 
-                        double moonOrbitRadius = 32 + (m % 3) * 16;
-
-                        // Satellite Sub-Orbit Ring
-                        var moonRing = new System.Windows.Shapes.Ellipse
+                        for (int mIdx = 0; mIdx < parentMoons.Count; mIdx++)
                         {
-                            Width = moonOrbitRadius * 2,
-                            Height = moonOrbitRadius * 2,
-                            Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(80, 200, 200, 200)),
-                            StrokeThickness = 0.9,
-                            StrokeDashArray = new System.Windows.Media.DoubleCollection { 2, 2 }
-                        };
-                        Canvas.SetLeft(moonRing, parentPos.X - moonOrbitRadius);
-                        Canvas.SetTop(moonRing, parentPos.Y - moonOrbitRadius);
-                        StarMapCanvas.Children.Add(moonRing);
+                            var moon = parentMoons[mIdx];
+                            double moonOrbitRadius = 38 + ((mIdx % 4) * 18) + ((mIdx / 4) * 25);
 
-                        double moonAngle = (2.0 * Math.PI * m) / Math.Max(1, moonBodies.Count) + (m * 0.85);
-                        double mx = parentPos.X + moonOrbitRadius * Math.Cos(moonAngle);
-                        double my = parentPos.Y + moonOrbitRadius * Math.Sin(moonAngle);
+                            // Draw Sub-Orbit Ring for parent planet
+                            if (mIdx % 4 == 0)
+                            {
+                                var moonRing = new System.Windows.Shapes.Ellipse
+                                {
+                                    Width = moonOrbitRadius * 2,
+                                    Height = moonOrbitRadius * 2,
+                                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(60, 180, 180, 200)),
+                                    StrokeThickness = 0.8,
+                                    StrokeDashArray = new System.Windows.Media.DoubleCollection { 2, 2 }
+                                };
+                                Canvas.SetLeft(moonRing, parentPos.X - moonOrbitRadius);
+                                Canvas.SetTop(moonRing, parentPos.Y - moonOrbitRadius);
+                                StarMapCanvas.Children.Add(moonRing);
+                            }
 
-                        double moonSize = 12;
-                        var moonSphere = new System.Windows.Shapes.Ellipse
-                        {
-                            Width = moonSize,
-                            Height = moonSize,
-                            Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 200, 200, 210)),
-                            Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White),
-                            StrokeThickness = 1,
-                            ToolTip = $"🌕 Satélite / Luna: {moon.Name}\nClase: {moon.BodyTypeName}\nGravedad: {moon.GravityDisplay}\nTemperatura: {moon.TempDisplay}"
-                        };
-                        Canvas.SetLeft(moonSphere, mx - moonSize / 2);
-                        Canvas.SetTop(moonSphere, my - moonSize / 2);
-                        StarMapCanvas.Children.Add(moonSphere);
+                            double moonAngle = (2.0 * Math.PI * mIdx) / Math.Max(1, Math.Min(8, parentMoons.Count)) + (mIdx * 0.45);
+                            double mx = parentPos.X + moonOrbitRadius * Math.Cos(moonAngle);
+                            double my = parentPos.Y + moonOrbitRadius * Math.Sin(moonAngle);
 
-                        TextBlock moonLabel = new TextBlock
-                        {
-                            Text = $"🌕 {moon.Name}",
-                            Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(220, 220, 220, 220)),
-                            FontWeight = FontWeights.Normal,
-                            FontSize = 9,
-                            Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(170, 10, 10, 15)),
-                            Padding = new Thickness(3, 1, 3, 1)
-                        };
-                        Canvas.SetLeft(moonLabel, mx - 20);
-                        Canvas.SetTop(moonLabel, my + moonSize / 2 + 2);
-                        StarMapCanvas.Children.Add(moonLabel);
+                            double moonSize = 8;
+                            var moonSphere = new System.Windows.Shapes.Ellipse
+                            {
+                                Width = moonSize,
+                                Height = moonSize,
+                                Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 190, 195, 205)),
+                                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White),
+                                StrokeThickness = 0.8,
+                                ToolTip = $"🌕 Satélite / Luna: {moon.Name}\nClase: {moon.BodyTypeName}\nGravedad: {moon.GravityDisplay}\nTemperatura: {moon.TempDisplay}"
+                            };
+                            Canvas.SetLeft(moonSphere, mx - moonSize / 2);
+                            Canvas.SetTop(moonSphere, my - moonSize / 2);
+                            StarMapCanvas.Children.Add(moonSphere);
+
+                            // LOD Rule: Show text label ONLY if zoomed in or if planet has <= 3 moons
+                            if (_currentZoom >= 1.0 || parentMoons.Count <= 3)
+                            {
+                                TextBlock moonLabel = new TextBlock
+                                {
+                                    Text = $"🌕 {moon.Name}",
+                                    Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(220, 220, 220, 220)),
+                                    FontWeight = FontWeights.Normal,
+                                    FontSize = 8.5,
+                                    Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(170, 10, 10, 15)),
+                                    Padding = new Thickness(3, 1, 3, 1)
+                                };
+                                ApplyInverseScale(moonLabel);
+                                Canvas.SetLeft(moonLabel, mx - 18);
+                                Canvas.SetTop(moonLabel, my + moonSize / 2 + 2);
+                                StarMapCanvas.Children.Add(moonLabel);
+                            }
+                        }
                     }
                 }
 
-                // 4. Draw Jump Points (Warp Nodes) around perimeter
+                // 4. Render Asteroids & Comets (Green Dots spread across outer belts, like original Aurora 4X game!)
+                if (showAsteroids && asteroidBodies.Count > 0)
+                {
+                    for (int aIdx = 0; aIdx < asteroidBodies.Count; aIdx++)
+                    {
+                        var ast = asteroidBodies[aIdx];
+                        double astOrbitDist = ast.OrbitalDistAU > 0 ? (200 + Math.Log(ast.OrbitalDistAU + 1.0) * 380) : (450 + (aIdx * 6));
+                        double astAngle = (2.0 * Math.PI * aIdx) / Math.Max(1, asteroidBodies.Count) + (aIdx * 0.73);
+
+                        double ax = centerX + astOrbitDist * Math.Cos(astAngle);
+                        double ay = centerY + astOrbitDist * Math.Sin(astAngle);
+
+                        double astSize = 5;
+                        var astDot = new System.Windows.Shapes.Ellipse
+                        {
+                            Width = astSize,
+                            Height = astSize,
+                            Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 0, 255, 127)), // Green dot
+                            ToolTip = $"☄️ Asteroide / Cometa: {ast.Name}\nDistancia Orbital: {ast.OrbitalDistDisplay}\nYacimientos: {ast.MineralDeposits.Count}"
+                        };
+                        Canvas.SetLeft(astDot, ax - astSize / 2);
+                        Canvas.SetTop(astDot, ay - astSize / 2);
+                        StarMapCanvas.Children.Add(astDot);
+
+                        // LOD Rule: Show asteroid label only when zoomed in close (_currentZoom >= 1.5)
+                        if (_currentZoom >= 1.5)
+                        {
+                            TextBlock astLabel = new TextBlock
+                            {
+                                Text = ast.Name,
+                                Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(220, 0, 255, 127)),
+                                FontSize = 8.0,
+                                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(160, 5, 15, 10)),
+                                Padding = new Thickness(2, 1, 2, 1)
+                            };
+                            ApplyInverseScale(astLabel);
+                            Canvas.SetLeft(astLabel, ax - 15);
+                            Canvas.SetTop(astLabel, ay + astSize / 2 + 1);
+                            StarMapCanvas.Children.Add(astLabel);
+                        }
+                    }
+                }
+
+                // 5. Draw Jump Points (Warp Nodes) around perimeter
                 if (showJumpPoints && sys.JumpPoints.Count > 0)
                 {
                     int jpCount = sys.JumpPoints.Count;
@@ -584,7 +665,7 @@ namespace AuroraDesignSuite.Views
                     {
                         var jp = sys.JumpPoints[j];
                         double jpAngle = (2.0 * Math.PI * j) / jpCount + 0.8;
-                        double jpDistance = 650;
+                        double jpDistance = 1500;
 
                         double jpx = centerX + jpDistance * Math.Cos(jpAngle);
                         double jpy = centerY + jpDistance * Math.Sin(jpAngle);
@@ -628,13 +709,14 @@ namespace AuroraDesignSuite.Views
                             Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(190, 20, 15, 5)),
                             Padding = new Thickness(4, 1, 4, 1)
                         };
+                        ApplyInverseScale(jpLabel);
                         Canvas.SetLeft(jpLabel, jpx - 40);
                         Canvas.SetTop(jpLabel, jpy + jpSize / 2 + 2);
                         StarMapCanvas.Children.Add(jpLabel);
                     }
                 }
 
-                // 5. Draw Active Fleets with Trajectory Vector & Speed (FILTER: ShipCount > 0 ONLY!)
+                // 6. Draw Active Fleets with Trajectory Vector & Speed (FILTER: ShipCount > 0 ONLY!)
                 if (showFleets)
                 {
                     var fleets = _dbService.GetEmpireFleetSummary(_currentRaceId).Where(f => f.ShipCount > 0).ToList();
@@ -686,6 +768,7 @@ namespace AuroraDesignSuite.Views
                                 Padding = new Thickness(6, 3, 6, 3),
                                 ToolTip = $"🛸 Escuadra: {fleet.FleetName}\nNaves Activas: {fleet.ShipCount}\nNave Insignia: {fleet.FlagshipName}\nVelocidad: {fleet.SpeedKmS:N0} km/s\nRumbo: {fleet.Bearing:F0}°\nUbicación: {fleet.SystemLocation}"
                             };
+                            ApplyInverseScale(fleetIcon);
                             Canvas.SetLeft(fleetIcon, fleetX);
                             Canvas.SetTop(fleetIcon, fleetY);
                             StarMapCanvas.Children.Add(fleetIcon);
@@ -800,6 +883,7 @@ namespace AuroraDesignSuite.Views
                         Padding = new Thickness(5, 2, 5, 2)
                     };
 
+                    ApplyInverseScale(lbl);
                     Canvas.SetLeft(lbl, p.X - 55);
                     Canvas.SetTop(lbl, p.Y + nodeSize / 2 + 4);
                     StarMapCanvas.Children.Add(lbl);

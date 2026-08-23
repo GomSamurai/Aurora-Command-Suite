@@ -934,7 +934,7 @@ namespace AuroraDesignSuite.Services
                         LEFT JOIN FCT_SystemBodyName sbn ON b.SystemBodyID = sbn.SystemBodyID AND sbn.RaceID = @raceId
                         LEFT JOIN FCT_Population pop ON b.SystemBodyID = pop.SystemBodyID AND pop.RaceID = @raceId
                         WHERE b.SystemID = @sysId
-                        ORDER BY b.PlanetNumber, b.OrbitNumber LIMIT 60";
+                        ORDER BY b.PlanetNumber, b.OrbitNumber";
 
                     using var bodyCmd = new SqliteCommand(bodyQuery, conn);
                     bodyCmd.Parameters.AddWithValue("@sysId", sys.SystemID);
@@ -963,6 +963,7 @@ namespace AuroraDesignSuite.Services
                             SystemID = sys.SystemID,
                             ParentBodyID = parentBodyId,
                             ParentBodyType = parentType,
+                            BodyClass = bodyClass,
                             Name = bodyReader["BodyName"] != DBNull.Value ? bodyReader["BodyName"].ToString()! : "Cuerpo Celeste",
                             BodyTypeName = className,
                             RadiusKm = bodyReader["Radius"] != DBNull.Value ? Convert.ToDouble(bodyReader["Radius"]) : 6371.0,

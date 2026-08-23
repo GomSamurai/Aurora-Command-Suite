@@ -1097,8 +1097,8 @@ namespace AuroraDesignSuite.Views
                 TxtScaleDimensionsSummary.Text = $"Eslora: {lengthM:N0}m | Manga: {widthM:N0}m | Vol: {volumeM3:N0}m³";
             }
 
-            // Real World Reference Object
-            (string objName, double refLength, double refWidth, string catName) = GetRealWorldReferenceObject(tons);
+            // Real World Reference Object (Auto-matched by nearest physical length)
+            (string objName, double refLength, double refWidth, string catName) = GetRealWorldReferenceObject(tons, lengthM);
 
             if (TxtShipCardHeader != null) TxtShipCardHeader.Text = $"🚀 TU NAVE: {lengthM:N0}m";
             if (TxtRealWorldHeader != null) TxtRealWorldHeader.Text = $"{objName}: {refLength:N0}m";
@@ -1252,41 +1252,28 @@ namespace AuroraDesignSuite.Views
             UpdateSideBySideScaleHUD(CurrentDesign.TotalTonnage);
         }
 
-        private (string Name, double LengthM, double WidthM, string Category) GetRealWorldReferenceObject(double tonnage)
+        private (string Name, double LengthM, double WidthM, string Category) GetRealWorldReferenceObject(double tonnage, double shipLengthM)
         {
             if (CmbRealWorldReference?.SelectedItem is RealWorldObjectItem selectedObj && selectedObj.LengthM > 0)
             {
                 return (selectedObj.Name, selectedObj.LengthM, selectedObj.WidthM, selectedObj.Category);
             }
 
-            // Clean Auto-Selection based on tonnage
-            if (tonnage < 100)
-                return ("🚗 UN COCHE FAMILIAR", 5, 2, "Vehículo Urbano");
-            if (tonnage < 350)
-                return ("🚌 UN AUTOBÚS URBANO", 12, 2.5, "Transporte Urbano");
-            if (tonnage < 1000)
-                return ("🐋 UNA BALLENA AZUL", 30, 5, "Fauna Marina");
-            if (tonnage < 2500)
-                return ("🏊 UNA PISCINA OLÍMPICA", 50, 25, "Instalación Deportiva");
-            if (tonnage < 6000)
-                return ("✈️ UN AVIÓN JUMBO BOEING 747", 70.6, 64.4, "Avión Comercial");
-            if (tonnage < 12000)
-                return ("⚽ UN CAMPO DE FÚTBOL", 105, 68, "Estadio Deportivo");
-            if (tonnage < 22000)
-                return ("🏛️ EL COLISEO ROMANO", 189, 156, "Monumento Histórico");
-            if (tonnage < 40000)
-                return ("🚢 EL TRANSATLÁNTICO TITANIC", 269, 28, "Barco Famoso");
-            if (tonnage < 75000)
-                return ("🚢 UN PORTAAVIONES GIGANTE", 333, 77, "Gran Buque Naval");
-            if (tonnage < 120000)
-                return ("🏙️ EL RASCACIEROS EMPIRE STATE", 443, 130, "Edificio Gigante");
-            if (tonnage < 200000)
-                return ("🌉 EL PUENTE GOLDEN GATE", 500, 30, "Gran Puente");
-            if (tonnage < 500000)
-                return ("🗼 EL RASCACIEROS BURJ KHALIFA", 828, 180, "Torre Gigante");
-            if (tonnage < 1500000)
-                return ("🌉 EL PUENTE DE BROOKLYN", 1825, 26, "Gran Puente");
-            return ("🏔️ EL MONTE ULURU / AYERS ROCK", 3600, 2400, "Monolito Geológico Gigante");
+            // Automatic Nearest Length Match from the 60+ Catalog!
+            if (_realWorldObjects != null && _realWorldObjects.Count > 1)
+            {
+                var closest = _realWorldObjects
+                    .Where(o => o.LengthM > 0)
+                    .OrderBy(o => Math.Abs(o.LengthM - shipLengthM))
+                    .FirstOrDefault();
+
+                if (closest != null)
+                {
+                    return (closest.Name, closest.LengthM, closest.WidthM, closest.Category);
+                }
+            }
+
+            return ("🏛️ El Coliseo Romano", 189, 156, "Monumento Histórico");
         }
 
         private void ParseTacticalDossier(string fullText)

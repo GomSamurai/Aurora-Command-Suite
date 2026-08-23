@@ -24,9 +24,10 @@
         <!-- Left Column: Fluid Responsive Layout (Fills 100% Screen Height) -->
         <Grid Grid.Column="0" Margin="0,0,4,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="210"/>
+                <RowDefinition Height="1*" MinHeight="140"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="6"/>
+                <RowDefinition Height="1.5*" MinHeight="180"/>
             </Grid.RowDefinitions>
 
             <!-- Card 1: Active Research Projects (Row 0) -->
@@ -95,8 +96,17 @@
                 </Grid>
             </Border>
 
-            <!-- Card 3: Tech Tree Catalog with Search Filter (Row 2 - Fills Remaining Screen Height!) -->
-            <Border Grid.Row="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+            <!-- Vertical GridSplitter for Resizing Active Projects and Tech Tree (Row 2) -->
+            <GridSplitter Grid.Row="2" Height="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Cursor="SizeNS" ShowsPreview="True" ToolTip="Arrastra verticalmente para redimensionar los proyectos activos y el catálogo de tecnologías">
+                <GridSplitter.Template>
+                    <ControlTemplate TargetType="GridSplitter">
+                        <Border Background="{DynamicResource BorderBrush}" Height="2" VerticalAlignment="Center"/>
+                    </ControlTemplate>
+                </GridSplitter.Template>
+            </GridSplitter>
+
+            <!-- Card 3: Tech Tree Catalog with Search Filter (Row 3 - Fills Remaining Screen Height!) -->
+            <Border Grid.Row="3" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
                         <TextBlock Text="🌳 ÁRBOLES Y TECNOLOGÍAS INVESTIGABLES (FCT_TechData)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>

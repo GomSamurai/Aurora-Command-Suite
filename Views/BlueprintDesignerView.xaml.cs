@@ -1317,19 +1317,29 @@ namespace AuroraDesignSuite.Views
             string roleText;
             if (CurrentDesign.IsMilitary)
             {
-                if (hasCarrier) roleText = $"Nave insignia de proyección aeronaval embarcada ({tons:N0} t).";
-                else if (hasMissiles && hasBeam) roleText = $"Nave de combate pesado con batería mixta VLS y cañones de energía ({tons:N0} t).";
-                else if (hasMissiles) roleText = $"Plataforma de combate pesado de misiles VLS a larga distancia ({tons:N0} t).";
-                else if (hasBeam) roleText = $"Buque de combate directo energizado e interdicción táctica ({tons:N0} t).";
-                else if (hasJump) roleText = $"Buque guía de salto táctico de flota ({tons:N0} t).";
-                else if (hasSensors) roleText = $"Nave de mando, alerta temprana y guerra electromagnética AWACS ({tons:N0} t).";
-                else roleText = $"Buque de combate militar de la Marina Imperial ({tons:N0} t).";
+                if (hasCarrier)
+                    roleText = $"Superportaaviones de flota e insignia de proyección aeronaval militar ({tons:N0} t). Diseñado para albergar alas de caza embarcadas y coordinar la soberanía del Imperio en sectores disputados.";
+                else if (hasMissiles && hasBeam)
+                    roleText = $"Crucero pesado de combate mixto VLS y baterías de energía concentrada ({tons:N0} t). Combina ráfagas de misiles pesados a larga distancia con cañones energizados para la perforación directa de cascos blindados.";
+                else if (hasMissiles)
+                    roleText = $"Plataforma de asedio y combate táctico de misiles de largo alcance ({tons:N0} t). Concebida para descargar salvas masivas de misiles pesados y saturar los sistemas defensivos enemigos.";
+                else if (hasBeam)
+                    roleText = $"Buque de asalto energizado e interdicción naval a corta distancia ({tons:N0} t). Armado con cañones de energía directa para perforar armaduras compuestas y neutralizar buques de guerra en combates de línea.";
+                else if (hasJump)
+                    roleText = $"Crucero insignia de salto gravitacional táctico ({tons:N0} t). Equipado con bobinas de distorsión para abrir brechas espacio-temporales en Puntos de Salto hostiles y guiar a la flota de combate.";
+                else if (hasSensors)
+                    roleText = $"Piquete de inteligencia naval, alerta temprana y cobertura electromagnética AWACS ({tons:N0} t). Escanea el vacío estelar para detectar firmas enemigas a distancia astronómica y coordinar el vector de ataque.";
+                else
+                    roleText = $"Buque de combate de línea y patrulla pesada de la Marina Imperial ({tons:N0} t). Optimizado para el mantenimiento de la paz colonial y la defensa estratégica del espacio imperial.";
             }
             else
             {
-                if (hasMining) roleText = $"Plataforma de extracción minera y refinado de Sorium orbital ({tons:N0} t).";
-                else if (hasSensors) roleText = $"Nave de exploración científica y prospección geológica/gravitacional ({tons:N0} t).";
-                else roleText = $"Nave comercial de soporte logístico e industrial para rutas del Imperio ({tons:N0} t).";
+                if (hasMining)
+                    roleText = $"Cosechadora orbital y complejo de refinado de Sorium ({tons:N0} t). Estacionada en la atmósfera de gigantes gaseosos para convertir hidrocarburos en combustible LPH para la armada imperial.";
+                else if (hasSensors)
+                    roleText = $"Nave de exploración científica, cartografía gravitacional y prospección geológica ({tons:N0} t). Encargada de rastrear yacimientos minerales trans-newtonianos y abrir la frontera galáctica del Imperio.";
+                else
+                    roleText = $"Nave comercial de soporte logístico, transporte masivo e infraestructura industrial ({tons:N0} t). Diseñada para conectar la Metrópoli con las colonias exteriores y abastecer la economía imperial.";
             }
             TxtDossierPurpose.Text = roleText;
 
@@ -1337,20 +1347,20 @@ namespace AuroraDesignSuite.Views
             string speedStr = $"{CurrentDesign.MaxSpeedKmS:N0} km/s";
             string rangeStr = $"{CurrentDesign.RangeBillionKm:N2} Billones km ({CurrentDesign.RangeAU:F1} AU)";
             string armorStr = $"{CurrentDesign.ArmorThickness} capas de armadura composite";
-            string shieldStr = CurrentDesign.ShieldStrength > 0 ? $", matriz de escudos de {CurrentDesign.ShieldStrength:N0} HP" : "";
-            string depStr = $"{CurrentDesign.PlannedDeploymentMonths} meses de despliegue";
+            string shieldStr = CurrentDesign.ShieldStrength > 0 ? $", reforzada con un campo de escudos de {CurrentDesign.ShieldStrength:N0} HP" : "";
+            string depStr = $"{CurrentDesign.PlannedDeploymentMonths} meses de despliegue militar sin degradar moral";
 
-            TxtDossierDoctrine.Text = $"Navegación a {speedStr} con alcance de {rangeStr}. Protección de {armorStr}{shieldStr} y soporte vital para {depStr}.";
+            TxtDossierDoctrine.Text = $"Integrado en la doctrina del Comando Imperial, opera a una velocidad táctica de {speedStr} con un alcance estratégico de {rangeStr}. Su ciudadela está protegida por {armorStr}{shieldStr}, garantizando el soporte vital durante {depStr}.";
 
             // 3. RENDIMIENTO & LÍMITES TÁCTICOS
-            string mspStr = $"{CurrentDesign.TotalMSP:N0} MSP";
+            string mspStr = $"{CurrentDesign.TotalMSP:N0} MSP de repuestos";
             string maintLifeStr = $"{CurrentDesign.MaintenanceLifeYears:F1} Años MTBF";
             string costStr = $"{CurrentDesign.TotalCostBP:N1} BP";
 
-            TxtDossierExpectations.Text = $"Fiabilidad de {mspStr} ({maintLifeStr}). Firma Térmica: {CurrentDesign.ThermalSignature:N0} | EM: {CurrentDesign.EMSignature:N0}. Costo de fabricación: {costStr}.";
+            TxtDossierExpectations.Text = $"Sus almacenes de control de daños contienen {mspStr} ofreciendo un horizonte de mantenimiento de {maintLifeStr}. En telemetría pasiva exhibe una firma térmica de {CurrentDesign.ThermalSignature:N0} y EM de {CurrentDesign.EMSignature:N0}. Su inversión en gradas asciende a {costStr}.";
 
             // 4. PERFIL DE MAGNITUD EN PUERTO
-            TxtDossierScaleProfile.Text = $"{lengthM:N0} metros de eslora ({widthM:N0}m de manga, {volumeM3:N0}m³). Comparables a {cleanObjName} ({refLength:N0}m). Casco acorazado para diques imperiales.";
+            TxtDossierScaleProfile.Text = $"{lengthM:N0} metros de eslora ({widthM:N0}m de manga, {volumeM3:N0}m³ de volumen operativo). En dimensión física equivale a {cleanObjName} ({refLength:N0}m). Su casco acorazado domina las bahías de atracamiento del dique imperial.";
         }
 
         private void SyncDossierScaleProfileWithCalculatedLength(double lengthM, double widthM, double volumeM3, string cleanObjName, double refLength)

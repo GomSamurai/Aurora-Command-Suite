@@ -21,12 +21,17 @@ namespace AuroraDesignSuite.Models
         public int ShipCount { get; set; }
         public string FlagshipName { get; set; } = "Sin Insignia";
         public double SpeedKmS { get; set; }
+        public double Bearing { get; set; }
+        public int SystemID { get; set; } = 1;
+        public double Xcor { get; set; }
+        public double Ycor { get; set; }
         public double FuelPercent { get; set; }
         public double MoralePercent { get; set; }
         public string SystemLocation { get; set; } = "Sol";
 
         public string ShipsDisplay => $"{ShipCount} Naves";
         public string SpeedDisplay => $"{SpeedKmS:N0} km/s";
+        public string HeadingDisplay => SpeedKmS > 0 ? $"{SpeedKmS:N0} km/s (Rumbo {Bearing:F0}° ↗)" : "Estacionario en Órbita";
         public string FuelDisplay => $"{FuelPercent:F0}%";
         public string MoraleDisplay => $"{MoralePercent:F0}%";
     }

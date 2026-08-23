@@ -3,6 +3,24 @@ using System.Collections.Generic;
 
 namespace AuroraDesignSuite.Models
 {
+    public class SystemStarInfo
+    {
+        public int StarID { get; set; }
+        public string Name { get; set; } = "Estrella";
+        public int Component { get; set; } = 1;
+        public double Luminosity { get; set; } = 1.0;
+        public double OrbitalDistance { get; set; }
+        public double Bearing { get; set; }
+
+        public string StarTypeDisplay => Component switch
+        {
+            1 => "Estrella Principal (A)",
+            2 => "Estrella Secundaria (B)",
+            3 => "Estrella Terciaria (C)",
+            _ => $"Estrella Componente #{Component}"
+        };
+    }
+
     public class StarSystemInfo
     {
         public int SystemID { get; set; }
@@ -12,6 +30,7 @@ namespace AuroraDesignSuite.Models
         public double AbundanceModifier { get; set; }
         public int DiscoveredBodiesCount { get; set; }
 
+        public List<SystemStarInfo> Stars { get; set; } = new List<SystemStarInfo>();
         public List<SystemBodyInfo> Bodies { get; set; } = new List<SystemBodyInfo>();
         public List<JumpPointInfo> JumpPoints { get; set; } = new List<JumpPointInfo>();
 
@@ -22,6 +41,9 @@ namespace AuroraDesignSuite.Models
     {
         public int SystemBodyID { get; set; }
         public int SystemID { get; set; }
+        public int ParentBodyID { get; set; }
+        public int ParentBodyType { get; set; }
+        public bool IsMoon => ParentBodyID > 0 || BodyTypeName.Contains("Luna") || BodyTypeName.Contains("Satélite");
         public string Name { get; set; } = string.Empty;
         public string BodyTypeName { get; set; } = string.Empty;
         public double RadiusKm { get; set; }

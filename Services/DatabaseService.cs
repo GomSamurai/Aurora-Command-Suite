@@ -905,9 +905,27 @@ namespace AuroraDesignSuite.Services
 
                 foreach (var sys in systems)
                 {
+                    // Query Stars in System (Primary, Secondary, Tertiary...)
+                    string starQuery = "SELECT StarID, Name, Component, Luminosity, OrbitalDistance, Bearing FROM FCT_Star WHERE SystemID = @sysId ORDER BY Component";
+                    using var starCmd = new SqliteCommand(starQuery, conn);
+                    starCmd.Parameters.AddWithValue("@sysId", sys.SystemID);
+                    using var starReader = starCmd.ExecuteReader();
+                    while (starReader.Read())
+                    {
+                        sys.Stars.Add(new SystemStarInfo
+                        {
+                            StarID = Convert.ToInt32(starReader["StarID"]),
+                            Name = starReader["Name"] != DBNull.Value ? starReader["Name"].ToString()! : "Estrella",
+                            Component = starReader["Component"] != DBNull.Value ? Convert.ToInt32(starReader["Component"]) : 1,
+                            Luminosity = starReader["Luminosity"] != DBNull.Value ? Convert.ToDouble(starReader["Luminosity"]) : 1.0,
+                            OrbitalDistance = starReader["OrbitalDistance"] != DBNull.Value ? Convert.ToDouble(starReader["OrbitalDistance"]) : 0.0,
+                            Bearing = starReader["Bearing"] != DBNull.Value ? Convert.ToDouble(starReader["Bearing"]) : 0.0
+                        });
+                    }
+
                     string bodyQuery = @"
                         SELECT b.SystemBodyID, COALESCE(sbn.Name, b.Name, 'Cuerpo Celeste') as BodyName,
-                               b.Radius, b.Gravity, b.BaseTemp, b.SurfaceTemp, b.AtmosPress, b.GroundMineralSurvey, b.BodyClass,
+                               b.Radius, b.Gravity, b.BaseTemp, b.SurfaceTemp, b.AtmosPress, b.GroundMineralSurvey, b.BodyClass, b.ParentBodyID, b.ParentBodyType,
                                b.Density, b.Mass, b.EscapeVelocity, b.OrbitalDistance, b.Year, b.DayValue, b.TidalLock,
                                b.TectonicActivity, b.MagneticField, b.HydroExt, b.Albedo, b.GHFactor, b.RadiationLevel, b.DustLevel,
                                b.RuinID, b.AbandonedFactories,
@@ -925,14 +943,16 @@ namespace AuroraDesignSuite.Services
                     while (bodyReader.Read())
                     {
                         int bodyId = Convert.ToInt32(bodyReader["SystemBodyID"]);
+                        int parentBodyId = bodyReader["ParentBodyID"] != DBNull.Value ? Convert.ToInt32(bodyReader["ParentBodyID"]) : 0;
+                        int parentType = bodyReader["ParentBodyType"] != DBNull.Value ? Convert.ToInt32(bodyReader["ParentBodyType"]) : 0;
                         int bodyClass = bodyReader["BodyClass"] != DBNull.Value ? Convert.ToInt32(bodyReader["BodyClass"]) : 1;
                         string className = bodyClass switch
                         {
-                            1 => "🌍 Planeta Terrestre",
+                            1 => parentBodyId > 0 ? "🌕 Luna / Satélite" : "🌍 Planeta Terrestre",
                             2 => "🪐 Gigante Gaseoso",
-                            3 => "🌕 Luna / Satélite",
+                            3 => "🌕 Luna / Satélite Natural",
                             4 => "☄️ Asteroide / Cometa",
-                            _ => "🪐 Planeta / Luna"
+                            _ => parentBodyId > 0 ? "🌕 Luna / Satélite" : "🪐 Planeta"
                         };
 
                         double popCost = bodyReader["PopulationColonyCost"] != DBNull.Value ? Convert.ToDouble(bodyReader["PopulationColonyCost"]) : -1;
@@ -941,6 +961,8 @@ namespace AuroraDesignSuite.Services
                         {
                             SystemBodyID = bodyId,
                             SystemID = sys.SystemID,
+                            ParentBodyID = parentBodyId,
+                            ParentBodyType = parentType,
                             Name = bodyReader["BodyName"] != DBNull.Value ? bodyReader["BodyName"].ToString()! : "Cuerpo Celeste",
                             BodyTypeName = className,
                             RadiusKm = bodyReader["Radius"] != DBNull.Value ? Convert.ToDouble(bodyReader["Radius"]) : 6371.0,
@@ -1836,10 +1858,11 @@ namespace AuroraDesignSuite.Services
             {
                 using var conn = GetConnection();
                 string sql = @"
-                    SELECT FleetID, FleetName, Speed
-                    FROM FCT_Fleet
-                    WHERE RaceID = @raceId
-                    ORDER BY FleetName";
+                    SELECT f.FleetID, f.FleetName, f.Speed, f.OrbitBearing, f.SystemID, f.Xcor, f.Ycor, COALESCE(sys.Name, 'Sol') as SysName
+                    FROM FCT_Fleet f
+                    LEFT JOIN FCT_RaceSysSurvey sys ON f.SystemID = sys.SystemID AND sys.RaceID = @raceId
+                    WHERE f.RaceID = @raceId
+                    ORDER BY f.FleetName";
 
                 using var cmd = new SqliteCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@raceId", raceId);
@@ -1848,7 +1871,12 @@ namespace AuroraDesignSuite.Services
                 {
                     int fleetId = Convert.ToInt32(reader["FleetID"]);
                     string fleetName = reader["FleetName"] != DBNull.Value ? reader["FleetName"].ToString()! : "Flota";
-                    double speed = reader["Speed"] != DBNull.Value ? Convert.ToDouble(reader["Speed"]) : 1000.0;
+                    double speed = reader["Speed"] != DBNull.Value ? Convert.ToDouble(reader["Speed"]) : 0.0;
+                    double bearing = reader["OrbitBearing"] != DBNull.Value ? Convert.ToDouble(reader["OrbitBearing"]) : 0.0;
+                    int systemId = reader["SystemID"] != DBNull.Value ? Convert.ToInt32(reader["SystemID"]) : 1;
+                    double xcor = reader["Xcor"] != DBNull.Value ? Convert.ToDouble(reader["Xcor"]) : 0.0;
+                    double ycor = reader["Ycor"] != DBNull.Value ? Convert.ToDouble(reader["Ycor"]) : 0.0;
+                    string sysLocation = reader["SysName"] != DBNull.Value ? reader["SysName"].ToString()! : "Sol";
 
                     string shipSql = "SELECT ShipName, Fuel, CrewMorale FROM FCT_Ship WHERE FleetID = @fId";
                     using var shipCmd = new SqliteCommand(shipSql, conn);
@@ -1870,6 +1898,9 @@ namespace AuroraDesignSuite.Services
                         avgMoralePercent = morale;
                     }
 
+                    // CRITICAL FIX: Only include fleets that actually have active ships (ShipCount > 0)!
+                    if (shipCount == 0) continue;
+
                     list.Add(new EmpireFleetSummaryItem
                     {
                         FleetID = fleetId,
@@ -1877,9 +1908,13 @@ namespace AuroraDesignSuite.Services
                         ShipCount = shipCount,
                         FlagshipName = flagship,
                         SpeedKmS = speed,
+                        Bearing = bearing,
+                        SystemID = systemId,
+                        Xcor = xcor,
+                        Ycor = ycor,
                         FuelPercent = avgFuelPercent,
                         MoralePercent = avgMoralePercent,
-                        SystemLocation = "Sistema Sol"
+                        SystemLocation = sysLocation
                     });
                 }
             }

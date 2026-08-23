@@ -83,26 +83,25 @@ namespace AuroraDesignSuite.Views
         private readonly ObservableCollection<ColorRoleViewModel> _colorRoles = new ObservableCollection<ColorRoleViewModel>();
         private ThemeOption _currentDraft = new ThemeOption();
         private ThemeOption? _initialOriginalTheme;
+        private bool _isPopulating = false;
 
         public CustomThemeEditorWindow(ThemeOption? startingTheme = null)
         {
             InitializeComponent();
             _initialOriginalTheme = startingTheme;
 
-            InitializeBaseTemplatesDropdown();
             InitializeColorRoleViewModels();
+            InitializeBaseTemplatesDropdown();
 
             LoadStartingTheme(startingTheme);
         }
 
         private void InitializeBaseTemplatesDropdown()
         {
+            CmbBaseTemplate.SelectionChanged -= CmbBaseTemplate_SelectionChanged;
             var templates = ThemeManager.AvailableThemes.Where(t => !t.IsHeader && !t.IsEditorAction).ToList();
             CmbBaseTemplate.ItemsSource = templates;
-            if (templates.Count > 0)
-            {
-                CmbBaseTemplate.SelectedIndex = 0;
-            }
+            CmbBaseTemplate.SelectionChanged += CmbBaseTemplate_SelectionChanged;
         }
 
         private void InitializeColorRoleViewModels()
@@ -188,7 +187,7 @@ namespace AuroraDesignSuite.Views
             {
                 CategoryBadge = "⚡ Acento / Rol",
                 RoleTitle = "Indicador de Alertas / Advertencias",
-                RoleDescription = "Color de advertencia táctica, alerta de consumo, masa excesiva o peligro.",
+                RoleDescription = "Color de advertencia táctica, alerta de consumo, masa excessive o peligro.",
                 PropertyKey = nameof(ThemeOption.AccentRed)
             });
 
@@ -236,7 +235,14 @@ namespace AuroraDesignSuite.Views
 
             TxtCustomThemeName.Text = _currentDraft.Name;
 
-            // Populate viewmodels
+            CmbBaseTemplate.SelectionChanged -= CmbBaseTemplate_SelectionChanged;
+            var matchTemplate = (CmbBaseTemplate.ItemsSource as List<ThemeOption>)?.FirstOrDefault(t => t.Name == theme.Name);
+            if (matchTemplate != null)
+            {
+                CmbBaseTemplate.SelectedItem = matchTemplate;
+            }
+            CmbBaseTemplate.SelectionChanged += CmbBaseTemplate_SelectionChanged;
+
             PopulateRoleHexFromDraft();
             ApplyLiveHotSwap();
 
@@ -245,30 +251,40 @@ namespace AuroraDesignSuite.Views
 
         private void PopulateRoleHexFromDraft()
         {
-            foreach (var vm in _colorRoles)
+            _isPopulating = true;
+            try
             {
-                string hex = vm.PropertyKey switch
+                foreach (var vm in _colorRoles)
                 {
-                    nameof(ThemeOption.BgDark) => _currentDraft.BgDark,
-                    nameof(ThemeOption.CardBg) => _currentDraft.CardBg,
-                    nameof(ThemeOption.CardHeader) => _currentDraft.CardHeader,
-                    nameof(ThemeOption.TextPrimary) => _currentDraft.TextPrimary,
-                    nameof(ThemeOption.TextSecondary) => _currentDraft.TextSecondary,
-                    nameof(ThemeOption.AccentCyan) => _currentDraft.AccentCyan,
-                    nameof(ThemeOption.AccentAmber) => _currentDraft.AccentAmber,
-                    nameof(ThemeOption.AccentGreen) => _currentDraft.AccentGreen,
-                    nameof(ThemeOption.AccentRed) => _currentDraft.AccentRed,
-                    nameof(ThemeOption.AccentPurple) => _currentDraft.AccentPurple,
-                    nameof(ThemeOption.BorderColor) => _currentDraft.BorderColor,
-                    _ => "#000000"
-                };
+                    string hex = vm.PropertyKey switch
+                    {
+                        nameof(ThemeOption.BgDark) => _currentDraft.BgDark,
+                        nameof(ThemeOption.CardBg) => _currentDraft.CardBg,
+                        nameof(ThemeOption.CardHeader) => _currentDraft.CardHeader,
+                        nameof(ThemeOption.TextPrimary) => _currentDraft.TextPrimary,
+                        nameof(ThemeOption.TextSecondary) => _currentDraft.TextSecondary,
+                        nameof(ThemeOption.AccentCyan) => _currentDraft.AccentCyan,
+                        nameof(ThemeOption.AccentAmber) => _currentDraft.AccentAmber,
+                        nameof(ThemeOption.AccentGreen) => _currentDraft.AccentGreen,
+                        nameof(ThemeOption.AccentRed) => _currentDraft.AccentRed,
+                        nameof(ThemeOption.AccentPurple) => _currentDraft.AccentPurple,
+                        nameof(ThemeOption.BorderColor) => _currentDraft.BorderColor,
+                        _ => "#000000"
+                    };
 
-                vm.HexValue = hex;
+                    vm.HexValue = hex;
+                }
+            }
+            finally
+            {
+                _isPopulating = false;
             }
         }
 
         private void OnColorRoleChanged()
         {
+            if (_isPopulating) return;
+
             // Sync values from viewmodels back to draft
             foreach (var vm in _colorRoles)
             {

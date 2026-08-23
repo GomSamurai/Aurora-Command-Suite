@@ -35,6 +35,8 @@ namespace AuroraDesignSuite.Views
 
         private void ApplyFilter()
         {
+            if (DgEvents == null) return;
+
             string query = TxtSearchChronicle?.Text?.Trim().ToLower() ?? "";
 
             var filtered = _allEvents.Where(e =>

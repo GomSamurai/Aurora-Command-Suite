@@ -35,6 +35,8 @@ namespace AuroraDesignSuite.Views
 
         private void ApplyFilter()
         {
+            if (DgWorlds == null) return;
+
             string query = TxtSearchWorld?.Text?.Trim().ToLower() ?? "";
             var filtered = _allWorlds.Where(w =>
                 string.IsNullOrEmpty(query) ||

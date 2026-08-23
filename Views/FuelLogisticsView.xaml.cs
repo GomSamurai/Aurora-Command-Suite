@@ -37,6 +37,8 @@ namespace AuroraDesignSuite.Views
 
         private void ApplyFilter()
         {
+            if (DgColonies == null || DgShips == null) return;
+
             string query = TxtSearchFuel?.Text?.Trim().ToLower() ?? "";
 
             var filteredColonies = _allColonies.Where(c =>

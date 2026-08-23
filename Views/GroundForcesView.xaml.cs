@@ -35,6 +35,8 @@ namespace AuroraDesignSuite.Views
 
         private void ApplyFilter()
         {
+            if (DgFormations == null) return;
+
             string query = TxtSearchFormation?.Text?.Trim().ToLower() ?? "";
             var filtered = _allFormations.Where(f =>
                 string.IsNullOrEmpty(query) ||

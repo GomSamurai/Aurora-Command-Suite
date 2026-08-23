@@ -35,6 +35,8 @@ namespace AuroraDesignSuite.Views
 
         private void ApplyFilter()
         {
+            if (DgAlienRaces == null) return;
+
             string query = TxtSearchXeno?.Text?.Trim().ToLower() ?? "";
             var filtered = _allAlienRaces.Where(a =>
                 string.IsNullOrEmpty(query) ||

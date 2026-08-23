@@ -35,6 +35,8 @@ namespace AuroraDesignSuite.Views
 
         private void ApplyFilter()
         {
+            if (DgOfficers == null) return;
+
             string query = TxtSearchOfficer?.Text?.Trim().ToLower() ?? "";
             int statusFilter = CmbFilterStatus != null ? CmbFilterStatus.SelectedIndex : 0;
 

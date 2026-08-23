@@ -145,7 +145,7 @@
                 <!-- Visual Hull Scale Reference & Shared Ruler Viewport HUD -->
                 <Border Grid.Row="2" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8" ToolTip="Escala visual comparativa en una regla graduada compartida contra objetos reales.">
                     <StackPanel>
-                        <!-- Header & Live Class Badge -->
+                        <!-- Header & Object Selector Dock -->
                         <DockPanel Margin="0,0,0,6">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock Text="📏 ESCALÍMETRO NAVAL &amp; MAGNITUD REAL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
@@ -153,7 +153,11 @@
                                     <TextBlock x:Name="TxtScaleDimensionsSummary" Text="Eslora: 140m | Manga: 31m | Vol: 6,812m³" Foreground="{DynamicResource AccentCyanBrush}" FontSize="9.5" FontWeight="Bold"/>
                                 </Border>
                             </StackPanel>
-                            <TextBlock x:Name="LblVisualScaleClass" Text="Clase: Corbeta / Cañonera (4,698t / HS 94)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock Text="Comparar con:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <ComboBox x:Name="CmbRealWorldReference" Width="210" Height="22" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="9.5" SelectionChanged="CmbRealWorldReference_SelectionChanged" ToolTip="Selecciona un objeto del mundo real para comparar las dimensiones visuales de tu nave."/>
+                            </StackPanel>
                         </DockPanel>
 
                         <!-- Single Shared Ruler Track Container -->
@@ -170,35 +174,49 @@
 
                                 <StackPanel VerticalAlignment="Center">
                                     <!-- Row 1: YOUR SHIP BAR -->
-                                    <DockPanel Margin="0,0,0,4">
-                                        <TextBlock x:Name="TxtShipCardHeader" Text="🚀 TU NAVE: 140m" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" Width="170" VerticalAlignment="Center"/>
-                                        <Border Height="14" Background="#0C2232" CornerRadius="3" VerticalAlignment="Center">
+                                    <Grid Margin="0,0,0,5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="230"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" x:Name="TxtShipCardHeader" Text="🚀 TU NAVE: 140m (Eslora)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" VerticalAlignment="Center"/>
+                                        <Border Grid.Column="1" Height="14" Background="#0C2232" CornerRadius="3" VerticalAlignment="Center">
                                             <Grid HorizontalAlignment="Left">
                                                 <Border x:Name="BdrShipGauge" Width="240" Background="{DynamicResource AccentCyanBrush}" CornerRadius="3"/>
-                                                <TextBlock x:Name="TxtShipGaugeLabel" Text="140 metros (Eslora)" Foreground="#000000" FontWeight="Bold" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,0"/>
+                                                <TextBlock x:Name="TxtShipGaugeLabel" Text="140m" Foreground="#000000" FontWeight="Bold" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,0"/>
                                             </Grid>
                                         </Border>
-                                    </DockPanel>
+                                    </Grid>
 
                                     <!-- Row 2: REAL WORLD OBJECT BAR -->
-                                    <DockPanel Margin="0,0,0,4">
-                                        <TextBlock x:Name="TxtRealWorldHeader" Text="🗽 ESTATUA DE LA LIBERTAD: 93m" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10" Width="170" VerticalAlignment="Center"/>
-                                        <Border Height="14" Background="#281F0C" CornerRadius="3" VerticalAlignment="Center">
+                                    <Grid Margin="0,0,0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="230"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" x:Name="TxtRealWorldHeader" Text="🚢 PORTAAVIONES NIMITZ: 333m" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10" VerticalAlignment="Center"/>
+                                        <Border Grid.Column="1" Height="14" Background="#281F0C" CornerRadius="3" VerticalAlignment="Center">
                                             <Grid HorizontalAlignment="Left">
                                                 <Border x:Name="BdrWorldGauge" Width="160" Background="{DynamicResource AccentAmberBrush}" CornerRadius="3"/>
-                                                <TextBlock x:Name="TxtWorldGaugeLabel" Text="93 metros (Altura)" Foreground="#000000" FontWeight="Bold" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,0"/>
+                                                <TextBlock x:Name="TxtWorldGaugeLabel" Text="333m" Foreground="#000000" FontWeight="Bold" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,0"/>
                                             </Grid>
                                         </Border>
-                                    </DockPanel>
+                                    </Grid>
 
                                     <!-- Graduated Ruler Axis -->
-                                    <DockPanel Margin="170,2,0,0">
-                                        <TextBlock Text="0m" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8"/>
-                                        <TextBlock x:Name="TxtRulerTick1" Text="50m" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8" Margin="40,0,0,0"/>
-                                        <TextBlock x:Name="TxtRulerTick2" Text="100m" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8" Margin="40,0,0,0"/>
-                                        <TextBlock x:Name="TxtRulerTick3" Text="200m" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8" Margin="40,0,0,0"/>
-                                        <TextBlock x:Name="TxtRulerTick4" Text="350m+" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8" HorizontalAlignment="Right"/>
-                                    </DockPanel>
+                                    <Grid Margin="0,2,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="230"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <DockPanel Grid.Column="1">
+                                            <TextBlock Text="0m" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8"/>
+                                            <TextBlock x:Name="TxtRulerTick1" Text="50m" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8" Margin="40,0,0,0"/>
+                                            <TextBlock x:Name="TxtRulerTick2" Text="100m" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8" Margin="40,0,0,0"/>
+                                            <TextBlock x:Name="TxtRulerTick3" Text="200m" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8" Margin="40,0,0,0"/>
+                                            <TextBlock x:Name="TxtRulerTick4" Text="350m+" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8" HorizontalAlignment="Right"/>
+                                        </DockPanel>
+                                    </Grid>
                                 </StackPanel>
                             </Grid>
                         </Border>

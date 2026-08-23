@@ -52,6 +52,7 @@ namespace AuroraDesignSuite.Views
 
             InitializeCategories();
             InitializePresets();
+            InitializeRealWorldObjectsCatalog();
         }
 
         private void InitializeCategories()
@@ -1091,20 +1092,6 @@ namespace AuroraDesignSuite.Views
             double widthM = Math.Round(lengthM * 0.22, 0);
             double volumeM3 = Math.Round(tons * 1.45, 0);
 
-            string hullCategory = "Corbeta";
-            if (tons >= 100000) hullCategory = "Acorazado Estelar / Súper-Nave";
-            else if (tons >= 50000) hullCategory = "Crucero Pesado / Dreadnought";
-            else if (tons >= 25000) hullCategory = "Crucero Ligero / Batalla";
-            else if (tons >= 10000) hullCategory = "Destructor Escuadra";
-            else if (tons >= 5000) hullCategory = "Fragata de Escolta";
-            else if (tons >= 2000) hullCategory = "Corbeta / Cañonera";
-            else hullCategory = "Caza / Nave Ligera";
-
-            if (LblVisualScaleClass != null)
-            {
-                LblVisualScaleClass.Text = $"Clase: {hullCategory} ({tons:N0}t / HS {hs:F0})";
-            }
-
             if (TxtScaleDimensionsSummary != null)
             {
                 TxtScaleDimensionsSummary.Text = $"Eslora: {lengthM:N0}m | Manga: {widthM:N0}m | Vol: {volumeM3:N0}m³";
@@ -1163,25 +1150,99 @@ namespace AuroraDesignSuite.Views
             }
         }
 
+        public class RealWorldObjectItem
+        {
+            public string Name { get; set; } = string.Empty;
+            public double LengthM { get; set; }
+            public double WidthM { get; set; }
+            public string Category { get; set; } = string.Empty;
+            public string DisplayTitle => LengthM > 0 ? $"{Name} ({LengthM:N0}m)" : Name;
+        }
+
+        private List<RealWorldObjectItem> _realWorldObjects = new List<RealWorldObjectItem>();
+
+        private void InitializeRealWorldObjectsCatalog()
+        {
+            _realWorldObjects = new List<RealWorldObjectItem>
+            {
+                new RealWorldObjectItem { Name = "⭐ Auto-Seleccionar según Peso", LengthM = 0, WidthM = 0, Category = "Auto" },
+                new RealWorldObjectItem { Name = "🚗 Autobús Urbano Doble Piso", LengthM = 12, WidthM = 2.5, Category = "Vehículo Terrestre" },
+                new RealWorldObjectItem { Name = "✈️ Caza F-22 Raptor", LengthM = 20, WidthM = 15, Category = "Caza Quinta Generación" },
+                new RealWorldObjectItem { Name = "🐋 Ballena Azul Gigante", LengthM = 30, WidthM = 5, Category = "Fauna Marina Terrestre" },
+                new RealWorldObjectItem { Name = "🏛️ El Partenón de Atenas", LengthM = 70, WidthM = 31, Category = "Monumento Histórico" },
+                new RealWorldObjectItem { Name = "🚀 Cohete Falcon 9 (SpaceX)", LengthM = 70, WidthM = 3.7, Category = "Lanzador Espacial" },
+                new RealWorldObjectItem { Name = "✈️ Boeing 747 Jumbo", LengthM = 71, WidthM = 64, Category = "Avión Comercial Fuselaje Ancho" },
+                new RealWorldObjectItem { Name = "🗽 Estatua de la Libertad", LengthM = 93, WidthM = 40, Category = "Monumento Nacional" },
+                new RealWorldObjectItem { Name = "🕰️ Big Ben / Torre Elizabeth", LengthM = 96, WidthM = 12, Category = "Monumento Histórico" },
+                new RealWorldObjectItem { Name = "⚽ Campo de Fútbol Reglamentario", LengthM = 105, WidthM = 68, Category = "Estadio Profesional" },
+                new RealWorldObjectItem { Name = "🛸 Estación Espacial (ISS)", LengthM = 109, WidthM = 73, Category = "Estación Espacial" },
+                new RealWorldObjectItem { Name = "🚢 Submarino Nuclear Clase Ohio", LengthM = 170, WidthM = 13, Category = "Submarino Militar" },
+                new RealWorldObjectItem { Name = "🚢 Crucero de Batalla Moskva", LengthM = 186, WidthM = 21, Category = "Buque de Guerra Capital" },
+                new RealWorldObjectItem { Name = "🏛️ El Coliseo Romano", LengthM = 189, WidthM = 156, Category = "Anfiteatro y Dique Histórico" },
+                new RealWorldObjectItem { Name = "🚢 Destructor Zumwalt (US Navy)", LengthM = 190, WidthM = 24, Category = "Destructor Sigiloso" },
+                new RealWorldObjectItem { Name = "🚢 Transatlántico RMS Titanic", LengthM = 269, WidthM = 28, Category = "Transatlántico Histórico" },
+                new RealWorldObjectItem { Name = "🚢 Portaaviones Nimitz", LengthM = 333, WidthM = 77, Category = "Supercarrier Militar" },
+                new RealWorldObjectItem { Name = "🚢 Portaaviones Gerald R. Ford", LengthM = 337, WidthM = 78, Category = "Supercarrier Quinta Generación" },
+                new RealWorldObjectItem { Name = "🏭 Presa Hoover Dam", LengthM = 379, WidthM = 200, Category = "Infraestructura Hidroeléctrica" },
+                new RealWorldObjectItem { Name = "🏔️ Peñón de Gibraltar / Pan de Azúcar", LengthM = 396, WidthM = 200, Category = "Formación Geológica" },
+                new RealWorldObjectItem { Name = "🏙️ Rascacielos Empire State Building", LengthM = 443, WidthM = 130, Category = "Rascacielos Icónico" },
+                new RealWorldObjectItem { Name = "🌉 Puente Golden Gate (Sección Principal)", LengthM = 500, WidthM = 30, Category = "Gran Puente Colgante" },
+                new RealWorldObjectItem { Name = "🏙️ Rascacielos Taipei 101", LengthM = 508, WidthM = 100, Category = "Super-Rascacielos" },
+                new RealWorldObjectItem { Name = "🗼 Rascacielos Burj Khalifa (Dubái)", LengthM = 828, WidthM = 180, Category = "Superestructura Humana" },
+                new RealWorldObjectItem { Name = "🌉 Puente de Brooklyn Completo", LengthM = 1825, WidthM = 26, Category = "Gran Infraestructura Colgante" },
+                new RealWorldObjectItem { Name = "🏔️ Monte Uluru / Ayers Rock", LengthM = 3600, WidthM = 2400, Category = "Monolito Geológico Gigante" }
+            };
+
+            if (CmbRealWorldReference != null)
+            {
+                CmbRealWorldReference.ItemsSource = _realWorldObjects;
+                CmbRealWorldReference.DisplayMemberPath = "DisplayTitle";
+                CmbRealWorldReference.SelectedIndex = 0;
+            }
+        }
+
+        private void CmbRealWorldReference_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateSideBySideScaleHUD(CurrentDesign.TotalTonnage);
+        }
+
         private (string Name, double LengthM, double WidthM, string Category) GetRealWorldReferenceObject(double tonnage)
         {
+            if (CmbRealWorldReference?.SelectedItem is RealWorldObjectItem selectedObj && selectedObj.LengthM > 0)
+            {
+                return (selectedObj.Name, selectedObj.LengthM, selectedObj.WidthM, selectedObj.Category);
+            }
+
+            // Auto-selection based on tonnage
+            if (tonnage < 250)
+                return ("🚗 AUTOBÚS URBANO", 12, 2.5, "Vehículo Terrestre");
             if (tonnage < 500)
                 return ("✈️ CAZA F-22 RAPTOR", 20, 15, "Caza Quinta Generación");
-            if (tonnage < 1500)
+            if (tonnage < 1000)
+                return ("🚀 COHETE FALCON 9", 70, 3.7, "Lanzador Espacial");
+            if (tonnage < 2000)
                 return ("✈️ BOEING 747 JUMBO", 71, 64, "Avión Comercial Fuselaje Ancho");
             if (tonnage < 4000)
-                return ("⚽ CAMPO DE FÚTBOL ESTADIO", 105, 68, "Estadio Profesional");
-            if (tonnage < 8000)
                 return ("🗽 ESTATUA DE LA LIBERTAD", 93, 40, "Monumento Nacional Terrestre");
+            if (tonnage < 6000)
+                return ("⚽ CAMPO DE FÚTBOL ESTADIO", 105, 68, "Estadio Profesional");
+            if (tonnage < 10000)
+                return ("🛸 ESTACIÓN ESPACIAL (ISS)", 109, 73, "Estación Espacial");
             if (tonnage < 15000)
+                return ("🚢 SUBMARINO CLASE OHIO", 170, 13, "Submarino Nuclear");
+            if (tonnage < 22000)
                 return ("🏛️ EL COLISEO ROMANO", 189, 156, "Anfiteatro y Dique Histórico");
-            if (tonnage < 30000)
-                return ("🚢 PORTAAVIONES SUPERCARRIER NIMIZ", 333, 77, "Buque Capital Terrestre");
+            if (tonnage < 35000)
+                return ("🚢 PORTAAVIONES NIMITZ", 333, 77, "Buque Capital Terrestre");
             if (tonnage < 55000)
                 return ("🏙️ EMPIRE STATE BUILDING", 443, 130, "Rascacielos Icónico Mundial");
             if (tonnage < 90000)
                 return ("🌉 PUENTE GOLDEN GATE", 500, 30, "Sección Colgante Principal");
-            return ("🗼 RASCACIELOS BURJ KHALIFA", 828, 180, "Superestructura Humana");
+            if (tonnage < 180000)
+                return ("🗼 RASCACIELOS BURJ KHALIFA", 828, 180, "Superestructura Humana");
+            if (tonnage < 400000)
+                return ("🌉 PUENTE DE BROOKLYN", 1825, 26, "Gran Infraestructura Colgante");
+            return ("🏔️ MONTE ULURU / AYERS ROCK", 3600, 2400, "Monolito Geológico Gigante");
         }
 
         private void ParseTacticalDossier(string fullText)

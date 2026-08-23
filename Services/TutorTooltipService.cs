@@ -170,13 +170,16 @@ namespace AuroraDesignSuite.Services
                     return;
                 }
 
+                string? categoryHint = null;
                 if (dc is SelectedComponentItem sci)
                 {
                     textToLookup = sci.ComponentName;
+                    categoryHint = sci.TypeName;
                 }
                 else if (dc is Component comp)
                 {
                     textToLookup = comp.ComponentName;
+                    categoryHint = comp.TypeName;
                 }
                 else
                 {
@@ -200,6 +203,12 @@ namespace AuroraDesignSuite.Services
                     {
                         textToLookup = dc.ToString();
                     }
+                }
+
+                if (!string.IsNullOrEmpty(textToLookup) && textToLookup.Length > 1 && !textToLookup.StartsWith("System.") && !textToLookup.StartsWith("AuroraDesignSuite."))
+                {
+                    AttachToolTip(fe, textToLookup, categoryHint);
+                    return;
                 }
             }
 
@@ -266,7 +275,7 @@ namespace AuroraDesignSuite.Services
             return cleaned.Trim();
         }
 
-        public static string? GetTutorText(string? keyOrTerm)
+        public static string? GetTutorText(string? keyOrTerm, string? categoryHint = null)
         {
             EnsureLoaded();
             if (string.IsNullOrWhiteSpace(keyOrTerm)) return null;
@@ -286,7 +295,7 @@ namespace AuroraDesignSuite.Services
                 if (_dictionary.TryGetValue(synonymKey, out val) && IsRichContent(val)) return val;
             }
 
-            // 4. Case-insensitive dictionary search
+            // 4. Case-insensitive exact dictionary search
             foreach (var kvp in _dictionary)
             {
                 if (string.Equals(kvp.Key, cleaned, StringComparison.OrdinalIgnoreCase) ||
@@ -296,7 +305,14 @@ namespace AuroraDesignSuite.Services
                 }
             }
 
-            // 5. Keyword & Component Category Fallback Matching (SPANISH + ENGLISH)
+            // 5. Prioritize TechDescriptionResolver Category / Keyword Matching (for Engines, Fuel, Jump Drive, Weapon, Sensor, etc.)
+            string resolved = TechDescriptionResolver.ResolveDescription(cleaned, categoryHint ?? "");
+            if (!string.IsNullOrWhiteSpace(resolved) && !resolved.Contains("es una especificación y componente técnico fundamental"))
+            {
+                return resolved;
+            }
+
+            // 6. Keyword & Component Category Fallback Matching (SPANISH + ENGLISH)
             if (ContainsWord(raw, "Puerto") || ContainsWord(raw, "Spaceport"))
             {
                 if (_dictionary.TryGetValue("Puertos Espaciales de Carga", out val)) return val;
@@ -398,21 +414,20 @@ namespace AuroraDesignSuite.Services
                 if (_dictionary.TryGetValue("EM Sensor", out val)) return val;
             }
 
-            // 6. Substring match for compound DB technology names
+            // 7. Substring match for compound DB technology names (Strict: prefix match with long key)
             foreach (var kvp in _dictionary)
             {
-                if (kvp.Key.Length > 4)
+                if (kvp.Key.Length >= 8)
                 {
-                    if (cleaned.StartsWith(kvp.Key, StringComparison.OrdinalIgnoreCase) ||
-                        cleaned.Contains(kvp.Key, StringComparison.OrdinalIgnoreCase))
+                    if (cleaned.StartsWith(kvp.Key, StringComparison.OrdinalIgnoreCase))
                     {
                         if (IsRichContent(kvp.Value)) return kvp.Value;
                     }
                 }
             }
 
-            // 7. Fallback to TechDescriptionResolver
-            return TechDescriptionResolver.ResolveDescription(cleaned, "Tecnología / Elemento Imperial");
+            // 8. Final Fallback to TechDescriptionResolver
+            return resolved;
         }
 
         private static bool IsRichContent(string text)
@@ -427,11 +442,11 @@ namespace AuroraDesignSuite.Services
             return source.IndexOf(target, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
-        public static ToolTip? CreateTutorToolTip(string? keyOrTerm, string? customTitle = null)
+        public static ToolTip? CreateTutorToolTip(string? keyOrTerm, string? customTitle = null, string? categoryHint = null)
         {
             if (!IsTutorEnabled) return null;
 
-            string? bodyText = GetTutorText(keyOrTerm);
+            string? bodyText = GetTutorText(keyOrTerm, categoryHint);
             if (string.IsNullOrEmpty(bodyText)) return null;
 
             string cleanKey = CleanKey(keyOrTerm ?? "");

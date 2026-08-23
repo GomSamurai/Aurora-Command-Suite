@@ -928,7 +928,7 @@ namespace AuroraDesignSuite.Services
                                b.Radius, b.Gravity, b.BaseTemp, b.SurfaceTemp, b.AtmosPress, b.GroundMineralSurvey, b.BodyClass, b.ParentBodyID, b.ParentBodyType,
                                b.Density, b.Mass, b.EscapeVelocity, b.OrbitalDistance, b.Year, b.DayValue, b.TidalLock,
                                b.TectonicActivity, b.MagneticField, b.HydroExt, b.Albedo, b.GHFactor, b.RadiationLevel, b.DustLevel,
-                               b.RuinID, b.AbandonedFactories,
+                               b.RuinID, b.AbandonedFactories, b.Xcor, b.Ycor, b.Bearing,
                                COALESCE(pop.LastColonyCost, -1) as PopulationColonyCost
                         FROM FCT_SystemBody b
                         LEFT JOIN FCT_SystemBodyName sbn ON b.SystemBodyID = sbn.SystemBodyID AND sbn.RaceID = @raceId
@@ -946,6 +946,9 @@ namespace AuroraDesignSuite.Services
                         int parentBodyId = bodyReader["ParentBodyID"] != DBNull.Value ? Convert.ToInt32(bodyReader["ParentBodyID"]) : 0;
                         int parentType = bodyReader["ParentBodyType"] != DBNull.Value ? Convert.ToInt32(bodyReader["ParentBodyType"]) : 0;
                         int bodyClass = bodyReader["BodyClass"] != DBNull.Value ? Convert.ToInt32(bodyReader["BodyClass"]) : 1;
+                        double xcor = bodyReader["Xcor"] != DBNull.Value ? Convert.ToDouble(bodyReader["Xcor"]) : 0.0;
+                        double ycor = bodyReader["Ycor"] != DBNull.Value ? Convert.ToDouble(bodyReader["Ycor"]) : 0.0;
+                        double bearing = bodyReader["Bearing"] != DBNull.Value ? Convert.ToDouble(bodyReader["Bearing"]) : 0.0;
                         string className = bodyClass switch
                         {
                             1 => parentBodyId > 0 ? "🌕 Luna / Satélite" : "🌍 Planeta Terrestre",
@@ -964,6 +967,9 @@ namespace AuroraDesignSuite.Services
                             ParentBodyID = parentBodyId,
                             ParentBodyType = parentType,
                             BodyClass = bodyClass,
+                            Xcor = xcor,
+                            Ycor = ycor,
+                            Bearing = bearing,
                             Name = bodyReader["BodyName"] != DBNull.Value ? bodyReader["BodyName"].ToString()! : "Cuerpo Celeste",
                             BodyTypeName = className,
                             RadiusKm = bodyReader["Radius"] != DBNull.Value ? Convert.ToDouble(bodyReader["Radius"]) : 6371.0,

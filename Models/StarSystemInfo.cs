@@ -44,6 +44,9 @@ namespace AuroraDesignSuite.Models
         public int ParentBodyID { get; set; }
         public int ParentBodyType { get; set; }
         public int BodyClass { get; set; }
+        public double Xcor { get; set; }
+        public double Ycor { get; set; }
+        public double Bearing { get; set; }
         public bool IsMoon => (ParentBodyID > 0 && BodyClass != 4) || BodyTypeName.Contains("Luna") || BodyTypeName.Contains("Satélite");
         public bool IsAsteroidOrComet => BodyClass == 4 || BodyTypeName.Contains("Asteroide") || BodyTypeName.Contains("Cometa");
         public string Name { get; set; } = string.Empty;

@@ -273,6 +273,52 @@ namespace AuroraDesignSuite.Views
             element.RenderTransformOrigin = new Point(0.5, 0.5);
         }
 
+        private Point GetBodyCanvasCoordinates(SystemBodyInfo body, double centerX, double centerY, out double orbitRadius)
+        {
+            // 1. Calculate Real Angle from database Bearing or Xcor/Ycor
+            double angleRad = (body.Bearing * Math.PI) / 180.0;
+            if (Math.Abs(body.Xcor) > 0.001 || Math.Abs(body.Ycor) > 0.001)
+            {
+                angleRad = Math.Atan2(-body.Ycor, body.Xcor);
+            }
+
+            // 2. Calculate Real Astronomical Distance Scale (in AU)
+            double distAU = body.OrbitalDistAU;
+            if (distAU <= 0 && (Math.Abs(body.Xcor) > 0 || Math.Abs(body.Ycor) > 0))
+            {
+                distAU = Math.Sqrt(body.Xcor * body.Xcor + body.Ycor * body.Ycor) / 149597870.7;
+            }
+
+            // 3. Dynamic Radius Scaling per Astronomical Region
+            if (distAU <= 0) distAU = 1.0;
+
+            if (distAU <= 2.2)
+            {
+                // Terrestrial Planets (Mercury, Venus, Earth, Mars)
+                orbitRadius = 110 + (distAU * 240);
+            }
+            else if (distAU <= 4.5)
+            {
+                // Main Asteroid Belt (Ceres, Vesta, Pallas...)
+                orbitRadius = 640 + (distAU - 2.2) * 110;
+            }
+            else if (distAU <= 35.0)
+            {
+                // Gas Giants & Outer Planets (Jupiter, Saturn, Uranus, Neptune)
+                orbitRadius = 900 + Math.Log(distAU - 3.5) * 340;
+            }
+            else
+            {
+                // Trans-Neptunian Objects, Kuiper Belt & Oort Cloud (Pluto, Eris, Sedna, Makemake...)
+                orbitRadius = 1750 + Math.Log(distAU - 30.0) * 380;
+            }
+
+            double px = centerX + orbitRadius * Math.Cos(angleRad);
+            double py = centerY - orbitRadius * Math.Sin(angleRad);
+
+            return new Point(px, py);
+        }
+
         private void Render2DStarMap()
         {
             if (StarMapCanvas == null || _dbService == null) return;
@@ -358,11 +404,13 @@ namespace AuroraDesignSuite.Views
                         for (int s = 1; s < sys.Stars.Count; s++)
                         {
                             var companionStar = sys.Stars[s];
-                            double starAngle = (2.0 * Math.PI * s) / sys.Stars.Count + (s * 1.2);
-                            double starDistance = 750 + (s * 150);
+                            double starAngle = (companionStar.Bearing * Math.PI) / 180.0;
+                            if (starAngle == 0) starAngle = (2.0 * Math.PI * s) / sys.Stars.Count;
+
+                            double starDistance = companionStar.OrbitalDistance > 0 ? (800 + Math.Log(companionStar.OrbitalDistance + 1.0) * 350) : (750 + s * 150);
 
                             double starX = centerX + starDistance * Math.Cos(starAngle);
-                            double starY = centerY + starDistance * Math.Sin(starAngle);
+                            double starY = centerY - starDistance * Math.Sin(starAngle);
 
                             double compGlow = 140;
                             var compStarGlow = new System.Windows.Shapes.Ellipse
@@ -421,9 +469,8 @@ namespace AuroraDesignSuite.Views
                     {
                         var body = mainPlanets[i];
 
-                        // Calculate dynamic orbital radius scale
-                        double orbitRadius = 140 + (i + 1) * 110;
-                        if (orbitRadius > 1400) orbitRadius = 1400;
+                        // Calculate Real Coordinates & Concentric Orbit Radius from DB
+                        Point p = GetBodyCanvasCoordinates(body, centerX, centerY, out double orbitRadius);
 
                         // Concentric Orbit Ring around Central Sun
                         var orbitRing = new System.Windows.Shapes.Ellipse
@@ -438,10 +485,8 @@ namespace AuroraDesignSuite.Views
                         Canvas.SetTop(orbitRing, centerY - orbitRadius);
                         StarMapCanvas.Children.Add(orbitRing);
 
-                        // Position planet sphere along orbit ring
-                        double angle = (2.0 * Math.PI * i) / Math.Min(16, bodyCount) + (i * 0.45);
-                        double px = centerX + orbitRadius * Math.Cos(angle);
-                        double py = centerY + orbitRadius * Math.Sin(angle);
+                        double px = p.X;
+                        double py = p.Y;
 
                         // Store planet position for satellite moon docking
                         planetPositions[body.SystemBodyID] = new Point(px, py);
@@ -557,7 +602,18 @@ namespace AuroraDesignSuite.Views
                         for (int mIdx = 0; mIdx < parentMoons.Count; mIdx++)
                         {
                             var moon = parentMoons[mIdx];
-                            double moonOrbitRadius = 38 + ((mIdx % 4) * 18) + ((mIdx / 4) * 25);
+
+                            double moonAngleRad = (moon.Bearing * Math.PI) / 180.0;
+                            if (Math.Abs(moon.Xcor) > 0.001 || Math.Abs(moon.Ycor) > 0.001)
+                            {
+                                moonAngleRad = Math.Atan2(-moon.Ycor, moon.Xcor);
+                            }
+                            if (moon.Bearing == 0 && moon.Xcor == 0 && moon.Ycor == 0)
+                            {
+                                moonAngleRad = (2.0 * Math.PI * mIdx) / Math.Max(1, parentMoons.Count);
+                            }
+
+                            double moonOrbitRadius = 35 + ((mIdx % 4) * 16) + ((mIdx / 4) * 22);
 
                             // Draw Sub-Orbit Ring for parent planet
                             if (mIdx % 4 == 0)
@@ -575,9 +631,8 @@ namespace AuroraDesignSuite.Views
                                 StarMapCanvas.Children.Add(moonRing);
                             }
 
-                            double moonAngle = (2.0 * Math.PI * mIdx) / Math.Max(1, Math.Min(8, parentMoons.Count)) + (mIdx * 0.45);
-                            double mx = parentPos.X + moonOrbitRadius * Math.Cos(moonAngle);
-                            double my = parentPos.Y + moonOrbitRadius * Math.Sin(moonAngle);
+                            double mx = parentPos.X + moonOrbitRadius * Math.Cos(moonAngleRad);
+                            double my = parentPos.Y - moonOrbitRadius * Math.Sin(moonAngleRad);
 
                             double moonSize = 8;
                             var moonSphere = new System.Windows.Shapes.Ellipse
@@ -614,17 +669,16 @@ namespace AuroraDesignSuite.Views
                     }
                 }
 
-                // 4. Render Asteroids & Comets (Green Dots spread across outer belts, like original Aurora 4X game!)
+                // 4. Render Asteroids & Comets (Green Dots at REAL Database Astronomical Coordinates!)
                 if (showAsteroids && asteroidBodies.Count > 0)
                 {
                     for (int aIdx = 0; aIdx < asteroidBodies.Count; aIdx++)
                     {
                         var ast = asteroidBodies[aIdx];
-                        double astOrbitDist = ast.OrbitalDistAU > 0 ? (200 + Math.Log(ast.OrbitalDistAU + 1.0) * 380) : (450 + (aIdx * 6));
-                        double astAngle = (2.0 * Math.PI * aIdx) / Math.Max(1, asteroidBodies.Count) + (aIdx * 0.73);
 
-                        double ax = centerX + astOrbitDist * Math.Cos(astAngle);
-                        double ay = centerY + astOrbitDist * Math.Sin(astAngle);
+                        Point astPoint = GetBodyCanvasCoordinates(ast, centerX, centerY, out double astOrbitRadius);
+                        double ax = astPoint.X;
+                        double ay = astPoint.Y;
 
                         double astSize = 5;
                         var astDot = new System.Windows.Shapes.Ellipse

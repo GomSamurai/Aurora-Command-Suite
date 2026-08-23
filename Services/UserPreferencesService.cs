@@ -11,6 +11,7 @@ namespace AuroraDesignSuite.Services
         public double WindowLeft { get; set; } = -1;
         public double WindowTop { get; set; } = -1;
         public bool IsMaximized { get; set; } = true;
+        public bool IsSidebarCollapsed { get; set; } = false;
         public string SelectedTheme { get; set; } = "Cyberpunk Obsidian";
         public int SelectedEmpireId { get; set; } = -1;
         public string LastDbPath { get; set; } = string.Empty;

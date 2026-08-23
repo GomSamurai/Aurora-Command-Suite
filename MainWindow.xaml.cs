@@ -16,6 +16,7 @@ namespace AuroraDesignSuite
         private System.Windows.Threading.DispatcherTimer? _liveSyncTimer;
         private DateTime _lastDbWriteTime = DateTime.MinValue;
         private double _lastGameTime = -1;
+        private bool _isSidebarCollapsed = false;
 
         public static MainWindow? Instance { get; private set; }
 
@@ -88,6 +89,11 @@ namespace AuroraDesignSuite
                 CmbThemeSelector.SelectedIndex = 0;
             }
 
+            if (prefs.IsSidebarCollapsed)
+            {
+                Dispatcher.InvokeAsync(() => SetSidebarVisibility(true), System.Windows.Threading.DispatcherPriority.Loaded);
+            }
+
             Closing += MainWindow_Closing;
 
             string[] args = Environment.GetCommandLineArgs();
@@ -139,6 +145,7 @@ namespace AuroraDesignSuite
                 prefs.WindowWidth = Width;
                 prefs.WindowHeight = Height;
                 prefs.IsMaximized = WindowState == WindowState.Maximized;
+                prefs.IsSidebarCollapsed = _isSidebarCollapsed;
                 prefs.SelectedTheme = (CmbThemeSelector.SelectedItem as ThemeOption)?.Name ?? "Cyberpunk Obsidian";
                 prefs.SelectedEmpireId = (CmbGlobalEmpire.SelectedItem as Empire)?.RaceID ?? -1;
                 if (!string.IsNullOrEmpty(_dbService?.DbPath))
@@ -154,6 +161,57 @@ namespace AuroraDesignSuite
                 Application.Current.Shutdown();
             }
             catch { }
+        }
+
+        private void BtnToggleSidebar_Click(object sender, RoutedEventArgs e)
+        {
+            SetSidebarVisibility(!_isSidebarCollapsed);
+        }
+
+        public void SetSidebarVisibility(bool collapse)
+        {
+            _isSidebarCollapsed = collapse;
+
+            if (MainTabControl?.Template == null) return;
+
+            if (MainTabControl.Template.FindName("BdrSidebarDock", MainTabControl) is Border bdrSidebar &&
+                MainTabControl.Template.FindName("SplitterSidebar", MainTabControl) is GridSplitter splitter &&
+                MainTabControl.Template.FindName("ColSidebar", MainTabControl) is ColumnDefinition colSidebar &&
+                MainTabControl.Template.FindName("ColSplitter", MainTabControl) is ColumnDefinition colSplitter)
+            {
+                if (collapse)
+                {
+                    bdrSidebar.Visibility = Visibility.Collapsed;
+                    splitter.Visibility = Visibility.Collapsed;
+                    colSidebar.Width = new GridLength(0);
+                    colSidebar.MinWidth = 0;
+                    colSplitter.Width = new GridLength(0);
+
+                    if (BtnToggleSidebar != null)
+                    {
+                        BtnToggleSidebar.Content = "☰ Mostrar Menú";
+                        BtnToggleSidebar.Foreground = (System.Windows.Media.Brush)FindResource("AccentAmberBrush");
+                        BtnToggleSidebar.BorderBrush = (System.Windows.Media.Brush)FindResource("AccentAmberBrush");
+                        ToolTipService.SetToolTip(BtnToggleSidebar, "El menú lateral está oculto para maximizar el espacio de trabajo. Haz clic aquí para volver a mostrar el menú de navegación.");
+                    }
+                }
+                else
+                {
+                    bdrSidebar.Visibility = Visibility.Visible;
+                    splitter.Visibility = Visibility.Visible;
+                    colSidebar.Width = new GridLength(275);
+                    colSidebar.MinWidth = 230;
+                    colSplitter.Width = new GridLength(6);
+
+                    if (BtnToggleSidebar != null)
+                    {
+                        BtnToggleSidebar.Content = "☰ Ocultar Menú";
+                        BtnToggleSidebar.Foreground = (System.Windows.Media.Brush)FindResource("AccentCyanBrush");
+                        BtnToggleSidebar.BorderBrush = (System.Windows.Media.Brush)FindResource("AccentCyanBrush");
+                        ToolTipService.SetToolTip(BtnToggleSidebar, "Oculta el menú lateral de navegación para ampliar la vista de las pestañas al 100% de la pantalla.");
+                    }
+                }
+            }
         }
 
         private void LoadDatabasePath(string dbPath)

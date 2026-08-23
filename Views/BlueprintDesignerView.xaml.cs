@@ -1272,6 +1272,69 @@ namespace AuroraDesignSuite.Views
                     TxtSideBySideSynthesis.Text = $"💡 COMPARACIÓN DIRECTA: La nave '{shipName}' ({lengthM:N0}m) es un {ratio - 100}% más larga que {cleanObjName} ({refLength:N0}m).";
                 }
             }
+
+            // Sync Section 4 of Dossier Táctico dynamically with real calculated length
+            SyncDossierScaleProfileWithCalculatedLength(lengthM, widthM, volumeM3, cleanObjName, refLength);
+        }
+
+        private void SyncDossierScaleProfileWithCalculatedLength(double lengthM, double widthM, double volumeM3, string cleanObjName, double refLength)
+        {
+            if (TxtDossierScaleProfile == null) return;
+
+            string current = TxtDossierScaleProfile.Text?.Trim() ?? string.Empty;
+            string featureSuffix = "";
+
+            int metrosIdx = current.IndexOf("metros", StringComparison.OrdinalIgnoreCase);
+            if (metrosIdx >= 0)
+            {
+                int deEsloraIdx = current.IndexOf("de eslora", metrosIdx, StringComparison.OrdinalIgnoreCase);
+                if (deEsloraIdx >= 0)
+                {
+                    featureSuffix = current.Substring(deEsloraIdx + "de eslora".Length).Trim();
+                }
+                else
+                {
+                    int deLongitudIdx = current.IndexOf("de longitud", metrosIdx, StringComparison.OrdinalIgnoreCase);
+                    if (deLongitudIdx >= 0)
+                    {
+                        featureSuffix = current.Substring(deLongitudIdx + "de longitud".Length).Trim();
+                    }
+                    else
+                    {
+                        featureSuffix = current.Substring(metrosIdx + "metros".Length).Trim();
+                    }
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(current) && !current.StartsWith("Estructura") && !current.StartsWith("Presencia"))
+            {
+                featureSuffix = current;
+            }
+
+            // Clean leading prepositions & punctuation if left
+            featureSuffix = featureSuffix.TrimStart('.', ',', ' ', ';', ':');
+            if (featureSuffix.StartsWith("de ", StringComparison.OrdinalIgnoreCase)) featureSuffix = featureSuffix.Substring(3).Trim();
+            if (featureSuffix.StartsWith("con ", StringComparison.OrdinalIgnoreCase)) featureSuffix = featureSuffix.Substring(4).Trim();
+
+            // Strip out any redundant static comparison parenthetical if previously present
+            int parenIdx = featureSuffix.IndexOf("Comparables a", StringComparison.OrdinalIgnoreCase);
+            if (parenIdx >= 0)
+            {
+                int endParen = featureSuffix.IndexOf('.', parenIdx);
+                if (endParen >= 0) featureSuffix = featureSuffix.Substring(endParen + 1).Trim();
+                else featureSuffix = featureSuffix.Substring(0, parenIdx).Trim();
+            }
+
+            if (string.IsNullOrWhiteSpace(featureSuffix))
+            {
+                featureSuffix = "Estructura de casco acorazado para operaciones tácticas en espacio profundo.";
+            }
+
+            if (featureSuffix.Length > 1 && char.IsLower(featureSuffix[0]))
+            {
+                featureSuffix = char.ToUpper(featureSuffix[0]) + featureSuffix.Substring(1);
+            }
+
+            TxtDossierScaleProfile.Text = $"{lengthM:N0} metros de eslora ({widthM:N0}m de manga, {volumeM3:N0}m³). Comparables a {cleanObjName} ({refLength:N0}m). {featureSuffix}";
         }
 
         public class RealWorldObjectItem

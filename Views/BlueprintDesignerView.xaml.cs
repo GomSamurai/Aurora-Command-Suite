@@ -1110,46 +1110,55 @@ namespace AuroraDesignSuite.Views
                 TxtScaleDimensionsSummary.Text = $"Eslora: {lengthM:N0}m | Manga: {widthM:N0}m | Vol: {volumeM3:N0}m³";
             }
 
-            // Left Card: YOUR IMPERIAL SHIP
-            string shipClassName = TxtClassName?.Text?.Trim() ?? "Plano Actual";
-            if (TxtShipCardHeader != null) TxtShipCardHeader.Text = $"🚀 TU NAVE: {shipClassName}";
-            if (TxtShipTonnageMetric != null) TxtShipTonnageMetric.Text = $"{tons:N0}t / HS {hs:F0}";
-            if (TxtShipLengthM != null) TxtShipLengthM.Text = $"{lengthM:N0} metros";
-            if (TxtShipWidthM != null) TxtShipWidthM.Text = $"{widthM:N0} metros";
-
-            // Right Card: REAL WORLD KNOWN REFERENCE
+            // Real World Reference Object
             (string objName, double refLength, double refWidth, string catName) = GetRealWorldReferenceObject(tons);
 
-            if (TxtRealWorldHeader != null) TxtRealWorldHeader.Text = objName;
-            if (TxtRealWorldCategory != null) TxtRealWorldCategory.Text = catName;
-            if (TxtRealWorldLength != null) TxtRealWorldLength.Text = $"{refLength:N0} metros";
+            if (TxtShipCardHeader != null) TxtShipCardHeader.Text = $"🚀 TU NAVE: {lengthM:N0}m";
+            if (TxtRealWorldHeader != null) TxtRealWorldHeader.Text = $"{objName}: {refLength:N0}m";
 
+            if (TxtShipGaugeLabel != null) TxtShipGaugeLabel.Text = $"{lengthM:N0}m (Eslora)";
+            if (TxtWorldGaugeLabel != null) TxtWorldGaugeLabel.Text = $"{refLength:N0}m";
+
+            // Dynamic Shared Ruler Scaling (Max track width ~320px)
+            double maxMetersOnRuler = Math.Max(lengthM, refLength) * 1.25;
+            if (maxMetersOnRuler < 100) maxMetersOnRuler = 100;
+
+            double trackMaxPx = 320.0;
+            double shipPx = Math.Max(25, Math.Min(trackMaxPx, (lengthM / maxMetersOnRuler) * trackMaxPx));
+            double worldPx = Math.Max(25, Math.Min(trackMaxPx, (refLength / maxMetersOnRuler) * trackMaxPx));
+
+            if (BdrShipGauge != null) BdrShipGauge.Width = shipPx;
+            if (BdrWorldGauge != null) BdrWorldGauge.Width = worldPx;
+
+            // Ruler Ticks Calibration
+            double t1 = Math.Round(maxMetersOnRuler * 0.25, 0);
+            double t2 = Math.Round(maxMetersOnRuler * 0.50, 0);
+            double t3 = Math.Round(maxMetersOnRuler * 0.75, 0);
+            double t4 = Math.Round(maxMetersOnRuler, 0);
+
+            if (TxtRulerTick1 != null) TxtRulerTick1.Text = $"{t1:F0}m";
+            if (TxtRulerTick2 != null) TxtRulerTick2.Text = $"{t2:F0}m";
+            if (TxtRulerTick3 != null) TxtRulerTick3.Text = $"{t3:F0}m";
+            if (TxtRulerTick4 != null) TxtRulerTick4.Text = $"{t4:F0}m+";
+
+            // Synthesis Line
             double ratio = Math.Round((lengthM / refLength) * 100.0, 0);
-            if (TxtRealWorldRatio != null) TxtRealWorldRatio.Text = $"{ratio:N0}% de longitud";
+            string cleanObjName = objName.Replace("🏛️ ", "").Replace("🚢 ", "").Replace("🗽 ", "").Replace("✈️ ", "").Replace("🏙️ ", "").Replace("🗼 ", "").Replace("⚽ ", "").Replace("🌉 ", "");
+            string shipName = TxtClassName?.Text?.Trim() ?? "Tu nave";
 
-            // Visual Progress Gauges Width Adjustment
-            if (BdrShipGauge != null && BdrWorldGauge != null)
-            {
-                double maxVal = Math.Max(lengthM, refLength);
-                BdrShipGauge.Width = Math.Max(15, Math.Min(200, (lengthM / maxVal) * 200.0));
-                BdrWorldGauge.Width = Math.Max(15, Math.Min(200, (refLength / maxVal) * 200.0));
-            }
-
-            // Synthesis Banner
             if (TxtSideBySideSynthesis != null)
             {
-                string cleanObjName = objName.Replace("🏛️ ", "").Replace("🚢 ", "").Replace("🗽 ", "").Replace("✈️ ", "").Replace("🏙️ ", "").Replace("🗼 ", "").Replace("⚽ ", "").Replace("🌉 ", "");
                 if (ratio >= 95 && ratio <= 105)
                 {
-                    TxtSideBySideSynthesis.Text = $"💡 SÍNTESIS COMPARATIVA: Si estacionaras la nave '{shipClassName}' al lado de {cleanObjName} en la Tierra, ocuparía exactamente su misma longitud de extremo a extremo ({lengthM:N0}m vs {refLength:N0}m).";
+                    TxtSideBySideSynthesis.Text = $"💡 COMPARACIÓN DIRECTA: La nave '{shipName}' ({lengthM:N0}m) tiene una longitud prácticamente idéntica a {cleanObjName} ({refLength:N0}m).";
                 }
                 else if (ratio < 95)
                 {
-                    TxtSideBySideSynthesis.Text = $"💡 SÍNTESIS COMPARATIVA: La nave '{shipClassName}' ({lengthM:N0}m) representa el {ratio}% de las dimensiones de {cleanObjName} ({refLength:N0}m).";
+                    TxtSideBySideSynthesis.Text = $"💡 COMPARACIÓN DIRECTA: La nave '{shipName}' ({lengthM:N0}m) representa el {ratio}% del tamaño de {cleanObjName} ({refLength:N0}m).";
                 }
                 else
                 {
-                    TxtSideBySideSynthesis.Text = $"💡 SÍNTESIS COMPARATIVA: La nave '{shipClassName}' ({lengthM:N0}m) supera en un {ratio - 100}% las dimensiones de {cleanObjName} ({refLength:N0}m).";
+                    TxtSideBySideSynthesis.Text = $"💡 COMPARACIÓN DIRECTA: La nave '{shipName}' ({lengthM:N0}m) es un {ratio - 100}% más larga que {cleanObjName} ({refLength:N0}m).";
                 }
             }
         }

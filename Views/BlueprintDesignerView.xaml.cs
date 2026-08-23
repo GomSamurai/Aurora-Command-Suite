@@ -420,11 +420,8 @@ namespace AuroraDesignSuite.Views
 
             _selectedComponents.Clear();
 
-            // Populate Tactical Description Text & Status Tags
-            if (TxtTacticalDescription != null)
-            {
-                TxtTacticalDescription.Text = preset.TacticalDescription;
-            }
+            // Populate Tactical Description into 4 Dossier Block Cards & Status Tags
+            ParseTacticalDossier(preset.TacticalDescription);
 
             if (TxtPresetTypeTag != null && BdrPresetTypeTag != null)
             {
@@ -436,7 +433,7 @@ namespace AuroraDesignSuite.Views
                 }
                 else
                 {
-                    TxtPresetTypeTag.Text = "📌 Preset Oficial de la Marina Imperial";
+                    TxtPresetTypeTag.Text = "📌 Preset Oficial Marina Imperial";
                     TxtPresetTypeTag.Foreground = (Brush)Application.Current.Resources["AccentCyanBrush"];
                     BdrPresetTypeTag.BorderBrush = (Brush)Application.Current.Resources["AccentCyanBrush"];
                 }
@@ -615,11 +612,8 @@ namespace AuroraDesignSuite.Views
             TxtDeploymentMonths.Text = ud.PlannedDeploymentMonths.ToString();
             TxtArmorThickness.Text = ud.ArmorThickness.ToString();
             TxtArmorWidth.Text = ud.ArmorWidth.ToString();
-            if (TxtTacticalDescription != null)
-            {
-                TxtTacticalDescription.Text = string.IsNullOrWhiteSpace(ud.TacticalDescription) ?
-                    $"🎯 PROPÓSITO: Preset personalizado ({ud.ClassName}).\n⚓ DOCTRINA: Configuración táctica diseñada por el Comando Imperial.\n📊 EXPECTATIVAS: Ensamblado a medida con componentes locales." : ud.TacticalDescription;
-            }
+
+            ParseTacticalDossier(ud.TacticalDescription);
 
             _selectedComponents.Clear();
             foreach (var item in ud.Components)
@@ -652,6 +646,8 @@ namespace AuroraDesignSuite.Views
             int.TryParse(TxtArmorThickness.Text, out int armorT);
             int.TryParse(TxtArmorWidth.Text, out int armorW);
 
+            string combinedTacticalDesc = CombineTacticalDossier();
+
             var userPreset = new UserPresetData
             {
                 PresetName = presetName,
@@ -660,7 +656,7 @@ namespace AuroraDesignSuite.Views
                 ArmorThickness = Math.Max(1, armorT),
                 ArmorWidth = Math.Max(1, armorW),
                 IsMilitary = CurrentDesign.IsMilitary,
-                TacticalDescription = TxtTacticalDescription != null ? TxtTacticalDescription.Text.Trim() : string.Empty,
+                TacticalDescription = combinedTacticalDesc,
                 Components = _selectedComponents.Select(x => new UserPresetComponentItem
                 {
                     ComponentID = x.Component.ComponentID,
@@ -955,8 +951,8 @@ namespace AuroraDesignSuite.Views
                 }
             }
 
-            // Update Visual Ship Scale Silhouette & Real World Magnitude HUD
-            UpdateVisualScaleHUD(CurrentDesign.TotalTonnage);
+            // Update Visual Ship Scale Silhouette & Side-by-Side Real World Magnitude HUD
+            UpdateSideBySideScaleHUD(CurrentDesign.TotalTonnage);
 
             LblTonnage.Text = $"{CurrentDesign.TotalTonnage:N0} Tons ({CurrentDesign.TotalHS:F1} HS)";
             LblSpeed.Text = $"{CurrentDesign.MaxSpeedKmS:N0} km/s";
@@ -1082,14 +1078,14 @@ namespace AuroraDesignSuite.Views
             }
         }
 
-        private void UpdateVisualScaleHUD(double tons)
+        private void UpdateSideBySideScaleHUD(double tons)
         {
             if (tons <= 0) tons = 1000;
             double hs = CurrentDesign.TotalHS;
             if (hs <= 0) hs = tons / 50.0;
 
             // Physical Dimensions Math (Metros)
-            // Formula: L = 42 * (tons / 1000)^(0.38) * 1.85
+            // L = 42 * (tons / 1000)^(0.38) * 1.85
             double lengthM = Math.Round(42.0 * Math.Pow(tons / 1000.0, 0.38) * 1.85, 0);
             if (lengthM < 15) lengthM = 15;
             double widthM = Math.Round(lengthM * 0.22, 0);
@@ -1111,60 +1107,124 @@ namespace AuroraDesignSuite.Views
 
             if (TxtScaleDimensionsSummary != null)
             {
-                TxtScaleDimensionsSummary.Text = $"Longitud: {lengthM:N0}m | Manga: {widthM:N0}m | Vol: {volumeM3:N0}m³";
+                TxtScaleDimensionsSummary.Text = $"Eslora: {lengthM:N0}m | Manga: {widthM:N0}m | Vol: {volumeM3:N0}m³";
             }
 
-            // Real-World Magnitude Comparison
-            string comparisonText = GetRealWorldComparisonString(tons, lengthM);
-            if (TxtRealWorldComparison != null)
+            // Left Card: YOUR IMPERIAL SHIP
+            string shipClassName = TxtClassName?.Text?.Trim() ?? "Plano Actual";
+            if (TxtShipCardHeader != null) TxtShipCardHeader.Text = $"🚀 TU NAVE: {shipClassName}";
+            if (TxtShipTonnageMetric != null) TxtShipTonnageMetric.Text = $"{tons:N0}t / HS {hs:F0}";
+            if (TxtShipLengthM != null) TxtShipLengthM.Text = $"{lengthM:N0} metros";
+            if (TxtShipWidthM != null) TxtShipWidthM.Text = $"{widthM:N0} metros";
+
+            // Right Card: REAL WORLD KNOWN REFERENCE
+            (string objName, double refLength, double refWidth, string catName) = GetRealWorldReferenceObject(tons);
+
+            if (TxtRealWorldHeader != null) TxtRealWorldHeader.Text = objName;
+            if (TxtRealWorldCategory != null) TxtRealWorldCategory.Text = catName;
+            if (TxtRealWorldLength != null) TxtRealWorldLength.Text = $"{refLength:N0} metros";
+
+            double ratio = Math.Round((lengthM / refLength) * 100.0, 0);
+            if (TxtRealWorldRatio != null) TxtRealWorldRatio.Text = $"{ratio:N0}% de longitud";
+
+            // Visual Progress Gauges Width Adjustment
+            if (BdrShipGauge != null && BdrWorldGauge != null)
             {
-                TxtRealWorldComparison.Text = comparisonText;
+                double maxVal = Math.Max(lengthM, refLength);
+                BdrShipGauge.Width = Math.Max(15, Math.Min(200, (lengthM / maxVal) * 200.0));
+                BdrWorldGauge.Width = Math.Max(15, Math.Min(200, (refLength / maxVal) * 200.0));
             }
 
-            // Visual Silhouette Bar Width Adjustment
-            if (BdrVisualShipSilhouette != null && TxtVisualShipTonnage != null)
+            // Synthesis Banner
+            if (TxtSideBySideSynthesis != null)
             {
-                TxtVisualShipTonnage.Text = $"◄────── {tons:N0}t (HS {hs:F0}) / ~{lengthM:N0} metros ──────►";
-                double targetWidth = Math.Max(90, Math.Min(360, 90 + (Math.Min(tons, 100000) / 100000.0) * 270));
-                BdrVisualShipSilhouette.Width = targetWidth;
+                string cleanObjName = objName.Replace("🏛️ ", "").Replace("🚢 ", "").Replace("🗽 ", "").Replace("✈️ ", "").Replace("🏙️ ", "").Replace("🗼 ", "").Replace("⚽ ", "").Replace("🌉 ", "");
+                if (ratio >= 95 && ratio <= 105)
+                {
+                    TxtSideBySideSynthesis.Text = $"💡 SÍNTESIS COMPARATIVA: Si estacionaras la nave '{shipClassName}' al lado de {cleanObjName} en la Tierra, ocuparía exactamente su misma longitud de extremo a extremo ({lengthM:N0}m vs {refLength:N0}m).";
+                }
+                else if (ratio < 95)
+                {
+                    TxtSideBySideSynthesis.Text = $"💡 SÍNTESIS COMPARATIVA: La nave '{shipClassName}' ({lengthM:N0}m) representa el {ratio}% de las dimensiones de {cleanObjName} ({refLength:N0}m).";
+                }
+                else
+                {
+                    TxtSideBySideSynthesis.Text = $"💡 SÍNTESIS COMPARATIVA: La nave '{shipClassName}' ({lengthM:N0}m) supera en un {ratio - 100}% las dimensiones de {cleanObjName} ({refLength:N0}m).";
+                }
             }
         }
 
-        private string GetRealWorldComparisonString(double tonnage, double lengthM)
+        private (string Name, double LengthM, double WidthM, string Category) GetRealWorldReferenceObject(double tonnage)
         {
             if (tonnage < 500)
-            {
-                return $"✈️ Tamaño equivalente a un Caza de Combate F-22 Raptor o Su-57 ({lengthM:N0}m de largo)";
-            }
+                return ("✈️ CAZA F-22 RAPTOR", 20, 15, "Caza Quinta Generación");
             if (tonnage < 1500)
-            {
-                return $"✈️ Tamaño equivalente a un Avión Comercial Boeing 747 Jumbo / Estación Espacial ({lengthM:N0}m)";
-            }
+                return ("✈️ BOEING 747 JUMBO", 71, 64, "Avión Comercial Fuselaje Ancho");
             if (tonnage < 4000)
-            {
-                return $"⚽ Más largo que un Campo de Fútbol Reglamentario de Primera División ({lengthM:N0}m vs 105m)";
-            }
+                return ("⚽ CAMPO DE FÚTBOL ESTADIO", 105, 68, "Estadio Profesional");
             if (tonnage < 8000)
-            {
-                return $"🗽 Más alto/largo que la Estatua de la Libertad ({lengthM:N0}m vs 93m) / Casi 2 Campos de Fútbol";
-            }
+                return ("🗽 ESTATUA DE LA LIBERTAD", 93, 40, "Monumento Nacional Terrestre");
             if (tonnage < 15000)
-            {
-                return $"🏛️ Tan grande como el Coliseo Romano de extremo a extremo ({lengthM:N0}m vs 189m)";
-            }
+                return ("🏛️ EL COLISEO ROMANO", 189, 156, "Anfiteatro y Dique Histórico");
             if (tonnage < 30000)
-            {
-                return $"🚢 Tan largo como un Portaaviones Supercarrier Nimitz / Torre Eiffel horizontal ({lengthM:N0}m vs 333m)";
-            }
+                return ("🚢 PORTAAVIONES SUPERCARRIER NIMIZ", 333, 77, "Buque Capital Terrestre");
             if (tonnage < 55000)
-            {
-                return $"🏙️ Más largo que la altura del Rascacielos Empire State Building ({lengthM:N0}m vs 443m)";
-            }
+                return ("🏙️ EMPIRE STATE BUILDING", 443, 130, "Rascacielos Icónico Mundial");
             if (tonnage < 90000)
+                return ("🌉 PUENTE GOLDEN GATE", 500, 30, "Sección Colgante Principal");
+            return ("🗼 RASCACIELOS BURJ KHALIFA", 828, 180, "Superestructura Humana");
+        }
+
+        private void ParseTacticalDossier(string fullText)
+        {
+            if (string.IsNullOrWhiteSpace(fullText))
             {
-                return $"🌉 Tan largo como la sección principal del Puente Golden Gate ({lengthM:N0}m vs 500m+)";
+                if (TxtDossierPurpose != null) TxtDossierPurpose.Text = "Escribe aquí el propósito y función de diseño de esta nave...";
+                if (TxtDossierDoctrine != null) TxtDossierDoctrine.Text = "Describe aquí la doctrina operativa y rol táctico en flota...";
+                if (TxtDossierExpectations != null) TxtDossierExpectations.Text = "Indica expectativas de combate, armamento y límites...";
+                if (TxtDossierScaleProfile != null) TxtDossierScaleProfile.Text = "Describe la presencia física de la nave en puerto espacial...";
+                return;
             }
-            return $"🗼 Magnitud monumental equivalente al Rascacielos Burj Khalifa ({lengthM:N0}m vs 828m)";
+
+            string purpose = string.Empty;
+            string doctrine = string.Empty;
+            string expectations = string.Empty;
+            string scaleProfile = string.Empty;
+
+            string[] lines = fullText.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var line in lines)
+            {
+                string trimmed = line.Trim();
+                if (trimmed.Contains("🎯 PROPÓSITO:"))
+                    purpose = trimmed.Replace("🎯 PROPÓSITO:", "").Trim();
+                else if (trimmed.Contains("⚓ DOCTRINA:"))
+                    doctrine = trimmed.Replace("⚓ DOCTRINA:", "").Trim();
+                else if (trimmed.Contains("📊 EXPECTATIVAS:"))
+                    expectations = trimmed.Replace("📊 EXPECTATIVAS:", "").Trim();
+                else if (trimmed.Contains("📏 MAGNITUD EN PUERTO:") || trimmed.Contains("📏 MAGNITUD:"))
+                    scaleProfile = trimmed.Replace("📏 MAGNITUD EN PUERTO:", "").Replace("📏 MAGNITUD:", "").Trim();
+                else
+                {
+                    if (string.IsNullOrEmpty(purpose)) purpose += " " + trimmed;
+                    else if (string.IsNullOrEmpty(doctrine)) doctrine += " " + trimmed;
+                    else expectations += " " + trimmed;
+                }
+            }
+
+            if (TxtDossierPurpose != null) TxtDossierPurpose.Text = string.IsNullOrWhiteSpace(purpose) ? "Diseño multi-rol del Comando Imperial." : purpose.Trim();
+            if (TxtDossierDoctrine != null) TxtDossierDoctrine.Text = string.IsNullOrWhiteSpace(doctrine) ? "Despliegue estándar en grupo de batalla." : doctrine.Trim();
+            if (TxtDossierExpectations != null) TxtDossierExpectations.Text = string.IsNullOrWhiteSpace(expectations) ? "Operación continua según parámetros de plano." : expectations.Trim();
+            if (TxtDossierScaleProfile != null) TxtDossierScaleProfile.Text = string.IsNullOrWhiteSpace(scaleProfile) ? "Estructura de casco estandarizada para atracamiento orbital." : scaleProfile.Trim();
+        }
+
+        private string CombineTacticalDossier()
+        {
+            string purpose = TxtDossierPurpose?.Text?.Trim() ?? string.Empty;
+            string doctrine = TxtDossierDoctrine?.Text?.Trim() ?? string.Empty;
+            string expectations = TxtDossierExpectations?.Text?.Trim() ?? string.Empty;
+            string scaleProfile = TxtDossierScaleProfile?.Text?.Trim() ?? string.Empty;
+
+            return $"🎯 PROPÓSITO: {purpose}\n⚓ DOCTRINA: {doctrine}\n📊 EXPECTATIVAS: {expectations}\n📏 MAGNITUD EN PUERTO: {scaleProfile}";
         }
     }
 }

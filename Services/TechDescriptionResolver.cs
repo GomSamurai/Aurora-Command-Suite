@@ -4,7 +4,7 @@ namespace AuroraDesignSuite.Services
 {
     public static class TechDescriptionResolver
     {
-        public static string ResolveDescription(string techName, string categoryName = "")
+        public static string? ResolveDescription(string techName, string categoryName = "")
         {
             if (string.IsNullOrWhiteSpace(techName)) return categoryName;
 
@@ -82,7 +82,7 @@ namespace AuroraDesignSuite.Services
                 return $"📌 CONCEPTO & DEFINICIÓN:\n{techName} es una cubierta de hangar y bahía de lanzamiento para cazas, lanzaderas y naves parásitas.\n\n⚙️ FUNCIÓN Y MECÁNICA EN JUEGO:\n• Transporte y Mantenimiento: Alberga cazas y embarcaciones pequeñas, suministrando combustible y munición mientras están atracadas.\n• Lanzamiento y Recuperación: Permite desplegar escuadrones de cazas rápidamente en el campo de batalla.\n\n💡 EJEMPLO PRÁCTICO EN PARTIDA:\nUn portaaviones de flota equipado con 5,000 toneladas de hangar podrá transportar y desplegar 20 cazas de interceptación.\n\n🛡️ CONSEJO TÁCTICO IMPERIAL:\nAsigna buques nodriza con hangares para proteger cazas de corto alcance en saltos estelares.";
             }
 
-            return $"📌 CONCEPTO & DEFINICIÓN:\n{techName} es una especificación y componente técnico fundamental de la arquitectura naval e industrial de Aurora 4X.\n\n⚙️ FUNCIÓN Y MECÁNICA EN JUEGO:\n• Rendimiento Operativo: Potencia las capacidades tácticas de tus buques, la eficiencia de tus colonias o la velocidad de prospección galáctica.\n• Especificación Técnica: Diseñado para integrarse en el Diseñador de Naves (Class Design) o en la gestión de infraestructura colonial del Imperio.\n\n💡 EJEMPLO PRÁCTICO EN PARTIDA:\nIncorporar {techName} en tu doctrina de flota o en la gestión de mundos exteriores optimizará el uso de recursos y aumentará la supervivencia en combate.\n\n🛡️ CONSEJO TÁCTICO IMPERIAL:\nMantén equilibrados tus suministros minerales y energéticos en la telemetría para sacar el máximo partido a {techName}.";
+            return null;
         }
     }
 }

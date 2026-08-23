@@ -56,9 +56,29 @@
                             <TextBlock DockPanel.Dock="Top" Text="🌌 SISTEMAS ESTELARES DESCUBIERTOS" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
                             <DataGrid x:Name="DgSystems" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgSystems_SelectionChanged">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Sistema Estelar" Binding="{Binding SystemName}" Width="*"/>
-                                    <DataGridTextColumn Header="Estrellas" Binding="{Binding StarCount}" Width="65"/>
-                                    <DataGridTextColumn Header="Abundancia" Binding="{Binding AbundanceModifier, StringFormat={}{0:F2}}" Width="85"/>
+                                    <DataGridTextColumn Header="Sistema Estelar" Binding="{Binding SystemName}" Width="*">
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                                                <Setter Property="ToolTip" Value="🌌 SISTEMA ESTELAR: Nombre oficial de la estrella o sistema solar registrado en las cartas de navegación del Imperio."/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Header="Estrellas" Binding="{Binding StarCount}" Width="65">
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                                                <Setter Property="ToolTip" Value="⭐ CANTIDAD DE ESTRELLAS: Número de soles centrales (sistemas simples, binarios o trinarios) presentes en este sistema estelar."/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Header="Abundancia" Binding="{Binding AbundanceModifier, StringFormat={}{0:F2}}" Width="85">
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                                                <Setter Property="ToolTip" Value="💎 MULTIPLICADOR DE ABUNDANCIA: Factor astronómico (ej. 1.00 = 100%, 0.85 = 85%, 1.50 = 150%) que multiplica la probabilidad y riqueza de yacimientos minerales exóticos (Duranium, Sorium, Gallicite...) generados en todos los planetas, lunas y asteroides de este sistema estelar."/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                    </DataGridTextColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </DockPanel>

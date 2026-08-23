@@ -306,8 +306,8 @@ namespace AuroraDesignSuite.Services
             }
 
             // 5. Prioritize TechDescriptionResolver Category / Keyword Matching (for Engines, Fuel, Jump Drive, Weapon, Sensor, etc.)
-            string resolved = TechDescriptionResolver.ResolveDescription(cleaned, categoryHint ?? "");
-            if (!string.IsNullOrWhiteSpace(resolved) && !resolved.Contains("es una especificación y componente técnico fundamental"))
+            string? resolved = TechDescriptionResolver.ResolveDescription(cleaned, categoryHint ?? "");
+            if (!string.IsNullOrWhiteSpace(resolved))
             {
                 return resolved;
             }

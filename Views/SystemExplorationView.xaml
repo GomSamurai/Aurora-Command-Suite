@@ -259,27 +259,65 @@
                 </Border>
             </Grid>
 
-            <!-- MODE 4: INTERACTIVE 2D STAR MAP CANVAS -->
+            <!-- MODE 4: INTERACTIVE 2D STAR MAP & ORBITAL ENGINE CANVAS -->
             <Grid x:Name="Pnl2DStarMap" Visibility="Collapsed">
-                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12">
+                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <DockPanel Grid.Row="0" Margin="0,0,0,8">
-                            <TextBlock Text="🌌 NAVEGACIÓN Y RED INTERESTELAR (MAPA ESTELAR 2D)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Content="🔄 Recargar Nodos de Salto" Click="BtnRefreshStarMap_Click" Padding="8,4" Margin="0,0,6,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
-                                <Button Content="🎯 Centrar Mapa" Click="BtnResetStarMapZoom_Click" Padding="8,4" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="11"/>
-                            </StackPanel>
-                        </DockPanel>
+                        <!-- Top Toolbar Bar: View Modes & Star System Selector -->
+                        <Border Grid.Row="0" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10,6" Margin="0,0,0,6">
+                            <DockPanel>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="🌌 NAVEGACIÓN INTERESTELAR Y MAPA DE SISTEMA 2D" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center" Margin="0,0,14,0"/>
 
-                        <Border Grid.Row="1" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" ClipToBounds="True">
-                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                                <Canvas x:Name="StarMapCanvas" Width="1400" Height="900" Background="#0A0E17"/>
-                            </ScrollViewer>
+                                    <TextBlock Text="Modo de Vista:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                    <ComboBox x:Name="CmbStarMapViewMode" SelectionChanged="OnMapFilterChanged" Width="220" Margin="0,0,14,0" ToolTip="Alterna entre la Red Galáctica Interestelar (sistemas conectados) y el Mapa Orbital de Sistema Solar (planetas y órbitas)."/>
+
+                                    <TextBlock Text="Sistema Estelar:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                    <ComboBox x:Name="CmbStarMapSystemSelector" SelectionChanged="OnMapFilterChanged" Width="180" ToolTip="Selecciona el sistema estelar cuyos planetas y órbitas deseas explorar en detalle."/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                    <TextBlock Text="🔍 Zoom:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                    <Button Content="-" Click="BtnZoomOut_Click" Padding="6,2" Margin="0,0,3,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold"/>
+                                    <Slider x:Name="SldMapZoom" Minimum="0.2" Maximum="5.0" Value="1.0" Width="90" ValueChanged="SldMapZoom_ValueChanged" VerticalAlignment="Center" Margin="0,0,3,0" ToolTip="Nivel de Zoom interactivo del mapa estelar."/>
+                                    <Button Content="+" Click="BtnZoomIn_Click" Padding="6,2" Margin="0,0,10,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold"/>
+
+                                    <Button Content="🎯 Centrar Mapa" Click="BtnResetStarMapZoom_Click" Padding="8,4" Margin="0,0,4,0" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentGreenBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5" ToolTip="Restablece la cámara y centra el mapa en el objeto principal."/>
+                                    <Button Content="🔄 Recargar" Click="BtnRefreshStarMap_Click" Padding="8,4" Background="{DynamicResource CardBgBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10.5" ToolTip="Recarga los datos astronómicos y nodos desde AuroraDB.db."/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Layer Filter Checkboxes Bar -->
+                        <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8,4" Margin="0,0,0,6">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="🎨 Filtros de Capas:" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,10,0"/>
+
+                                <CheckBox x:Name="ChkLayerStars" Content="⭐ Estrellas / Soles" IsChecked="True" Click="OnMapFilterChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" Margin="0,0,12,0" ToolTip="Muestra/oculta los soles centrales y su resplandor."/>
+                                <CheckBox x:Name="ChkLayerPlanets" Content="🪐 Planetas y Órbitas" IsChecked="True" Click="OnMapFilterChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" Margin="0,0,12,0" ToolTip="Muestra/oculta planetas, lunas y anillos de órbita astronómica."/>
+                                <CheckBox x:Name="ChkLayerColonies" Content="🏛️ Colonias Imperiales" IsChecked="True" Click="OnMapFilterChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" Margin="0,0,12,0" ToolTip="Muestra/oculta insignias y distintivos de colonias habitadas."/>
+                                <CheckBox x:Name="ChkLayerJumpPoints" Content="🌀 Puntos de Salto (JP)" IsChecked="True" Click="OnMapFilterChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" Margin="0,0,12,0" ToolTip="Muestra/oculta portales de salto interestelar y rutas warp."/>
+                                <CheckBox x:Name="ChkLayerFleets" Content="🛸 Flotas y Buques Activos" IsChecked="True" Click="OnMapFilterChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" Margin="0,0,12,0" ToolTip="Muestra/oculta las naves y escuadras militares/comerciales en servicio."/>
+                                <CheckBox x:Name="ChkLayerMinerals" Content="💎 Yacimientos Minerales" IsChecked="True" Click="OnMapFilterChanged" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" ToolTip="Muestra/oculta indicadores de prospección mineral exótica."/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Main Interactive Canvas container with Pan & MouseWheel Zoom -->
+                        <Border x:Name="BrdStarMapContainer" Grid.Row="2" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" ClipToBounds="True" MouseWheel="BrdStarMapContainer_MouseWheel" MouseLeftButtonDown="BrdStarMapContainer_MouseLeftButtonDown" MouseMove="BrdStarMapContainer_MouseMove" MouseLeftButtonUp="BrdStarMapContainer_MouseLeftButtonUp" Cursor="Hand">
+                            <Canvas x:Name="StarMapCanvas" Width="2000" Height="1400" Background="#070A12">
+                                <Canvas.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform x:Name="StarMapScaleTransform" ScaleX="1.0" ScaleY="1.0"/>
+                                        <TranslateTransform x:Name="StarMapTranslateTransform" X="0" Y="0"/>
+                                    </TransformGroup>
+                                </Canvas.RenderTransform>
+                            </Canvas>
                         </Border>
                     </Grid>
                 </Border>

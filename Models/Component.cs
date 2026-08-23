@@ -68,6 +68,12 @@ namespace AuroraDesignSuite.Models
         public double TotalTons => TotalHS * 50.0;
         public string TotalWeightDisplay => $"{TotalHS:N1} HS ({TotalTons:N0} t)";
 
+        public string UnitWeightFormatted => $"{UnitHS:N1} HS ({UnitTons:N0} t)";
+        public string TotalWeightFormatted => Quantity > 1 ? $" ➜ {TotalHS:N1} HS ({TotalTons:N0} t)" : "";
+        public string CombinedWeightDisplay => Quantity > 1 
+            ? $"{UnitHS:N1} HS ({UnitTons:N0} t) ➜ {TotalHS:N1} HS ({TotalTons:N0} t)" 
+            : $"{UnitHS:N1} HS ({UnitTons:N0} t)";
+
         public double UnitCost => Component?.Cost ?? 0;
         public double TotalCost => UnitCost * Quantity;
         public double TotalCostBP => TotalCost;

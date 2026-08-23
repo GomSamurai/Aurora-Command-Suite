@@ -127,17 +127,50 @@ namespace AuroraDesignSuite.Views
             Render2DStarMap();
         }
 
+        private void CenterMapOnScreen(double targetCanvasX = 1000, double targetCanvasY = 700)
+        {
+            if (BrdStarMapContainer == null || StarMapScaleTransform == null || StarMapTranslateTransform == null || SldMapZoom == null) return;
+
+            double containerWidth = BrdStarMapContainer.ActualWidth > 0 ? BrdStarMapContainer.ActualWidth : 1200;
+            double containerHeight = BrdStarMapContainer.ActualHeight > 0 ? BrdStarMapContainer.ActualHeight : 750;
+
+            _isInitializingMap = true;
+            _currentZoom = 1.0;
+            SldMapZoom.Value = 1.0;
+            _isInitializingMap = false;
+
+            StarMapScaleTransform.ScaleX = 1.0;
+            StarMapScaleTransform.ScaleY = 1.0;
+
+            StarMapTranslateTransform.X = (containerWidth / 2.0) - targetCanvasX;
+            StarMapTranslateTransform.Y = (containerHeight / 2.0) - targetCanvasY;
+        }
+
         private void SldMapZoom_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (StarMapScaleTransform == null) return;
-            _currentZoom = e.NewValue;
-            StarMapScaleTransform.ScaleX = _currentZoom;
-            StarMapScaleTransform.ScaleY = _currentZoom;
+            if (_isInitializingMap || StarMapScaleTransform == null || StarMapTranslateTransform == null || BrdStarMapContainer == null) return;
+
+            double oldZoom = _currentZoom;
+            double newZoom = e.NewValue;
+            if (Math.Abs(newZoom - oldZoom) < 0.0001) return;
+
+            double containerWidth = BrdStarMapContainer.ActualWidth > 0 ? BrdStarMapContainer.ActualWidth : 1200;
+            double containerHeight = BrdStarMapContainer.ActualHeight > 0 ? BrdStarMapContainer.ActualHeight : 750;
+            Point centerPos = new Point(containerWidth / 2.0, containerHeight / 2.0);
+
+            double scaleRatio = newZoom / oldZoom;
+            _currentZoom = newZoom;
+
+            StarMapTranslateTransform.X = centerPos.X - (centerPos.X - StarMapTranslateTransform.X) * scaleRatio;
+            StarMapTranslateTransform.Y = centerPos.Y - (centerPos.Y - StarMapTranslateTransform.Y) * scaleRatio;
+
+            StarMapScaleTransform.ScaleX = newZoom;
+            StarMapScaleTransform.ScaleY = newZoom;
         }
 
         private void BtnZoomIn_Click(object sender, RoutedEventArgs e)
         {
-            if (SldMapZoom != null) SldMapZoom.Value = Math.Min(5.0, SldMapZoom.Value + 0.25);
+            if (SldMapZoom != null) SldMapZoom.Value = Math.Min(6.0, SldMapZoom.Value + 0.25);
         }
 
         private void BtnZoomOut_Click(object sender, RoutedEventArgs e)
@@ -147,9 +180,29 @@ namespace AuroraDesignSuite.Views
 
         private void BrdStarMapContainer_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
         {
-            if (SldMapZoom == null) return;
-            double zoomDelta = e.Delta > 0 ? 0.20 : -0.20;
-            SldMapZoom.Value = Math.Clamp(SldMapZoom.Value + zoomDelta, 0.2, 5.0);
+            if (SldMapZoom == null || StarMapScaleTransform == null || StarMapTranslateTransform == null || BrdStarMapContainer == null) return;
+
+            Point mousePos = e.GetPosition(BrdStarMapContainer);
+
+            double oldZoom = _currentZoom;
+            double zoomFactor = e.Delta > 0 ? 1.18 : (1.0 / 1.18);
+            double newZoom = Math.Clamp(oldZoom * zoomFactor, 0.2, 6.0);
+
+            if (Math.Abs(newZoom - oldZoom) < 0.0001) return;
+
+            double scaleRatio = newZoom / oldZoom;
+            _currentZoom = newZoom;
+
+            // Anchor Zoom precisely around mouse cursor position!
+            StarMapTranslateTransform.X = mousePos.X - (mousePos.X - StarMapTranslateTransform.X) * scaleRatio;
+            StarMapTranslateTransform.Y = mousePos.Y - (mousePos.Y - StarMapTranslateTransform.Y) * scaleRatio;
+
+            StarMapScaleTransform.ScaleX = newZoom;
+            StarMapScaleTransform.ScaleY = newZoom;
+
+            _isInitializingMap = true;
+            SldMapZoom.Value = newZoom;
+            _isInitializingMap = false;
         }
 
         private void BrdStarMapContainer_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -181,17 +234,13 @@ namespace AuroraDesignSuite.Views
 
         private void BtnRefreshStarMap_Click(object sender, RoutedEventArgs e)
         {
+            CenterMapOnScreen();
             Render2DStarMap();
         }
 
         private void BtnResetStarMapZoom_Click(object sender, RoutedEventArgs e)
         {
-            if (SldMapZoom != null) SldMapZoom.Value = 1.0;
-            if (StarMapTranslateTransform != null)
-            {
-                StarMapTranslateTransform.X = 0;
-                StarMapTranslateTransform.Y = 0;
-            }
+            CenterMapOnScreen();
             Render2DStarMap();
         }
 
@@ -217,6 +266,12 @@ namespace AuroraDesignSuite.Views
 
             var systems = _dbService.GetDiscoveredSystems(_currentRaceId);
             if (systems.Count == 0) return;
+
+            // Auto-Center if translation was uninitialized
+            if (StarMapTranslateTransform != null && StarMapTranslateTransform.X == 0 && StarMapTranslateTransform.Y == 0)
+            {
+                CenterMapOnScreen(1000, 700);
+            }
 
             bool isOrbitalMode = CmbStarMapViewMode?.SelectedIndex == 0;
 

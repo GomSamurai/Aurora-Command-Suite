@@ -17,10 +17,54 @@ namespace AuroraDesignSuite
         private DateTime _lastDbWriteTime = DateTime.MinValue;
         private double _lastGameTime = -1;
 
+        public static MainWindow? Instance { get; private set; }
+
         public MainWindow()
         {
+            Instance = this;
             InitializeComponent();
             Loaded += MainWindow_Loaded;
+        }
+
+        public void OpenShipDesignInDesigner(ShipDesign design, string? notificationMsg = null)
+        {
+            if (design == null) return;
+
+            if (MainTabControl != null && TabBlueprint != null)
+            {
+                MainTabControl.SelectedItem = TabBlueprint;
+            }
+
+            if (ViewBlueprint != null)
+            {
+                ViewBlueprint.LoadShipDesignIntoDesigner(design);
+            }
+
+            string msg = !string.IsNullOrEmpty(notificationMsg) ? notificationMsg : $"📐 Plano de la nave '{design.ClassName}' cargado correctamente en el Diseñador con todos sus componentes.";
+            MessageBox.Show(msg, "Diseñador de Naves - Plano Cargado", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        public void OpenShipClassInDesigner(int shipClassId, string className)
+        {
+            ShipDesign? design = null;
+            if (_dbService != null)
+            {
+                if (shipClassId > 0)
+                {
+                    design = _dbService.GetShipDesignFromClass(shipClassId);
+                }
+                if (design == null && !string.IsNullOrEmpty(className))
+                {
+                    design = _dbService.GetShipDesignFromClassByName(className);
+                }
+            }
+
+            if (design == null)
+            {
+                design = new ShipDesign { ClassName = className };
+            }
+
+            OpenShipDesignInDesigner(design, $"📐 Clase de nave '{className}' importada desde la base de datos de Aurora 4X al Diseñador.");
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

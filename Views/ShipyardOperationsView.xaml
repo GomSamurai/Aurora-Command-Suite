@@ -61,6 +61,13 @@
 
                     <DataGrid Grid.Row="1" x:Name="DgShipyardTasks" AutoGenerateColumns="False" IsReadOnly="True">
                         <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Acción / Diseñador" Width="130">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="📐 Diseñador" Click="BtnSendTaskToDesigner_Click" Padding="6,2" Margin="2,1" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10.5" ToolTip="Carga la clase que se está fabricando en esta grada directamente en el Diseñador de Naves."/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTextColumn Header="Unidad / Clase en Construcción" Binding="{Binding UnitName}" Width="*"/>
                             <DataGridTextColumn Header="Progreso BP" Binding="{Binding ProgressDisplay}" Width="200"/>
                             <DataGridTemplateColumn Header="Avance" Width="140">

@@ -350,6 +350,41 @@ namespace AuroraDesignSuite.Views
             }
         }
 
+        public void LoadShipDesignIntoDesigner(ShipDesign design, string? tacticalDescription = null)
+        {
+            if (design == null) return;
+
+            if (TxtClassName != null) TxtClassName.Text = string.IsNullOrWhiteSpace(design.ClassName) ? "Clase Importada" : design.ClassName;
+            if (TxtArmorThickness != null) TxtArmorThickness.Text = Math.Max(1, design.ArmorThickness).ToString();
+            if (TxtArmorWidth != null) TxtArmorWidth.Text = Math.Max(1, design.ArmorWidth).ToString();
+            if (TxtDeploymentMonths != null) TxtDeploymentMonths.Text = Math.Max(1, design.PlannedDeploymentMonths).ToString();
+
+            _selectedComponents.Clear();
+            if (design.Components != null)
+            {
+                foreach (var item in design.Components)
+                {
+                    var comp = item.Component ?? new Component { ComponentName = item.ComponentName, TypeName = item.TypeName, ComponentSize = item.TotalHS, Cost = item.TotalCost };
+                    _selectedComponents.Add(new SelectedComponentItem
+                    {
+                        Component = comp,
+                        Quantity = Math.Max(1, item.Quantity)
+                    });
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(tacticalDescription))
+            {
+                ParseTacticalDossier(tacticalDescription);
+            }
+            else
+            {
+                ParseTacticalDossier($"🎯 PROPÓSITO: Plano cargado directamente al Diseñador de Naves desde el juego / auditoría imperial.\n⚓ DOCTRINA: Inspección técnica y calibración en vivo de la clase {design.ClassName}.\n📊 EXPECTATIVAS: Componentes, masa y especificaciones importados con éxito.");
+            }
+
+            Recalculate();
+        }
+
         private void InitializeDatabase(string path)
         {
             if (string.IsNullOrEmpty(path) || !System.IO.File.Exists(path)) return;

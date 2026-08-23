@@ -186,5 +186,16 @@ namespace AuroraDesignSuite.Views
                 RefreshData();
             }
         }
+
+        private void BtnSendShipToDesigner_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is ActiveShip ship)
+            {
+                if (MainWindow.Instance != null)
+                {
+                    MainWindow.Instance.OpenShipClassInDesigner(ship.ShipClassID, ship.ClassName);
+                }
+            }
+        }
     }
 }

@@ -227,5 +227,21 @@ namespace AuroraDesignSuite.Views
             LblCalcRetoolBP.Text = $"{retoolCostBP:N1} BP";
             LblCalcRetoolDays.Text = $"{retoolDays:N0} Días";
         }
+
+        private void BtnSendTaskToDesigner_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is ShipyardTaskInfo task)
+            {
+                if (MainWindow.Instance != null)
+                {
+                    string className = task.UnitName;
+                    if (className.StartsWith("S.M.S. ")) className = className.Substring(7);
+                    if (className.Contains("-")) className = className.Split('-')[0];
+                    className = className.Trim();
+
+                    MainWindow.Instance.OpenShipClassInDesigner(0, className);
+                }
+            }
+        }
     }
 }

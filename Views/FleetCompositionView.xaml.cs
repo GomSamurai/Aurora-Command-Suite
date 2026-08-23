@@ -400,5 +400,16 @@ namespace AuroraDesignSuite.Views
                 }
             }
         }
+
+        private void BtnSendFleetItemToDesigner_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is FleetCompositionItem item)
+            {
+                if (MainWindow.Instance != null && item.Design != null)
+                {
+                    MainWindow.Instance.OpenShipDesignInDesigner(item.Design);
+                }
+            }
+        }
     }
 }

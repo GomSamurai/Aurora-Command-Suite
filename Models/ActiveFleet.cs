@@ -5,6 +5,7 @@ namespace AuroraDesignSuite.Models
     public class ActiveShip
     {
         public int ShipID { get; set; }
+        public int ShipClassID { get; set; }
         public string ShipName { get; set; } = string.Empty;
         public int HullNumber { get; set; }
         public string ClassName { get; set; } = string.Empty;

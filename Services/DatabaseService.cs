@@ -1363,7 +1363,7 @@ namespace AuroraDesignSuite.Services
                 foreach (var fleet in fleets)
                 {
                     string shipQuery = @"
-                        SELECT s.ShipID, s.ShipName, s.HullNumber, s.Fuel, s.CrewMorale, s.CurrentMaintSupplies,
+                        SELECT s.ShipID, s.ShipClassID, s.ShipName, s.HullNumber, s.Fuel, s.CrewMorale, s.CurrentMaintSupplies,
                                c.ClassName, c.Size as ClassSize, c.FuelCapacity as MaxFuel
                         FROM FCT_Ship s
                         LEFT JOIN FCT_ShipClass c ON s.ShipClassID = c.ShipClassID
@@ -1385,10 +1385,12 @@ namespace AuroraDesignSuite.Services
                         var morale = shipReader["CrewMorale"] != DBNull.Value ? Convert.ToDouble(shipReader["CrewMorale"]) * 100.0 : 100.0;
                         var msp = shipReader["CurrentMaintSupplies"] != DBNull.Value ? Convert.ToDouble(shipReader["CurrentMaintSupplies"]) : 0.0;
                         var hullNo = shipReader["HullNumber"] != DBNull.Value ? Convert.ToInt32(shipReader["HullNumber"]) : 1;
+                        var classId = shipReader["ShipClassID"] != DBNull.Value ? Convert.ToInt32(shipReader["ShipClassID"]) : 0;
 
                         var ship = new ActiveShip
                         {
                             ShipID = Convert.ToInt32(shipReader["ShipID"]),
+                            ShipClassID = classId,
                             ShipName = shipReader["ShipName"].ToString() ?? "Warship",
                             HullNumber = hullNo,
                             ClassName = shipReader["ClassName"].ToString() ?? "Unknown Class",
@@ -3100,6 +3102,125 @@ namespace AuroraDesignSuite.Services
                 System.Diagnostics.Debug.WriteLine($"GetCompanyNames Error: {ex.Message}");
             }
             return companies;
+        }
+
+        public ShipDesign? GetShipDesignFromClass(int shipClassId)
+        {
+            if (shipClassId <= 0) return null;
+
+            try
+            {
+                using var conn = GetConnection();
+                string classSql = @"
+                    SELECT ShipClassID, ClassName, Size, Cost, Crew, FuelCapacity, ArmourThickness, ArmourWidth, 
+                           PlannedDeployment, MaintSupplies, MaxSpeed, MilitaryEngines
+                    FROM FCT_ShipClass
+                    WHERE ShipClassID = @classId
+                    LIMIT 1";
+
+                using var cmd = new SqliteCommand(classSql, conn);
+                cmd.Parameters.AddWithValue("@classId", shipClassId);
+                using var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    var design = new ShipDesign
+                    {
+                        ClassName = reader["ClassName"]?.ToString() ?? "Clase Desconocida",
+                        ArmorThickness = reader["ArmourThickness"] != DBNull.Value ? Convert.ToInt32(reader["ArmourThickness"]) : 1,
+                        ArmorWidth = reader["ArmourWidth"] != DBNull.Value ? Convert.ToInt32(reader["ArmourWidth"]) : 10,
+                        PlannedDeploymentMonths = reader["PlannedDeployment"] != DBNull.Value ? Convert.ToInt32(reader["PlannedDeployment"]) : 12,
+                        IsMilitary = reader["MilitaryEngines"] == DBNull.Value || Convert.ToInt32(reader["MilitaryEngines"]) > 0
+                    };
+
+                    // Query components in FCT_ClassComponent + FCT_ShipComponentTemplate / FCT_TechSystem
+                    string compSql = @"
+                        SELECT cc.ComponentID, cc.NumComponent, 
+                               COALESCE(t.ComponentName, tech.Name, 'Componente #' || cc.ComponentID) as CompName,
+                               COALESCE(t.ComponentSize, 1.0) as CompSize,
+                               COALESCE(t.ComponentValue, tech.DevelopCost, 1.0) as CompCost,
+                               COALESCE(dt.TypeDescription, 'Componente Especial') as TypeName
+                        FROM FCT_ClassComponent cc
+                        LEFT JOIN FCT_ShipComponentTemplate t ON cc.ComponentID = t.ShipComponentTemplateID
+                        LEFT JOIN FCT_TechSystem tech ON cc.ComponentID = tech.TechSystemID
+                        LEFT JOIN DIM_ComponentType dt ON t.ComponentTypeID = dt.ComponentTypeID
+                        WHERE cc.ClassID = @classId";
+
+                    using var compCmd = new SqliteCommand(compSql, conn);
+                    compCmd.Parameters.AddWithValue("@classId", shipClassId);
+                    using var compReader = compCmd.ExecuteReader();
+                    while (compReader.Read())
+                    {
+                        int compId = Convert.ToInt32(compReader["ComponentID"]);
+                        int qty = Convert.ToInt32(compReader["NumComponent"]);
+                        string compName = compReader["CompName"].ToString() ?? "Componente";
+                        double size = Convert.ToDouble(compReader["CompSize"]);
+                        double cost = Convert.ToDouble(compReader["CompCost"]);
+                        string typeName = compReader["TypeName"].ToString() ?? "General";
+
+                        design.Components.Add(new SelectedComponentItem
+                        {
+                            Component = new Component
+                            {
+                                ComponentID = compId,
+                                ComponentName = compName,
+                                TypeName = typeName,
+                                ComponentSize = size,
+                                Cost = cost
+                            },
+                            Quantity = qty
+                        });
+                    }
+
+                    return design;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching ship design for class {shipClassId}: {ex.Message}");
+            }
+            return null;
+        }
+
+        public ShipDesign? GetShipDesignFromClassByName(string className)
+        {
+            if (string.IsNullOrWhiteSpace(className)) return null;
+
+            try
+            {
+                using var conn = GetConnection();
+                string query = "SELECT ShipClassID FROM FCT_ShipClass WHERE ClassName = @name LIMIT 1";
+                using var cmd = new SqliteCommand(query, conn);
+                cmd.Parameters.AddWithValue("@name", className);
+                object? res = cmd.ExecuteScalar();
+                if (res != null && res != DBNull.Value)
+                {
+                    return GetShipDesignFromClass(Convert.ToInt32(res));
+                }
+            }
+            catch { }
+
+            return null;
+        }
+
+        public ShipDesign? GetShipDesignFromShipId(int shipId)
+        {
+            if (shipId <= 0) return null;
+
+            try
+            {
+                using var conn = GetConnection();
+                string query = "SELECT ShipClassID FROM FCT_Ship WHERE ShipID = @shipId LIMIT 1";
+                using var cmd = new SqliteCommand(query, conn);
+                cmd.Parameters.AddWithValue("@shipId", shipId);
+                object? res = cmd.ExecuteScalar();
+                if (res != null && res != DBNull.Value)
+                {
+                    return GetShipDesignFromClass(Convert.ToInt32(res));
+                }
+            }
+            catch { }
+
+            return null;
         }
     }
 }

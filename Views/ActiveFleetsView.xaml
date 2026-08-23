@@ -60,6 +60,13 @@
 
                     <DataGrid x:Name="DgActiveShips" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgActiveShips_SelectionChanged">
                         <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Acción / Diseñador" Width="130">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="📐 Diseñador" Click="BtnSendShipToDesigner_Click" Padding="6,2" Margin="2,1" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10.5" ToolTip="Carga el plano completo de esta nave y todos sus componentes en el Diseñador de Naves."/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTextColumn Header="Nombre de Nave" Binding="{Binding ShipName}" Width="*"/>
                             <DataGridTextColumn Header="Casco #" Binding="{Binding HullNumber}" Width="65"/>
                             <DataGridTextColumn Header="Clase" Binding="{Binding ClassName}" Width="160"/>

@@ -308,24 +308,35 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="Tipo" Binding="{Binding TypeName}" IsReadOnly="True" Width="85"/>
-                            <DataGridTextColumn Header="Cant." Binding="{Binding Quantity}" Width="40"/>
+                            <DataGridTextColumn Header="Tipo" Binding="{Binding TypeName}" IsReadOnly="True" Width="90"/>
+                            <DataGridTextColumn Header="Cant." Binding="{Binding Quantity}" Width="45"/>
 
-                            <!-- Combined Unit & Highlighted Total Weight Column -->
-                            <DataGridTemplateColumn Header="Peso (Unit. ➔ Total)" IsReadOnly="True" Width="160">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding UnitWeightFormatted}" Foreground="{DynamicResource TextPrimaryBrush}"/>
-                                            <TextBlock Text="{Binding TotalWeightFormatted}" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                            <!-- Clean Unit Weight Column with Rich Total Weight ToolTip -->
+                            <DataGridTextColumn Header="Peso" Binding="{Binding UnitWeightDisplay}" IsReadOnly="True" Width="90">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="ToolTip" Value="{Binding WeightToolTip}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
 
-                            <DataGridTextColumn Header="Costo (BP)" Binding="{Binding CostDisplay}" IsReadOnly="True" Width="85"/>
-                            <DataGridTextColumn Header="Tripulación" Binding="{Binding CrewDisplay}" IsReadOnly="True" Width="75"/>
-                            <DataGridTextColumn Header="Especificación" Binding="{Binding KeySpecDisplay}" IsReadOnly="True" Width="145"/>
+                            <DataGridTextColumn Header="Costo BP" Binding="{Binding TotalCostBP, StringFormat={}{0:N1}}" IsReadOnly="True" Width="65">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="ToolTip" Value="{Binding CostToolTip}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Tripulación" Binding="{Binding TotalCrew, StringFormat={}{0:N0}}" IsReadOnly="True" Width="70">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="ToolTip" Value="{Binding CrewToolTip}"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Especificación" Binding="{Binding KeySpecDisplay}" IsReadOnly="True" Width="135"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

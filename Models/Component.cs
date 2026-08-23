@@ -83,6 +83,18 @@ namespace AuroraDesignSuite.Models
         public int TotalCrew => UnitCrew * Quantity;
         public string CrewDisplay => Quantity > 1 ? $"{UnitCrew:N0} / {TotalCrew:N0}" : $"{TotalCrew:N0}";
 
+        public string WeightToolTip => Quantity > 1 
+            ? $"📏 Peso Unitario: {UnitHS:N1} HS ({UnitTons:N0} t)\n⚖️ Peso Total Acumulado ({Quantity}x): {TotalHS:N1} HS ({TotalTons:N0} t)" 
+            : $"📏 Peso Unitario: {UnitHS:N1} HS ({UnitTons:N0} t)";
+
+        public string CostToolTip => Quantity > 1 
+            ? $"💰 Costo Unitario: {UnitCost:N1} BP\n💎 Costo Total Acumulado ({Quantity}x): {TotalCost:N1} BP" 
+            : $"💰 Costo Unitario: {UnitCost:N1} BP";
+
+        public string CrewToolTip => Quantity > 1 
+            ? $"👨‍✈️ Tripulación Unitaria: {UnitCrew:N0}\n👥 Tripulación Total Acumulada ({Quantity}x): {TotalCrew:N0}" 
+            : $"👨‍✈️ Tripulación Unitaria: {UnitCrew:N0}";
+
         public string KeySpecDisplay => Component?.KeySpecDisplay ?? "";
 
         public override string ToString() => Component?.ComponentName ?? "Componente Naval";

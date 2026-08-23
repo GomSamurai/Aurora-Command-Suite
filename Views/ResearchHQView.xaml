@@ -24,15 +24,15 @@
         <!-- Left Column: Fluid Responsive Layout (Fills 100% Screen Height) -->
         <Grid Grid.Column="0" Margin="0,0,4,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*" MinHeight="140"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="1*" MinHeight="180"/>
                 <RowDefinition Height="6"/>
-                <RowDefinition Height="1.5*" MinHeight="180"/>
+                <RowDefinition Height="1.5*" MinHeight="200"/>
             </Grid.RowDefinitions>
 
-            <!-- Card 1: Active Research Projects (Row 0) -->
-            <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+            <!-- Card 1: Active Research Projects & Integrated Global Telemetry (Row 0) -->
+            <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
                 <DockPanel>
+                    <!-- Header Bar -->
                     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,6">
                         <TextBlock Text="🔬 PROYECTOS DE INVESTIGACIÓN ACTIVOS EN VIVO (CON FECHA ESTIMADA DE COMPLETADO)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -44,6 +44,46 @@
                         </StackPanel>
                     </DockPanel>
 
+                    <!-- Integrated Global Telemetry Footer (Fixed Docked to Bottom of Card 1) -->
+                    <Border DockPanel.Dock="Bottom" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,6,0,0">
+                        <Grid x:Name="PnlGlobalTelemetry">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="📊 TELEMETRÍA GLOBAL:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,12,0"/>
+
+                            <UniformGrid Grid.Column="1" Columns="4">
+                                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="Total Labs: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
+                                        <TextBlock x:Name="LblGlobalTotalLabs" Text="17 Labs" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10.5"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="Ocupación: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
+                                        <TextBlock x:Name="LblGlobalLabsInUse" Text="17/0 (100%)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="RP Bruta/Año: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
+                                        <TextBlock x:Name="LblGlobalTotalRpYear" Text="3,400 RP" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="Bono Promedio: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
+                                        <TextBlock x:Name="LblGlobalAvgBonus" Text="+23.5%" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5"/>
+                                    </StackPanel>
+                                </Border>
+                            </UniformGrid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Active Projects DataGrid (Fills Remaining Space inside Card 1) -->
                     <DataGrid x:Name="DgResearchProjects" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgResearchProjects_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Tecnología en Desarrollo" Binding="{Binding TechName}" Width="190"/>
@@ -57,47 +97,8 @@
                 </DockPanel>
             </Border>
 
-            <!-- Card 2: Compact Horizontal Imperial Global Telemetry (Row 1) -->
-            <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,0,0,8">
-                <Grid x:Name="PnlGlobalTelemetry">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Grid.Column="0" Text="📊 TELEMETRÍA GLOBAL:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,12,0"/>
-
-                    <UniformGrid Grid.Column="1" Columns="4">
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock Text="Total Labs: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                                <TextBlock x:Name="LblGlobalTotalLabs" Text="17 Labs" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10.5"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock Text="Ocupación: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                                <TextBlock x:Name="LblGlobalLabsInUse" Text="17/0 (100%)" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock Text="RP Bruta/Año: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                                <TextBlock x:Name="LblGlobalTotalRpYear" Text="3,400 RP" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,4" Margin="2,0">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock Text="Bono Promedio: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
-                                <TextBlock x:Name="LblGlobalAvgBonus" Text="+23.5%" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" FontSize="10.5"/>
-                            </StackPanel>
-                        </Border>
-                    </UniformGrid>
-                </Grid>
-            </Border>
-
-            <!-- Vertical GridSplitter for Resizing Active Projects and Tech Tree (Row 2) -->
-            <GridSplitter Grid.Row="2" Height="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Cursor="SizeNS" ShowsPreview="True" ToolTip="Arrastra verticalmente para redimensionar los proyectos activos y el catálogo de tecnologías">
+            <!-- Vertical GridSplitter directly between Active Projects and Tech Tree (Row 1) -->
+            <GridSplitter Grid.Row="1" Height="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Cursor="SizeNS" ShowsPreview="True" ToolTip="Arrastra verticalmente para redimensionar los proyectos activos y el catálogo de tecnologías">
                 <GridSplitter.Template>
                     <ControlTemplate TargetType="GridSplitter">
                         <Border Background="{DynamicResource BorderBrush}" Height="2" VerticalAlignment="Center"/>
@@ -105,8 +106,8 @@
                 </GridSplitter.Template>
             </GridSplitter>
 
-            <!-- Card 3: Tech Tree Catalog with Search Filter (Row 3 - Fills Remaining Screen Height!) -->
-            <Border Grid.Row="3" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
+            <!-- Card 2: Tech Tree Catalog with Search Filter (Row 2 - Fills Remaining Screen Height!) -->
+            <Border Grid.Row="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
                         <TextBlock Text="🌳 ÁRBOLES Y TECNOLOGÍAS INVESTIGABLES (FCT_TechData)" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>

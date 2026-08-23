@@ -1907,8 +1907,12 @@ namespace AuroraDesignSuite.Services
                         avgMoralePercent = morale;
                     }
 
-                    // CRITICAL FIX: Only include fleets that actually have active ships (ShipCount > 0)!
-                    if (shipCount == 0) continue;
+                    if (shipCount == 0)
+                    {
+                        flagship = "Sin Naves (Flota Vacía)";
+                        avgFuelPercent = 0.0;
+                        avgMoralePercent = 100.0;
+                    }
 
                     list.Add(new EmpireFleetSummaryItem
                     {

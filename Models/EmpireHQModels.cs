@@ -32,8 +32,8 @@ namespace AuroraDesignSuite.Models
         public string ShipsDisplay => $"{ShipCount} Naves";
         public string SpeedDisplay => $"{SpeedKmS:N0} km/s";
         public string HeadingDisplay => SpeedKmS > 0 ? $"{SpeedKmS:N0} km/s (Rumbo {Bearing:F0}° ↗)" : "Estacionario en Órbita";
-        public string FuelDisplay => $"{FuelPercent:F0}%";
-        public string MoraleDisplay => $"{MoralePercent:F0}%";
+        public string FuelDisplay => ShipCount > 0 ? $"{FuelPercent:F0}%" : "N/A";
+        public string MoraleDisplay => ShipCount > 0 ? $"{MoralePercent:F0}%" : "N/A";
     }
 
     public class EmpireOfficerSummary

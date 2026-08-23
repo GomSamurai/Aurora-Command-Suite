@@ -234,45 +234,45 @@
                         <!-- Header & Badges -->
                         <DockPanel Margin="0,0,0,6">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="📖 DOSSIER TÁCTICO &amp; ESPECIFICACIONES DE CLASE" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
-                                <Border x:Name="BdrPresetTypeTag" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="3" Padding="6,1" Margin="8,0,0,0">
-                                    <TextBlock x:Name="TxtPresetTypeTag" Text="📌 Preset Oficial Marina Imperial" Foreground="{DynamicResource AccentCyanBrush}" FontSize="9.5" FontWeight="Bold"/>
+                                <TextBlock Text="📖 DOSSIER TÁCTICO &amp; ESPECIFICACIONES DE CLASE" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="13"/>
+                                <Border x:Name="BdrPresetTypeTag" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="3" Padding="6,2" Margin="8,0,0,0">
+                                    <TextBlock x:Name="TxtPresetTypeTag" Text="📌 Preset Oficial Marina Imperial" Foreground="{DynamicResource AccentCyanBrush}" FontSize="11" FontWeight="Bold"/>
                                 </Border>
                             </StackPanel>
-                            <TextBlock Text="✍️ Editables en Diseños del Usuario" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <TextBlock Text="✍️ Editables en Diseños del Usuario" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         </DockPanel>
 
                         <!-- Clean Unified 4-Section Grid -->
                         <UniformGrid Columns="2" Rows="2">
                             <!-- Section 1: Purpose -->
-                            <Border Background="#09131C" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
+                            <Border Background="#09131C" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="3">
                                 <StackPanel>
-                                    <TextBlock Text="🎯 1. PROPÓSITO DE DISEÑO &amp; ROL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="9.5" Margin="0,0,0,2"/>
-                                    <TextBox x:Name="TxtDossierPurpose" Text="Propósito..." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" MinHeight="36" MaxHeight="52" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+                                    <TextBlock Text="🎯 1. PROPÓSITO DE DISEÑO &amp; ROL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5" Margin="0,0,0,4"/>
+                                    <TextBox x:Name="TxtDossierPurpose" Text="Propósito..." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12.5" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" MinHeight="44" MaxHeight="68" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
                                 </StackPanel>
                             </Border>
 
                             <!-- Section 2: Doctrine -->
-                            <Border Background="#09131C" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
+                            <Border Background="#09131C" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="3">
                                 <StackPanel>
-                                    <TextBlock Text="⚓ 2. DOCTRINA OPERATIVA &amp; SINERGIAS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="9.5" Margin="0,0,0,2"/>
-                                    <TextBox x:Name="TxtDossierDoctrine" Text="Doctrina..." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" MinHeight="36" MaxHeight="52" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+                                    <TextBlock Text="⚓ 2. DOCTRINA OPERATIVA &amp; SINERGIAS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5" Margin="0,0,0,4"/>
+                                    <TextBox x:Name="TxtDossierDoctrine" Text="Doctrina..." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12.5" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" MinHeight="44" MaxHeight="68" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
                                 </StackPanel>
                             </Border>
 
                             <!-- Section 3: Performance -->
-                            <Border Background="#09131C" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
+                            <Border Background="#09131C" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="3">
                                 <StackPanel>
-                                    <TextBlock Text="📊 3. RENDIMIENTO &amp; LÍMITES TÁCTICOS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="9.5" Margin="0,0,0,2"/>
-                                    <TextBox x:Name="TxtDossierExpectations" Text="Rendimiento..." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" MinHeight="36" MaxHeight="52" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+                                    <TextBlock Text="📊 3. RENDIMIENTO &amp; LÍMITES TÁCTICOS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5" Margin="0,0,0,4"/>
+                                    <TextBox x:Name="TxtDossierExpectations" Text="Rendimiento..." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12.5" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" MinHeight="44" MaxHeight="68" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
                                 </StackPanel>
                             </Border>
 
                             <!-- Section 4: Physical Scale -->
-                            <Border Background="#09131C" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6" Margin="2">
+                            <Border Background="#09131C" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="3">
                                 <StackPanel>
-                                    <TextBlock Text="📏 4. PERFIL DE MAGNITUD EN PUERTO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="9.5" Margin="0,0,0,2"/>
-                                    <TextBox x:Name="TxtDossierScaleProfile" Text="Presencia física..." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" MinHeight="36" MaxHeight="52" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+                                    <TextBlock Text="📏 4. PERFIL DE MAGNITUD EN PUERTO" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5" Margin="0,0,0,4"/>
+                                    <TextBox x:Name="TxtDossierScaleProfile" Text="Presencia física..." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12.5" TextWrapping="Wrap" Background="Transparent" BorderThickness="0" MinHeight="44" MaxHeight="68" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
                                 </StackPanel>
                             </Border>
                         </UniformGrid>

@@ -71,9 +71,11 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Tipo" Binding="{Binding TypeName}" Width="100"/>
-                        <DataGridTextColumn Header="HS" Binding="{Binding ComponentSize, StringFormat={}{0:F1}}" Width="45"/>
-                        <DataGridTextColumn Header="BP" Binding="{Binding Cost, StringFormat={}{0:N0}}" Width="50"/>
+                        <DataGridTextColumn Header="Tipo" Binding="{Binding TypeName}" Width="90"/>
+                        <DataGridTextColumn Header="Peso (HS/t)" Binding="{Binding UnitWeightDisplay}" Width="100"/>
+                        <DataGridTextColumn Header="BP" Binding="{Binding Cost, StringFormat={}{0:N1}}" Width="50"/>
+                        <DataGridTextColumn Header="Trip." Binding="{Binding Crew}" Width="45"/>
+                        <DataGridTextColumn Header="Especificación Clave" Binding="{Binding KeySpecDisplay}" Width="125"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>
@@ -298,12 +300,21 @@
                     </Grid>
                     <DataGrid Grid.Row="1" x:Name="DgSelectedComponents" AutoGenerateColumns="False" CanUserAddRows="False" CellEditEnding="DgSelectedComponents_CellEditEnding">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Componente" Binding="{Binding Component.ComponentName}" IsReadOnly="True" Width="*"/>
-                            <DataGridTextColumn Header="Tipo" Binding="{Binding Component.TypeName}" IsReadOnly="True" Width="100"/>
-                            <DataGridTextColumn Header="Cant." Binding="{Binding Quantity}" Width="55"/>
-                            <DataGridTextColumn Header="Total HS" Binding="{Binding TotalHS, StringFormat={}{0:F1}}" IsReadOnly="True" Width="65"/>
-                            <DataGridTextColumn Header="Total BP" Binding="{Binding TotalCostBP, StringFormat={}{0:N1}}" IsReadOnly="True" Width="65"/>
-                            <DataGridTextColumn Header="Tripulación" Binding="{Binding TotalCrew, StringFormat={}{0:N0}}" IsReadOnly="True" Width="75"/>
+                            <DataGridTextColumn Header="Componente" Binding="{Binding ComponentName}" IsReadOnly="True" Width="*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="ToolTip" Value="{Binding ComponentName}"/>
+                                        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Tipo" Binding="{Binding TypeName}" IsReadOnly="True" Width="95"/>
+                            <DataGridTextColumn Header="Cant." Binding="{Binding Quantity}" Width="45"/>
+                            <DataGridTextColumn Header="Peso Unit. (HS/t)" Binding="{Binding UnitWeightDisplay}" IsReadOnly="True" Width="105"/>
+                            <DataGridTextColumn Header="Peso Total (HS/t)" Binding="{Binding TotalWeightDisplay}" IsReadOnly="True" Width="110"/>
+                            <DataGridTextColumn Header="Costo (Unit / Total)" Binding="{Binding CostDisplay}" IsReadOnly="True" Width="105"/>
+                            <DataGridTextColumn Header="Tripulación (Unit / Total)" Binding="{Binding CrewDisplay}" IsReadOnly="True" Width="115"/>
+                            <DataGridTextColumn Header="Especificación Clave" Binding="{Binding KeySpecDisplay}" IsReadOnly="True" Width="135"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

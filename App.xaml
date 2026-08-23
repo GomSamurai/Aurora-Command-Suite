@@ -11,6 +11,7 @@
         <Color x:Key="CardHeaderColor">#1B2333</Color>
         <Color x:Key="AccentCyanColor">#00F0FF</Color>
         <Color x:Key="AccentAmberColor">#FFB700</Color>
+        <Color x:Key="AccentGoldColor">#FFD700</Color>
         <Color x:Key="AccentGreenColor">#00FF88</Color>
         <Color x:Key="AccentRedColor">#FF5555</Color>
         <Color x:Key="AccentPurpleColor">#BF5AF2</Color>
@@ -23,6 +24,7 @@
         <SolidColorBrush x:Key="CardHeaderBrush" Color="{StaticResource CardHeaderColor}"/>
         <SolidColorBrush x:Key="AccentCyanBrush" Color="{StaticResource AccentCyanColor}"/>
         <SolidColorBrush x:Key="AccentAmberBrush" Color="{StaticResource AccentAmberColor}"/>
+        <SolidColorBrush x:Key="AccentGoldBrush" Color="{StaticResource AccentGoldColor}"/>
         <SolidColorBrush x:Key="AccentGreenBrush" Color="{StaticResource AccentGreenColor}"/>
         <SolidColorBrush x:Key="AccentRedBrush" Color="{StaticResource AccentRedColor}"/>
         <SolidColorBrush x:Key="AccentPurpleBrush" Color="{StaticResource AccentPurpleColor}"/>

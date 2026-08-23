@@ -23,6 +23,7 @@ namespace AuroraDesignSuite.Services
         
         public string AccentCyan { get; set; } = "#00F0FF";
         public string AccentAmber { get; set; } = "#FFB700";
+        public string AccentGold { get; set; } = "#FFD700";
         public string AccentGreen { get; set; } = "#00FF88";
         public string AccentRed { get; set; } = "#FF5555";
         public string AccentPurple { get; set; } = "#BF5AF2";
@@ -447,6 +448,7 @@ namespace AuroraDesignSuite.Services
             
             SetResource(res, "AccentCyanColor", "AccentCyanBrush", theme.AccentCyan);
             SetResource(res, "AccentAmberColor", "AccentAmberBrush", theme.AccentAmber);
+            SetResource(res, "AccentGoldColor", "AccentGoldBrush", string.IsNullOrEmpty(theme.AccentGold) ? "#FFD700" : theme.AccentGold);
             SetResource(res, "AccentGreenColor", "AccentGreenBrush", theme.AccentGreen);
             SetResource(res, "AccentRedColor", "AccentRedBrush", theme.AccentRed);
             SetResource(res, "AccentPurpleColor", "AccentPurpleBrush", theme.AccentPurple);

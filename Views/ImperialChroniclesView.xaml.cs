@@ -63,5 +63,13 @@ namespace AuroraDesignSuite.Views
         {
             RefreshData();
         }
+
+        private void TxtFormattedMessage_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (sender is TextBlock tb && tb.DataContext is ImperialChronicleEvent ev)
+            {
+                ChronicleMessageFormatter.FormatMessageToTextBlock(tb, ev.MessageText);
+            }
+        }
     }
 }

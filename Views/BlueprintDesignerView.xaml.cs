@@ -98,163 +98,163 @@ namespace AuroraDesignSuite.Views
 
             // 1. Destructores
             AddPreset(ref idx, "🚀 DDG Artemis - Destructor Lanzamisiles de Flota (9,000 t)", "1. Destructores (DD / DDG / PD)", 
-                "🎯 PROPÓSITO: Destructor de escolta y combate de misiles antibuque de medio y largo alcance.\n⚓ DOCTRINA: Opera en la vanguardia de la flota lanzando salvas concentradas de misiles pesados mientras mantiene distancia de seguridad del fuego beam enemigo.\n📊 EXPECTATIVAS: Alta cadencia VLS, radar activo de búsqueda de 96Mkm y 4 capas de blindaje composite.");
+                "🎯 PROPÓSITO: Destructor de escolta y combate de misiles antibuque de medio y largo alcance.\n⚓ DOCTRINA: Opera en la vanguardia de la flota lanzando salvas concentradas de misiles pesados mientras mantiene distancia de seguridad del fuego beam enemigo.\n📊 EXPECTATIVAS: Alta cadencia VLS, radar activo de búsqueda de 96Mkm y 4 capas de blindaje composite.\n📏 MAGNITUD EN PUERTO: Con sus 185 metros de longitud y 9,000 toneladas, esta nave es tan grande como el Coliseo Romano de extremo a extremo. Su imponente casco domina las bahías de atracamiento del dique orbital.");
 
             AddPreset(ref idx, "🛡️ DD-PD Aegis-G - Destructor Escolta Defensa de Punto (8,500 t)", "1. Destructores (DD / DDG / PD)",
-                "🎯 PROPÓSITO: Destructor especializado en defensa de punto (AMM/PD) para protección de portaaviones y cruceros.\n⚓ DOCTRINA: Se posiciona en el centro del grupo de batalla entrelazando barreras Gauss y cañones de energía para interceptar salvas masivas de misiles enemigos.\n📊 EXPECTATIVAS: Intercepción de hasta 12 misiles por turno de 5s, recarga rápida de capacitores y escudos Alpha.");
+                "🎯 PROPÓSITO: Destructor especializado en defensa de punto (AMM/PD) para protección de portaaviones y cruceros.\n⚓ DOCTRINA: Se posiciona en el centro del grupo de batalla entrelazando barreras Gauss y cañones de energía para interceptar salvas masivas de misiles enemigos.\n📊 EXPECTATIVAS: Intercepción de hasta 12 misiles por turno de 5s, recarga rápida de capacitores y escudos Alpha.\n📏 MAGNITUD EN PUERTO: Eslora de 180 metros (equivalente a 2 campos de fútbol juntos) repleta de torretas antiaéreas y sensores de seguimiento.");
 
             AddPreset(ref idx, "💥 DD-Beam Lancer - Destructor Láser Espinal (9,500 t)", "1. Destructores (DD / DDG / PD)",
-                "🎯 PROPÓSITO: Destructor cazador con cañón láser espinal de alto calibre.\n⚓ DOCTRINA: Diseñado para emboscadas a corta distancia a través de puntos de salto y combate en cerrado contra cruceros blindados.\n📊 EXPECTATIVAS: Gran potencia de perforación de blindaje, velocidad militar de 4,200 km/s y recarga de capacitores en 15s.");
+                "🎯 PROPÓSITO: Destructor cazador con cañón láser espinal de alto calibre.\n⚓ DOCTRINA: Diseñado para emboscadas a corta distancia a través de puntos de salto y combate en cerrado contra cruceros blindados.\n📊 EXPECTATIVAS: Gran potencia de perforación de blindaje, velocidad militar de 4,200 km/s y recarga de capacitores en 15s.\n📏 MAGNITUD EN PUERTO: Casco afilado de 190 metros de largo cuya espina dorsal está ocupada enteramente por el focalizador del cañón láser gigante.");
 
             AddPreset(ref idx, "🌌 DDJ Pathbreaker - Destructor Líder de Salto (10,000 t)", "1. Destructores (DD / DDG / PD)",
-                "🎯 PROPÓSITO: Destructor nave insignia de salto equipado con motor de salto táctico.\n⚓ DOCTRINA: Guía a flotillas de destructores a través de puntos de salto no estabilizados sin depender de puertas estelares.\n📊 EXPECTATIVAS: Motor de salto militar para 10,000t, sensores de corto alcance y defensa antiaérea.");
+                "🎯 PROPÓSITO: Destructor nave insignia de salto equipado con motor de salto táctico.\n⚓ DOCTRINA: Guía a flotillas de destructores a través de puntos de salto no estabilizados sin depender de puertas estelares.\n📊 EXPECTATIVAS: Motor de salto militar para 10,000t, sensores de corto alcance y defensa antiaérea.\n📏 MAGNITUD EN PUERTO: 195 metros de longitud albergando la inmensa bobina de distorsión gravitacional trans-newtoniana.");
 
             AddPreset(ref idx, "📦 DDB Barrage - Destructor Emboscada Box Launchers (8,000 t)", "1. Destructores (DD / DDG / PD)",
-                "🎯 PROPÓSITO: Destructor de ataque relámpago con lanzadores desechables Box Launchers.\n⚓ DOCTRINA: Descarga toda su munición en un único turno masivo de saturación y se retira a reabastecer a la base orbital.\n📊 EXPECTATIVAS: Salva devastadora de 24 misiles simultáneos a un costo de construcción mínimo.");
+                "🎯 PROPÓSITO: Destructor de ataque relámpago con lanzadores desechables Box Launchers.\n⚓ DOCTRINA: Descarga toda su munición en un único turno masivo de saturación y se retira a reabastecer a la base orbital.\n📊 EXPECTATIVAS: Salva devastadora de 24 misiles simultáneos a un costo de construcción mínimo.\n📏 MAGNITUD EN PUERTO: 175 metros de eslora cubiertos de bahías de lanzamiento selladas listas para ráfagas relámpago.");
 
             // 2. Cruceros
             AddPreset(ref idx, "💥 CA Vindicator - Crucero Pesado Beam de Línea (20,000 t)", "2. Cruceros (CA / CC / CG / BC)",
-                "🎯 PROPÓSITO: Crucero pesado de línea con batería principal de armas de energía y blindaje reforzado.\n⚓ DOCTRINA: Buque insignia de línea de batalla. Sostiene el combate directo contra naves de guerra alienígenas.\n📊 EXPECTATIVAS: 6 capas de blindaje, generadores de escudo Alpha, 4 baterías láser pesadas y autonomía de 24 meses.");
+                "🎯 PROPÓSITO: Crucero pesado de línea con batería principal de armas de energía y blindaje reforzado.\n⚓ DOCTRINA: Buque insignia de línea de batalla. Sostiene el combate directo contra naves de guerra alienígenas.\n📊 EXPECTATIVAS: 6 capas de blindaje, generadores de escudo Alpha, 4 baterías láser pesadas y autonomía de 24 meses.\n📏 MAGNITUD EN PUERTO: 270 metros de longitud (tan largo como un portaaviones supercarrier de la Tierra o la Torre Eiffel echada). Una fortaleza que intimida a cualquier invasor.");
 
             AddPreset(ref idx, "📡 CC Oracle - Crucero de Mando y Sensores AWACS (18,000 t)", "2. Cruceros (CA / CC / CG / BC)",
-                "🎯 PROPÓSITO: Crucero de mando, guerra electrónica y alerta temprana AWACS.\n⚓ DOCTRINA: Permanece en el centro del comando imperial escaneando el sistema con sensores pasivos/activos de ultra alcance.\n📊 EXPECTATIVAS: Detección activa a más de 200Mkm, coordinación de flota y centro de oficiales superiores.");
+                "🎯 PROPÓSITO: Crucero de mando, guerra electrónica y alerta temprana AWACS.\n⚓ DOCTRINA: Permanece en el centro del comando imperial escaneando el sistema con sensores pasivos/activos de ultra alcance.\n📊 EXPECTATIVAS: Detección activa a más de 200Mkm, coordinación de flota y centro de oficiales superiores.\n📏 MAGNITUD EN PUERTO: 255 metros de eslora erizada de cúpulas de sensores térmicos y reflectores activos gigantes.");
 
             AddPreset(ref idx, "🚀 CG Titan - Crucero Lanzamisiles Pesado (22,000 t)", "2. Cruceros (CA / CC / CG / BC)",
-                "🎯 PROPÓSITO: Crucero pesado de bombardeo y combate de misiles de largo alcance.\n⚓ DOCTRINA: Lanza ataques de saturación contra flotas de combate enemigas y bases estelares.\n📊 EXPECTATIVAS: Pañoles masivos de misiles tamaño 6, sensores de control de tiro de 120Mkm y 6 capas de blindaje.");
+                "🎯 PROPÓSITO: Crucero pesado de bombardeo y combate de misiles de largo alcance.\n⚓ DOCTRINA: Lanza ataques de saturación contra flotas de combate enemigas y bases estelares.\n📊 EXPECTATIVAS: Pañoles masivos de misiles tamaño 6, sensores de control de tiro de 120Mkm y 6 capas de blindaje.\n📏 MAGNITUD EN PUERTO: 280 metros de largo equipados con bahías de pañoles automatizadas para almacenar cientos de proyectiles pesados.");
 
             AddPreset(ref idx, "⚡ BC Stalker - Crucero de Batalla Rápido (25,000 t)", "2. Cruceros (CA / CC / CG / BC)",
-                "🎯 PROPÓSITO: Crucero de batalla rápido diseñado para cazar y exterminar cruceros enemigos.\n⚓ DOCTRINA: Combina la velocidad de un destructor (5,500 km/s) con la potencia de fuego de un acorazado.\n📊 EXPECTATIVAS: Alta movilidad estratégica, baterías de plasma/láser y escudos de energía integrados.");
+                "🎯 PROPÓSITO: Crucero de batalla rápido diseñado para cazar y exterminar cruceros enemigos.\n⚓ DOCTRINA: Combina la velocidad de un destructor (5,500 km/s) con la potencia de fuego de un acorazado.\n📊 EXPECTATIVAS: Alta movilidad estratégica, baterías de plasma/láser y escudos de energía integrados.\n📏 MAGNITUD EN PUERTO: 300 metros de eslora con una relación longitud/manga estilizada diseñada para albergar gigantescos motores militares.");
 
             AddPreset(ref idx, "🌌 CJ Aether Gate - Crucero de Salto de Flota (25,000 t)", "2. Cruceros (CA / CC / CG / BC)",
-                "🎯 PROPÓSITO: Crucero de salto de flota principal.\n⚓ DOCTRINA: Abre brechas gravitacionales para permitir el paso de cruceros pesados y portaaviones en sistemas inexplorados.\n📊 EXPECTATIVAS: Motor de salto trans-newtoniano de 25,000t con eficiencia de escuadrón.");
+                "🎯 PROPÓSITO: Crucero de salto de flota principal.\n⚓ DOCTRINA: Abre brechas gravitacionales para permitir el paso de cruceros pesados y portaaviones en sistemas inexplorados.\n📊 EXPECTATIVAS: Motor de salto trans-newtoniano de 25,000t con eficiencia de escuadrón.\n📏 MAGNITUD EN PUERTO: 300 metros de estructura acorazada dominados por el núcleo de distorsión de hiper-salto.");
 
             // 3. Portaaviones
             AddPreset(ref idx, "🚢 CV Valhalla - Superportaaviones de Flota (40,000 t)", "3. Portaaviones (CV / CVL / CVE)",
-                "🎯 PROPÓSITO: Superportaaviones de flota con capacidad para más de 30 cazas y corbetas.\n⚓ DOCTRINA: Centro neurálgico del poder espacial imperial. Proyecta fuerza a sistemas enteros mediante alas embarcadas.\n📊 EXPECTATIVAS: Hangares masivos, talleres de reparación embarcados, 6 capas de blindaje y escudos pesados.");
+                "🎯 PROPÓSITO: Superportaaviones de flota con capacidad para más de 30 cazas y corbetas.\n⚓ DOCTRINA: Centro neurálgico del poder espacial imperial. Proyecta fuerza a sistemas enteros mediante alas embarcadas.\n📊 EXPECTATIVAS: Hangares masivos, talleres de reparación embarcados, 6 capas de blindaje y escudos pesados.\n📏 MAGNITUD EN PUERTO: Con 365 metros de eslora y 40,000t, supera la altura del rascacielos Empire State Building. Alberga verdaderas ciudades interiores y hangares de múltiples cubiertas.");
 
             AddPreset(ref idx, "🛡️ CVL Dauntless - Portaaviones Ligero de Escolta (15,000 t)", "3. Portaaviones (CV / CVL / CVE)",
-                "🎯 PROPÓSITO: Portaaviones ligero de escolta para protección de convoyes y exploraciones.\n⚓ DOCTRINA: Alberga 6-8 cazas interceptores para repeler agresiones sorpresa a convoyes civiles.\n📊 EXPECTATIVAS: Tamaño reducido (15,000t), bajo consumo de combustible y mantenimiento económico.");
+                "🎯 PROPÓSITO: Portaaviones ligero de escolta para protección de convoyes y exploraciones.\n⚓ DOCTRINA: Alberga 6-8 cazas interceptores para repeler agresiones sorpresa a convoyes civiles.\n📊 EXPECTATIVAS: Tamaño reducido (15,000t), bajo consumo de combustible y mantenimiento económico.\n📏 MAGNITUD EN PUERTO: 235 metros de eslora con pista de lanzamiento interna sellada y ascensores magnéticos.");
 
             AddPreset(ref idx, "🐝 CVE Hive - Nodriza de Lanchas de Asalto / FAC Tender (25,000 t)", "3. Portaaviones (CV / CVL / CVE)",
-                "🎯 PROPÓSITO: Nodriza militar de lanchas de ataque rápido (FAC Tender).\n⚓ DOCTRINA: Reabastece, repara y transporta 4 corbetas/FAC a través de saltos de sistema.\n📊 EXPECTATIVAS: Instalaciones de repostaje rápido, depósitos de Sorium y hangares modulares.");
+                "🎯 PROPÓSITO: Nodriza militar de lanchas de ataque rápido (FAC Tender).\n⚓ DOCTRINA: Reabastece, repara y transporta 4 corbetas/FAC a través de saltos de sistema.\n📊 EXPECTATIVAS: Instalaciones de repostaje rápido, depósitos de Sorium y hangares modulares.\n📏 MAGNITUD EN PUERTO: 300 metros de eslora con bahías de atracamiento ventrales preparadas para fijar corbetas enteras.");
 
             AddPreset(ref idx, "🏰 CVB Iron Haven - Portaaviones Blindado de Asalto (30,000 t)", "3. Portaaviones (CV / CVL / CVE)",
-                "🎯 PROPÓSITO: Portaaviones blindado de asalto frontal.\n⚓ DOCTRINA: Despliega fuerzas en sectores de intenso fuego enemigo sin arriesgar la integridad del buque.\n📊 EXPECTATIVAS: 8 capas de blindaje de neutronium, doble matriz de escudos y hangares reforzados.");
+                "🎯 PROPÓSITO: Portaaviones blindado de asalto frontal.\n⚓ DOCTRINA: Despliega fuerzas en sectores de intenso fuego enemigo sin arriesgar la integridad del buque.\n📊 EXPECTATIVAS: 8 capas de blindaje de neutronium, doble matriz de escudos y hangares reforzados.\n📏 MAGNITUD EN PUERTO: 320 metros de longitud recubiertos con las placas de armadura más gruesas de la flota imperial.");
 
             AddPreset(ref idx, "🤖 CVD Nexus - Portadrones Automatizado (10,000 t)", "3. Portaaviones (CV / CVL / CVE)",
-                "🎯 PROPÓSITO: Portadrones automatizado de vanguardia.\n⚓ DOCTRINA: Despliega enjambres de drones kamikaze y sondas de reconocimiento en territorio hostil.\n📊 EXPECTATIVAS: Operación con tripulación reducida, enlace de telemetría remota y alta velocidad de despliegue.");
+                "🎯 PROPÓSITO: Portadrones automatizado de vanguardia.\n⚓ DOCTRINA: Despliega enjambres de drones kamikaze y sondas de reconocimiento en territorio hostil.\n📊 EXPECTATIVAS: Operación con tripulación reducida, enlace de telemetría remota y alta velocidad de despliegue.\n📏 MAGNITUD EN PUERTO: 195 metros de casco automatizado optimizado para la descarga rápida de sondas avanzadas.");
 
             // 4. Cazas y Parásitas
             AddPreset(ref idx, "🐝 F-01 Hornet - Caza Interceptor Gauss (250 t)", "4. Cazas y Naves Parásitas",
-                "🎯 PROPÓSITO: Caza interceptor Gauss ultra-rápido (250t).\n⚓ DOCTRINA: Despliegue enjambre desde portaaviones para interceptar salvas de misiles o ametrallar cazas enemigos.\n📊 EXPECTATIVAS: Velocidad extrema de 8,000 km/s, sin requerir tanques de combustible de largo alcance.");
+                "🎯 PROPÓSITO: Caza interceptor Gauss ultra-rápido (250t).\n⚓ DOCTRINA: Despliegue enjambre desde portaaviones para interceptar salvas de misiles o ametrallar cazas enemigos.\n📊 EXPECTATIVAS: Velocidad extrema de 8,000 km/s, sin requerir tanques de combustible de largo alcance.\n📏 MAGNITUD EN PUERTO: 28 metros de longitud (mismas dimensiones que un caza de combate moderno F-22 Raptor o Su-57). Cabe ágilmente en los ascensores de hangar.");
 
             AddPreset(ref idx, "🚀 B-01 Viper - Caza Torpedeo Misiles (500 t)", "4. Cazas y Naves Parásitas",
-                "🎯 PROPÓSITO: Caza bombardero de torpedos y misiles pesados (500t).\n⚓ DOCTRINA: Ataques relámpago contra naves capitales enemigas lanzando torpedos a bocajarro y regresando al nodriza.\n📊 EXPECTATIVAS: Elevado impacto por nave, costo mínimo de producción y maniobrabilidad en combate.");
+                "🎯 PROPÓSITO: Caza bombardero de torpedos y misiles pesados (500t).\n⚓ DOCTRINA: Ataques relámpago contra naves capitales enemigas lanzando torpedos a bocajarro y regresando al nodriza.\n📊 EXPECTATIVAS: Elevado impacto por nave, costo mínimo de producción y maniobrabilidad en combate.\n📏 MAGNITUD EN PUERTO: 42 metros de largo (similar a un transbordador espacial). Diseñado para lanzar sus torpedos en pasadas a corta distancia.");
 
             AddPreset(ref idx, "💥 FB-02 Sabre - Caza Cañonero Beam (500 t)", "4. Cazas y Naves Parásitas",
-                "🎯 PROPÓSITO: Caza cañonero de energía láser/plasma (500t).\n⚓ DOCTRINA: Combate cerrado a corta distancia desgastando escudos y capas de blindaje superficial enemigas.\n📊 EXPECTATIVAS: Alta precisión angular, capacitores ligeros integrados.");
+                "🎯 PROPÓSITO: Caza cañonero de energía láser/plasma (500t).\n⚓ DOCTRINA: Combate cerrado a corta distancia desgastando escudos y capas de blindaje superficial enemigas.\n📊 EXPECTATIVAS: Alta precisión angular, capacitores ligeros integrados.\n📏 MAGNITUD EN PUERTO: 42 metros de largo equipado con focalizadores térmicos ligeros en sus alas.");
 
             AddPreset(ref idx, "🔍 R-01 Eye - Caza de Reconocimiento Pasivo (200 t)", "4. Cazas y Naves Parásitas",
-                "🎯 PROPÓSITO: Sonda de reconocimiento pasivo furtivo (200t).\n⚓ DOCTRINA: Explora sectores desconocidos del sistema sin activar radares para mantener el sigilo absoluto.\n📊 EXPECTATIVAS: Sensores térmicos y electromagnéticos de alta sensibilidad en un casco diminuto.");
+                "🎯 PROPÓSITO: Sonda de reconocimiento pasivo furtivo (200t).\n⚓ DOCTRINA: Explora sectores desconocidos del sistema sin activar radares para mantener el sigilo absoluto.\n📊 EXPECTATIVAS: Sensores térmicos y electromagnéticos de alta sensibilidad en un casco diminuto.\n📏 MAGNITUD EN PUERTO: 24 metros de longitud recubiertos de pintura absorvente anti-IR.");
 
             AddPreset(ref idx, "💣 D-01 Wasp - Drone Kamikaze / Señuelo (150 t)", "4. Cazas y Naves Parásitas",
-                "🎯 PROPÓSITO: Drone kamikaze señuelo (150t).\n⚓ DOCTRINA: Atrae el fuego de las defensas de punto enemigas simulando ser un buque capital de mayor tamaño.\n📊 EXPECTATIVAS: Emisor de firma térmica amplificada y costo de producción insignificante.");
+                "🎯 PROPÓSITO: Drone kamikaze señuelo (150t).\n⚓ DOCTRINA: Atrae el fuego de las defensas de punto enemigas simulando ser un buque capital de mayor tamaño.\n📊 EXPECTATIVAS: Emisor de firma térmica amplificada y costo de producción insignificante.\n📏 MAGNITUD EN PUERTO: 20 metros de eslora automatizada sin soporte vital para tripulación.");
 
             // 5. Exploración y Ciencia
             AddPreset(ref idx, "🌌 ES-Grav Compass - Explorador Gravitacional Rápido (3,000 t)", "5. Exploración y Ciencia",
-                "🎯 PROPÓSITO: Nave de exploración gravitacional de vanguardia (3,000t).\n⚓ DOCTRINA: Mapea puntos de salto en sistemas no cartografiados para la expansión imperial.\n📊 EXPECTATIVAS: Sensores gravimétricos de alta sensibilidad, motor de salto propio y autonomía de 36 meses.");
+                "🎯 PROPÓSITO: Nave de exploración gravitacional de vanguardia (3,000t).\n⚓ DOCTRINA: Mapea puntos de salto en sistemas no cartografiados para la expansión imperial.\n📊 EXPECTATIVAS: Sensores gravimétricos de alta sensibilidad, motor de salto propio y autonomía de 36 meses.\n📏 MAGNITUD EN PUERTO: 120 metros de eslora (más largo que un campo de fútbol profesional). Equipado con laboratorios científicos completos.");
 
             AddPreset(ref idx, "🔍 ES-Geo Prospector - Explorador Geológico Celular (3,000 t)", "5. Exploración y Ciencia",
-                "🎯 PROPÓSITO: Nave de prospectiva geológica planetaria (3,000t).\n⚓ DOCTRINA: Escanea asteroides, lunas y planetas identificando yacimientos de minerales trans-newtonianos.\n📊 EXPECTATIVAS: Sensores geológicos celulares, alta autonomía y bajo costo operativo.");
+                "🎯 PROPÓSITO: Nave de prospectiva geológica planetaria (3,000t).\n⚓ DOCTRINA: Escanea asteroides, lunas y planetas identificando yacimientos de minerales trans-newtonianos.\n📊 EXPECTATIVAS: Sensores geológicos celulares, alta autonomía y bajo costo operativo.\n📏 MAGNITUD EN PUERTO: 120 metros de longitud albergando matrices de escáneres minerales de alta resolución.");
 
             AddPreset(ref idx, "🧭 GSV Pathfinder - Explorador Combinado de Largo Alcance (7,000 t)", "5. Exploración y Ciencia",
-                "🎯 PROPÓSITO: Explorador espacial combinado de largo alcance (7,000t).\n⚓ DOCTRINA: Nave científica autónoma equipada con sensores gravimétricos y geológicos integrados.\n📊 EXPECTATIVAS: Cobertura total de exploración, motor de salto y capacidad de supervivencia en fronteras lejanas.");
+                "🎯 PROPÓSITO: Explorador espacial combinado de largo alcance (7,000t).\n⚓ DOCTRINA: Nave científica autónoma equipada con sensores gravimétricos y geológicos integrados.\n📊 EXPECTATIVAS: Cobertura total de exploración, motor de salto y capacidad de supervivencia en fronteras lejanas.\n📏 MAGNITUD EN PUERTO: 165 metros de eslora (tan alto/largo como la torre Monumento a Washington). Sostiene misiones aisladas durante años.");
 
             AddPreset(ref idx, "🛰️ Probe - Lancha Científica Parásita (300 t)", "5. Exploración y Ciencia",
-                "🎯 PROPÓSITO: Lancha científica embarcable para reconocimiento exploratorio cercano (300t).\n⚓ DOCTRINA: Lanzada desde exploradores nodriza para investigar planetas de alto peligro ambiental.\n📊 EXPECTATIVAS: Sensores pasivos integrados y perfil de masa reducido.");
+                "🎯 PROPÓSITO: Lancha científica embarcable para reconocimiento exploratorio cercano (300t).\n⚓ DOCTRINA: Lanzada desde exploradores nodriza para investigar planetas de alto peligro ambiental.\n📊 EXPECTATIVAS: Sensores pasivos integrados y perfil de masa reducido.\n📏 MAGNITUD EN PUERTO: 32 metros de eslora construidos para descensos a atmósferas densas.");
 
             AddPreset(ref idx, "📡 SV-Scout Sentinel - Piquete Científico Alerta Temprana (4,000 t)", "5. Exploración y Ciencia",
-                "🎯 PROPÓSITO: Piquete de vigilancia científica y alerta temprana (4,000t).\n⚓ DOCTRINA: Estacionado cerca de puntos de salto estratégicos para detectar intrusiones enemigas al instante.\n📊 EXPECTATIVAS: Sensores pasivos de largo alcance, emisores de baliza y motores de escape rápido.");
+                "🎯 PROPÓSITO: Piquete de vigilancia científica y alerta temprana (4,000t).\n⚓ DOCTRINA: Estacionado cerca de puntos de salto estratégicos para detectar intrusiones enemigas al instante.\n📊 EXPECTATIVAS: Sensores pasivos de largo alcance, emisores de baliza y motores de escape rápido.\n📏 MAGNITUD EN PUERTO: 135 metros de eslora dominados por una antena de alerta pasiva de ultra frecuencia.");
 
             // 6. Petroleros y Reabastecimiento
             AddPreset(ref idx, "⚡ AOF Endurance - Petrolero de Flota Rápido (25,000 t)", "6. Petroleros y Reabastecimiento",
-                "🎯 PROPÓSITO: Petrolero de flota rápido para soporte de grupos de batalla en avance.\n⚓ DOCTRINA: Acompaña a las escuadras militares reabasteciendo combustible Sorium en pleno vuelo.\n📊 EXPECTATIVAS: Tanques de 5,000,000L, sistemas de transferencia ultra-rápida y velocidad militar.");
+                "🎯 PROPÓSITO: Petrolero de flota rápido para soporte de grupos de batalla en avance.\n⚓ DOCTRINA: Acompaña a las escuadras militares reabasteciendo combustible Sorium en pleno vuelo.\n📊 EXPECTATIVAS: Tanques de 5,000,000L, sistemas de transferencia ultra-rápida y velocidad militar.\n📏 MAGNITUD EN PUERTO: 300 metros de longitud equipados con gigantescos tanques de presión y mangueras de transferencia de alta velocidad.");
 
             AddPreset(ref idx, "⛽ AO Prometheus - Supertanquero Comercial Estratégico (60,000 t)", "6. Petroleros y Reabastecimiento",
-                "🎯 PROPÓSITO: Supertanquero comercial estratégico (60,000t).\n⚓ DOCTRINA: Transporta reservas masivas de combustible entre la Metrópoli y las colonias exteriores.\n📊 EXPECTATIVAS: Capacidad para 25,000,000 Litros de Sorium y motores comerciales de alta eficiencia.");
+                "🎯 PROPÓSITO: Supertanquero comercial estratégico (60,000t).\n⚓ DOCTRINA: Transporta reservas masivas de combustible entre la Metrópoli y las colonias exteriores.\n📊 EXPECTATIVAS: Capacidad para 25,000,000 Litros de Sorium y motores comerciales de alta eficiencia.\n📏 MAGNITUD EN PUERTO: Con 430 metros de eslora y 60,000t, supera holgadamente las dimensiones del rascacielos Empire State Building. Una arteria vital de la economía imperial.");
 
             AddPreset(ref idx, "🪐 AOH Harvester Primus - Cosechadora de Sorium Orbital (50,000 t)", "6. Petroleros y Reabastecimiento",
-                "🎯 PROPÓSITO: Cosechadora orbital de Sorium en gigantes gaseosos (50,000t).\n⚓ DOCTRINA: Permanece en órbita de gigantes de gas refinando combustible Sorium de forma continua.\n📊 EXPECTATIVAS: Módulos de extracción de combustible, almacenamiento masivo y operación comercial.");
+                "🎯 PROPÓSITO: Cosechadora orbital de Sorium en gigantes gaseosos (50,000t).\n⚓ DOCTRINA: Permanece en órbita de gigantes de gas refinando combustible Sorium de forma continua.\n📊 EXPECTATIVAS: Módulos de extracción de combustible, almacenamiento masivo y operación comercial.\n📏 MAGNITUD EN PUERTO: 400 metros de diámetro operativo albergando refinerías químicas de alta potencia.");
 
             AddPreset(ref idx, "📦 AOR Atlas Fleet - Aprovisionamiento Logístico Combinado (35,000 t)", "6. Petroleros y Reabastecimiento",
-                "🎯 PROPÓSITO: Nave de aprovisionamiento logístico combinado (combustible + MSP + municiones).\n⚓ DOCTRINA: Sostiene campañas prolongadas de flotas de guerra en sectores alienígenas distantes.\n📊 EXPECTATIVAS: Tanques de Sorium, pañoles de munición VLS y repuestos MSP.");
+                "🎯 PROPÓSITO: Nave de aprovisionamiento logístico combinado (combustible + MSP + municiones).\n⚓ DOCTRINA: Sostiene campañas prolongadas de flotas de guerra en sectores alienígenas distantes.\n📊 EXPECTATIVAS: Tanques de Sorium, pañoles de munición VLS y repuestos MSP.\n📏 MAGNITUD EN PUERTO: 345 metros de eslora con grúas de carga magnética integradas.");
 
             AddPreset(ref idx, "🏰 Safehaven - Estación Tanque de Almacenamiento (80,000 t)", "6. Petroleros y Reabastecimiento",
-                "🎯 PROPÓSITO: Estación orbital de almacenamiento de combustible sin propulsión (80,000t).\n⚓ DOCTRINA: Sirve como depósito nodriza en sistemas fronterizos para reabastecimiento rápido de flotas.\n📊 EXPECTATIVAS: Capacidad para 50,000,000L de Sorium a costo mínimo.");
+                "🎯 PROPÓSITO: Estación orbital de almacenamiento de combustible sin propulsión (80,000t).\n⚓ DOCTRINA: Sirve como depósito nodriza en sistemas fronterizos para reabastecimiento rápido de flotas.\n📊 EXPECTATIVAS: Capacidad para 50,000,000L de Sorium a costo mínimo.\n📏 MAGNITUD EN PUERTO: 485 metros de estructura esférica orbital (tan grande como el tramo principal del Puente Golden Gate).");
 
             // 7. Naves de Misiles y Asedio
             AddPreset(ref idx, "💣 BBG Nemesis - Monitor de Misiles Asedio Planetario (20,000 t)", "7. Naves de Misiles y Asedio",
-                "🎯 PROPÓSITO: Monitor de misiles de asedio planetario e instalaciones fijas.\n⚓ DOCTRINA: Destruye complejas defensas planetarias enemigas lanzando misiles pesados de ojiva masiva desde fuera del alcance enemigo.\n📊 EXPECTATIVAS: Lanzadores de gran tamaño, pañoles blindados y control de tiro corregido por telemetría.");
+                "🎯 PROPÓSITO: Monitor de misiles de asedio planetario e instalaciones fijas.\n⚓ DOCTRINA: Destruye complejas defensas planetarias enemigas lanzando misiles pesados de ojiva masiva desde fuera del alcance enemigo.\n📊 EXPECTATIVAS: Lanzadores de gran tamaño, pañoles blindados y control de tiro corregido por telemetría.\n📏 MAGNITUD EN PUERTO: 270 metros de casco fuertemente protegido blindado contra represalias de baterías de superficie.");
 
             AddPreset(ref idx, "🛡️ FFG-AMM Shield - Fragata Antimisil Cobertura Área (6,000 t)", "7. Naves de Misiles y Asedio",
-                "🎯 PROPÓSITO: Fragata ligera defensiva antimisil (AMM).\n⚓ DOCTRINA: Lanza pequeñas salvas de interceptores AMM para neutralizar misiles atacantes a 10Mkm.\n📊 EXPECTATIVAS: Lanzadores tamaño 1 de alta cadencia, radares de resolución 1 y costo reducido.");
+                "🎯 PROPÓSITO: Fragata ligera defensiva antimisil (AMM).\n⚓ DOCTRINA: Lanza pequeñas salvas de interceptores AMM para neutralizar misiles atacantes a 10Mkm.\n📊 EXPECTATIVAS: Lanzadores tamaño 1 de alta cadencia, radares de resolución 1 y costo reducido.\n📏 MAGNITUD EN PUERTO: 155 metros de eslora con radar de alta frecuencia en la superestructura central.");
 
             AddPreset(ref idx, "🚢 ML Trapdoor - Crucero Lanzaminas Espacial (12,000 t)", "7. Naves de Misiles y Asedio",
-                "🎯 PROPÓSITO: Crucero sembrador de campos de minas espaciales (12,000t).\n⚓ DOCTRINA: Bloquea puntos de salto defensivos desplegando campos de minas autónomas invisibles.\n📊 EXPECTATIVAS: Pañol de minas espaciales de alta capacidad y sistemas de sembrado sigiloso.");
+                "🎯 PROPÓSITO: Crucero sembrador de campos de minas espaciales (12,000t).\n⚓ DOCTRINA: Bloquea puntos de salto defensivos desplegando campos de minas autónomas invisibles.\n📊 EXPECTATIVAS: Pañol de minas espaciales de alta capacidad y sistemas de sembrado sigiloso.\n📏 MAGNITUD EN PUERTO: 210 metros de eslora con escotillas de eyectores de minas situadas en la sección de popa.");
 
             AddPreset(ref idx, "🚀 CG Universal - Crucero VLS Multipropósito (15,000 t)", "7. Naves de Misiles y Asedio",
-                "🎯 PROPÓSITO: Crucero de lanzamiento vertical VLS multipropósito.\n⚓ DOCTRINA: Capaz de alternar en sus pañoles misiles ASM antibuque, AMM defensivos y sondas de reconocimiento.\n📊 EXPECTATIVAS: Versatilidad táctica total, velocidad crucero de 4,500 km/s.");
+                "🎯 PROPÓSITO: Crucero de lanzamiento vertical VLS multipropósito.\n⚓ DOCTRINA: Capaz de alternar en sus pañoles misiles ASM antibuque, AMM defensivos y sondas de reconocimiento.\n📊 EXPECTATIVAS: Versatilidad táctica total, velocidad crucero de 4,500 km/s.\n📏 MAGNITUD EN PUERTO: 235 metros de eslora con celdas de lanzamiento VLS alineadas a lo largo de toda su cubierta superior.");
 
             AddPreset(ref idx, "👻 SSG Shadow - Submarino Espacial Sigiloso de Misiles (8,000 t)", "7. Naves de Misiles y Asedio",
-                "🎯 PROPÓSITO: Submarino espacial sigiloso de ataque relámpago (8,000t).\n⚓ DOCTRINA: Se infiltra tras las líneas enemigas con firmas térmicas/EM reducidas para emboscar transportes.\n📊 EXPECTATIVAS: 80% de reducción de firma por recubrimientos anti-ir y lanzadores Box Launchers.");
+                "🎯 PROPÓSITO: Submarino espacial sigiloso de ataque relámpago (8,000t).\n⚓ DOCTRINA: Se infiltra tras las líneas enemigas con firmas térmicas/EM reducidas para emboscar transportes.\n📊 EXPECTATIVAS: 80% de reducción de firma por recubrimientos anti-ir y lanzadores Box Launchers.\n📏 MAGNITUD EN PUERTO: 175 metros de superficie negra mate absorvente de radar sin aristas reflejantes.");
 
             // 8. Combate Compacto y Corbetas
             AddPreset(ref idx, "⚡ FAC Strikefast - Lancha Torpedera Rápida (1,000 t)", "8. Combate Compacto y Corbetas",
-                "🎯 PROPÓSITO: Lancha de ataque rápido de torpedos (FAC - 1,000t).\n⚓ DOCTRINA: Ataque en wolfpack de corta distancia contra buques de carga o naves descolgadas de la flota enemiga.\n📊 EXPECTATIVAS: Velocidad extrema (7,000 km/s), tamaño compacto para hangares de nodrizas.");
+                "🎯 PROPÓSITO: Lancha de ataque rápido de torpedos (FAC - 1,000t).\n⚓ DOCTRINA: Ataque en wolfpack de corta distancia contra buques de carga o naves descolgadas de la flota enemiga.\n📊 EXPECTATIVAS: Velocidad extrema (7,000 km/s), tamaño compacto para hangares de nodrizas.\n📏 MAGNITUD EN PUERTO: 72 metros de eslora (mismo tamaño que un avión comercial Boeing 747 Jumbo).");
 
             AddPreset(ref idx, "💥 Gunboat Warp Hammer - Cañonera Mesón de Salto (1,200 t)", "8. Combate Compacto y Corbetas",
-                "🎯 PROPÓSITO: Cañonera rápida con cañón Mesón ignorador de blindaje (1,200t).\n⚓ DOCTRINA: Ignora escudos y armaduras atacando directamente los componentes internos de naves pesadas.\n📊 EXPECTATIVAS: Daño directo a sistemas internos a corta distancia.");
+                "🎯 PROPÓSITO: Cañonera rápida con cañón Mesón ignorador de blindaje (1,200t).\n⚓ DOCTRINA: Ignora escudos y armaduras atacando directamente los componentes internos de naves pesadas.\n📊 EXPECTATIVAS: Daño directo a sistemas internos a corta distancia.\n📏 MAGNITUD EN PUERTO: 78 metros de eslora construidos alrededor del cañón emisor de partículas mesónicas.");
 
             AddPreset(ref idx, "🛡️ Corvette Gargoyle - Corbeta Escolta Gauss (2,500 t)", "8. Combate Compacto y Corbetas",
-                "🎯 PROPÓSITO: Corbeta de escolta armada con torreta Gauss (2,500t).\n⚓ DOCTRINA: Escolta ligera de convoyes mercantes contra cazas piratas o misiles solitarios.\n📊 EXPECTATIVAS: Cobertura de punto cercana, costo económico de construcción.");
+                "🎯 PROPÓSITO: Corbeta de escolta armada con torreta Gauss (2,500t).\n⚓ DOCTRINA: Escolta ligera de convoyes mercantes contra cazas piratas o misiles solitarios.\n📊 EXPECTATIVAS: Cobertura de punto cercana, costo económico de construcción.\n📏 MAGNITUD EN PUERTO: 110 metros de longitud (más largo que un campo de fútbol) armados con ametralladoras electromagnéticas.");
 
             AddPreset(ref idx, "👮 Corvette Watchman - Corbeta Patrullera de Frontera (3,000 t)", "8. Combate Compacto y Corbetas",
-                "🎯 PROPÓSITO: Corbeta patrullera de soberanía y policía colonial (3,000t).\n⚓ DOCTRINA: Mantiene la presencia militar y el orden público en colonias lejanas reduciendo el malestar civil.\n📊 EXPECTATIVAS: Autonomía de 24 meses, mantenimiento reducido y costo de producción bajo.");
+                "🎯 PROPÓSITO: Corbeta patrullera de soberanía y policía colonial (3,000t).\n⚓ DOCTRINA: Mantiene la presencia militar y el orden público en colonias lejanas reduciendo el malestar civil.\n📊 EXPECTATIVAS: Autonomía de 24 meses, mantenimiento reducido y costo de producción bajo.\n📏 MAGNITUD EN PUERTO: 120 metros de eslora equipada con camarotes ampliados para patrullas prolongadas.");
 
             AddPreset(ref idx, "👻 Raider Specter - Cazador Sigiloso de Emboscada (2,000 t)", "8. Combate Compacto y Corbetas",
-                "🎯 PROPÓSITO: Cazador sigiloso de interdicción y emboscada (2,000t).\n⚓ DOCTRINA: Operaciones encubiertas en sectores neutrales o disputados interrumpiendo rutas comerciales.\n📊 EXPECTATIVAS: Motores de bajo calor, sensores pasivos y cañón de energía liviano.");
+                "🎯 PROPÓSITO: Cazador sigiloso de interdicción y emboscada (2,000t).\n⚓ DOCTRINA: Operaciones encubiertas en sectores neutrales o disputados interrumpiendo rutas comerciales.\n📊 EXPECTATIVAS: Motores de bajo calor, sensores pasivos y cañón de energía liviano.\n📏 MAGNITUD EN PUERTO: 100 metros de eslora estilizada de color carbón táctico.");
 
             // 9. Formaciones Terrestres
             AddPreset(ref idx, "🪖 Marine Strike Battalion - Asalto Planetario Helitransportado", "9. Formaciones Terrestres",
-                "🎯 PROPÓSITO: Batallón de infantería marina de asalto orbital.\n⚓ DOCTRINA: Fuerza de choque helitransportada para asegurar cabezas de playa en mundos enemigos hostiles.\n📊 EXPECTATIVAS: Alta movilidad táctica, armamento ligero de perforación y moral elevada.");
+                "🎯 PROPÓSITO: Batallón de infantería marina de asalto orbital.\n⚓ DOCTRINA: Fuerza de choque helitransportada para asegurar cabezas de playa en mundos enemigos hostiles.\n📊 EXPECTATIVAS: Alta movilidad táctica, armamento ligero de perforación y moral elevada.\n📏 MAGNITUD EN PUERTO: Despliegue terrestre compuesto por 500 hombres y vehículos blindados de desembarco.");
 
             AddPreset(ref idx, "🏛️ Garrison Battalion - Infantería de Guarnición y Policía", "9. Formaciones Terrestres",
-                "🎯 PROPÓSITO: Batallón de guarnición, pacificación y policía militar.\n⚓ DOCTRINA: Mantiene la seguridad interna de colonias recién tomadas o en riesgo de rebelión civil.\n📊 EXPECTATIVAS: Bajo costo de mantenimiento y alta efectividad de pacificación.");
+                "🎯 PROPÓSITO: Batallón de guarnición, pacificación y policía militar.\n⚓ DOCTRINA: Mantiene la seguridad interna de colonias recién tomadas o en riesgo de rebelión civil.\n📊 EXPECTATIVAS: Bajo costo de mantenimiento y alta efectividad de pacificación.\n📏 MAGNITUD EN PUERTO: Formación de 800 efectivos terrestres con equipamiento antimotines y fortificaciones portátiles.");
 
             AddPreset(ref idx, "🚜 Heavy Armor Regiment - Regimiento Blindado de Ruptura", "9. Formaciones Terrestres",
-                "🎯 PROPÓSITO: Regimiento de tanques pesados y vehículos blindados de ruptura.\n⚓ DOCTRINA: Destruye fortificaciones defensivas enemigas en combate terrestre de alta intensidad.\n📊 EXPECTATIVAS: Blindaje pesado terrestre, potencia de fuego de fuego directo.");
+                "🎯 PROPÓSITO: Regimiento de tanques pesados y vehículos blindados de ruptura.\n⚓ DOCTRINA: Destruye fortificaciones defensivas enemigas en combate terrestre de alta intensidad.\n📊 EXPECTATIVAS: Blindaje pesado terrestre, potencia de fuego de fuego directo.\n📏 MAGNITUD EN PUERTO: Columna de 120 tanques de combate pesados con cañones de masa gravitacional.");
 
             AddPreset(ref idx, "💣 Bombardment Artillery Element - Batería Artillería Pesada", "9. Formaciones Terrestres",
-                "🎯 PROPÓSITO: Elemento de artillería pesada de apoyo de fuego de campamento.\n⚓ DOCTRINA: Proporciona cobertura artillera de largo alcance a unidades de infantería en combate.\n📊 EXPECTATIVAS: Daño de área y destrucción de fortificaciones sin contacto directo.");
+                "🎯 PROPÓSITO: Elemento de artillería pesada de apoyo de fuego de campamento.\n⚓ DOCTRINA: Proporciona cobertura artillera de largo alcance a unidades de infantería en combate.\n📊 EXPECTATIVAS: Daño de área y destrucción de fortificaciones sin contacto directo.\n📏 MAGNITUD EN PUERTO: 40 obuses móviles de calibres pesados capaces de pulverizar búnkeres alienígenas.");
 
             AddPreset(ref idx, "🛡️ Air & Orbital Defense Battery - Batería Antiaérea / Antidroga", "9. Formaciones Terrestres",
-                "🎯 PROPÓSITO: Batería terrestre de defensa contra aeronaves y bombardeos orbitales.\n⚓ DOCTRINA: Protege centros industriales y tropas terrestres contra ataques aéreos enemigos.\n📊 EXPECTATIVAS: Sensores de seguimiento aéreo y cañones automáticos integrados.");
+                "🎯 PROPÓSITO: Batería terrestre de defensa contra aeronaves y bombardeos orbitales.\n⚓ DOCTRINA: Protege centros industriales y tropas terrestres contra ataques aéreos enemigos.\n📊 EXPECTATIVAS: Sensores de seguimiento aéreo y cañones automáticos integrados.\n📏 MAGNITUD EN PUERTO: Batería fija de radares y cañones antiaéreos de tiro rápido.");
 
             // 10. Logística Modular
             AddPreset(ref idx, "📦 Freighter Atlas Heavy - Carguero Modular Pesado (50,000 t)", "10. Logística Modular",
-                "🎯 PROPÓSITO: Carguero comercial pesado modular (50,000t).\n⚓ DOCTRINA: Traslado de instalaciones industriales, minas y fábricas entre planetas imperiales.\n📊 EXPECTATIVAS: Capacidad para 25,000t de carga por viaje, diseño comercial robusto y económico.");
+                "🎯 PROPÓSITO: Carguero comercial pesado modular (50,000t).\n⚓ DOCTRINA: Traslado de instalaciones industriales, minas y fábricas entre planetas imperiales.\n📊 EXPECTATIVAS: Capacidad para 25,000t de carga por viaje, diseño comercial robusto y económico.\n📏 MAGNITUD EN PUERTO: Con 400 metros de eslora (más grande que el Empire State Building), sus bodegas pueden transportar una fábrica automatizada entera por viaje.");
 
             AddPreset(ref idx, "🪖 Troop Transport Colossus - Transporte Tropas Invasión (30,000 t)", "10. Logística Modular",
-                "🎯 PROPÓSITO: Transporte masivo de tropas de desembarco (30,000t).\n⚓ DOCTRINA: Transporta regimientos blindados y divisiones de infantería para invasiones planetarias.\n📊 EXPECTATIVAS: Capacidad para 10,000t de fuerzas terrestres y cápsulas de desembarco atmosférico.");
+                "🎯 PROPÓSITO: Transporte masivo de tropas de desembarco (30,000t).\n⚓ DOCTRINA: Transporta regimientos blindados y divisiones de infantería para invasiones planetarias.\n📊 EXPECTATIVAS: Capacidad para 10,000t de fuerzas terrestres y cápsulas de desembarco atmosférico.\n📏 MAGNITUD EN PUERTO: 320 metros de largo equipados con bahías de desembarco de cápsulas orbitales rápidas.");
 
             AddPreset(ref idx, "⛏️ Mining Ship Titan Core - Minero Espacial de Asteroides (60,000 t)", "10. Logística Modular",
-                "🎯 PROPÓSITO: Minero espacial autónomo de asteroides (60,000t).\n⚓ DOCTRINA: Extracción de mineral en cuerpos celestes sin atmósfera ni infraestructura colonial.\n📊 EXPECTATIVAS: Minas automatizadas integradas y bodegas de almacenamiento de minerales.");
+                "🎯 PROPÓSITO: Minero espacial autónomo de asteroides (60,000t).\n⚓ DOCTRINA: Extracción de mineral en cuerpos celestes sin atmósfera ni infraestructura colonial.\n📊 EXPECTATIVAS: Minas automatizadas integradas y bodegas de almacenamiento de minerales.\n📏 MAGNITUD EN PUERTO: 430 metros de eslora dominados por cortadores de plasma industrial y trituradoras de mineral.");
 
             AddPreset(ref idx, "🚜 Tugboat Hercules - Remolcador Espacial Despliegue Rápido (20,000 t)", "10. Logística Modular",
-                "🎯 PROPÓSITO: Remolcador espacial militar/comercial (20,000t).\n⚓ DOCTRINA: Remolca estaciones orbitales, astilleros portátiles o naves averiadas sin motor.\n📊 EXPECTATIVAS: Rayos de remolque de alta potencia y propulsores de gran empuje.");
+                "🎯 PROPÓSITO: Remolcador espacial militar/comercial (20,000t).\n⚓ DOCTRINA: Remolca estaciones orbitales, astilleros portátiles o naves averiadas sin motor.\n📊 EXPECTATIVAS: Rayos de remolque de alta potencia y propulsores de gran empuje.\n📏 MAGNITUD EN PUERTO: 270 metros de casco reforzado optimizado para la tracción de masas gigantescas.");
 
             AddPreset(ref idx, "🛠️ Maint Vessel Hephaestus - Taller Orbital y Dique Móvil (50,000 t)", "10. Logística Modular",
-                "🎯 PROPÓSITO: Taller orbital y dique seco móvil de mantenimiento (50,000t).\n⚓ DOCTRINA: Estacionado en bases de avanzada para reparar y mantener buques militares sin astillero.\n📊 EXPECTATIVAS: Módulos de mantenimiento naval masivos y pañoles MSP de gran capacidad.");
+                "🎯 PROPÓSITO: Taller orbital y dique seco móvil de mantenimiento (50,000t).\n⚓ DOCTRINA: Estacionado en bases de avanzada para reparar y mantener buques militares sin astillero.\n📊 EXPECTATIVAS: Módulos de mantenimiento naval masivos y pañoles MSP de gran capacidad.\n📏 MAGNITUD EN PUERTO: 400 metros de eslora albergando talleres de fundición y brazos robóticos de reparación naval.");
 
             // User-saved custom presets
             LoadUserSavedPresetsIntoList(ref idx);
@@ -955,27 +955,8 @@ namespace AuroraDesignSuite.Views
                 }
             }
 
-            // Update Visual Ship Scale Silhouette Bar
-            if (BdrVisualShipSilhouette != null && TxtVisualShipTonnage != null && LblVisualScaleClass != null)
-            {
-                double tons = CurrentDesign.TotalTonnage;
-                double hs = CurrentDesign.TotalHS;
-
-                string hullCategory = "Corbeta";
-                if (tons >= 100000) hullCategory = "Acorazado Estelar / Súper-Nave";
-                else if (tons >= 50000) hullCategory = "Crucero Pesado / Dreadnought";
-                else if (tons >= 25000) hullCategory = "Crucero Ligero / Batalla";
-                else if (tons >= 10000) hullCategory = "Destructor Escuadra";
-                else if (tons >= 5000) hullCategory = "Fragata de Escolta";
-                else if (tons >= 2000) hullCategory = "Corbeta / Cañonera";
-                else hullCategory = "Caza / Nave Ligera";
-
-                LblVisualScaleClass.Text = $"Clase: {hullCategory} ({tons:N0}t / HS {hs:F0})";
-                TxtVisualShipTonnage.Text = $"◄═══ {tons:N0} Tons (HS {hs:F0}) ═══►";
-
-                double targetWidth = Math.Max(90, Math.Min(340, 90 + (Math.Min(tons, 100000) / 100000.0) * 250));
-                BdrVisualShipSilhouette.Width = targetWidth;
-            }
+            // Update Visual Ship Scale Silhouette & Real World Magnitude HUD
+            UpdateVisualScaleHUD(CurrentDesign.TotalTonnage);
 
             LblTonnage.Text = $"{CurrentDesign.TotalTonnage:N0} Tons ({CurrentDesign.TotalHS:F1} HS)";
             LblSpeed.Text = $"{CurrentDesign.MaxSpeedKmS:N0} km/s";
@@ -1099,6 +1080,91 @@ namespace AuroraDesignSuite.Views
 
                 LblShipyardRetoolInfo.Text = "Amplía la capacidad de astillero en Operaciones Astillero.";
             }
+        }
+
+        private void UpdateVisualScaleHUD(double tons)
+        {
+            if (tons <= 0) tons = 1000;
+            double hs = CurrentDesign.TotalHS;
+            if (hs <= 0) hs = tons / 50.0;
+
+            // Physical Dimensions Math (Metros)
+            // Formula: L = 42 * (tons / 1000)^(0.38) * 1.85
+            double lengthM = Math.Round(42.0 * Math.Pow(tons / 1000.0, 0.38) * 1.85, 0);
+            if (lengthM < 15) lengthM = 15;
+            double widthM = Math.Round(lengthM * 0.22, 0);
+            double volumeM3 = Math.Round(tons * 1.45, 0);
+
+            string hullCategory = "Corbeta";
+            if (tons >= 100000) hullCategory = "Acorazado Estelar / Súper-Nave";
+            else if (tons >= 50000) hullCategory = "Crucero Pesado / Dreadnought";
+            else if (tons >= 25000) hullCategory = "Crucero Ligero / Batalla";
+            else if (tons >= 10000) hullCategory = "Destructor Escuadra";
+            else if (tons >= 5000) hullCategory = "Fragata de Escolta";
+            else if (tons >= 2000) hullCategory = "Corbeta / Cañonera";
+            else hullCategory = "Caza / Nave Ligera";
+
+            if (LblVisualScaleClass != null)
+            {
+                LblVisualScaleClass.Text = $"Clase: {hullCategory} ({tons:N0}t / HS {hs:F0})";
+            }
+
+            if (TxtScaleDimensionsSummary != null)
+            {
+                TxtScaleDimensionsSummary.Text = $"Longitud: {lengthM:N0}m | Manga: {widthM:N0}m | Vol: {volumeM3:N0}m³";
+            }
+
+            // Real-World Magnitude Comparison
+            string comparisonText = GetRealWorldComparisonString(tons, lengthM);
+            if (TxtRealWorldComparison != null)
+            {
+                TxtRealWorldComparison.Text = comparisonText;
+            }
+
+            // Visual Silhouette Bar Width Adjustment
+            if (BdrVisualShipSilhouette != null && TxtVisualShipTonnage != null)
+            {
+                TxtVisualShipTonnage.Text = $"◄────── {tons:N0}t (HS {hs:F0}) / ~{lengthM:N0} metros ──────►";
+                double targetWidth = Math.Max(90, Math.Min(360, 90 + (Math.Min(tons, 100000) / 100000.0) * 270));
+                BdrVisualShipSilhouette.Width = targetWidth;
+            }
+        }
+
+        private string GetRealWorldComparisonString(double tonnage, double lengthM)
+        {
+            if (tonnage < 500)
+            {
+                return $"✈️ Tamaño equivalente a un Caza de Combate F-22 Raptor o Su-57 ({lengthM:N0}m de largo)";
+            }
+            if (tonnage < 1500)
+            {
+                return $"✈️ Tamaño equivalente a un Avión Comercial Boeing 747 Jumbo / Estación Espacial ({lengthM:N0}m)";
+            }
+            if (tonnage < 4000)
+            {
+                return $"⚽ Más largo que un Campo de Fútbol Reglamentario de Primera División ({lengthM:N0}m vs 105m)";
+            }
+            if (tonnage < 8000)
+            {
+                return $"🗽 Más alto/largo que la Estatua de la Libertad ({lengthM:N0}m vs 93m) / Casi 2 Campos de Fútbol";
+            }
+            if (tonnage < 15000)
+            {
+                return $"🏛️ Tan grande como el Coliseo Romano de extremo a extremo ({lengthM:N0}m vs 189m)";
+            }
+            if (tonnage < 30000)
+            {
+                return $"🚢 Tan largo como un Portaaviones Supercarrier Nimitz / Torre Eiffel horizontal ({lengthM:N0}m vs 333m)";
+            }
+            if (tonnage < 55000)
+            {
+                return $"🏙️ Más largo que la altura del Rascacielos Empire State Building ({lengthM:N0}m vs 443m)";
+            }
+            if (tonnage < 90000)
+            {
+                return $"🌉 Tan largo como la sección principal del Puente Golden Gate ({lengthM:N0}m vs 500m+)";
+            }
+            return $"🗼 Magnitud monumental equivalente al Rascacielos Burj Khalifa ({lengthM:N0}m vs 828m)";
         }
     }
 }

@@ -142,48 +142,75 @@
                     </Border>
                 </Grid>
 
-                <!-- Visual Hull Scale Reference & Sci-Fi Blueprint Diagram -->
-                <Border Grid.Row="2" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,8" ToolTip="Representación visual interactiva de escala de nave según tonelaje de casco.">
+                <!-- Visual Hull Scale Reference & Real-World Magnitude HUD -->
+                <Border Grid.Row="2" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8" ToolTip="Telemetría de escala física y comparativa de magnitud real con monumentos y vehículos terrestres.">
                     <StackPanel>
-                        <DockPanel Margin="0,0,0,4">
-                            <TextBlock Text="🚀 REFERENCIA VISUAL DE ESCALA Y SILUETA NAVAL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
-                            <TextBlock x:Name="LblVisualScaleClass" Text="Clase: Destructor (10,000t / HS 200)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/>
+                        <!-- Header & Live Category Class -->
+                        <DockPanel Margin="0,0,0,6">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="📐 TELEMETRÍA DE ESCALA FÍSICA &amp; MAGNITUD REAL" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11"/>
+                                <Border Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="3" Padding="6,1" Margin="8,0,0,0">
+                                    <TextBlock x:Name="TxtScaleDimensionsSummary" Text="Longitud: 185m | Manga: 41m | Vol: 12,600m³" Foreground="{DynamicResource AccentCyanBrush}" FontSize="9.5" FontWeight="Bold"/>
+                                </Border>
+                            </StackPanel>
+                            <TextBlock x:Name="LblVisualScaleClass" Text="Clase: Destructor Escuadra (9,000t / HS 180)" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10.5" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         </DockPanel>
-                        <Border Height="55" Background="#0A121D" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6">
+
+                        <!-- Real World Magnitude Comparison Badge Banner -->
+                        <Border x:Name="BdrRealWorldComparisonTag" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" CornerRadius="4" Padding="8,4" Margin="0,0,0,6">
+                            <DockPanel>
+                                <TextBlock Text="📏 MAGNITUD EN EL MUNDO REAL:" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock x:Name="TxtRealWorldComparison" Text="🚢 Tan largo como un Portaaviones Supercarrier Nimitz / Torre Eiffel horizontal (333m)" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="10.5" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Interactive Sci-Fi Blueprint Diagram & Scale Gauges -->
+                        <Border Height="60" Background="#070D16" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6">
                             <Grid>
-                                <UniformGrid Columns="5" Opacity="0.15">
+                                <!-- HUD Grid Lines -->
+                                <UniformGrid Columns="6" Opacity="0.12">
+                                    <Border BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1,0,0,0"/>
                                     <Border BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1,0,0,0"/>
                                     <Border BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1,0,0,0"/>
                                     <Border BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1,0,0,0"/>
                                     <Border BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1,0,0,0"/>
                                     <Border BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1,0,0,0"/>
                                 </UniformGrid>
+
                                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <Border x:Name="BdrVisualShipSilhouette" Width="220" Height="24" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1.5" CornerRadius="12">
+                                    <!-- Dynamic Silhouette Bar -->
+                                    <Border x:Name="BdrVisualShipSilhouette" Width="260" Height="24" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1.5" CornerRadius="12" ToolTip="Dimensión relativa del casco respecto a naves capitales imperiales.">
                                         <Grid>
-                                            <TextBlock x:Name="TxtVisualShipTonnage" Text="◄═══ 10,000 Tons (HS 200) ═══►" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <TextBlock x:Name="TxtVisualShipTonnage" Text="◄────────── 9,000 Tons (HS 180) / ~185 metros ──────────►" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="9.5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                         </Grid>
                                     </Border>
-                                    <TextBlock Text="📏 Escala Comparativa: 1,000t (Caza/Corbeta) ── 10,000t (Destructor) ── 100,000t (Acorazado)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5" HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                                    <!-- Scale Benchmark Line -->
+                                    <DockPanel Width="380" Margin="0,3,0,0">
+                                        <TextBlock Text="✈️ Caza (25m)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8.5"/>
+                                        <TextBlock Text="🗽 Libertad (93m)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8.5"/>
+                                        <TextBlock Text="🚢 Nimitz (333m)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8.5"/>
+                                        <TextBlock Text="🏙️ Empire State (443m)" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="8.5" HorizontalAlignment="Right"/>
+                                    </DockPanel>
                                 </StackPanel>
                             </Grid>
                         </Border>
                     </StackPanel>
                 </Border>
 
-                <!-- Tactical Doctrine & Design Purpose Card -->
-                <Border Grid.Row="3" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,8" ToolTip="Ficha técnica de doctrina táctica, propósito de diseño y expectativas operativas de la nave. Si estás creando un preset propio, puedes editar este texto y guardarlo.">
+                <!-- Tactical Fleet Intelligence Dossier Card -->
+                <Border Grid.Row="3" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,8" ToolTip="Dossier oficial de doctrina táctica, propósito de diseño y perfil operativo. Editable para diseños personalizados del usuario.">
                     <StackPanel>
-                        <DockPanel Margin="0,0,0,4">
+                        <DockPanel Margin="0,0,0,6">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="📖 DOCTRINA TÁCTICA &amp; PROPÓSITO DE DISEÑO" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
+                                <TextBlock Text="📖 DOSSIER TÁCTICO &amp; ENSAMBLAJE IMPERIAL" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="11"/>
                                 <Border x:Name="BdrPresetTypeTag" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="3" Padding="6,2" Margin="8,0,0,0">
                                     <TextBlock x:Name="TxtPresetTypeTag" Text="📌 Preset Oficial de la Marina Imperial" Foreground="{DynamicResource AccentCyanBrush}" FontSize="9.5" FontWeight="Bold"/>
                                 </Border>
                             </StackPanel>
-                            <TextBlock Text="✏️ Editable para Diseños del Usuario" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <TextBlock Text="✍️ Editable para Diseños Personalizados" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         </DockPanel>
-                        <TextBox x:Name="TxtTacticalDescription" Text="Selecciona una plantilla o escribe aquí la doctrina táctica y propósito de diseño de tu nave..." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" TextWrapping="Wrap" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="6" MinHeight="55" MaxHeight="90" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" ToolTip="Describe el rol de la nave, sus capacidades tácticas, armamento, doctrina operativa y expectativas de combate."/>
+
+                        <TextBox x:Name="TxtTacticalDescription" Text="Selecciona una plantilla o escribe aquí la doctrina táctica y propósito de diseño de tu nave..." Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" TextWrapping="Wrap" Background="{DynamicResource BgDarkBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="8" MinHeight="75" MaxHeight="120" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" ToolTip="Describe el propósito de la nave, su rol en flota, tácticas de combate, perfil de magnitud y rendimiento esperado."/>
                     </StackPanel>
                 </Border>
 

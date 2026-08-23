@@ -239,7 +239,10 @@
                                     <TextBlock x:Name="TxtPresetTypeTag" Text="📌 Preset Oficial Marina Imperial" Foreground="{DynamicResource AccentCyanBrush}" FontSize="11" FontWeight="Bold"/>
                                 </Border>
                             </StackPanel>
-                            <TextBlock Text="✍️ Editables en Diseños del Usuario" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <CheckBox x:Name="ChkDynamicDossier" Content="⚡ Dossier Dinámico en Vivo" IsChecked="True" Checked="OnDynamicDossierChecked" Unchecked="OnDynamicDossierUnchecked" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,10,0" ToolTip="Sintetiza automáticamente los 4 puntos del dossier táctico en tiempo real en base a los componentes, armas, velocidad, armadura y sensores actuales de la nave."/>
+                                <TextBlock Text="✍️ Editables en Diseños del Usuario" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center"/>
+                            </StackPanel>
                         </DockPanel>
 
                         <!-- Clean Unified 4-Section Grid -->

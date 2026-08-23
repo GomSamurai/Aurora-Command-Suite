@@ -1020,6 +1020,16 @@ namespace AuroraDesignSuite.Views
             Recalculate();
         }
 
+        private void OnDynamicDossierChecked(object sender, RoutedEventArgs e)
+        {
+            SynthesizeDynamicTacticalDossier();
+        }
+
+        private void OnDynamicDossierUnchecked(object sender, RoutedEventArgs e)
+        {
+            // Preserves custom user text without auto-updating
+        }
+
         public void Recalculate()
         {
             if (TxtClassName == null) return;
@@ -1275,6 +1285,72 @@ namespace AuroraDesignSuite.Views
 
             // Sync Section 4 of Dossier Táctico dynamically with real calculated length
             SyncDossierScaleProfileWithCalculatedLength(lengthM, widthM, volumeM3, cleanObjName, refLength);
+
+            // Synthesize full 4-point dynamic dossier if live dynamic mode is active
+            SynthesizeDynamicTacticalDossier();
+        }
+
+        private void SynthesizeDynamicTacticalDossier()
+        {
+            if (ChkDynamicDossier?.IsChecked != true) return;
+            if (TxtDossierPurpose == null || TxtDossierDoctrine == null || TxtDossierExpectations == null || TxtDossierScaleProfile == null) return;
+
+            double tons = CurrentDesign.TotalTonnage;
+            if (tons <= 0) tons = 1000;
+
+            double lengthM = Math.Round(42.0 * Math.Pow(tons / 1000.0, 0.38) * 1.85, 0);
+            if (lengthM < 15) lengthM = 15;
+            double widthM = Math.Round(lengthM * 0.22, 0);
+            double volumeM3 = Math.Round(tons * 1.45, 0);
+
+            (string objName, double refLength, double refWidth, string catName) = GetRealWorldReferenceObject(tons, lengthM);
+            string cleanObjName = objName.Replace("🏛️ ", "").Replace("🚢 ", "").Replace("🗽 ", "").Replace("✈️ ", "").Replace("🏙️ ", "").Replace("🗼 ", "").Replace("⚽ ", "").Replace("🌉 ", "");
+
+            // 1. PROPÓSITO DE DISEÑO & ROL
+            bool hasMissiles = _selectedComponents.Any(x => x.Component.TypeName.ToLower().Contains("magazine") || x.Component.TypeName.ToLower().Contains("launcher") || x.Component.ComponentName.ToLower().Contains("missile"));
+            bool hasBeam = _selectedComponents.Any(x => x.Component.TypeName.ToLower().Contains("beam") || x.Component.TypeName.ToLower().Contains("weapon") || x.Component.TypeName.ToLower().Contains("laser") || x.Component.TypeName.ToLower().Contains("gauss"));
+            bool hasSensors = _selectedComponents.Any(x => x.Component.TypeName.ToLower().Contains("sensor") || x.Component.TypeName.ToLower().Contains("active") || x.Component.TypeName.ToLower().Contains("passive"));
+            bool hasJump = _selectedComponents.Any(x => x.Component.TypeName.ToLower().Contains("jump"));
+            bool hasCarrier = _selectedComponents.Any(x => x.Component.TypeName.ToLower().Contains("hangar") || x.Component.TypeName.ToLower().Contains("carrier"));
+            bool hasMining = _selectedComponents.Any(x => x.Component.ComponentName.ToLower().Contains("mining") || x.Component.ComponentName.ToLower().Contains("harvester"));
+
+            string roleText;
+            if (CurrentDesign.IsMilitary)
+            {
+                if (hasCarrier) roleText = $"Nave insignia de proyección aeronaval embarcada ({tons:N0} t).";
+                else if (hasMissiles && hasBeam) roleText = $"Nave de combate pesado con batería mixta VLS y cañones de energía ({tons:N0} t).";
+                else if (hasMissiles) roleText = $"Plataforma de combate pesado de misiles VLS a larga distancia ({tons:N0} t).";
+                else if (hasBeam) roleText = $"Buque de combate directo energizado e interdicción táctica ({tons:N0} t).";
+                else if (hasJump) roleText = $"Buque guía de salto táctico de flota ({tons:N0} t).";
+                else if (hasSensors) roleText = $"Nave de mando, alerta temprana y guerra electromagnética AWACS ({tons:N0} t).";
+                else roleText = $"Buque de combate militar de la Marina Imperial ({tons:N0} t).";
+            }
+            else
+            {
+                if (hasMining) roleText = $"Plataforma de extracción minera y refinado de Sorium orbital ({tons:N0} t).";
+                else if (hasSensors) roleText = $"Nave de exploración científica y prospección geológica/gravitacional ({tons:N0} t).";
+                else roleText = $"Nave comercial de soporte logístico e industrial para rutas del Imperio ({tons:N0} t).";
+            }
+            TxtDossierPurpose.Text = roleText;
+
+            // 2. DOCTRINA OPERATIVA & SINERGIAS
+            string speedStr = $"{CurrentDesign.MaxSpeedKmS:N0} km/s";
+            string rangeStr = $"{CurrentDesign.RangeBillionKm:N2} Billones km ({CurrentDesign.RangeAU:F1} AU)";
+            string armorStr = $"{CurrentDesign.ArmorThickness} capas de armadura composite";
+            string shieldStr = CurrentDesign.ShieldStrength > 0 ? $", matriz de escudos de {CurrentDesign.ShieldStrength:N0} HP" : "";
+            string depStr = $"{CurrentDesign.PlannedDeploymentMonths} meses de despliegue";
+
+            TxtDossierDoctrine.Text = $"Navegación a {speedStr} con alcance de {rangeStr}. Protección de {armorStr}{shieldStr} y soporte vital para {depStr}.";
+
+            // 3. RENDIMIENTO & LÍMITES TÁCTICOS
+            string mspStr = $"{CurrentDesign.TotalMSP:N0} MSP";
+            string maintLifeStr = $"{CurrentDesign.MaintenanceLifeYears:F1} Años MTBF";
+            string costStr = $"{CurrentDesign.TotalCostBP:N1} BP";
+
+            TxtDossierExpectations.Text = $"Fiabilidad de {mspStr} ({maintLifeStr}). Firma Térmica: {CurrentDesign.ThermalSignature:N0} | EM: {CurrentDesign.EMSignature:N0}. Costo de fabricación: {costStr}.";
+
+            // 4. PERFIL DE MAGNITUD EN PUERTO
+            TxtDossierScaleProfile.Text = $"{lengthM:N0} metros de eslora ({widthM:N0}m de manga, {volumeM3:N0}m³). Comparables a {cleanObjName} ({refLength:N0}m). Casco acorazado para diques imperiales.";
         }
 
         private void SyncDossierScaleProfileWithCalculatedLength(double lengthM, double widthM, double volumeM3, string cleanObjName, double refLength)

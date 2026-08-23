@@ -716,50 +716,113 @@ namespace AuroraDesignSuite.Views
 
         private void AutoBalanceHabitationAndMaintenance()
         {
-            var hab = _allComponents.FirstOrDefault(c => c.TypeName == "Habitation") ??
-                      _allComponents.FirstOrDefault(c => c.ComponentName.ToLower().Contains("crew quarters"));
+            // 1. Find or create Habitation component
+            var hab = _allComponents.FirstOrDefault(c => c.ComponentTypeID == 2) ??
+                      _allComponents.FirstOrDefault(c => c.TypeName.Equals("Habitation", StringComparison.OrdinalIgnoreCase)) ??
+                      _allComponents.FirstOrDefault(c => c.TypeName.Equals("Crew Quarters", StringComparison.OrdinalIgnoreCase)) ??
+                      _allComponents.FirstOrDefault(c => c.ComponentName.ToLower().Contains("crew quarters")) ??
+                      _allComponents.FirstOrDefault(c => c.ComponentName.ToLower().Contains("alojamiento"));
 
-            var maint = _allComponents.FirstOrDefault(c => c.TypeName == "Maintenance") ??
-                        _allComponents.FirstOrDefault(c => c.ComponentName.ToLower().Contains("engineering"));
+            if (hab == null)
+            {
+                hab = new Component
+                {
+                    ComponentID = 9901,
+                    ComponentName = "Crew Quarters (50 Berths)",
+                    TypeName = "Habitation",
+                    ComponentTypeID = 2,
+                    ComponentSize = 1.0,
+                    Cost = 2.0,
+                    Crew = 0,
+                    MineralCosts = new Dictionary<string, double> { { "Duranium", 2.0 } }
+                };
+                _allComponents.Add(hab);
+            }
 
+            // 2. Find or create Maintenance component
+            var maint = _allComponents.FirstOrDefault(c => c.ComponentTypeID == 31 || c.ComponentTypeID == 47 || c.ComponentTypeID == 48) ??
+                        _allComponents.FirstOrDefault(c => c.TypeName.Equals("Maintenance", StringComparison.OrdinalIgnoreCase)) ??
+                        _allComponents.FirstOrDefault(c => c.TypeName.Equals("Engineering", StringComparison.OrdinalIgnoreCase)) ??
+                        _allComponents.FirstOrDefault(c => c.ComponentName.ToLower().Contains("engineering")) ??
+                        _allComponents.FirstOrDefault(c => c.ComponentName.ToLower().Contains("mantenimiento"));
+
+            if (maint == null)
+            {
+                maint = new Component
+                {
+                    ComponentID = 9902,
+                    ComponentName = "Engineering Spaces",
+                    TypeName = "Maintenance",
+                    ComponentTypeID = 31,
+                    ComponentSize = 1.0,
+                    Cost = 10.0,
+                    Crew = 5,
+                    MaintSupplies = 25,
+                    MineralCosts = new Dictionary<string, double> { { "Duranium", 5.0 } }
+                };
+                _allComponents.Add(maint);
+            }
+
+            // 3. Calculate total crew required for non-habitation components
             int totalCrewReq = 0;
             double totalHS = 0;
             foreach (var item in _selectedComponents)
             {
                 totalHS += item.TotalHS;
-                if (!item.Component.TypeName.Equals("Habitation", StringComparison.OrdinalIgnoreCase) && 
-                    !item.Component.ComponentName.ToLower().Contains("crew quarters"))
+                bool isHabComp = item.Component.ComponentTypeID == 2 ||
+                                 item.Component.TypeName.Equals("Habitation", StringComparison.OrdinalIgnoreCase) || 
+                                 item.Component.TypeName.Equals("Crew Quarters", StringComparison.OrdinalIgnoreCase) || 
+                                 item.Component.ComponentName.ToLower().Contains("crew quarters") ||
+                                 item.Component.ComponentName.ToLower().Contains("alojamiento");
+
+                if (!isHabComp)
                 {
-                    totalCrewReq += item.Component.Crew * item.Quantity;
+                    int cCount = item.Component.Crew;
+                    if (cCount <= 0)
+                    {
+                        var n = item.Component.ComponentName.ToLower();
+                        var t = item.Component.TypeName.ToLower();
+                        if (t.Contains("engine") || n.Contains("engine") || n.Contains("drive")) cCount = Math.Max(1, (int)(item.Component.ComponentSize * 0.8));
+                        else if (t.Contains("beam") || t.Contains("weapon") || n.Contains("cannon") || n.Contains("laser")) cCount = Math.Max(1, (int)(item.Component.ComponentSize * 0.8));
+                        else if (t.Contains("jump") || n.Contains("jump")) cCount = Math.Max(1, (int)(item.Component.ComponentSize * 0.8));
+                        else if (t.Contains("active") || t.Contains("sensor")) cCount = Math.Max(1, (int)(item.Component.ComponentSize * 0.4));
+                        else if (t.Contains("magazine")) cCount = Math.Max(1, (int)(item.Component.ComponentSize * 0.5));
+                    }
+                    totalCrewReq += cCount * item.Quantity;
                 }
             }
 
+            // 4. Update or insert Habitation component in _selectedComponents
             int habQuantityNeeded = Math.Max(1, (int)Math.Ceiling(totalCrewReq / 50.0));
-            if (hab != null)
+            var existingHab = _selectedComponents.FirstOrDefault(x => x.Component.ComponentTypeID == 2 ||
+                                                                      x.Component.TypeName.Equals("Habitation", StringComparison.OrdinalIgnoreCase) || 
+                                                                      x.Component.TypeName.Equals("Crew Quarters", StringComparison.OrdinalIgnoreCase) || 
+                                                                      x.Component.ComponentName.ToLower().Contains("crew quarters") ||
+                                                                      x.Component.ComponentName.ToLower().Contains("alojamiento"));
+            if (existingHab != null)
             {
-                var existingHab = _selectedComponents.FirstOrDefault(x => x.Component.TypeName == "Habitation" || 
-                                                                          x.Component.ComponentName.ToLower().Contains("crew quarters"));
-                if (existingHab != null)
-                {
-                    existingHab.Quantity = habQuantityNeeded;
-                }
-                else
-                {
-                    _selectedComponents.Add(new SelectedComponentItem { Component = hab, Quantity = habQuantityNeeded });
-                }
+                existingHab.Quantity = habQuantityNeeded;
+            }
+            else
+            {
+                _selectedComponents.Add(new SelectedComponentItem { Component = hab, Quantity = habQuantityNeeded });
             }
 
-            // Maintenance auto balance
+            // 5. Maintenance auto balance for military ships
             bool isMilitaryComp = _selectedComponents.Any(x => 
                 x.Component.TypeName.ToLower().Contains("engine") && !x.Component.ComponentName.ToLower().Contains("commercial") ||
                 x.Component.TypeName.ToLower().Contains("beam") || x.Component.TypeName.ToLower().Contains("weapon") ||
                 x.Component.TypeName.ToLower().Contains("active") || x.Component.TypeName.ToLower().Contains("shield"));
 
-            if (isMilitaryComp && maint != null)
+            if (isMilitaryComp)
             {
                 int engineeringNeeded = Math.Max(1, (int)Math.Ceiling(totalHS / 50.0));
-                var existingMaint = _selectedComponents.FirstOrDefault(x => x.Component.TypeName == "Maintenance" || 
-                                                                             x.Component.ComponentName.ToLower().Contains("engineering"));
+                var existingMaint = _selectedComponents.FirstOrDefault(x => x.Component.ComponentTypeID == 31 ||
+                                                                             x.Component.ComponentTypeID == 47 ||
+                                                                             x.Component.TypeName.Equals("Maintenance", StringComparison.OrdinalIgnoreCase) || 
+                                                                             x.Component.TypeName.Equals("Engineering", StringComparison.OrdinalIgnoreCase) || 
+                                                                             x.Component.ComponentName.ToLower().Contains("engineering") ||
+                                                                             x.Component.ComponentName.ToLower().Contains("mantenimiento"));
                 if (existingMaint != null)
                 {
                     existingMaint.Quantity = engineeringNeeded;
@@ -768,6 +831,11 @@ namespace AuroraDesignSuite.Views
                 {
                     _selectedComponents.Add(new SelectedComponentItem { Component = maint, Quantity = engineeringNeeded });
                 }
+            }
+
+            if (DgSelectedComponents != null)
+            {
+                DgSelectedComponents.Items.Refresh();
             }
         }
 

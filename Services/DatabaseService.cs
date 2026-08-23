@@ -1204,13 +1204,15 @@ namespace AuroraDesignSuite.Services
                 System.Diagnostics.Debug.WriteLine($"Error fetching components: {ex.Message}");
             }
 
-            // Only merge fallback standard components when in Sandbox mode (onlyResearched = false) or if no components exist at all
-            if (!onlyResearched || components.Count == 0)
+            // Always merge essential fallback components (Crew Quarters, Maintenance, Fuel Tanks) if missing
+            var defaults = GetDefaultFallbackComponents();
+            foreach (var d in defaults)
             {
-                var defaults = GetDefaultFallbackComponents();
-                foreach (var d in defaults)
+                if (!seenIds.Contains(d.ComponentID))
                 {
-                    if (!seenIds.Contains(d.ComponentID))
+                    bool existsType = components.Any(c => c.ComponentTypeID == d.ComponentTypeID || 
+                                                          c.TypeName.Equals(d.TypeName, StringComparison.OrdinalIgnoreCase));
+                    if (!onlyResearched || !existsType)
                     {
                         components.Add(d);
                         seenIds.Add(d.ComponentID);

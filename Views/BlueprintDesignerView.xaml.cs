@@ -936,9 +936,30 @@ namespace AuroraDesignSuite.Views
             MessageBox.Show("📋 Ficha técnica de la nave copiada al portapapeles en formato oficial de Aurora 4X.", "Copiado al Portapapeles", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        private void BtnAutoBalanceCrew_Click(object sender, RoutedEventArgs e)
+        {
+            AutoBalanceHabitationAndMaintenance();
+            Recalculate();
+        }
+
+        private void OnAutoBalanceCrewChecked(object sender, RoutedEventArgs e)
+        {
+            Recalculate();
+        }
+
+        private void OnAutoBalanceCrewUnchecked(object sender, RoutedEventArgs e)
+        {
+            Recalculate();
+        }
+
         public void Recalculate()
         {
             if (TxtClassName == null) return;
+
+            if (ChkAutoBalanceCrew?.IsChecked == true)
+            {
+                AutoBalanceHabitationAndMaintenance();
+            }
 
             CurrentDesign.ClassName = TxtClassName?.Text ?? "Nueva Clase";
             int.TryParse(TxtDeploymentMonths?.Text, out int depMonths);

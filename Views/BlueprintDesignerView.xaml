@@ -286,8 +286,12 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" Margin="0,0,0,4">
-                        <TextBlock Text="Componentes Seleccionados en el Plano:" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Bold"/>
-                        <Button Content="✕ Eliminar Seleccionado" Click="BtnRemoveComponent_Click" HorizontalAlignment="Right" Padding="8,2" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" ToolTip="Quita el componente actualmente seleccionado en la lista del plano de la nave."/>
+                        <TextBlock Text="Componentes Seleccionados en el Plano:" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <CheckBox x:Name="ChkAutoBalanceCrew" Content="⚡ Auto-Balancear Habitabilidad" IsChecked="True" Checked="OnAutoBalanceCrewChecked" Unchecked="OnAutoBalanceCrewUnchecked" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,10,0" ToolTip="Cuando está activo, calcula automáticamente la tripulación total requerida por todos los sistemas y ajusta las plazas de alojamiento (Crew Quarters) requeridas."/>
+                            <Button Content="🏠 Auto-Ajustar Habitabilidad" Click="BtnAutoBalanceCrew_Click" Padding="8,2" Margin="0,0,6,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10.5" ToolTip="Calcula la tripulación total requerida por todos los sistemas y ajusta automáticamente la cantidad de alojamientos (Crew Quarters)."/>
+                            <Button Content="✕ Eliminar Seleccionado" Click="BtnRemoveComponent_Click" Padding="8,2" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentRedBrush}" BorderBrush="{DynamicResource AccentRedBrush}" ToolTip="Quita el componente actualmente seleccionado en la lista del plano de la nave."/>
+                        </StackPanel>
                     </Grid>
                     <DataGrid Grid.Row="1" x:Name="DgSelectedComponents" AutoGenerateColumns="False" CanUserAddRows="False" CellEditEnding="DgSelectedComponents_CellEditEnding">
                         <DataGrid.Columns>

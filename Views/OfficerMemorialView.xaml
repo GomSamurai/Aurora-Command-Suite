@@ -1,0 +1,123 @@
+<UserControl x:Class="AuroraDesignSuite.Views.OfficerMemorialView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200">
+    <Grid Background="{DynamicResource BgDarkBrush}" Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Header & Filter Banner -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="🎖️ MAUSOLEO IMPERIAL &amp; MEDALLERO DE HONOR" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="15" VerticalAlignment="Center"/>
+                    <Border Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" CornerRadius="4" Padding="6,2" Margin="10,0,0,0">
+                        <TextBlock x:Name="TxtMemorialSummary" Text="0 Oficiales Registrados | 0 Medallas Concedidas" Foreground="{DynamicResource AccentAmberBrush}" FontSize="11" FontWeight="Bold"/>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Buscar Oficial:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox x:Name="TxtSearchOfficer" Width="180" Height="24" TextChanged="TxtSearchOfficer_TextChanged" ToolTip="Filtra por nombre u honor militar."/>
+                    <Button Content="🔄 Actualizar" Click="BtnRefresh_Click" Padding="10,2" Margin="8,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main 2-Column Content Layout -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Column 0: Officers Grid -->
+            <Border Grid.Column="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="🏛️ SALÓN DE HONOR Y ANNALES IMPERIALES" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+
+                    <DataGrid Grid.Row="1" x:Name="DgOfficers" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgOfficers_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Rango &amp; Nombre" Binding="{Binding Name}" Width="*"/>
+                            <DataGridTextColumn Header="Cuerpo / Rol" Binding="{Binding CommanderTypeDisplay}" Width="140"/>
+                            <DataGridTextColumn Header="Estado Imperial" Binding="{Binding StatusDisplay}" Width="160"/>
+                            <DataGridTextColumn Header="Medallas" Binding="{Binding TotalMedalsCount, StringFormat={}{0:N0}}" Width="70"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <!-- Column 1: Splitter -->
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="Transparent"/>
+
+            <!-- Column 2: Selected Officer Dossier & Medals -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Top: Officer Dossier Card -->
+                <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,4">
+                    <StackPanel>
+                        <TextBlock x:Name="TxtOfficerNameHeader" Text="🎖️ EXPEDIENTE DE HONOR DE OFICIAL" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="14" Margin="0,0,0,8"/>
+
+                        <Grid Margin="0,3">
+                            <TextBlock Text="Estado de Servicio:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            <TextBlock x:Name="LblOfficerStatus" Text="-" Foreground="White" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,3">
+                            <TextBlock Text="Rama Militar:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            <TextBlock x:Name="LblOfficerType" Text="-" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,3">
+                            <TextBlock Text="Registro de Bajas Enemigas:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            <TextBlock x:Name="LblOfficerKills" Text="-" Foreground="{DynamicResource AccentGreenBrush}" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <Border Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,10,0,0">
+                            <TextBlock x:Name="TxtCitationQuote" Text="📜 'Servicio distinguido en las filas del Imperio. Su lealtad y liderazgo perdurarán en los anales de la flota.'" Foreground="{DynamicResource TextPrimaryBrush}" FontStyle="Italic" TextWrapping="Wrap" FontSize="11"/>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Bottom: Medals & Decorations List -->
+                <Border Grid.Row="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,4,0,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="🏅 CONDECORACIONES Y MEDALLAS OTORGADAS" Foreground="{DynamicResource AccentAmberBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+
+                        <DataGrid Grid.Row="1" x:Name="DgMedals" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Medalla" Binding="{Binding DisplayName}" Width="150"/>
+                                <DataGridTextColumn Header="Motivo de la Condecoración" Binding="{Binding AwardReason}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

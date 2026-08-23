@@ -3266,5 +3266,423 @@ namespace AuroraDesignSuite.Services
 
             return null;
         }
+
+        public List<GroundFormation> GetGroundFormations(int raceId)
+        {
+            var list = new List<GroundFormation>();
+            try
+            {
+                using var conn = GetConnection();
+                string sql = @"
+                    SELECT f.FormationID, f.Name, f.Abbreviation, f.RaceID, f.PopulationID,
+                           COALESCE(p.PopName, 'En Órbita / Nave') as LocationName,
+                           COALESCE(SUM(e.Units * c.Size), 0.0) as TotalSizeTons,
+                           COALESCE(SUM(e.Units * c.Cost), 0.0) as TotalCostBP,
+                           COALESCE(SUM(e.Units), 0) as TotalUnits
+                    FROM FCT_GroundUnitFormation f
+                    LEFT JOIN FCT_Population p ON f.PopulationID = p.PopulationID
+                    LEFT JOIN FCT_GroundUnitFormationElement e ON f.FormationID = e.FormationID
+                    LEFT JOIN FCT_GroundUnitClass c ON e.ClassID = c.GroundUnitClassID
+                    WHERE f.RaceID = @raceId
+                    GROUP BY f.FormationID
+                    ORDER BY TotalSizeTons DESC, f.Name ASC";
+
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var form = new GroundFormation
+                    {
+                        FormationID = Convert.ToInt32(reader["FormationID"]),
+                        Name = reader["Name"] != DBNull.Value ? reader["Name"].ToString()! : "Formación Terrestre",
+                        Abbreviation = reader["Abbreviation"] != DBNull.Value ? reader["Abbreviation"].ToString()! : "GAR",
+                        RaceID = raceId,
+                        PopulationID = reader["PopulationID"] != DBNull.Value ? Convert.ToInt32(reader["PopulationID"]) : 0,
+                        LocationName = reader["LocationName"] != DBNull.Value ? reader["LocationName"].ToString()! : "En Órbita / Nave",
+                        TotalSizeTons = reader["TotalSizeTons"] != DBNull.Value ? Convert.ToDouble(reader["TotalSizeTons"]) : 0.0,
+                        TotalCostBP = reader["TotalCostBP"] != DBNull.Value ? Convert.ToDouble(reader["TotalCostBP"]) : 0.0,
+                        TotalUnits = reader["TotalUnits"] != DBNull.Value ? Convert.ToInt32(reader["TotalUnits"]) : 0
+                    };
+                    list.Add(form);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching ground formations: {ex.Message}");
+            }
+            return list;
+        }
+
+        public List<GroundFormationElement> GetGroundFormationElements(int formationId)
+        {
+            var list = new List<GroundFormationElement>();
+            try
+            {
+                using var conn = GetConnection();
+                string sql = @"
+                    SELECT e.ElementID, e.FormationID, e.Units, e.ClassID, e.Morale, e.FortificationLevel,
+                           c.ClassName, c.Size as UnitSizeTons, c.Cost as UnitCostBP,
+                           b.Name as BaseTypeName
+                    FROM FCT_GroundUnitFormationElement e
+                    JOIN FCT_GroundUnitClass c ON e.ClassID = c.GroundUnitClassID
+                    LEFT JOIN DIM_GroundUnitBaseType b ON c.BaseType = b.UnitBaseTypeID
+                    WHERE e.FormationID = @fId
+                    ORDER BY c.Size DESC, c.ClassName ASC";
+
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@fId", formationId);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    list.Add(new GroundFormationElement
+                    {
+                        ElementID = Convert.ToInt32(reader["ElementID"]),
+                        FormationID = formationId,
+                        Units = Convert.ToInt32(reader["Units"]),
+                        ClassID = Convert.ToInt32(reader["ClassID"]),
+                        ClassName = reader["ClassName"] != DBNull.Value ? reader["ClassName"].ToString()! : "Clase de Tropa",
+                        UnitSizeTons = reader["UnitSizeTons"] != DBNull.Value ? Convert.ToDouble(reader["UnitSizeTons"]) : 10.0,
+                        UnitCostBP = reader["UnitCostBP"] != DBNull.Value ? Convert.ToDouble(reader["UnitCostBP"]) : 1.0,
+                        BaseTypeName = reader["BaseTypeName"] != DBNull.Value ? reader["BaseTypeName"].ToString()! : "Infantería",
+                        Morale = reader["Morale"] != DBNull.Value ? Convert.ToInt32(reader["Morale"]) : 100,
+                        FortificationLevel = reader["FortificationLevel"] != DBNull.Value ? Convert.ToDouble(reader["FortificationLevel"]) : 1.0
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching ground formation elements: {ex.Message}");
+            }
+            return list;
+        }
+
+        public List<MemorialOfficerInfo> GetMemorialOfficers(int raceId)
+        {
+            var list = new List<MemorialOfficerInfo>();
+            try
+            {
+                using var conn = GetConnection();
+                string sql = @"
+                    SELECT c.CommanderID, c.Name, c.CommanderType, c.Deceased, c.RetireStatus,
+                           c.KillTonnageMilitary, c.KillTonnageCommercial, r.RankName
+                    FROM FCT_Commander c
+                    LEFT JOIN FCT_CommanderRank r ON c.RankID = r.RankID
+                    WHERE c.RaceID = @raceId
+                    ORDER BY c.Deceased DESC, c.RetireStatus DESC, (c.KillTonnageMilitary + c.KillTonnageCommercial) DESC, c.Name ASC";
+
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    int cmdId = Convert.ToInt32(reader["CommanderID"]);
+                    int type = Convert.ToInt32(reader["CommanderType"]);
+                    string typeDisp = type switch
+                    {
+                        1 => "⚓ Comandante Naval",
+                        2 => "🔬 Director Científico",
+                        3 => "🏛️ Gobernador Imperial",
+                        _ => "⚔️ Comandante de Tropas"
+                    };
+
+                    int milKills = reader["KillTonnageMilitary"] != DBNull.Value ? Convert.ToInt32(reader["KillTonnageMilitary"]) : 0;
+                    int comKills = reader["KillTonnageCommercial"] != DBNull.Value ? Convert.ToInt32(reader["KillTonnageCommercial"]) : 0;
+
+                    var item = new MemorialOfficerInfo
+                    {
+                        CommanderID = cmdId,
+                        Name = reader["Name"] != DBNull.Value ? reader["Name"].ToString()! : "Oficial",
+                        RankName = reader["RankName"] != DBNull.Value ? reader["RankName"].ToString()! : "Oficial",
+                        CommanderTypeDisplay = typeDisp,
+                        IsDeceased = reader["Deceased"] != DBNull.Value && Convert.ToBoolean(reader["Deceased"]),
+                        RetireStatus = reader["RetireStatus"] != DBNull.Value ? Convert.ToInt32(reader["RetireStatus"]) : 0,
+                        MilitaryKillsTons = milKills,
+                        CommercialKillsTons = comKills
+                    };
+
+                    // Query Medals
+                    string medalSql = @"
+                        SELECT cm.NumAwarded, cm.AwardReason, rm.MedalName, rm.MedalDescription, rm.MedalID
+                        FROM FCT_CommanderMedal cm
+                        JOIN FCT_RaceMedals rm ON cm.MedalID = rm.MedalID
+                        WHERE cm.CommanderID = @cId";
+                    using var mCmd = new SqliteCommand(medalSql, conn);
+                    mCmd.Parameters.AddWithValue("@cId", cmdId);
+                    using var mReader = mCmd.ExecuteReader();
+                    while (mReader.Read())
+                    {
+                        item.Medals.Add(new OfficerMedalInfo
+                        {
+                            MedalID = Convert.ToInt32(mReader["MedalID"]),
+                            MedalName = mReader["MedalName"] != DBNull.Value ? mReader["MedalName"].ToString()! : "Medalla Imperial",
+                            MedalDescription = mReader["MedalDescription"] != DBNull.Value ? mReader["MedalDescription"].ToString()! : "Condecoración de Honor",
+                            NumAwarded = Convert.ToInt32(mReader["NumAwarded"]),
+                            AwardReason = mReader["AwardReason"] != DBNull.Value ? mReader["AwardReason"].ToString()! : "Méritos de Servicio"
+                        });
+                    }
+
+                    item.TotalMedalsCount = item.Medals.Sum(m => m.NumAwarded);
+                    if (item.TotalMedalsCount > 0)
+                    {
+                        item.MedalsSummary = string.Join(", ", item.Medals.Select(m => m.DisplayName));
+                    }
+
+                    list.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching memorial officers: {ex.Message}");
+            }
+            return list;
+        }
+
+        public List<AlienRaceInfo> GetAlienRaces(int raceId)
+        {
+            var list = new List<AlienRaceInfo>();
+            try
+            {
+                using var conn = GetConnection();
+                string sql = @"
+                    SELECT AlienRaceID, ViewRaceID, AlienRaceName, Abbrev, CommStatus, DiplomaticPoints,
+                           TradeTreaty, TechTreaty, GeoTreaty, DamageCausedByAlienRace
+                    FROM FCT_AlienRace
+                    WHERE ViewRaceID = @raceId
+                    ORDER BY DamageCausedByAlienRace DESC, AlienRaceName ASC";
+
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    int alienRaceId = Convert.ToInt32(reader["AlienRaceID"]);
+                    var alien = new AlienRaceInfo
+                    {
+                        AlienRaceID = alienRaceId,
+                        ViewRaceID = raceId,
+                        AlienRaceName = reader["AlienRaceName"] != DBNull.Value ? reader["AlienRaceName"].ToString()! : "Especie Xeno",
+                        Abbrev = reader["Abbrev"] != DBNull.Value ? reader["Abbrev"].ToString()! : "XENO",
+                        CommStatus = reader["CommStatus"] != DBNull.Value ? Convert.ToInt32(reader["CommStatus"]) : 0,
+                        DiplomaticPoints = reader["DiplomaticPoints"] != DBNull.Value ? Convert.ToDouble(reader["DiplomaticPoints"]) : 0.0,
+                        HasTradeTreaty = reader["TradeTreaty"] != DBNull.Value && Convert.ToBoolean(reader["TradeTreaty"]),
+                        HasTechTreaty = reader["TechTreaty"] != DBNull.Value && Convert.ToBoolean(reader["TechTreaty"]),
+                        HasGeoTreaty = reader["GeoTreaty"] != DBNull.Value && Convert.ToBoolean(reader["GeoTreaty"]),
+                        DamageCaused = reader["DamageCausedByAlienRace"] != DBNull.Value ? Convert.ToDouble(reader["DamageCausedByAlienRace"]) : 0.0
+                    };
+
+                    // Query Alien Classes
+                    string classSql = @"
+                        SELECT AlienClassID, ClassName, MaxSpeed, ThermalSignature, TCS, ArmourStrength, ShieldStrength, ShipCount
+                        FROM FCT_AlienClass
+                        WHERE AlienRaceID = @aId";
+                    using var cCmd = new SqliteCommand(classSql, conn);
+                    cCmd.Parameters.AddWithValue("@aId", alienRaceId);
+                    using var cReader = cCmd.ExecuteReader();
+                    while (cReader.Read())
+                    {
+                        alien.Classes.Add(new AlienClassInfo
+                        {
+                            AlienClassID = Convert.ToInt32(cReader["AlienClassID"]),
+                            ClassName = cReader["ClassName"] != DBNull.Value ? cReader["ClassName"].ToString()! : "Clase Xeno",
+                            MaxSpeedKmS = cReader["MaxSpeed"] != DBNull.Value ? Convert.ToInt32(cReader["MaxSpeed"]) : 0,
+                            ThermalSignature = cReader["ThermalSignature"] != DBNull.Value ? Convert.ToDouble(cReader["ThermalSignature"]) : 0.0,
+                            TCS = cReader["TCS"] != DBNull.Value ? Convert.ToInt32(cReader["TCS"]) : 0,
+                            ArmourStrength = cReader["ArmourStrength"] != DBNull.Value ? Convert.ToInt32(cReader["ArmourStrength"]) : 0,
+                            ShieldStrength = cReader["ShieldStrength"] != DBNull.Value ? Convert.ToInt32(cReader["ShieldStrength"]) : 0,
+                            ObservedShipCount = cReader["ShipCount"] != DBNull.Value ? Convert.ToInt32(cReader["ShipCount"]) : 0
+                        });
+                    }
+
+                    list.Add(alien);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching alien races: {ex.Message}");
+            }
+            return list;
+        }
+
+        public List<TerraformWorldInfo> GetTerraformWorlds(int raceId)
+        {
+            var list = new List<TerraformWorldInfo>();
+            try
+            {
+                using var conn = GetConnection();
+                string sql = @"
+                    SELECT p.PopulationID, p.SystemBodyID, p.PopName, p.LastColonyCost,
+                           sb.SurfaceTemp, sb.AtmosPress, sb.Gravity, sb.HydroExt
+                    FROM FCT_Population p
+                    JOIN FCT_SystemBody sb ON p.SystemBodyID = sb.SystemBodyID
+                    WHERE p.RaceID = @raceId
+                    ORDER BY p.LastColonyCost DESC, p.Population DESC";
+
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    int sbId = Convert.ToInt32(reader["SystemBodyID"]);
+                    var world = new TerraformWorldInfo
+                    {
+                        PopulationID = Convert.ToInt32(reader["PopulationID"]),
+                        SystemBodyID = sbId,
+                        PopName = reader["PopName"] != DBNull.Value ? reader["PopName"].ToString()! : "Mundo Imperial",
+                        ColonyCost = reader["LastColonyCost"] != DBNull.Value ? Convert.ToDouble(reader["LastColonyCost"]) : 0.0,
+                        SurfaceTempKelvin = reader["SurfaceTemp"] != DBNull.Value ? Convert.ToDouble(reader["SurfaceTemp"]) : 288.15,
+                        AtmosPressure = reader["AtmosPress"] != DBNull.Value ? Convert.ToDouble(reader["AtmosPress"]) : 1.0,
+                        Gravity = reader["Gravity"] != DBNull.Value ? Convert.ToDouble(reader["Gravity"]) : 1.0,
+                        HydroExtent = reader["HydroExt"] != DBNull.Value ? Convert.ToDouble(reader["HydroExt"]) : 70.0
+                    };
+
+                    // Query Atmospheric Gases
+                    string gasSql = @"
+                        SELECT ag.AtmosGasID, g.Name, g.Symbol, ag.GasAtm, ag.FrozenOut,
+                               g.GHGas, g.AntiGHGas, g.Dangerous
+                        FROM FCT_AtmosphericGas ag
+                        JOIN DIM_Gases g ON ag.AtmosGasID = g.GasID
+                        WHERE ag.SystemBodyID = @sbId
+                        ORDER BY ag.GasAtm DESC";
+                    using var gCmd = new SqliteCommand(gasSql, conn);
+                    gCmd.Parameters.AddWithValue("@sbId", sbId);
+                    using var gReader = gCmd.ExecuteReader();
+                    while (gReader.Read())
+                    {
+                        world.Gases.Add(new AtmosphericGasInfo
+                        {
+                            GasID = Convert.ToInt32(gReader["AtmosGasID"]),
+                            GasName = gReader["Name"] != DBNull.Value ? gReader["Name"].ToString()! : "Gas",
+                            Symbol = gReader["Symbol"] != DBNull.Value ? gReader["Symbol"].ToString()! : "GAS",
+                            GasAtm = gReader["GasAtm"] != DBNull.Value ? Convert.ToDouble(gReader["GasAtm"]) : 0.0,
+                            IsFrozenOut = gReader["FrozenOut"] != DBNull.Value && Convert.ToBoolean(gReader["FrozenOut"]),
+                            IsGHGas = gReader["GHGas"] != DBNull.Value && Convert.ToInt32(gReader["GHGas"]) > 0,
+                            IsAntiGHGas = gReader["AntiGHGas"] != DBNull.Value && Convert.ToInt32(gReader["AntiGHGas"]) > 0,
+                            IsDangerous = gReader["Dangerous"] != DBNull.Value && Convert.ToInt32(gReader["Dangerous"]) > 0
+                        });
+                    }
+
+                    list.Add(world);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching terraform worlds: {ex.Message}");
+            }
+            return list;
+        }
+
+        public List<ColonyFuelStockpile> GetColonyFuelStockpiles(int raceId)
+        {
+            var list = new List<ColonyFuelStockpile>();
+            try
+            {
+                using var conn = GetConnection();
+                string sql = @"
+                    SELECT PopulationID, PopName, FuelStockpile, Sorium
+                    FROM FCT_Population
+                    WHERE RaceID = @raceId
+                    ORDER BY FuelStockpile DESC, Population DESC";
+
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    list.Add(new ColonyFuelStockpile
+                    {
+                        PopulationID = Convert.ToInt32(reader["PopulationID"]),
+                        PopName = reader["PopName"] != DBNull.Value ? reader["PopName"].ToString()! : "Colonia Imperial",
+                        FuelLiters = reader["FuelStockpile"] != DBNull.Value ? Convert.ToDouble(reader["FuelStockpile"]) : 0.0,
+                        SoriumTons = reader["Sorium"] != DBNull.Value ? Convert.ToDouble(reader["Sorium"]) : 0.0
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching colony fuel stockpiles: {ex.Message}");
+            }
+            return list;
+        }
+
+        public List<ShipFuelStatus> GetShipFuelStatuses(int raceId)
+        {
+            var list = new List<ShipFuelStatus>();
+            try
+            {
+                using var conn = GetConnection();
+                string sql = @"
+                    SELECT s.ShipID, s.ShipName, f.FleetName, sc.ClassName, s.Fuel, sc.FuelCapacity
+                    FROM FCT_Ship s
+                    JOIN FCT_ShipClass sc ON s.ShipClassID = sc.ShipClassID
+                    LEFT JOIN FCT_Fleet f ON s.FleetID = f.FleetID
+                    WHERE s.RaceID = @raceId
+                    ORDER BY s.Fuel / MAX(1.0, sc.FuelCapacity) ASC, s.ShipName ASC";
+
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    list.Add(new ShipFuelStatus
+                    {
+                        ShipID = Convert.ToInt32(reader["ShipID"]),
+                        ShipName = reader["ShipName"] != DBNull.Value ? reader["ShipName"].ToString()! : "Nave Imperial",
+                        FleetName = reader["FleetName"] != DBNull.Value ? reader["FleetName"].ToString()! : "Flota Desconocida",
+                        ClassName = reader["ClassName"] != DBNull.Value ? reader["ClassName"].ToString()! : "Clase",
+                        CurrentFuelLiters = reader["Fuel"] != DBNull.Value ? Convert.ToDouble(reader["Fuel"]) : 0.0,
+                        MaxFuelLiters = reader["FuelCapacity"] != DBNull.Value ? Convert.ToDouble(reader["FuelCapacity"]) : 0.0
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching ship fuel statuses: {ex.Message}");
+            }
+            return list;
+        }
+
+        public List<ImperialChronicleEvent> GetImperialChronicleEvents(int raceId, string categoryFilter = "")
+        {
+            var list = new List<ImperialChronicleEvent>();
+            try
+            {
+                using var conn = GetConnection();
+                string sql = @"
+                    SELECT gl.Time, gl.EventType, et.Description, gl.MessageText
+                    FROM FCT_GameLog gl
+                    LEFT JOIN DIM_EventType et ON gl.EventType = et.EventTypeID
+                    WHERE (gl.RaceID = @raceId OR gl.RaceID IS NULL)
+                    ORDER BY gl.Time DESC
+                    LIMIT 200";
+
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@raceId", raceId);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    string category = reader["Description"] != DBNull.Value ? reader["Description"].ToString()! : "General";
+                    string message = reader["MessageText"] != DBNull.Value ? reader["MessageText"].ToString()! : "";
+
+                    if (!string.IsNullOrEmpty(categoryFilter) && !category.ToLower().Contains(categoryFilter.ToLower()) && !message.ToLower().Contains(categoryFilter.ToLower()))
+                    {
+                        continue;
+                    }
+
+                    list.Add(new ImperialChronicleEvent
+                    {
+                        GameTimeSeconds = reader["Time"] != DBNull.Value ? Convert.ToDouble(reader["Time"]) : 0.0,
+                        EventTypeID = reader["EventType"] != DBNull.Value ? Convert.ToInt32(reader["EventType"]) : 0,
+                        CategoryName = category,
+                        MessageText = message
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error fetching imperial chronicle events: {ex.Message}");
+            }
+            return list;
+        }
     }
 }

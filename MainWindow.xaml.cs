@@ -491,6 +491,14 @@ namespace AuroraDesignSuite
             {
                 ViewCommanders.LoadCommandersData(_dbService, raceId);
             }
+            else if (MainTabControl.SelectedItem == TabOfficerMemorial && ViewOfficerMemorial != null)
+            {
+                ViewOfficerMemorial.LoadData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabGroundForces && ViewGroundForces != null)
+            {
+                ViewGroundForces.LoadData(_dbService, raceId);
+            }
             else if (MainTabControl.SelectedItem == TabIndustrial && ViewIndustrial != null)
             {
                 ViewIndustrial.LoadData(_dbService, raceId);
@@ -498,6 +506,22 @@ namespace AuroraDesignSuite
             else if (MainTabControl.SelectedItem == TabExploration && ViewExploration != null)
             {
                 ViewExploration.LoadData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabXenoIntel && ViewXenoIntel != null)
+            {
+                ViewXenoIntel.LoadData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabTerraforming && ViewTerraforming != null)
+            {
+                ViewTerraforming.LoadData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabFuelLogistics && ViewFuelLogistics != null)
+            {
+                ViewFuelLogistics.LoadData(_dbService, raceId);
+            }
+            else if (MainTabControl.SelectedItem == TabImperialChronicles && ViewImperialChronicles != null)
+            {
+                ViewImperialChronicles.LoadData(_dbService, raceId);
             }
             else if (MainTabControl.SelectedItem == TabMissile && ViewMissile != null)
             {

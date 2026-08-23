@@ -253,6 +253,30 @@
                 <views:CommandersHQView x:Name="ViewCommanders"/>
             </TabItem>
 
+            <TabItem x:Name="TabOfficerMemorial">
+                <TabItem.Header>
+                    <DockPanel LastChildFill="True">
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="🏛️" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Mausoleo y Medallas" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </TabItem.Header>
+                <views:OfficerMemorialView x:Name="ViewOfficerMemorial"/>
+            </TabItem>
+
+            <TabItem x:Name="TabGroundForces">
+                <TabItem.Header>
+                    <DockPanel LastChildFill="True">
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="🪖" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Ejércitos Terrestres" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </TabItem.Header>
+                <views:GroundForcesView x:Name="ViewGroundForces"/>
+            </TabItem>
+
             <!-- ========================================== -->
             <!-- CATEGORÍA 2: CIENCIA E INDUSTRIA           -->
             <!-- ========================================== -->
@@ -363,6 +387,54 @@
                     </DockPanel>
                 </TabItem.Header>
                 <views:SystemExplorationView x:Name="ViewExploration"/>
+            </TabItem>
+
+            <TabItem x:Name="TabXenoIntel">
+                <TabItem.Header>
+                    <DockPanel LastChildFill="True">
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="👽" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentCyanBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Inteligencia Alienígena" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </TabItem.Header>
+                <views:XenoIntelView x:Name="ViewXenoIntel"/>
+            </TabItem>
+
+            <TabItem x:Name="TabTerraforming">
+                <TabItem.Header>
+                    <DockPanel LastChildFill="True">
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="🌱" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentGreenBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Simulador Terraformación" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </TabItem.Header>
+                <views:TerraformingView x:Name="ViewTerraforming"/>
+            </TabItem>
+
+            <TabItem x:Name="TabFuelLogistics">
+                <TabItem.Header>
+                    <DockPanel LastChildFill="True">
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentAmberBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="⛽" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentAmberBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Logística de Combustible" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </TabItem.Header>
+                <views:FuelLogisticsView x:Name="ViewFuelLogistics"/>
+            </TabItem>
+
+            <TabItem x:Name="TabImperialChronicles">
+                <TabItem.Header>
+                    <DockPanel LastChildFill="True">
+                        <Border Width="24" Height="24" CornerRadius="4" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentGoldBrush}" BorderThickness="1" Margin="0,0,8,0">
+                            <TextBlock Text="📜" FontFamily="Segoe UI Emoji, Segoe UI" Foreground="{DynamicResource AccentGoldBrush}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Anales de la Historia Imperial" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </TabItem.Header>
+                <views:ImperialChroniclesView x:Name="ViewImperialChronicles"/>
             </TabItem>
 
             <!-- ========================================== -->

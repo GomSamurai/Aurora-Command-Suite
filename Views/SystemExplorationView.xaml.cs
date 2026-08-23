@@ -588,12 +588,14 @@ namespace AuroraDesignSuite.Views
                 // 3. Render Natural Satellites / Moons (Grouped per Parent Planet to avoid clutter)
                 if (showMoons && moonBodies.Count > 0)
                 {
+                    var bodyLookup = sys.Bodies.ToDictionary(b => b.SystemBodyID, b => b);
                     var moonsByParent = moonBodies.GroupBy(m => m.ParentBodyID).ToDictionary(g => g.Key, g => g.ToList());
 
                     foreach (var kvp in moonsByParent)
                     {
                         int parentId = kvp.Key;
                         var parentMoons = kvp.Value;
+                        SystemBodyInfo? parentBody = (parentId > 0 && bodyLookup.ContainsKey(parentId)) ? bodyLookup[parentId] : null;
 
                         Point parentPos = (parentId > 0 && planetPositions.ContainsKey(parentId))
                             ? planetPositions[parentId]
@@ -603,14 +605,17 @@ namespace AuroraDesignSuite.Views
                         {
                             var moon = parentMoons[mIdx];
 
+                            double dx = (parentBody != null) ? (moon.Xcor - parentBody.Xcor) : moon.Xcor;
+                            double dy = (parentBody != null) ? (moon.Ycor - parentBody.Ycor) : moon.Ycor;
+
                             double moonAngleRad = (moon.Bearing * Math.PI) / 180.0;
-                            if (Math.Abs(moon.Xcor) > 0.001 || Math.Abs(moon.Ycor) > 0.001)
+                            if (Math.Abs(dx) > 0.001 || Math.Abs(dy) > 0.001)
                             {
-                                moonAngleRad = Math.Atan2(-moon.Ycor, moon.Xcor);
+                                moonAngleRad = Math.Atan2(-dy, dx);
                             }
-                            if (moon.Bearing == 0 && moon.Xcor == 0 && moon.Ycor == 0)
+                            else if (moon.Bearing == 0)
                             {
-                                moonAngleRad = (2.0 * Math.PI * mIdx) / Math.Max(1, parentMoons.Count);
+                                moonAngleRad = (2.0 * Math.PI * mIdx) / Math.Max(1, parentMoons.Count) + (mIdx * 0.35);
                             }
 
                             double moonOrbitRadius = 35 + ((mIdx % 4) * 16) + ((mIdx / 4) * 22);

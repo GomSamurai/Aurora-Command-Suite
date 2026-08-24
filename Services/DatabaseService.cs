@@ -3701,5 +3701,45 @@ namespace AuroraDesignSuite.Services
             }
             return list;
         }
+
+        public ImperialChroniclesTelemetry GetImperialChroniclesTelemetry(int raceId)
+        {
+            var telemetry = new ImperialChroniclesTelemetry();
+            var events = GetImperialChronicleEvents(raceId);
+            telemetry.TotalEvents = events.Count;
+
+            foreach (var ev in events)
+            {
+                switch (ev.CategoryIcon)
+                {
+                    case "🔬 INVESTIGACIÓN": telemetry.ResearchEvents++; break;
+                    case "⚔️ COMBATE": telemetry.CombatEvents++; break;
+                    case "🧭 EXPLORACIÓN": telemetry.ExplorationEvents++; break;
+                    case "🎖️ OFICIALES": telemetry.OfficerEvents++; break;
+                    case "🏭 INDUSTRIA": telemetry.IndustryEvents++; break;
+                    case "⛽ LOGÍSTICA": telemetry.LogisticsEvents++; break;
+                }
+
+                if (string.IsNullOrEmpty(telemetry.TopTechName) || telemetry.TopTechName == "Sin Registrar")
+                {
+                    if (ev.MessageText.Contains("research into", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var m = System.Text.RegularExpressions.Regex.Match(ev.MessageText, @"research into\s+(.+?)(?=\s+completed|\s+working|$)");
+                        if (m.Success) telemetry.TopTechName = m.Groups[1].Value.Trim();
+                    }
+                }
+
+                if (string.IsNullOrEmpty(telemetry.TopHeroName) || telemetry.TopHeroName == "Sin Registrar")
+                {
+                    if (ev.MessageText.Contains("promoted", StringComparison.OrdinalIgnoreCase) || ev.MessageText.Contains("bonus", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var m = System.Text.RegularExpressions.Regex.Match(ev.MessageText, @"(?:Capitán de (?:Corbeta|Navío|Fragata)|Almirante|Adept|Seeker|R\d+|CIV)\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+");
+                        if (m.Success) telemetry.TopHeroName = m.Value.Trim();
+                    }
+                }
+            }
+
+            return telemetry;
+        }
     }
 }

@@ -52,14 +52,25 @@ namespace AuroraDesignSuite.Services
         {
             var list = new List<TokenSpan>();
 
-            string rankRegex = @"\b(?:Capitán de (?:Corbeta|Navío|Fragata)|Almirante|Comandante|Adept|Seeker|Syntagmatarchis|Antisyntagmatarchis|CIV|R\d+|Dr\.|Científico)\b\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)*";
-            string ledByRegex = @"(?<=led by\s+)[A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)+";
-            string techRegex = @"(?<=research into\s+)[A-Za-z0-9\-\.\s\/]+?(?=\s+(?:working|completed|at|$))";
-            string locRegex = @"(?<=\b(?:working on|completed at|trained on)\s+)[A-ZÁÉÍÓÚÑa-záéíóúñ0-9\s]+?(?=\s+(?:has|completed|is|$|\.))";
-            string alertRegex = @"\b(retired from the service|killed in an accident|killed in action|run out of fuel|destroyed|Low Fuel|Critical Fuel)\b";
-            string percentRegex = @"\b\d+%\b";
+            // Regex 1: Event Type Headers (e.g. 🔬 HITO CIENTÍFICO:, ⚔️ COMBATE NAVAL:)
+            string headerRegex = @"^(?:🔬 HITO CIENTÍFICO|🧠 DESARROLLO CIENTÍFICO|🎖️ DECRETO DE HONOR|🎖️ RETIRO CON HONORES|✝️ IN MEMORIAM|🎖️ PERFECCIONAMIENTO TÁCTICO|🧭 EXPLORACIÓN ESTELAR|💎 PROSPECCIÓN GEOLÓGICA|🌌 PUNTO DE SALTO|🪐 PROSPECCIÓN GRAVITACIONAL|🌍 PROSPECCIÓN TERRESTRE|🛰️ ESCÁNER ORBITAL|🏭 PRODUCCIÓN INDUSTRIAL|🏭 INICIO DE FABRICACIÓN|🪖 ADIESTRAMIENTO DE TROPAS|⚓ BOTADURA NAVAL|🏭 EXPANSIÓN COMERCIAL|🚀 NUEVA RUTA COMERCIAL|🛸 BOTADURA CIVIL|💥 ALERTA DE CATÁSTROFE|⚔️ COMBATE NAVAL|⛽ ALERTA LOGÍSTICA|⛽ EMERGENCIA LOGÍSTICA|⛽ TANQUES LLENOS):";
 
-            string masterPattern = $"({rankRegex})|({ledByRegex})|({techRegex})|({locRegex})|({alertRegex})|({percentRegex})";
+            // Regex 2: Officer & Leader Names
+            string rankRegex = @"(?:\b(?:oficial|Capitán de (?:Corbeta|Navío|Fragata)|Almirante|Comandante|Adept|Seeker|Syntagmatarchis|Antisyntagmatarchis|CIV|R\d+|Dr\.|Científico)\b\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)*)|(?<=liderado por\s+)[A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)+|(?<=al mando del oficial\s+)[A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)+";
+
+            // Regex 3: Tech Research Names
+            string techRegex = @"(?<=investigación de\s+)[A-Za-z0-9\-\.\s\/]+?(?=\s+(?:ha sido|en|$))";
+
+            // Regex 4: Locations & Systems
+            string locRegex = @"(?<=\b(?:en la colonia de|en el sistema|en el cuerpo celeste|en|sobre)\s+)[A-ZÁÉÍÓÚÑa-záéíóúñ0-9\s]+?(?=\s+(?:ha|reveló|completado|es|$|\.))";
+
+            // Regex 5: Alert Triggers
+            string alertRegex = @"\b(retirado con honores|fallecido trágicamente|fallo crítico|explotando|fuego enemigo|sin combustible|a la deriva|emergencia|combate)\b";
+
+            // Regex 6: Percentages & Stats
+            string percentRegex = @"\b\d+(?:\.\d+)?%\b";
+
+            string masterPattern = $"({headerRegex})|({rankRegex})|({techRegex})|({locRegex})|({alertRegex})|({percentRegex})";
 
             MatchCollection matches;
             try
@@ -81,7 +92,11 @@ namespace AuroraDesignSuite.Services
                 }
 
                 string val = m.Value;
-                if (m.Groups[1].Success || m.Groups[2].Success) // Officer Name
+                if (m.Groups[1].Success) // Header Banner
+                {
+                    list.Add(new TokenSpan { Text = val, HexColor = "#FFD700", IsBold = true }); // Imperial Gold
+                }
+                else if (m.Groups[2].Success) // Officer Name
                 {
                     list.Add(new TokenSpan { Text = val, HexColor = "#FFD700", IsBold = true }); // Amber Gold
                 }

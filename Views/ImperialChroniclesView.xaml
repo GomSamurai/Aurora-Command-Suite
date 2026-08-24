@@ -4,15 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1200">
-    <Grid Background="{DynamicResource BgDarkBrush}" Margin="8">
+             d:DesignHeight="850" d:DesignWidth="1300">
+    <Grid Background="{DynamicResource BgDarkBrush}" Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header Controls -->
-        <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,8">
+        <!-- ROW 0: Header Bar & Filters -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -21,30 +23,195 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="📜 HISTORIA E HISTORIAL DE EVENTOS IMPERIALES (ANALES DEL IMPERIO)" Foreground="{DynamicResource AccentGoldBrush}" FontWeight="Bold" FontSize="15" VerticalAlignment="Center"/>
-                    <Border Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentGoldBrush}" BorderThickness="1" CornerRadius="4" Padding="6,2" Margin="10,0,0,0">
-                        <TextBlock x:Name="TxtEventSummary" Text="0 Eventos Registrados" Foreground="{DynamicResource AccentGoldBrush}" FontSize="11" FontWeight="Bold"/>
+                    <Border Width="28" Height="28" CornerRadius="5" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentGoldBrush}" BorderThickness="1.5" Margin="0,0,10,0">
+                        <TextBlock Text="📜" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="ANALES DE LA HISTORIA IMPERIAL" Foreground="{DynamicResource AccentGoldBrush}" FontWeight="Bold" FontSize="15"/>
+                        <TextBlock Text="Crónicas y Registro Histórico Unificado de la Partida" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
+                    </StackPanel>
+                    <Border Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentGoldBrush}" BorderThickness="1" CornerRadius="4" Padding="8,3" Margin="14,0,0,0" VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtEventSummary" Text="0 Eventos Registrados" Foreground="{DynamicResource AccentGoldBrush}" FontSize="11.5" FontWeight="Bold"/>
                     </Border>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Filtrar Anales:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                    <TextBox x:Name="TxtSearchChronicle" Width="200" Height="24" TextChanged="TxtSearchChronicle_TextChanged" ToolTip="Busca eventos por texto o categoría (e.g. combate, investigación, descubrimiento)."/>
-                    <Button Content="🔄 Actualizar Anales" Click="BtnRefresh_Click" Padding="10,2" Margin="8,0,0,0" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold"/>
+                    <TextBlock Text="🔍 Buscar:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox x:Name="TxtSearchChronicle" Width="180" Height="28" TextChanged="TxtSearchChronicle_TextChanged" Padding="6,4" FontSize="11.5" ToolTip="Busca eventos por texto, oficial o tecnología." Margin="0,0,10,0"/>
+
+                    <TextBlock Text="🏷️ Categoría:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11.5" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <ComboBox x:Name="CmbCategoryFilter" SelectionChanged="CmbCategoryFilter_SelectionChanged" Width="150" Height="28" FontSize="11.5" Margin="0,0,10,0">
+                        <ComboBoxItem Content="🌟 Todas las Categorías" IsSelected="True"/>
+                        <ComboBoxItem Content="⚔️ Combate"/>
+                        <ComboBoxItem Content="🔬 Investigación"/>
+                        <ComboBoxItem Content="🧭 Exploración"/>
+                        <ComboBoxItem Content="🏭 Industria"/>
+                        <ComboBoxItem Content="🎖️ Oficiales"/>
+                        <ComboBoxItem Content="⛽ Logística"/>
+                    </ComboBox>
+
+                    <Button Content="🔄 Actualizar" Click="BtnRefresh_Click" Padding="12,4" Height="28" Background="{DynamicResource CardHeaderBrush}" Foreground="{DynamicResource AccentCyanBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11.5"/>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- Events DataGrid with Dynamic Color Coding & Badges -->
-        <Border Grid.Row="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8">
-            <DataGrid x:Name="DgEvents" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
+        <!-- ROW 1: Executive Telemetry KPI Dashboard (4 Cards) -->
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- KPI Card 1: Total Events -->
+            <Border Grid.Column="0" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentGoldBrush}" BorderThickness="1.5" CornerRadius="6" Padding="12" Margin="0,0,6,0">
+                <DockPanel>
+                    <Border Width="36" Height="36" CornerRadius="6" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentGoldBrush}" BorderThickness="1" Margin="0,0,10,0">
+                        <TextBlock Text="📜" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="ANALES IMPERIALES" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock x:Name="TxtKpiTotalEvents" Text="0 Eventos" Foreground="{DynamicResource AccentGoldBrush}" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock Text="Registrados en FCT_GameLog" Foreground="{DynamicResource AccentGreenBrush}" FontSize="9.5"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!-- KPI Card 2: Research & Science -->
+            <Border Grid.Column="1" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1.5" CornerRadius="6" Padding="12" Margin="4,0,4,0">
+                <DockPanel>
+                    <Border Width="36" Height="36" CornerRadius="6" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" Margin="0,0,10,0">
+                        <TextBlock Text="🔬" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="CIENCIA E INDUSTRIA" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock x:Name="TxtKpiResearch" Text="0 Hitos" Foreground="{DynamicResource AccentCyanBrush}" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock x:Name="TxtKpiResearchSub" Text="0% del Registro Histórico" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!-- KPI Card 3: Exploration -->
+            <Border Grid.Column="2" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" BorderThickness="1.5" CornerRadius="6" Padding="12" Margin="4,0,4,0">
+                <DockPanel>
+                    <Border Width="36" Height="36" CornerRadius="6" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentGreenBrush}" BorderThickness="1" Margin="0,0,10,0">
+                        <TextBlock Text="🧭" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="EXPLORACIÓN Y SISTEMAS" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock x:Name="TxtKpiExploration" Text="0 Prospecciones" Foreground="{DynamicResource AccentGreenBrush}" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock x:Name="TxtKpiExplorationSub" Text="0% del Registro Histórico" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!-- KPI Card 4: Officers & Honor -->
+            <Border Grid.Column="3" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource AccentPurpleBrush}" BorderThickness="1.5" CornerRadius="6" Padding="12" Margin="6,0,0,0">
+                <DockPanel>
+                    <Border Width="36" Height="36" CornerRadius="6" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource AccentPurpleBrush}" BorderThickness="1" Margin="0,0,10,0">
+                        <TextBlock Text="🎖️" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="OFICIALES Y HONORES" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock x:Name="TxtKpiOfficers" Text="0 Decretos" Foreground="{DynamicResource AccentPurpleBrush}" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock x:Name="TxtKpiOfficersSub" Text="0% del Registro Histórico" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="9.5"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+        </Grid>
+
+        <!-- ROW 2: Category Distribution Progress Telemetry & Hero Milestones -->
+        <Border Grid.Row="2" Background="{DynamicResource CardHeaderBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12,10" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="380"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Distribution Telemetry Progress Bars -->
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Text="📊 DISTRIBUCIÓN HISTÓRICA POR NÚCLEOS TEMÁTICOS" Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="11" Margin="0,0,0,6"/>
+                    <Grid Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                            <DockPanel Margin="0,0,0,2">
+                                <TextBlock Text="🔬 Ciencia" Foreground="{DynamicResource AccentCyanBrush}" FontSize="9.5" FontWeight="Bold"/>
+                                <TextBlock x:Name="TxtDistResearchVal" Text="0%" Foreground="{DynamicResource AccentCyanBrush}" FontSize="9.5" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </DockPanel>
+                            <ProgressBar x:Name="PbarDistResearch" Height="6" Minimum="0" Maximum="100" Value="0" Foreground="{DynamicResource AccentCyanBrush}" Background="{DynamicResource BgDarkBrush}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Margin="0,0,6,0">
+                            <DockPanel Margin="0,0,0,2">
+                                <TextBlock Text="🧭 Exploración" Foreground="{DynamicResource AccentGreenBrush}" FontSize="9.5" FontWeight="Bold"/>
+                                <TextBlock x:Name="TxtDistExplorationVal" Text="0%" Foreground="{DynamicResource AccentGreenBrush}" FontSize="9.5" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </DockPanel>
+                            <ProgressBar x:Name="PbarDistExploration" Height="6" Minimum="0" Maximum="100" Value="0" Foreground="{DynamicResource AccentGreenBrush}" Background="{DynamicResource BgDarkBrush}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Margin="0,0,6,0">
+                            <DockPanel Margin="0,0,0,2">
+                                <TextBlock Text="🎖️ Oficiales" Foreground="{DynamicResource AccentPurpleBrush}" FontSize="9.5" FontWeight="Bold"/>
+                                <TextBlock x:Name="TxtDistOfficersVal" Text="0%" Foreground="{DynamicResource AccentPurpleBrush}" FontSize="9.5" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </DockPanel>
+                            <ProgressBar x:Name="PbarDistOfficers" Height="6" Minimum="0" Maximum="100" Value="0" Foreground="{DynamicResource AccentPurpleBrush}" Background="{DynamicResource BgDarkBrush}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="3" Margin="0,0,6,0">
+                            <DockPanel Margin="0,0,0,2">
+                                <TextBlock Text="🏭 Industria" Foreground="{DynamicResource AccentAmberBrush}" FontSize="9.5" FontWeight="Bold"/>
+                                <TextBlock x:Name="TxtDistIndustryVal" Text="0%" Foreground="{DynamicResource AccentAmberBrush}" FontSize="9.5" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </DockPanel>
+                            <ProgressBar x:Name="PbarDistIndustry" Height="6" Minimum="0" Maximum="100" Value="0" Foreground="{DynamicResource AccentAmberBrush}" Background="{DynamicResource BgDarkBrush}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="4">
+                            <DockPanel Margin="0,0,0,2">
+                                <TextBlock Text="⚔️ Combate" Foreground="{DynamicResource AccentRedBrush}" FontSize="9.5" FontWeight="Bold"/>
+                                <TextBlock x:Name="TxtDistCombatVal" Text="0%" Foreground="{DynamicResource AccentRedBrush}" FontSize="9.5" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </DockPanel>
+                            <ProgressBar x:Name="PbarDistCombat" Height="6" Minimum="0" Maximum="100" Value="0" Foreground="{DynamicResource AccentRedBrush}" Background="{DynamicResource BgDarkBrush}"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <!-- Divider -->
+                <Border Grid.Column="1" Width="1" Background="{DynamicResource BorderBrush}" Margin="14,0"/>
+
+                <!-- VIP Milestones Card -->
+                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                    <TextBlock Text="🏆 HITOS DESTACADOS DEL IMPERIO" Foreground="{DynamicResource AccentGoldBrush}" FontWeight="Bold" FontSize="11" Margin="0,0,0,4"/>
+                    <DockPanel Margin="0,0,0,2">
+                        <TextBlock Text="🔬 Última Tech:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
+                        <TextBlock x:Name="TxtHeroTech" Text="Cargando..." Foreground="{DynamicResource AccentCyanBrush}" FontWeight="Bold" FontSize="10.5" TextTrimming="CharacterEllipsis" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock Text="⭐ Oficial Destacado:" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10.5"/>
+                        <TextBlock x:Name="TxtHeroOfficer" Text="Cargando..." Foreground="{DynamicResource AccentGoldBrush}" FontWeight="Bold" FontSize="10.5" TextTrimming="CharacterEllipsis" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ROW 3: Enriched Spanish Chronicles DataGrid -->
+        <Border Grid.Row="3" Background="{DynamicResource CardBgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8">
+            <DataGrid x:Name="DgEvents" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column" FontSize="12">
                 <DataGrid.Columns>
                     <!-- Category Badge Template Column -->
                     <DataGridTemplateColumn Header="Categoría / Tipo Evento" Width="180">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Border Background="{Binding BadgeBackground}" BorderBrush="{Binding BadgeBorder}" BorderThickness="1" CornerRadius="4" Padding="8,3" Margin="2" HorizontalAlignment="Left" VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding CategoryIcon}" Foreground="{Binding BadgeForeground}" FontWeight="Bold" FontSize="11"/>
+                                <Border Background="{Binding BadgeBackground}" BorderBrush="{Binding BadgeBorder}" BorderThickness="1" CornerRadius="4" Padding="8,4" Margin="2" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding CategoryIcon}" Foreground="{Binding BadgeForeground}" FontWeight="Bold" FontSize="11.5"/>
                                 </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -52,11 +219,11 @@
 
                     <DataGridTextColumn Header="Fecha Imperial / Stardate" Binding="{Binding FormattedDateDisplay}" Width="160"/>
 
-                    <!-- Formatted Rich Text Message Column -->
-                    <DataGridTemplateColumn Header="Detalle del Evento Histórico (Resaltado Inteligente)" Width="*">
+                    <!-- Formatted Spanish Rich Text Message Column -->
+                    <DataGridTemplateColumn Header="Detalle del Evento Histórico Imperial (Traducción Épica al Español)" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Margin="4,2" Loaded="TxtFormattedMessage_Loaded"/>
+                                <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Margin="6,4" Loaded="TxtFormattedMessage_Loaded" FontSize="12" LineHeight="18"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

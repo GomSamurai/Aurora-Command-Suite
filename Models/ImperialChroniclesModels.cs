@@ -1,4 +1,5 @@
 using System;
+using AuroraDesignSuite.Services;
 
 namespace AuroraDesignSuite.Models
 {
@@ -9,6 +10,8 @@ namespace AuroraDesignSuite.Models
         public int EventTypeID { get; set; }
         public string CategoryName { get; set; } = string.Empty;
         public string MessageText { get; set; } = string.Empty;
+
+        public string TranslatedMessageText => ImperialChronicleTranslator.TranslateToEpicSpanish(MessageText);
 
         public string FormattedDateDisplay
         {
@@ -36,6 +39,7 @@ namespace AuroraDesignSuite.Models
             var c when c.Contains("survey") || c.Contains("discovery") || c.Contains("system") => "🧭 EXPLORACIÓN",
             var c when c.Contains("build") || c.Contains("ship") || c.Contains("production") || c.Contains("harvester") || c.Contains("unit") => "🏭 INDUSTRIA",
             var c when c.Contains("commander") || c.Contains("officer") || c.Contains("retirement") || c.Contains("promot") || c.Contains("health") || c.Contains("assignment") => "🎖️ OFICIALES",
+            var c when c.Contains("fuel") || c.Contains("logistics") || c.Contains("supply") => "⛽ LOGÍSTICA",
             _ => "📜 EVENTO IMPERIAL"
         };
 
@@ -46,6 +50,7 @@ namespace AuroraDesignSuite.Models
             "🧭 EXPLORACIÓN" => "#072414",
             "🏭 INDUSTRIA" => "#2A1D07",
             "🎖️ OFICIALES" => "#2C0F38",
+            "⛽ LOGÍSTICA" => "#3B2609",
             _ => "#0C192E"
         };
 
@@ -56,6 +61,7 @@ namespace AuroraDesignSuite.Models
             "🧭 EXPLORACIÓN" => "#00FF88",
             "🏭 INDUSTRIA" => "#FFD700",
             "🎖️ OFICIALES" => "#D946EF",
+            "⛽ LOGÍSTICA" => "#F59E0B",
             _ => "#3B82F6"
         };
 
@@ -66,7 +72,40 @@ namespace AuroraDesignSuite.Models
             "🧭 EXPLORACIÓN" => "#66FFAA",
             "🏭 INDUSTRIA" => "#FFE066",
             "🎖️ OFICIALES" => "#F472B6",
+            "⛽ LOGÍSTICA" => "#FCD34D",
             _ => "#93C5FD"
         };
+
+        public string SeverityGroup => CategoryIcon switch
+        {
+            "⚔️ COMBATE" => "⚔️ Combates y Bajas",
+            "🔬 INVESTIGACIÓN" => "🔬 Hitos Científicos",
+            "🧭 EXPLORACIÓN" => "🧭 Descubrimientos",
+            "🏭 INDUSTRIA" => "🏭 Producción Industrial",
+            "🎖️ OFICIALES" => "🎖️ Decretos de Honor",
+            _ => "📜 Eventos Generales"
+        };
+    }
+
+    public class ImperialChroniclesTelemetry
+    {
+        public int TotalEvents { get; set; }
+        public int ResearchEvents { get; set; }
+        public int CombatEvents { get; set; }
+        public int ExplorationEvents { get; set; }
+        public int OfficerEvents { get; set; }
+        public int IndustryEvents { get; set; }
+        public int LogisticsEvents { get; set; }
+
+        public double ResearchPercent => TotalEvents > 0 ? (ResearchEvents * 100.0 / TotalEvents) : 0;
+        public double CombatPercent => TotalEvents > 0 ? (CombatEvents * 100.0 / TotalEvents) : 0;
+        public double ExplorationPercent => TotalEvents > 0 ? (ExplorationEvents * 100.0 / TotalEvents) : 0;
+        public double OfficerPercent => TotalEvents > 0 ? (OfficerEvents * 100.0 / TotalEvents) : 0;
+        public double IndustryPercent => TotalEvents > 0 ? (IndustryEvents * 100.0 / TotalEvents) : 0;
+        public double LogisticsPercent => TotalEvents > 0 ? (LogisticsEvents * 100.0 / TotalEvents) : 0;
+
+        public string TopHeroName { get; set; } = "Sin Registrar";
+        public string TopTechName { get; set; } = "Sin Registrar";
+        public string TopDiscoveredSystem { get; set; } = "Sol";
     }
 }

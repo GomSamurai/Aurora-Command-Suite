@@ -1,4 +1,6 @@
 using System;
+using System.Windows;
+using System.Windows.Media;
 using AuroraDesignSuite.Services;
 
 namespace AuroraDesignSuite.Models
@@ -43,38 +45,82 @@ namespace AuroraDesignSuite.Models
             _ => "📜 EVENTO IMPERIAL"
         };
 
-        public string BadgeBackground => CategoryIcon switch
+        private bool IsLightTheme()
         {
-            "⚔️ COMBATE" => "#3B0E0E",
-            "🔬 INVESTIGACIÓN" => "#09202C",
-            "🧭 EXPLORACIÓN" => "#072414",
-            "🏭 INDUSTRIA" => "#2A1D07",
-            "🎖️ OFICIALES" => "#2C0F38",
-            "⛽ LOGÍSTICA" => "#3B2609",
-            _ => "#0C192E"
-        };
+            try
+            {
+                if (Application.Current?.Resources["BgDarkBrush"] is SolidColorBrush b)
+                {
+                    return (b.Color.R * 0.299 + b.Color.G * 0.587 + b.Color.B * 0.114) > 128;
+                }
+            }
+            catch { }
+            return false;
+        }
 
-        public string BadgeBorder => CategoryIcon switch
+        public string BadgeBackground
         {
-            "⚔️ COMBATE" => "#FF4444",
-            "🔬 INVESTIGACIÓN" => "#00F0FF",
-            "🧭 EXPLORACIÓN" => "#00FF88",
-            "🏭 INDUSTRIA" => "#FFD700",
-            "🎖️ OFICIALES" => "#D946EF",
-            "⛽ LOGÍSTICA" => "#F59E0B",
-            _ => "#3B82F6"
-        };
+            get
+            {
+                if (IsLightTheme())
+                {
+                    return CategoryIcon switch
+                    {
+                        "⚔️ COMBATE" => "#FEE2E2",
+                        "🔬 INVESTIGACIÓN" => "#E0F2FE",
+                        "🧭 EXPLORACIÓN" => "#DCFCE7",
+                        "🏭 INDUSTRIA" => "#FEF3C7",
+                        "🎖️ OFICIALES" => "#F3E8FF",
+                        "⛽ LOGÍSTICA" => "#FFEDD5",
+                        _ => "#E2E8F0"
+                    };
+                }
 
-        public string BadgeForeground => CategoryIcon switch
+                return CategoryIcon switch
+                {
+                    "⚔️ COMBATE" => "#3B0E0E",
+                    "🔬 INVESTIGACIÓN" => "#09202C",
+                    "🧭 EXPLORACIÓN" => "#072414",
+                    "🏭 INDUSTRIA" => "#2A1D07",
+                    "🎖️ OFICIALES" => "#2C0F38",
+                    "⛽ LOGÍSTICA" => "#3B2609",
+                    _ => "#0C192E"
+                };
+            }
+        }
+
+        public string BadgeBorder
         {
-            "⚔️ COMBATE" => "#FF6B6B",
-            "🔬 INVESTIGACIÓN" => "#64F4FF",
-            "🧭 EXPLORACIÓN" => "#66FFAA",
-            "🏭 INDUSTRIA" => "#FFE066",
-            "🎖️ OFICIALES" => "#F472B6",
-            "⛽ LOGÍSTICA" => "#FCD34D",
-            _ => "#93C5FD"
-        };
+            get
+            {
+                if (IsLightTheme())
+                {
+                    return CategoryIcon switch
+                    {
+                        "⚔️ COMBATE" => "#B91C1C",
+                        "🔬 INVESTIGACIÓN" => "#0284C7",
+                        "🧭 EXPLORACIÓN" => "#15803D",
+                        "🏭 INDUSTRIA" => "#B45309",
+                        "🎖️ OFICIALES" => "#6B21A8",
+                        "⛽ LOGÍSTICA" => "#C2410C",
+                        _ => "#475569"
+                    };
+                }
+
+                return CategoryIcon switch
+                {
+                    "⚔️ COMBATE" => "#FF4444",
+                    "🔬 INVESTIGACIÓN" => "#00F0FF",
+                    "🧭 EXPLORACIÓN" => "#00FF88",
+                    "🏭 INDUSTRIA" => "#FFD700",
+                    "🎖️ OFICIALES" => "#D946EF",
+                    "⛽ LOGÍSTICA" => "#F59E0B",
+                    _ => "#3B82F6"
+                };
+            }
+        }
+
+        public string BadgeForeground => BadgeBorder;
 
         public string SeverityGroup => CategoryIcon switch
         {

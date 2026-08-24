@@ -57,6 +57,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#9DA8C0",
                 AccentCyan = "#00F0FF",
                 AccentAmber = "#FFD700",
+                AccentGold = "#FFD700",
                 AccentGreen = "#00FF88",
                 AccentRed = "#FF4444",
                 AccentPurple = "#BF5AF2",
@@ -79,6 +80,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#8B949E",
                 AccentCyan = "#00F0FF",
                 AccentAmber = "#FFB700",
+                AccentGold = "#FFD700",
                 AccentGreen = "#00FF88",
                 AccentRed = "#FF5555",
                 AccentPurple = "#AF52DE",
@@ -96,6 +98,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#7EA691",
                 AccentCyan = "#00FF88",
                 AccentAmber = "#00E5FF",
+                AccentGold = "#FFD700",
                 AccentGreen = "#55FF55",
                 AccentRed = "#FF3B30",
                 AccentPurple = "#AF52DE",
@@ -113,6 +116,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#9683B5",
                 AccentCyan = "#BF5AF2",
                 AccentAmber = "#FF2D55",
+                AccentGold = "#FFD700",
                 AccentGreen = "#00FF88",
                 AccentRed = "#FF3B30",
                 AccentPurple = "#D946EF",
@@ -130,6 +134,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#A87C71",
                 AccentCyan = "#FF9500",
                 AccentAmber = "#FF3B30",
+                AccentGold = "#FFD700",
                 AccentGreen = "#34D399",
                 AccentRed = "#EF4444",
                 AccentPurple = "#C084FC",
@@ -147,6 +152,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#A0AEC0",
                 AccentCyan = "#63B3ED",
                 AccentAmber = "#F6AD55",
+                AccentGold = "#FFD700",
                 AccentGreen = "#48BB78",
                 AccentRed = "#F56565",
                 AccentPurple = "#9F7AEA",
@@ -164,6 +170,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#FEB2B2",
                 AccentCyan = "#FC8181",
                 AccentAmber = "#F6AD55",
+                AccentGold = "#FFD700",
                 AccentGreen = "#68D391",
                 AccentRed = "#E53E3E",
                 AccentPurple = "#B794F4",
@@ -181,6 +188,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#9AE6B4",
                 AccentCyan = "#68D391",
                 AccentAmber = "#4FD1C5",
+                AccentGold = "#FFD700",
                 AccentGreen = "#38A169",
                 AccentRed = "#E53E3E",
                 AccentPurple = "#B794F4",
@@ -203,6 +211,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#475569",
                 AccentCyan = "#1E3A8A",
                 AccentAmber = "#B45309",
+                AccentGold = "#B45309",
                 AccentGreen = "#15803D",
                 AccentRed = "#B91C1C",
                 AccentPurple = "#6B21A8",
@@ -220,6 +229,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#4A5568",
                 AccentCyan = "#0284C7",
                 AccentAmber = "#C2410C",
+                AccentGold = "#C2410C",
                 AccentGreen = "#166534",
                 AccentRed = "#C53030",
                 AccentPurple = "#7E22CE",
@@ -237,6 +247,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#586E75",
                 AccentCyan = "#B58900",
                 AccentAmber = "#CB4B16",
+                AccentGold = "#B58900",
                 AccentGreen = "#2AA198",
                 AccentRed = "#DC322F",
                 AccentPurple = "#6C71C4",
@@ -254,6 +265,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#334155",
                 AccentCyan = "#0369A1",
                 AccentAmber = "#D97706",
+                AccentGold = "#D97706",
                 AccentGreen = "#047857",
                 AccentRed = "#BE123C",
                 AccentPurple = "#581C87",
@@ -271,6 +283,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#78350F",
                 AccentCyan = "#0369A1",
                 AccentAmber = "#B45309",
+                AccentGold = "#B45309",
                 AccentGreen = "#15803D",
                 AccentRed = "#B91C1C",
                 AccentPurple = "#6B21A8",
@@ -293,6 +306,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#9CA3AF",
                 AccentCyan = "#38BDF8",
                 AccentAmber = "#FBBF24",
+                AccentGold = "#FFD700",
                 AccentGreen = "#34D399",
                 AccentRed = "#F87171",
                 AccentPurple = "#C084FC",
@@ -310,6 +324,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#A7F3D0",
                 AccentCyan = "#34D399",
                 AccentAmber = "#F59E0B",
+                AccentGold = "#FFD700",
                 AccentGreen = "#10B981",
                 AccentRed = "#EF4444",
                 AccentPurple = "#A78BFA",
@@ -327,6 +342,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#FDBA74",
                 AccentCyan = "#FB923C",
                 AccentAmber = "#FACC15",
+                AccentGold = "#FFD700",
                 AccentGreen = "#4ADE80",
                 AccentRed = "#F87171",
                 AccentPurple = "#E879F9",
@@ -344,6 +360,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#A9B1D6",
                 AccentCyan = "#7AA2F7",
                 AccentAmber = "#F7768E",
+                AccentGold = "#FFD700",
                 AccentGreen = "#73DACA",
                 AccentRed = "#F7768E",
                 AccentPurple = "#BB9AF7",
@@ -366,6 +383,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#DDD6FE",
                 AccentCyan = "#A78BFA",
                 AccentAmber = "#F472B6",
+                AccentGold = "#FFD700",
                 AccentGreen = "#34D399",
                 AccentRed = "#FB7185",
                 AccentPurple = "#C084FC",
@@ -383,6 +401,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#A5F3FC",
                 AccentCyan = "#22D3EE",
                 AccentAmber = "#FACC15",
+                AccentGold = "#FFD700",
                 AccentGreen = "#34D399",
                 AccentRed = "#F87171",
                 AccentPurple = "#C084FC",
@@ -400,6 +419,7 @@ namespace AuroraDesignSuite.Services
                 TextSecondary = "#A1A1AA",
                 AccentCyan = "#E4E4E7",
                 AccentAmber = "#D4D4D8",
+                AccentGold = "#FFD700",
                 AccentGreen = "#10B981",
                 AccentRed = "#EF4444",
                 AccentPurple = "#A855F7",
@@ -439,6 +459,20 @@ namespace AuroraDesignSuite.Services
 
             var res = Application.Current.Resources;
 
+            bool isLight = false;
+            try
+            {
+                var c = (Color)ColorConverter.ConvertFromString(theme.BgDark);
+                isLight = (c.R * 0.299 + c.G * 0.587 + c.B * 0.114) > 128;
+            }
+            catch { }
+
+            string goldColor = theme.AccentGold;
+            if (string.IsNullOrEmpty(goldColor) || (isLight && goldColor == "#FFD700"))
+            {
+                goldColor = isLight ? "#B45309" : "#FFD700";
+            }
+
             SetResource(res, "BgDarkColor", "BgDarkBrush", theme.BgDark);
             SetResource(res, "CardBgColor", "CardBgBrush", theme.CardBg);
             SetResource(res, "CardHeaderColor", "CardHeaderBrush", theme.CardHeader);
@@ -448,7 +482,7 @@ namespace AuroraDesignSuite.Services
             
             SetResource(res, "AccentCyanColor", "AccentCyanBrush", theme.AccentCyan);
             SetResource(res, "AccentAmberColor", "AccentAmberBrush", theme.AccentAmber);
-            SetResource(res, "AccentGoldColor", "AccentGoldBrush", string.IsNullOrEmpty(theme.AccentGold) ? "#FFD700" : theme.AccentGold);
+            SetResource(res, "AccentGoldColor", "AccentGoldBrush", goldColor);
             SetResource(res, "AccentGreenColor", "AccentGreenBrush", theme.AccentGreen);
             SetResource(res, "AccentRedColor", "AccentRedBrush", theme.AccentRed);
             SetResource(res, "AccentPurpleColor", "AccentPurpleBrush", theme.AccentPurple);

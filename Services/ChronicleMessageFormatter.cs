@@ -24,11 +24,15 @@ namespace AuroraDesignSuite.Services
                 var run = new Run(token.Text);
                 if (token.IsBold) run.FontWeight = FontWeights.Bold;
 
-                if (!string.IsNullOrEmpty(token.HexColor))
+                if (Application.Current != null && Application.Current.Resources.Contains(token.ResourceKey))
+                {
+                    run.Foreground = (Brush)Application.Current.Resources[token.ResourceKey];
+                }
+                else if (!string.IsNullOrEmpty(token.FallbackHex))
                 {
                     try
                     {
-                        var color = (Color)ColorConverter.ConvertFromString(token.HexColor);
+                        var color = (Color)ColorConverter.ConvertFromString(token.FallbackHex);
                         run.Foreground = new SolidColorBrush(color);
                     }
                     catch
@@ -38,7 +42,7 @@ namespace AuroraDesignSuite.Services
                 }
                 else
                 {
-                    run.Foreground = (Brush)Application.Current.Resources["TextPrimaryBrush"] ?? System.Windows.Media.Brushes.White;
+                    run.Foreground = System.Windows.Media.Brushes.White;
                 }
 
                 textBlock.Inlines.Add(run);
@@ -48,7 +52,8 @@ namespace AuroraDesignSuite.Services
         private class TokenSpan
         {
             public string Text { get; set; } = string.Empty;
-            public string HexColor { get; set; } = "#E6EDF3";
+            public string ResourceKey { get; set; } = "TextPrimaryBrush";
+            public string FallbackHex { get; set; } = "#E6EDF3";
             public bool IsBold { get; set; } = false;
         }
 
@@ -83,7 +88,7 @@ namespace AuroraDesignSuite.Services
             }
             catch
             {
-                list.Add(new TokenSpan { Text = text });
+                list.Add(new TokenSpan { Text = text, ResourceKey = "TextPrimaryBrush" });
                 return list;
             }
 
@@ -92,37 +97,37 @@ namespace AuroraDesignSuite.Services
             {
                 if (m.Index > lastIdx)
                 {
-                    list.Add(new TokenSpan { Text = text.Substring(lastIdx, m.Index - lastIdx), HexColor = "#E6EDF3" });
+                    list.Add(new TokenSpan { Text = text.Substring(lastIdx, m.Index - lastIdx), ResourceKey = "TextPrimaryBrush" });
                 }
 
                 string val = m.Value;
                 if (m.Groups[1].Success) // Header Banner
                 {
-                    list.Add(new TokenSpan { Text = val, HexColor = "#FFD700", IsBold = true }); // Imperial Gold
+                    list.Add(new TokenSpan { Text = val, ResourceKey = "AccentGoldBrush", FallbackHex = "#FFD700", IsBold = true });
                 }
                 else if (m.Groups[2].Success) // Officer Name
                 {
-                    list.Add(new TokenSpan { Text = val, HexColor = "#FFE066", IsBold = true }); // Warm Amber Gold
+                    list.Add(new TokenSpan { Text = val, ResourceKey = "AccentAmberBrush", FallbackHex = "#FFE066", IsBold = true });
                 }
                 else if (m.Groups[3].Success) // Tech
                 {
-                    list.Add(new TokenSpan { Text = val, HexColor = "#00F0FF", IsBold = true }); // Cyan
+                    list.Add(new TokenSpan { Text = val, ResourceKey = "AccentCyanBrush", FallbackHex = "#00F0FF", IsBold = true });
                 }
                 else if (m.Groups[4].Success) // Location
                 {
-                    list.Add(new TokenSpan { Text = val, HexColor = "#00FF88", IsBold = true }); // Emerald
+                    list.Add(new TokenSpan { Text = val, ResourceKey = "AccentGreenBrush", FallbackHex = "#00FF88", IsBold = true });
                 }
                 else if (m.Groups[5].Success) // Alert / Sin Asignar
                 {
-                    list.Add(new TokenSpan { Text = val, HexColor = "#FF6B6B", IsBold = true }); // Rose
+                    list.Add(new TokenSpan { Text = val, ResourceKey = "AccentRedBrush", FallbackHex = "#FF6B6B", IsBold = true });
                 }
                 else if (m.Groups[6].Success) // Numbers / Stats
                 {
-                    list.Add(new TokenSpan { Text = val, HexColor = "#64F4FF", IsBold = true }); // Light Cyan
+                    list.Add(new TokenSpan { Text = val, ResourceKey = "AccentCyanBrush", FallbackHex = "#64F4FF", IsBold = true });
                 }
                 else
                 {
-                    list.Add(new TokenSpan { Text = val, HexColor = "#E6EDF3" });
+                    list.Add(new TokenSpan { Text = val, ResourceKey = "TextPrimaryBrush" });
                 }
 
                 lastIdx = m.Index + m.Length;
@@ -130,7 +135,7 @@ namespace AuroraDesignSuite.Services
 
             if (lastIdx < text.Length)
             {
-                list.Add(new TokenSpan { Text = text.Substring(lastIdx), HexColor = "#E6EDF3" });
+                list.Add(new TokenSpan { Text = text.Substring(lastIdx), ResourceKey = "TextPrimaryBrush" });
             }
 
             return list;

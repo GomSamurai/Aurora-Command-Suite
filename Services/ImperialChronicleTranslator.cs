@@ -115,6 +115,7 @@ namespace AuroraDesignSuite.Services
             if (string.IsNullOrWhiteSpace(rawMessage)) return string.Empty;
 
             string cleanMsg = rawMessage.Trim();
+            string translated = cleanMsg;
 
             try
             {
@@ -122,7 +123,8 @@ namespace AuroraDesignSuite.Services
                 {
                     if (pattern.IsMatch(cleanMsg))
                     {
-                        return pattern.Replace(cleanMsg, replacement);
+                        translated = pattern.Replace(cleanMsg, replacement);
+                        break;
                     }
                 }
             }
@@ -131,26 +133,25 @@ namespace AuroraDesignSuite.Services
                 System.Diagnostics.Debug.WriteLine($"Error translating message: {ex.Message}");
             }
 
-            // Fallback word replacement for non-templated messages
-            string text = cleanMsg;
+            // Post-processing translations for residual English terms
             try
             {
-                text = Regex.Replace(text, @"\bcompleted at\b", "completado en", RegexOptions.IgnoreCase);
-                text = Regex.Replace(text, @"\bcompleted\b", "completado", RegexOptions.IgnoreCase);
-                text = Regex.Replace(text, @"\btrained on\b", "adiestrado en", RegexOptions.IgnoreCase);
-                text = Regex.Replace(text, @"\bdiscovered\b", "descubierto en", RegexOptions.IgnoreCase);
-                text = Regex.Replace(text, @"\bunder the command of\b", "al mando de", RegexOptions.IgnoreCase);
-                text = Regex.Replace(text, @"\bhas retired from the service\b", "se ha retirado del servicio imperial", RegexOptions.IgnoreCase);
-                text = Regex.Replace(text, @"\bpromoted to\b", "promovido a", RegexOptions.IgnoreCase);
-                text = Regex.Replace(text, @"\bhas increased to\b", "se ha incrementado a", RegexOptions.IgnoreCase);
-                text = Regex.Replace(text, @"\bUnassigned\b", "Sin Asignar", RegexOptions.IgnoreCase);
+                translated = Regex.Replace(translated, @"\bUnassigned\b", "Sin Asignar", RegexOptions.IgnoreCase);
+                translated = Regex.Replace(translated, @"\bcompleted at\b", "completado en", RegexOptions.IgnoreCase);
+                translated = Regex.Replace(translated, @"\bcompleted\b", "completado", RegexOptions.IgnoreCase);
+                translated = Regex.Replace(translated, @"\btrained on\b", "adiestrado en", RegexOptions.IgnoreCase);
+                translated = Regex.Replace(translated, @"\bdiscovered\b", "descubierto en", RegexOptions.IgnoreCase);
+                translated = Regex.Replace(translated, @"\bunder the command of\b", "al mando de", RegexOptions.IgnoreCase);
+                translated = Regex.Replace(translated, @"\bhas retired from the service\b", "se ha retirado del servicio imperial", RegexOptions.IgnoreCase);
+                translated = Regex.Replace(translated, @"\bpromoted to\b", "promovido a", RegexOptions.IgnoreCase);
+                translated = Regex.Replace(translated, @"\bhas increased to\b", "se ha incrementado a", RegexOptions.IgnoreCase);
             }
             catch
             {
-                // Return original string if fallback fails
+                // Fallback
             }
 
-            return text;
+            return translated;
         }
     }
 }

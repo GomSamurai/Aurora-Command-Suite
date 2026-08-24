@@ -36,6 +36,10 @@ namespace AuroraDesignSuite.Services
                         run.Foreground = System.Windows.Media.Brushes.White;
                     }
                 }
+                else
+                {
+                    run.Foreground = (Brush)Application.Current.Resources["TextPrimaryBrush"] ?? System.Windows.Media.Brushes.White;
+                }
 
                 textBlock.Inlines.Add(run);
             }
@@ -52,11 +56,11 @@ namespace AuroraDesignSuite.Services
         {
             var list = new List<TokenSpan>();
 
-            // Regex 1: Event Type Headers (e.g. 🔬 HITO CIENTÍFICO:, ⚔️ COMBATE NAVAL:)
-            string headerRegex = @"^(?:🔬 HITO CIENTÍFICO|🧠 DESARROLLO CIENTÍFICO|🎖️ DECRETO DE HONOR|🎖️ RETIRO CON HONORES|✝️ IN MEMORIAM|🎖️ PERFECCIONAMIENTO TÁCTICO|🧭 EXPLORACIÓN ESTELAR|💎 PROSPECCIÓN GEOLÓGICA|🌌 PUNTO DE SALTO|🪐 PROSPECCIÓN GRAVITACIONAL|🌍 PROSPECCIÓN TERRESTRE|🛰️ ESCÁNER ORBITAL|🏭 PRODUCCIÓN INDUSTRIAL|🏭 INICIO DE FABRICACIÓN|🪖 ADIESTRAMIENTO DE TROPAS|⚓ BOTADURA NAVAL|🏭 EXPANSIÓN COMERCIAL|🚀 NUEVA RUTA COMERCIAL|🛸 BOTADURA CIVIL|💥 ALERTA DE CATÁSTROFE|⚔️ COMBATE NAVAL|⛽ ALERTA LOGÍSTICA|⛽ EMERGENCIA LOGÍSTICA|⛽ TANQUES LLENOS):";
+            // Regex 1: Event Type Header Banners (e.g. 🔬 HITO CIENTÍFICO:, 🎖️ RETIRO CON HONORES:)
+            string headerRegex = @"^(?:🔬 HITO CIENTÍFICO|🧠 DESARROLLO CIENTÍFICO|🎖️ DECRETO DE ASCENSO|🎖️ DECRETO DE HONOR|🎖️ RETIRO CON HONORES|✝️ IN MEMORIAM|🎖️ PERFECCIONAMIENTO TÁCTICO|🧭 EXPLORACIÓN ESTELAR|💎 PROSPECCIÓN GEOLÓGICA|🌌 PUNTO DE SALTO|🪐 PROSPECCIÓN GRAVITACIONAL|🌍 PROSPECCIÓN TERRESTRE|🛰️ ESCÁNER ORBITAL|🏭 PRODUCCIÓN INDUSTRIAL|🏭 INICIO DE FABRICACIÓN|🪖 ADIESTRAMIENTO DE TROPAS|⚓ BOTADURA NAVAL|🏭 EXPANSIÓN COMERCIAL|🚀 NUEVA RUTA COMERCIAL|🛸 BOTADURA CIVIL|💥 ALERTA DE CATÁSTROFE|⚔️ COMBATE NAVAL|⛽ ALERTA LOGÍSTICA|⛽ EMERGENCIA LOGÍSTICA|⛽ TANQUES LLENOS):";
 
-            // Regex 2: Officer & Leader Names
-            string rankRegex = @"(?:\b(?:oficial|Capitán de (?:Corbeta|Navío|Fragata)|Almirante|Comandante|Adept|Seeker|Syntagmatarchis|Antisyntagmatarchis|CIV|R\d+|Dr\.|Científico)\b\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)*)|(?<=liderado por\s+)[A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)+|(?<=al mando del oficial\s+)[A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)+";
+            // Regex 2: Officer & Leader Names with ranks
+            string rankRegex = @"(?:\b(?:El oficial|oficial|Capitán de (?:Corbeta|Navío|Fragata)|Almirante|Comandante|Adept|Seeker|Syntagmatarchis|Antisyntagmatarchis|CIV|R\d+|Dr\.|Científico)\b\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)*)|(?<=liderado por\s+)[A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)+|(?<=al mando del oficial\s+)[A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)+";
 
             // Regex 3: Tech Research Names
             string techRegex = @"(?<=investigación de\s+)[A-Za-z0-9\-\.\s\/]+?(?=\s+(?:ha sido|en|$))";
@@ -64,13 +68,13 @@ namespace AuroraDesignSuite.Services
             // Regex 4: Locations & Systems
             string locRegex = @"(?<=\b(?:en la colonia de|en el sistema|en el cuerpo celeste|en|sobre)\s+)[A-ZÁÉÍÓÚÑa-záéíóúñ0-9\s]+?(?=\s+(?:ha|reveló|completado|es|$|\.))";
 
-            // Regex 5: Alert Triggers
-            string alertRegex = @"\b(retirado con honores|fallecido trágicamente|fallo crítico|explotando|fuego enemigo|sin combustible|a la deriva|emergencia|combate)\b";
+            // Regex 5: Alert / Status Triggers
+            string alertRegex = @"\b(Sin Asignar|retirado con honores|fallecido trágicamente|fallo crítico|explotando|fuego enemigo|sin combustible|a la deriva|emergencia|combate)\b";
 
-            // Regex 6: Percentages & Stats
-            string percentRegex = @"\b\d+(?:\.\d+)?%\b";
+            // Regex 6: Numbers & Percentages (e.g., "32 años", "90%")
+            string numberRegex = @"\b\d+(?:\.\d+)?(?:\s*años|\s*%|\s*litros)?\b";
 
-            string masterPattern = $"({headerRegex})|({rankRegex})|({techRegex})|({locRegex})|({alertRegex})|({percentRegex})";
+            string masterPattern = $"({headerRegex})|({rankRegex})|({techRegex})|({locRegex})|({alertRegex})|({numberRegex})";
 
             MatchCollection matches;
             try
@@ -88,7 +92,7 @@ namespace AuroraDesignSuite.Services
             {
                 if (m.Index > lastIdx)
                 {
-                    list.Add(new TokenSpan { Text = text.Substring(lastIdx, m.Index - lastIdx) });
+                    list.Add(new TokenSpan { Text = text.Substring(lastIdx, m.Index - lastIdx), HexColor = "#E6EDF3" });
                 }
 
                 string val = m.Value;
@@ -98,7 +102,7 @@ namespace AuroraDesignSuite.Services
                 }
                 else if (m.Groups[2].Success) // Officer Name
                 {
-                    list.Add(new TokenSpan { Text = val, HexColor = "#FFD700", IsBold = true }); // Amber Gold
+                    list.Add(new TokenSpan { Text = val, HexColor = "#FFE066", IsBold = true }); // Warm Amber Gold
                 }
                 else if (m.Groups[3].Success) // Tech
                 {
@@ -108,17 +112,17 @@ namespace AuroraDesignSuite.Services
                 {
                     list.Add(new TokenSpan { Text = val, HexColor = "#00FF88", IsBold = true }); // Emerald
                 }
-                else if (m.Groups[5].Success) // Alert
+                else if (m.Groups[5].Success) // Alert / Sin Asignar
                 {
-                    list.Add(new TokenSpan { Text = val, HexColor = "#FF5252", IsBold = true }); // Crimson
+                    list.Add(new TokenSpan { Text = val, HexColor = "#FF6B6B", IsBold = true }); // Rose
                 }
-                else if (m.Groups[6].Success) // Percent
+                else if (m.Groups[6].Success) // Numbers / Stats
                 {
-                    list.Add(new TokenSpan { Text = val, HexColor = "#FFE066", IsBold = true }); // Yellow
+                    list.Add(new TokenSpan { Text = val, HexColor = "#64F4FF", IsBold = true }); // Light Cyan
                 }
                 else
                 {
-                    list.Add(new TokenSpan { Text = val });
+                    list.Add(new TokenSpan { Text = val, HexColor = "#E6EDF3" });
                 }
 
                 lastIdx = m.Index + m.Length;
@@ -126,7 +130,7 @@ namespace AuroraDesignSuite.Services
 
             if (lastIdx < text.Length)
             {
-                list.Add(new TokenSpan { Text = text.Substring(lastIdx) });
+                list.Add(new TokenSpan { Text = text.Substring(lastIdx), HexColor = "#E6EDF3" });
             }
 
             return list;
